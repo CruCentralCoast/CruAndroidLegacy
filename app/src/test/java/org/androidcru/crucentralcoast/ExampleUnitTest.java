@@ -1,4 +1,4 @@
-package com.androidcru.crucentralcoast;
+package org.androidcru.crucentralcoast;
 
 import org.junit.Test;
 

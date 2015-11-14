@@ -1,4 +1,4 @@
-package com.androidcru.crucentralcoast;
+package org.androidcru.crucentralcoast;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

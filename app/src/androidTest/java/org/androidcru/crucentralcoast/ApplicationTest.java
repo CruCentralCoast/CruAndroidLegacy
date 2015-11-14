@@ -1,4 +1,4 @@
-package com.androidcru.crucentralcoast;
+package org.androidcru.crucentralcoast;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
