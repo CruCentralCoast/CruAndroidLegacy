@@ -15,10 +15,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "LOG_LEVEL", '"1"'
+            buildConfigField "Integer", "LOG_LEVEL", '1'
         }
         debug {
-            buildConfigField "String", "LOG_LEVEL", '"0"'
+            buildConfigField "Integer", "LOG_LEVEL", '0'
         }
     }
 
