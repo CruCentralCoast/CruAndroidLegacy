@@ -1,35 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single" android:id="@+id/main_options">
         <item
-            android:id="@+id/nav_camara"
+            android:id="@+id/nav_home"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:title="Home"/>
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_events"
             android:icon="@android:drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="Events"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_cruber"
             android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="Cruber"/>
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_summer_missions"
             android:icon="@android:drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:title="Summer Missions"/>
     </group>
-
-    <item android:title="Communicate">
+    <item android:title="Get Involved">
         <menu>
+            <group android:checkableBehavior="single" android:id="@+id/get_involved">
+                    <item
+                        android:id="@+id/nav_community_groups"
+                        android:icon="@android:drawable/ic_menu_share"
+                        android:title="Community Groups"/>
+                    <item
+                        android:id="@+id/nav_ministry_teams"
+                        android:icon="@android:drawable/ic_menu_send"
+                        android:title="Ministry Teams"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Resources">
+        <menu>
+            <group android:checkableBehavior="single" android:id="@+id/resources_options">
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_articles"
                 android:icon="@android:drawable/ic_menu_share"
-                android:title="Share"/>
+                android:title="Articles"/>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_videos"
                 android:icon="@android:drawable/ic_menu_send"
-                android:title="Send"/>
+                android:title="Videos"/>
+            <item
+                android:id="@+id/nav_tools"
+                android:icon="@android:drawable/ic_menu_send"
+                android:title="Tools"/>
+            </group>
         </menu>
     </item>
 
