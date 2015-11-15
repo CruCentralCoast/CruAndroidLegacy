@@ -11,8 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
+import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends MvpActivity<MvpView, MvpBasePresenter>
         implements NavigationView.OnNavigationItemSelectedListener
 {
 
@@ -33,6 +36,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    @Override
+    protected MvpBasePresenter createPresenter()
+    {
+        return new MvpBasePresenter();
+    }
+
 
     @Override
     public void onBackPressed()
@@ -86,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_events)
         {
-
+            getFragmentManager().beginTransaction().add(R.id.content, new EventsFragment()).commit();
         }
         else if (id == R.id.nav_cruber)
         {

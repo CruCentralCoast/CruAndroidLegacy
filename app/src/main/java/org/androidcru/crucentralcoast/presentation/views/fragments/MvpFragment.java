@@ -8,7 +8,7 @@ import android.view.View;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpPresenter;
 import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
 
-public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter> extends Fragment implements MvpView {
+public abstract class MvpFragment<P extends MvpPresenter> extends Fragment implements MvpView {
 
     protected P presenter;
 
