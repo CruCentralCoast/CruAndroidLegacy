@@ -40,11 +40,12 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         super.onViewCreated(view, savedInstanceState);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mEventList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
         mEventAdapter = new EventAdapter(presenter.getEventData());
+        mEventList.setHasFixedSize(true);
         mEventList.setAdapter(mEventAdapter);
     }
 
