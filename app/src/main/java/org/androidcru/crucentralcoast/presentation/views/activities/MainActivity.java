@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
 
 public class MainActivity extends MvpActivity<MvpView, MvpBasePresenter>
@@ -96,7 +97,7 @@ public class MainActivity extends MvpActivity<MvpView, MvpBasePresenter>
         }
         else if (id == R.id.nav_events)
         {
-            getFragmentManager().beginTransaction().add(R.id.content, new EventsFragment()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
         }
         else if (id == R.id.nav_cruber)
         {
@@ -108,7 +109,7 @@ public class MainActivity extends MvpActivity<MvpView, MvpBasePresenter>
         }
         else if (id == R.id.nav_community_groups)
         {
-
+            getFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
         }
         else if (id == R.id.nav_ministry_teams)
         {

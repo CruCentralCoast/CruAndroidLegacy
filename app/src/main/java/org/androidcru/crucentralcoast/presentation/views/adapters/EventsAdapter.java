@@ -17,11 +17,11 @@ import org.threeten.bp.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder>
 {
     private ArrayList<Event> events;
 
-    public EventAdapter(ArrayList<Event> events)
+    public EventsAdapter(ArrayList<Event> events)
     {
         this.events = events;
     }

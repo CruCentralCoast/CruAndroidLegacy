@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.EventsPresenter;
-import org.androidcru.crucentralcoast.presentation.views.adapters.EventAdapter;
+import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
 import org.androidcru.crucentralcoast.presentation.views.views.EventsView;
 
 import butterknife.Bind;
@@ -22,14 +22,14 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
     RecyclerView mEventList;
 
     LinearLayoutManager mLayoutManager;
-    EventAdapter mEventAdapter;
+    EventsAdapter mEventAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.events, container, false);
+        View view = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -44,7 +44,7 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         mEventList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mEventAdapter = new EventAdapter(presenter.getEventData());
+        mEventAdapter = new EventsAdapter(presenter.getEventData());
         mEventList.setHasFixedSize(true);
         mEventList.setAdapter(mEventAdapter);
     }
