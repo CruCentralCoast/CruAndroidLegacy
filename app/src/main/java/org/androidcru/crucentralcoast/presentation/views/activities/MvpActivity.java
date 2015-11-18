@@ -7,7 +7,7 @@ import org.androidcru.crucentralcoast.presentation.presenters.MvpPresenter;
 import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
 
 
-public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter> extends AppCompatActivity implements MvpView
+public abstract class MvpActivity<P extends MvpPresenter> extends AppCompatActivity implements MvpView
 {
     protected P presenter;
 

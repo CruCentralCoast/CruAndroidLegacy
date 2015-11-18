@@ -29,16 +29,14 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.events, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.events, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
+        ButterKnife.bind(this, view);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mEventList.setLayoutManager(mLayoutManager);
