@@ -62,7 +62,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             //LinearLayout rootView = (LinearLayout) cardView.findViewById(R.id.rootview);
             //CardView cardViewLayout = (CardView) rootView.findViewById(R.id.card_view);
-            RelativeLayout layout = (RelativeLayout) rootView.findViewById(R.id.inview);
+            RelativeLayout layout = (RelativeLayout) rootView.findViewById(R.id.in_view);
             LinearLayout date = (LinearLayout) layout.findViewById(R.id.date);
             LinearLayout eventInfo = (LinearLayout) layout.findViewById(R.id.event_info);
             mDateMonth = (TextView) date.findViewById(R.id.date_month);

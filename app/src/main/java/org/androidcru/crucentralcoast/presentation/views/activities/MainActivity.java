@@ -5,7 +5,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +15,7 @@ import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragmen
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
 
-public class MainActivity extends MvpActivity<MvpView, MvpBasePresenter>
+public class MainActivity extends MvpActivity<MvpBasePresenter>
         implements NavigationView.OnNavigationItemSelectedListener
 {
 
@@ -91,41 +90,30 @@ public class MainActivity extends MvpActivity<MvpView, MvpBasePresenter>
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home)
+        switch (id)
         {
-            // Handle the camera action
-        }
-        else if (id == R.id.nav_events)
-        {
-            getFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
-        }
-        else if (id == R.id.nav_cruber)
-        {
+            case R.id.nav_home:
+                break;
+            case R.id.nav_events:
+                getFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+                break;
+            case R.id.nav_cruber:
+                break;
+            case R.id.nav_summer_missions:
+                break;
+            case R.id.nav_community_groups:
+                getFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
+                break;
+            case R.id.nav_ministry_teams:
+                break;
+            case R.id.nav_articles:
 
-        }
-        else if (id == R.id.nav_summer_missions)
-        {
+                break;
+            case R.id.nav_videos:
 
-        }
-        else if (id == R.id.nav_community_groups)
-        {
-            getFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
-        }
-        else if (id == R.id.nav_ministry_teams)
-        {
-
-        }
-        else if (id == R.id.nav_articles)
-        {
-
-        }
-        else if (id == R.id.nav_videos)
-        {
-
-        }
-        else if (id == R.id.nav_tools)
-        {
-
+                break;
+            case R.id.nav_tools:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

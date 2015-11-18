@@ -1,9 +1,6 @@
 package org.androidcru.crucentralcoast.data.models;
 
-import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
-
-import java.net.URL;
 
 public class Event
 {
