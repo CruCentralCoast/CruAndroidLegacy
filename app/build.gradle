@@ -19,6 +19,9 @@ android {
         }
         debug {
             buildConfigField "Integer", "LOG_LEVEL", '0'
+            buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
+            buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'
+            buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
         }
     }
 
@@ -37,7 +40,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:cardview-v7:23.1.0'

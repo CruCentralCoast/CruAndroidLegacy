@@ -14,6 +14,7 @@ import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
+import org.androidcru.crucentralcoast.presentation.views.fragments.VideoFragment;
 
 public class MainActivity extends MvpActivity<MvpBasePresenter>
         implements NavigationView.OnNavigationItemSelectedListener
@@ -94,15 +95,17 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
         {
             case R.id.nav_home:
                 break;
+            case R.id.nav_tools:
+                break;
             case R.id.nav_events:
-                getFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
                 break;
             case R.id.nav_cruber:
                 break;
             case R.id.nav_summer_missions:
                 break;
             case R.id.nav_community_groups:
-                getFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
                 break;
             case R.id.nav_ministry_teams:
                 break;
@@ -110,9 +113,7 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
 
                 break;
             case R.id.nav_videos:
-
-                break;
-            case R.id.nav_tools:
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideoFragment()).commit();
                 break;
         }
 
