@@ -17,7 +17,7 @@ public class VideoPresenter extends MvpBasePresenter<VideoView> {
         VideoProvider.getInstance().requestVideo(videoId);
     }
 
-    public void onEventAsync(VideoDataEvent videoDataEvent)
+    public void onEventMainThread(VideoDataEvent videoDataEvent)
     {
         VideoList videoList = videoDataEvent.videoList;
         getView().setTitle(videoList.items.get(0).snippet.title);

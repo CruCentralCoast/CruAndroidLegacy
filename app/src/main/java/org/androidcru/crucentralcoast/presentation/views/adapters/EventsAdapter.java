@@ -41,6 +41,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         holder.mDateDay.setText(monthName);
         holder.mEventName.setText(events.get(position).name);
         holder.mEventTimeframe.setText(events.get(position).startDate.format(DateTimeFormatter.ofPattern("h:m")) + " - " + events.get(position).endDate.format(DateTimeFormatter.ofPattern("h:m")));
+        holder.mEventDescription.setText(events.get(position).description);
     }
 
     @Override
@@ -49,27 +50,38 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return events.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView mDateMonth;
         public TextView mDateDay;
         public TextView mEventName;
         public TextView mEventTimeframe;
+        public TextView mEventDescription;
         public CardView rootView;
 
         public ViewHolder(View rootView) {
             super(rootView);
             this.rootView = (CardView) rootView;
 
+            rootView.setOnClickListener(this);
+
             //LinearLayout rootView = (LinearLayout) cardView.findViewById(R.id.rootview);
             //CardView cardViewLayout = (CardView) rootView.findViewById(R.id.card_view);
-            RelativeLayout layout = (RelativeLayout) rootView.findViewById(R.id.in_view);
-            LinearLayout date = (LinearLayout) layout.findViewById(R.id.date);
-            LinearLayout eventInfo = (LinearLayout) layout.findViewById(R.id.event_info);
+            RelativeLayout layout = (RelativeLayout) rootView.findViewById(R.id.root_view);
+            LinearLayout basicInfo = (LinearLayout) layout.findViewById(R.id.basic_info);
+            LinearLayout date = (LinearLayout) basicInfo.findViewById(R.id.date);
+            LinearLayout eventInfo = (LinearLayout) basicInfo.findViewById(R.id.event_info);
             mDateMonth = (TextView) date.findViewById(R.id.date_month);
             mDateDay = (TextView) date.findViewById(R.id.date_day);
             mEventName = (TextView) eventInfo.findViewById(R.id.event_name);
             mEventTimeframe = (TextView) eventInfo.findViewById(R.id.event_timeframe);
+            mEventDescription = (TextView) layout.findViewById(R.id.event_description);
 
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            mEventDescription.setVisibility(mEventDescription.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
         }
     }
 }

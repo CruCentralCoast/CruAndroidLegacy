@@ -5,59 +5,77 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
+        card_view:cardPreventCornerOverlap="true"
         android:layout_margin="8dp"
-    >
+        android:animateLayoutChanges="true">
 
         <RelativeLayout
-            android:id="@+id/in_view"
+            android:id="@+id/root_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:animateLayoutChanges="true">
 
 
-            <LinearLayout
-                android:id="@+id/date"
-                android:orientation="vertical"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/date_border">
-                <TextView
-                    android:id="@+id/date_month"
-                    android:layout_width="fill_parent"
-                    android:layout_height="36dp"
-                    android:text="NOV"
-                    android:gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-                <TextView
-                    android:id="@+id/date_day"
-                    android:layout_width="fill_parent"
-                    android:layout_height="28dp"
-                    android:text="14"
-                    android:gravity="top|center"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/event_description"
+                android:layout_below="@+id/basic_info"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"/>
 
             <LinearLayout
-                android:id="@+id/event_info"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/date"
-                android:layout_marginLeft="16dp">
+                android:id="@+id/basic_info">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Large Text"
-                    android:id="@+id/event_name" />
+                <LinearLayout
+                    android:id="@+id/date"
+                    android:orientation="vertical"
+                    android:layout_width="64dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/date_border">
+                    <TextView
+                        android:id="@+id/date_month"
+                        android:layout_width="fill_parent"
+                        android:layout_height="36dp"
+                        android:text="NOV"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                    <TextView
+                        android:id="@+id/date_day"
+                        android:layout_width="fill_parent"
+                        android:layout_height="28dp"
+                        android:text="14"
+                        android:gravity="top|center"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/event_timeframe" />
+                <LinearLayout
+                    android:id="@+id/event_info"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Large Text"
+                        android:id="@+id/event_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Medium Text"
+                        android:id="@+id/event_timeframe" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>
