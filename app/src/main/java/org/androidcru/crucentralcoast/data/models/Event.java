@@ -11,6 +11,8 @@ public class Event
     public ZonedDateTime endDate;
     public boolean rideSharingEnabled;
 
+    public Event() {}
+
     public Event(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, boolean rideSharingEnabled)
     {
         this.name = name;

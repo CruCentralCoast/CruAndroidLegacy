@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.Event;
 import org.androidcru.crucentralcoast.presentation.presenters.EventsPresenter;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
 import org.androidcru.crucentralcoast.presentation.views.views.EventsView;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,9 +45,9 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mEventList.setLayoutManager(mLayoutManager);
-
+        presenter.getEventData();
         // specify an adapter (see also next example)
-        mEventAdapter = new EventsAdapter(presenter.getEventData());
+        mEventAdapter = new EventsAdapter(new ArrayList<Event>());
         //mEventList.setHasFixedSize(true);
         mEventList.setNestedScrollingEnabled(false);
         mEventList.setAdapter(mEventAdapter);
@@ -57,4 +60,9 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
     }
 
 
+    @Override
+    public void setEvents(ArrayList<Event> events)
+    {
+        mEventList.setAdapter(new EventsAdapter(events));
+    }
 }
