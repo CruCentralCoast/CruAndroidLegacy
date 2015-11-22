@@ -1,15 +1,12 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Event;
-import org.androidcru.crucentralcoast.data.models.EventList;
 import org.androidcru.crucentralcoast.data.providers.events.EventListEvent;
 import org.androidcru.crucentralcoast.data.services.CruService;
-import org.androidcru.crucentralcoast.presentation.views.activities.MainActivity;
 
 import java.util.ArrayList;
 

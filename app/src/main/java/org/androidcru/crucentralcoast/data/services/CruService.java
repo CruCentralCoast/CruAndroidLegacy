@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.data.services;
 import org.androidcru.crucentralcoast.data.models.Event;
-import org.androidcru.crucentralcoast.data.models.EventList;
 
 import java.util.ArrayList;
 
