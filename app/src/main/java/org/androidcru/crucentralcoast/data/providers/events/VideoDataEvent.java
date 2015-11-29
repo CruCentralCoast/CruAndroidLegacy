@@ -1,12 +1,12 @@
 package org.androidcru.crucentralcoast.data.providers.events;
 
-import org.androidcru.crucentralcoast.data.models.VideoList;
+import com.google.api.services.youtube.model.VideoSnippet;
 
 public class VideoDataEvent {
 
-    public VideoList videoList;
+    public VideoSnippet videoSnippet;
 
-    public VideoDataEvent(VideoList videoList) {
-        this.videoList = videoList;
+    public VideoDataEvent(VideoSnippet videoSnippet) {
+        this.videoSnippet = videoSnippet;
     }
 }

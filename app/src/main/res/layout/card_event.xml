@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:tools="http://schemas.android.com/tools"
                                         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
         card_view:cardPreventCornerOverlap="true"
-        android:layout_margin="8dp"
-        android:animateLayoutChanges="true">
+        android:layout_margin="8dp">
 
         <RelativeLayout
             android:id="@+id/root_view"
@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                tools:text="New Text"
                 android:id="@+id/event_description"
                 android:layout_below="@+id/basic_info"
                 android:visibility="gone"
@@ -42,14 +42,14 @@
                         android:id="@+id/date_month"
                         android:layout_width="fill_parent"
                         android:layout_height="36dp"
-                        android:text="NOV"
+                        tools:text="NOV"
                         android:gravity="center"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
                     <TextView
                         android:id="@+id/date_day"
                         android:layout_width="fill_parent"
                         android:layout_height="28dp"
-                        android:text="14"
+                        tools:text="14"
                         android:gravity="top|center"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </LinearLayout>
@@ -59,7 +59,8 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -21,6 +21,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 {
     private ArrayList<Event> events;
 
+    public static String TIME_FORMATTER = "h:mm";
+
     public EventsAdapter(ArrayList<Event> events)
     {
         this.events = events;
@@ -40,8 +42,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         String monthName = String.valueOf(events.get(position).startDate.getDayOfMonth());
         holder.mDateDay.setText(monthName);
         holder.mEventName.setText(events.get(position).name);
-        holder.mEventTimeframe.setText(events.get(position).startDate.format(DateTimeFormatter.ofPattern("h:m")) + " - " + events.get(position).endDate.format(DateTimeFormatter.ofPattern("h:m")));
+        holder.mEventTimeframe.setText(events.get(position).startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)) + " - " + events.get(position).endDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
         holder.mEventDescription.setText(events.get(position).description);
+        holder.mEventDescription.setVisibility(View.GONE);
     }
 
     @Override

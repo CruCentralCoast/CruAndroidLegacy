@@ -4,51 +4,51 @@
     <group android:checkableBehavior="single" android:id="@+id/main_options">
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/ic_menu_compass"
-            android:title="Home"/>
+            android:icon="@drawable/ic_action_home"
+            android:title="@string/nav_string"/>
         <item
             android:id="@+id/nav_events"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Events"/>
+            android:icon="@drawable/ic_action_event"
+            android:title="@string/nav_events"/>
         <item
             android:id="@+id/nav_cruber"
-            android:icon="@android:drawable/ic_menu_compass"
-            android:title="Cruber"/>
+            android:icon="@drawable/ic_maps_directions_car"
+            android:title="@string/nav_cruber"/>
         <item
             android:id="@+id/nav_summer_missions"
-            android:icon="@android:drawable/ic_menu_myplaces"
-            android:title="Summer Missions"/>
+            android:icon="@drawable/ic_place"
+            android:title="@string/nav_summer_missions"/>
     </group>
-    <item android:title="Get Involved">
+    <item android:title="@string/nav_get_involved">
         <menu>
             <group android:checkableBehavior="single" android:id="@+id/get_involved">
                     <item
                         android:id="@+id/nav_community_groups"
-                        android:icon="@android:drawable/ic_menu_compass"
-                        android:title="Connect to a Community Groups"/>
+                        android:icon="@drawable/ic_group_add"
+                        android:title="@string/nav_community_group"/>
                     <item
                         android:id="@+id/nav_ministry_teams"
-                        android:icon="@android:drawable/ic_menu_compass"
-                        android:title="Join a Ministry Teams"/>
+                        android:icon="@drawable/ic_group_add"
+                        android:title="@string/nav_ministry_team"/>
             </group>
         </menu>
     </item>
 
-    <item android:title="Resources">
+    <item android:title="@string/nav_resources">
         <menu>
             <group android:checkableBehavior="single" android:id="@+id/resources_options">
             <item
                 android:id="@+id/nav_articles"
-                android:icon="@android:drawable/ic_menu_compass"
-                android:title="Articles"/>
+                android:icon="@drawable/ic_assignment"
+                android:title="@string/nav_articles"/>
             <item
                 android:id="@+id/nav_videos"
-                android:icon="@android:drawable/ic_menu_compass"
-                android:title="Videos"/>
+                android:icon="@drawable/ic_video_collection"
+                android:title="@string/nav_videos"/>
             <item
                 android:id="@+id/nav_tools"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Tools"/>
+                android:title="@string/nav_tools"/>
             </group>
         </menu>
     </item>

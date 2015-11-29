@@ -13,7 +13,6 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
-import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
 import org.androidcru.crucentralcoast.presentation.views.fragments.VideoFragment;
 
 public class MainActivity extends MvpActivity<MvpBasePresenter>

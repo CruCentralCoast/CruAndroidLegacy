@@ -8,4 +8,15 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_string">Home</string>
+    <string name="nav_events">Events</string>
+    <string name="nav_cruber">Cruber</string>
+    <string name="nav_summer_missions">Summer Missions</string>
+    <string name="nav_get_involved">Get Involved</string>
+    <string name="nav_community_group">Connect to a Community Groups</string>
+    <string name="nav_ministry_team">Join a Ministry Teams</string>
+    <string name="nav_resources">Resources</string>
+    <string name="nav_articles">Articles</string>
+    <string name="nav_videos">Videos</string>
+    <string name="nav_tools">Tools</string>
 </resources>

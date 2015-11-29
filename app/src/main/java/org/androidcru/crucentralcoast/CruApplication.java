@@ -14,11 +14,27 @@ public class CruApplication extends Application
 {
     public static Gson gson;
 
+    private static Context context;
+
+    private static String PACKAGE_NAME;
+
+    public static Context getContext()
+    {
+        return context;
+    }
+
+    public static String retrievePackageName()
+    {
+        return PACKAGE_NAME;
+    }
+
     @Override
     public void onCreate()
     {
         super.onCreate();
         Logger.init().setLogLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
+        context = this;
+        PACKAGE_NAME = context.getPackageName();
         GsonBuilder builder = new GsonBuilder();
         builder = ThreeTenGsonAdapter.registerAll(builder);
         gson = builder.create();
