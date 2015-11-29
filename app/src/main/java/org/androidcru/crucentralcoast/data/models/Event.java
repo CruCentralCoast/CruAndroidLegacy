@@ -10,15 +10,17 @@ public class Event
     public ZonedDateTime startDate;
     public ZonedDateTime endDate;
     public boolean rideSharingEnabled;
+    public Location location;
 
     public Event() {}
 
-    public Event(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, boolean rideSharingEnabled)
+    public Event(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled)
     {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.location = location;
         this.rideSharingEnabled = rideSharingEnabled;
     }
 }

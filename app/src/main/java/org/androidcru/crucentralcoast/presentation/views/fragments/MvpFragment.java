@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -14,7 +13,7 @@ public abstract class MvpFragment<P extends MvpPresenter> extends android.suppor
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        setHasOptionsMenu(false);
         // Create the presenter if needed
         if (presenter == null) {
             presenter = createPresenter();

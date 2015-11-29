@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,6 +45,9 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
     {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        setHasOptionsMenu(true);
+
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mEventList.setLayoutManager(mLayoutManager);
@@ -65,5 +71,26 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
     public void setEvents(ArrayList<Event> events)
     {
         mEventList.setAdapter(new EventsAdapter(events));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_events, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int itemId = item.getItemId();
+        switch(itemId)
+        {
+            case R.id.action_add_event:
+                presenter.postRandomEvent();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
