@@ -2,7 +2,10 @@ package org.androidcru.crucentralcoast;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.orhanobut.logger.LogLevel;
@@ -12,6 +15,8 @@ import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 
 public class CruApplication extends Application
 {
+
+
     public static Gson gson;
 
     private static Context context;
@@ -39,4 +44,6 @@ public class CruApplication extends Application
         builder = ThreeTenGsonAdapter.registerAll(builder);
         gson = builder.create();
     }
+
+
 }
