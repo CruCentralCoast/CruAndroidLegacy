@@ -20,4 +20,5 @@
     <string name="nav_videos">Videos</string>
     <string name="nav_tools">Tools</string>
     <string name="menu_add_event">Add Random Event</string>
+    <string name="menu_refresh">Refresh</string>
 </resources>

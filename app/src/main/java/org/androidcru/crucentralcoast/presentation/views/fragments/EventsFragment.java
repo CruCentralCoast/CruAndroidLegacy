@@ -51,13 +51,15 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mEventList.setLayoutManager(mLayoutManager);
+        mEventAdapter = new EventsAdapter(new ArrayList<Event>());
+        mEventList.setAdapter(mEventAdapter);
         presenter.getEventData();
         // specify an adapter (see also next example)
-        mEventAdapter = new EventsAdapter(new ArrayList<Event>());
+
         mEventList.setHasFixedSize(false);
         //mEventList.setNestedScrollingEnabled(false);
         //mEventList.setNestedScrollingEnabled(false);
-        mEventList.setAdapter(mEventAdapter);
+
     }
 
     @Override
@@ -88,6 +90,9 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         {
             case R.id.action_add_event:
                 presenter.postRandomEvent();
+                return true;
+            case R.id.action_refresh:
+                presenter.refresh();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

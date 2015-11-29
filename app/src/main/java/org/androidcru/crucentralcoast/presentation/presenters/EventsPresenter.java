@@ -26,4 +26,9 @@ public class EventsPresenter extends MvpBasePresenter<EventsView>
     {
         EventProvider.getInstance().postRandomEvent();
     }
+
+    public void refresh()
+    {
+        EventProvider.getInstance().forceUpdate();
+    }
 }

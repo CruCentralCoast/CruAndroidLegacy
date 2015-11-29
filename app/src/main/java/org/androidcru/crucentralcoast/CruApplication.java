@@ -2,10 +2,8 @@ package org.androidcru.crucentralcoast;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.anupcowkur.reservoir.Reservoir;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.orhanobut.logger.LogLevel;
@@ -43,6 +41,12 @@ public class CruApplication extends Application
         GsonBuilder builder = new GsonBuilder();
         builder = ThreeTenGsonAdapter.registerAll(builder);
         gson = builder.create();
+
+        try {
+            Reservoir.init(this, 10240, gson); //in bytes
+        } catch (Exception e) {
+            Logger.e(e,"Not enough space for disk cache!");
+        }
     }
 
 
