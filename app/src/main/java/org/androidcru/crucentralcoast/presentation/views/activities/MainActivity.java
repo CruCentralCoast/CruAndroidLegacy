@@ -17,6 +17,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.VideoFragment;
@@ -126,7 +127,7 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
             case R.id.nav_ministry_teams:
                 break;
             case R.id.nav_articles:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new ArticlesFragment()).commit();
                 break;
             case R.id.nav_videos:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideoFragment()).commit();
