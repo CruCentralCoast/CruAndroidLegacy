@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -24,13 +25,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
     public static String TIME_FORMATTER = "h:mm";
 
-    public EventsAdapter(ArrayList<Event> events)
+    private LinearLayoutManager layoutManager;
+
+    public EventsAdapter(ArrayList<Event> events, LinearLayoutManager layoutManager)
     {
         this.events = new ArrayList<>();
         for (Event event : events)
         {
             this.events.add(new Pair<Event, Boolean>(event, false));
         }
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -92,6 +96,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mEventDescription.setVisibility(mEventDescription.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             events.set(getAdapterPosition(), new Pair<Event, Boolean>(events.get(getAdapterPosition()).first, (mEventDescription.getVisibility() == View.VISIBLE)));
             notifyItemChanged(getAdapterPosition());
+            layoutManager.scrollToPosition(getAdapterPosition());
         }
     }
 }

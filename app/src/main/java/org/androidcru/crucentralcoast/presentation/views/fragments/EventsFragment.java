@@ -51,7 +51,7 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mEventList.setLayoutManager(mLayoutManager);
-        mEventAdapter = new EventsAdapter(new ArrayList<Event>());
+        mEventAdapter = new EventsAdapter(new ArrayList<Event>(), mLayoutManager);
         mEventList.setAdapter(mEventAdapter);
         presenter.getEventData();
         // specify an adapter (see also next example)
@@ -72,7 +72,7 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
     @Override
     public void setEvents(ArrayList<Event> events)
     {
-        mEventList.setAdapter(new EventsAdapter(events));
+        mEventList.setAdapter(new EventsAdapter(events, mLayoutManager));
     }
 
     @Override

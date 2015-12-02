@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.orhanobut.logger.Logger;
 
@@ -33,6 +31,8 @@ public class VideoFragment extends MvpFragment<VideoPresenter> implements VideoV
     @Bind(R.id.description)
     TextView description;
 
+    YouTubePlayer activePlayer;
+
     public static final String VIDEO_ID = "dQw4w9WgXcQ";
 
     @Override
@@ -46,11 +46,16 @@ public class VideoFragment extends MvpFragment<VideoPresenter> implements VideoV
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         presenter.requestVideoInformation(VIDEO_ID);
-        youTubePlayerFragment = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtubeplayerfragment);
-        youTubePlayerFragment.initialize(BuildConfig.YOUTUBEAPIKEY, new YouTubePlayer.OnInitializedListener() {
+        youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
+        getChildFragmentManager().beginTransaction().replace(R.id.youtubeplayerfragment, youTubePlayerFragment).commit();
+        youTubePlayerFragment.initialize(BuildConfig.YOUTUBEAPIKEY, new YouTubePlayer.OnInitializedListener()
+        {
             @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-                if (!wasRestored) {
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored)
+            {
+                activePlayer = player;
+                if (!wasRestored)
+                {
                     player.cueVideo("dQw4w9WgXcQ");
                 }
                 player.loadVideo("dQw4w9WgXcQ");
@@ -58,13 +63,19 @@ public class VideoFragment extends MvpFragment<VideoPresenter> implements VideoV
             }
 
             @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult)
+            {
                 Logger.d(youTubeInitializationResult.toString());
             }
         });
     }
 
-
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        activePlayer.release();
+    }
 
     @Override
     protected VideoPresenter createPresenter() {
