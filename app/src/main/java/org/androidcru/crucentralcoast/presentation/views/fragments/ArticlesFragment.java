@@ -19,7 +19,7 @@ import butterknife.OnClick;
 
 public class ArticlesFragment extends MvpFragment<MvpBasePresenter<MvpView>>
 {
-    private static final String URL = "http://www.slocru.com/missions";
+    private static final String URL = "http://www.slocru.com/";
 
     private CustomTabActivityHelper mCustomTabActivityHelper;
 
