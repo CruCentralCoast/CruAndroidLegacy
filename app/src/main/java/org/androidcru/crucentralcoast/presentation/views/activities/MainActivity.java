@@ -18,6 +18,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ConstructionFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.VideoFragment;
@@ -28,6 +29,8 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
     // Variables for checking google play services
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
+
+    private ConstructionFragment constructionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,6 +49,9 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        constructionFragment = new ConstructionFragment();
+        spawnConstructionFragment();
+
         // Checks for GCM compatibility, then registers phone if able
         if (checkPlayServices())
         {
@@ -53,6 +59,11 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+    }
+
+    private void spawnConstructionFragment()
+    {
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, constructionFragment).commit();
     }
 
     @Override
@@ -111,20 +122,25 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
         switch (id)
         {
             case R.id.nav_home:
+                spawnConstructionFragment();
                 break;
             case R.id.nav_tools:
+                spawnConstructionFragment();
                 break;
             case R.id.nav_events:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
                 break;
             case R.id.nav_cruber:
+                spawnConstructionFragment();
                 break;
             case R.id.nav_summer_missions:
+                spawnConstructionFragment();
                 break;
             case R.id.nav_community_groups:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
                 break;
             case R.id.nav_ministry_teams:
+                spawnConstructionFragment();
                 break;
             case R.id.nav_articles:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new ArticlesFragment()).commit();

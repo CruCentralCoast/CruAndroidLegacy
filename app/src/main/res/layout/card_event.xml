@@ -23,7 +23,6 @@
                 tools:text="New Text"
                 android:id="@+id/event_description"
                 android:layout_below="@+id/basic_info"
-                android:visibility="gone"
                 android:layout_marginTop="8dp"/>
 
             <LinearLayout

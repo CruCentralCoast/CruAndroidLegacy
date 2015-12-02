@@ -13,13 +13,13 @@
     <string name="nav_cruber">Cruber</string>
     <string name="nav_summer_missions">Summer Missions</string>
     <string name="nav_get_involved">Get Involved</string>
-    <string name="nav_community_group">Connect to a Community Groups</string>
-    <string name="nav_ministry_team">Join a Ministry Teams</string>
+    <string name="nav_community_group">Connect to a Community Group</string>
+    <string name="nav_ministry_team">Join a Ministry Team</string>
     <string name="nav_resources">Resources</string>
     <string name="nav_articles">Articles</string>
     <string name="nav_videos">Videos</string>
     <string name="nav_tools">Tools</string>
     <string name="menu_add_event">Add Random Event</string>
     <string name="menu_refresh">Refresh</string>
-    <string name="articles_ct_button">Launch Custom Tab</string>
+    <string name="articles_ct_button">Read Article</string>
 </resources>

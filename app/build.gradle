@@ -23,7 +23,7 @@ android {
             buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
             buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'
             buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
-            buildConfigField "String", "CRU_SERVER", '"http://10.0.2.2:3000"'
+            buildConfigField "String", "CRU_SERVER", '"http://198.199.103.186"'
         }
     }
 

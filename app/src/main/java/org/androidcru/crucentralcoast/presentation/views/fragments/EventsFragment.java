@@ -56,7 +56,7 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         presenter.getEventData();
         // specify an adapter (see also next example)
 
-        mEventList.setHasFixedSize(false);
+        mEventList.setHasFixedSize(true);
         //mEventList.setNestedScrollingEnabled(false);
         //mEventList.setNestedScrollingEnabled(false);
 

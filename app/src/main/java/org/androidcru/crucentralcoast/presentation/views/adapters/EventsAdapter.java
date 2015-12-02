@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,17 @@ import java.util.Locale;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder>
 {
-    private ArrayList<Event> events;
+    private ArrayList<Pair<Event, Boolean>> events;
 
     public static String TIME_FORMATTER = "h:mm";
 
     public EventsAdapter(ArrayList<Event> events)
     {
-        this.events = events;
+        this.events = new ArrayList<>();
+        for (Event event : events)
+        {
+            this.events.add(new Pair<Event, Boolean>(event, false));
+        }
     }
 
     @Override
@@ -38,13 +43,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        holder.mDateMonth.setText(events.get(position).startDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()).toUpperCase());
-        String monthName = String.valueOf(events.get(position).startDate.getDayOfMonth());
+        holder.mDateMonth.setText(events.get(position).first.startDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()).toUpperCase());
+        String monthName = String.valueOf(events.get(position).first.startDate.getDayOfMonth());
         holder.mDateDay.setText(monthName);
-        holder.mEventName.setText(events.get(position).name);
-        holder.mEventTimeframe.setText(events.get(position).startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)) + " - " + events.get(position).endDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
-        holder.mEventDescription.setText(events.get(position).description);
-        holder.mEventDescription.setVisibility(View.GONE);
+        holder.mEventName.setText(events.get(position).first.name);
+        holder.mEventTimeframe.setText(events.get(position).first.startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)) + " - " + events.get(position).first.endDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
+        holder.mEventDescription.setText(events.get(position).first.description);
+        holder.mEventDescription.setVisibility(events.get(position).second ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -53,7 +58,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return events.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView mDateMonth;
         public TextView mDateDay;
         public TextView mEventName;
@@ -85,6 +90,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public void onClick(View v)
         {
             mEventDescription.setVisibility(mEventDescription.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            events.set(getAdapterPosition(), new Pair<Event, Boolean>(events.get(getAdapterPosition()).first, (mEventDescription.getVisibility() == View.VISIBLE)));
+            notifyItemChanged(getAdapterPosition());
         }
     }
 }
