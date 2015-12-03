@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SubscriptionsFragment#newInstance} factory method to
+ * Use the {@link SubscriptionsFragment#} factory method to
  * create an instance of this fragment.
  */
 public class SubscriptionsFragment extends MvpFragment<SubscriptionsPresenter> implements SubscriptionsView
@@ -52,7 +52,7 @@ public class SubscriptionsFragment extends MvpFragment<SubscriptionsPresenter> i
         mSubscriptionsList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mSubscriptionAdapter = new SubscriptionsAdapter(presenter.getMinistrySubscriptionData());
+        mSubscriptionAdapter = new SubscriptionsAdapter(presenter.getMinistrySubscriptionData(getContext()));
         mSubscriptionsList.setHasFixedSize(true);
         mSubscriptionsList.setAdapter(mSubscriptionAdapter);
     }

@@ -106,6 +106,8 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
+
             return true;
         }
 

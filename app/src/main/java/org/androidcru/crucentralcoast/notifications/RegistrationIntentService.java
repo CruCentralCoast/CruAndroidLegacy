@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.notifications;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -10,7 +11,9 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 
 import java.io.IOException;
@@ -19,6 +22,9 @@ public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
+    private static InstanceID instanceID;
+    private static String token;
+    private static GcmPubSub pubSub;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -35,8 +41,8 @@ public class RegistrationIntentService extends IntentService {
             // R.string.gcm_defaultSenderId (the Sender ID) is typically derived from google-services.json.
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
-            InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+            instanceID = InstanceID.getInstance(this);
+            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
             Log.i(TAG, "GCM Registration Token: " + token);
@@ -75,6 +81,47 @@ public class RegistrationIntentService extends IntentService {
         // Add custom implementation, as needed.
     }
 
+    public static void subscribeToMinistry(final String topic)
+    {
+
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    pubSub.subscribe(token, "/topics/" + topic, null);
+                }
+                catch (IOException e)
+                {
+                    Logger.e(e, e.getStackTrace().toString());
+                }
+            }
+        }).start();
+
+    }
+
+    public static void unsubscribeToMinistry(final String topic)
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    pubSub.unsubscribe(token, "/topics/" + topic);
+                }
+                catch (IOException e)
+                {
+                    Logger.e(e, e.getStackTrace().toString());
+                }
+            }
+        }).start();
+
+    }
+
     /**
      * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.
      *
@@ -83,7 +130,7 @@ public class RegistrationIntentService extends IntentService {
      */
     // [START subscribe_topics]
     private void subscribeTopics(String token) throws IOException {
-        GcmPubSub pubSub = GcmPubSub.getInstance(this);
+        pubSub = GcmPubSub.getInstance(this);
         for (String topic : TOPICS) {
             pubSub.subscribe(token, "/topics/" + topic, null);
         }
