@@ -1,18 +1,14 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
@@ -42,7 +38,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        if (!ministries.get(position).isSubscribed)
+        if (ministries.get(position).isSubscribed)
         {
             Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(holder.mSubscriptionLogo);
         }
@@ -50,7 +46,6 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
         {
             Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.WHITE)).into(holder.mSubscriptionLogo);
         }
-        Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).into(holder.mSubscriptionLogo);
     }
 
     @Override
