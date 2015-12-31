@@ -18,12 +18,12 @@ public abstract class MvpFragment<P extends MvpPresenter> extends android.suppor
         if (presenter == null) {
             presenter = createPresenter();
         }
-        presenter.attachView(this);
+        presenter.onAttachView(this);
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        presenter.detachView(getRetainInstance());
+        presenter.onDetachView(getRetainInstance());
         presenter = null;
     }
 

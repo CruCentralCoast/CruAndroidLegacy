@@ -4,14 +4,15 @@ import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.events.EventListEvent;
 import org.androidcru.crucentralcoast.presentation.views.views.EventsView;
 
-import de.greenrobot.event.EventBus;
-
 public class EventsPresenter extends MvpBasePresenter<EventsView>
 {
-    public EventsPresenter()
+    @Override
+    public void onAttachView(EventsView view)
     {
-        EventBus.getDefault().register(this);
+        super.onAttachView(view);
+        eventBus.register(this);
     }
+
     public void getEventData()
     {
         EventProvider.getInstance().requestEvents();

@@ -40,10 +40,11 @@ import de.greenrobot.event.EventBus;
 public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V> {
 
     private WeakReference<V> viewRef;
-    protected EventBus eventBus = EventBus.getDefault();
+    protected EventBus eventBus;
 
-    @Override public void attachView(V view) {
+    @Override public void onAttachView(V view) {
         viewRef = new WeakReference<V>(view);
+        eventBus = EventBus.getDefault();
     }
 
     /**
@@ -65,12 +66,13 @@ public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V> {
         return viewRef != null && viewRef.get() != null;
     }
 
-    @Override public void detachView(boolean retainInstance) {
+    @Override public void onDetachView(boolean retainInstance) {
         if (viewRef != null) {
             viewRef.clear();
             viewRef = null;
         }
         if(eventBus.isRegistered(this))
             eventBus.unregister(this);
+        eventBus = null;
     }
 }

@@ -12,6 +12,22 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    productFlavors {
+        dev {
+            multiDexEnabled true
+        }
+
+        devFast {
+            multiDexEnabled true
+            minSdkVersion 21
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,7 +39,7 @@ android {
             buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
             buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'
             buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
-            buildConfigField "String", "CRU_SERVER", '"http://198.199.103.186"'
+            buildConfigField "String", "CRU_SERVER", '"http://androidcru-dev.jonamireh.com"'
         }
     }
 
@@ -40,9 +56,12 @@ android {
     }
 }
 
+apply plugin: 'com.getkeepsafe.dexcount'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.api-client:google-api-client:1.19.1' exclude module: 'httpclient'
     compile 'com.google.api-client:google-api-client-android:1.19.0' exclude module: 'httpclient'
     compile 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'

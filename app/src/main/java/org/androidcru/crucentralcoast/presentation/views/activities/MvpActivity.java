@@ -14,12 +14,12 @@ public abstract class MvpActivity<P extends MvpPresenter> extends AppCompatActiv
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = createPresenter();
-        presenter.attachView(this);
+        presenter.onAttachView(this);
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
-        presenter.detachView(false);
+        presenter.onDetachView(false);
     }
 
     protected abstract P createPresenter();

@@ -1,7 +1,7 @@
 package org.androidcru.crucentralcoast;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.anupcowkur.reservoir.Reservoir;
 import com.google.gson.Gson;
@@ -11,7 +11,7 @@ import com.orhanobut.logger.Logger;
 
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 
-public class CruApplication extends Application
+public class CruApplication extends MultiDexApplication
 {
 
 

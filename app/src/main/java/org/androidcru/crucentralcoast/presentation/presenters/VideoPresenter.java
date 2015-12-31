@@ -8,8 +8,10 @@ import org.androidcru.crucentralcoast.presentation.views.views.VideoView;
 
 public class VideoPresenter extends MvpBasePresenter<VideoView> {
 
-    public VideoPresenter()
+    @Override
+    public void onAttachView(VideoView view)
     {
+        super.onAttachView(view);
         eventBus.register(this);
     }
 
