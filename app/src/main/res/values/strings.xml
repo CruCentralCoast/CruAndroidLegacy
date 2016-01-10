@@ -22,4 +22,6 @@
     <string name="menu_add_event">Add Random Event</string>
     <string name="menu_refresh">Refresh</string>
     <string name="articles_ct_button">Read Article</string>
+
+    <string name="central_coast">CENTRAL COAST</string>
 </resources>

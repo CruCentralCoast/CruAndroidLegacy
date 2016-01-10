@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#f9b625</color>
     <color name="colorConstruction">#00ade5</color>
+
+    <color name="cruGray">#666062</color>
 </resources>
