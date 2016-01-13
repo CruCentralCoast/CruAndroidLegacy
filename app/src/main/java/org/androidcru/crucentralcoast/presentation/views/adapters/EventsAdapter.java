@@ -36,7 +36,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         this.events = new ArrayList<>();
         for (Event event : events)
         {
-            this.events.add(new Pair<Event, Boolean>(event, false));
+            this.events.add(new Pair<>(event, false));
         }
         this.layoutManager = layoutManager;
     }
@@ -94,7 +94,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         public ViewHolder(View rootView) {
             super(rootView);
-            ButterKnife.bind(rootView);
+            ButterKnife.bind(this, rootView);
             rootView.setOnClickListener(this);
         }
 
