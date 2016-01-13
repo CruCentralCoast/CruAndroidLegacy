@@ -10,6 +10,10 @@ import retrofit.http.POST;
 
 public interface CruService
 {
+    /**
+     * Method modeling the GET request for Events
+     * @return Callback request
+     */
     @GET("/api/event/list")
     public Call<ArrayList<Event>> getEvents();
 

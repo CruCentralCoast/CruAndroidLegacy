@@ -4,6 +4,10 @@ import org.androidcru.crucentralcoast.data.models.Event;
 
 import java.util.ArrayList;
 
+/**
+ * EventListEvent is used in EventBus for transmitting EventList from EventListProvider to
+ * any subscriber in the Presentation layer.
+ */
 public class EventListEvent
 {
     public ArrayList<Event> eventList;

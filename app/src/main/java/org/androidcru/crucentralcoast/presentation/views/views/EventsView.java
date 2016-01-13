@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 public interface EventsView extends MvpView
 {
-    //methods for the Presenter to interface with the EventsFragment
+    /**
+     * Updates the UI to reflect the Events in events
+     * @param events List of new Events the UI should adhere to
+     */
     public void setEvents(ArrayList<Event> events);
 }

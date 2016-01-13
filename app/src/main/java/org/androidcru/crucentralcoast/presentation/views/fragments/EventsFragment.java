@@ -24,57 +24,75 @@ import butterknife.ButterKnife;
 
 public class EventsFragment extends MvpFragment<EventsPresenter> implements EventsView
 {
-    @Bind(R.id.event_list)
-    RecyclerView mEventList;
+    //Injected Views
+    @Bind(R.id.event_list) RecyclerView mEventList;
 
+    //View elements
     LinearLayoutManager mLayoutManager;
     EventsAdapter mEventAdapter;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_events, container, false);
-        ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-
-        setHasOptionsMenu(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mEventList.setLayoutManager(mLayoutManager);
-        mEventAdapter = new EventsAdapter(new ArrayList<Event>(), mLayoutManager);
-        mEventList.setAdapter(mEventAdapter);
-        presenter.getEventData();
-        // specify an adapter (see also next example)
-
-        mEventList.setHasFixedSize(true);
-        //mEventList.setNestedScrollingEnabled(false);
-        //mEventList.setNestedScrollingEnabled(false);
-
-    }
-
+    /**
+     * When the framework invokes onCreateView(), MvpFragment will invoke this method and create the
+     * corresponding presenter.
+     * @return EventPresenter
+     */
     @Override
     protected EventsPresenter createPresenter()
     {
         return new EventsPresenter();
     }
 
-
-    @Override
-    public void setEvents(ArrayList<Event> events)
+    /**
+     * Invoked early on from the Android framework during rendering.
+     * @param inflater Object used to inflate new views, provided by Android
+     * @param container Parent view to inflate in, provided by Android
+     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
+     * @return inflated View
+     */
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mEventList.setAdapter(new EventsAdapter(events, mLayoutManager));
+        super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.fragment_events, container, false);
     }
 
+    /**
+     * Invoked after onCreateView() and deals with binding view references after the
+     * view has already been inflated.
+     * @param view Inflated View created by onCreateView()
+     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
+     */
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+        //Let ButterKnife find all injected views and bind them to member variables
+        ButterKnife.bind(this, view);
+
+        //Enables actions in the Activity Toolbar (top-right buttons)
+        setHasOptionsMenu(true);
+
+        //LayoutManager for RecyclerView
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mEventList.setLayoutManager(mLayoutManager);
+
+        //Adapter for RecyclerView
+        mEventAdapter = new EventsAdapter(new ArrayList<Event>(), mLayoutManager);
+        mEventList.setAdapter(mEventAdapter);
+        mEventList.setHasFixedSize(true);
+
+        //Ask presenter for data
+        presenter.getEventData();
+
+
+    }
+
+    /**
+     * Inovoked by the Android framework if setHasOptionsMenu() is called
+     * @param menu Reference to Menu, provided by Android
+     * @param inflater Inflater object, provided by Android
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
@@ -82,6 +100,11 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         inflater.inflate(R.menu.menu_events, menu);
     }
 
+    /**
+     * Click listener for when actions in the Toolbar are clicked
+     * @param item Item clicked, provided by Android
+     * @return True to consume the touch event or false to allow Android to handle it
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -97,5 +120,15 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Updates the UI to reflect the Events in events
+     * @param events List of new Events the UI should adhere to
+     */
+    @Override
+    public void setEvents(ArrayList<Event> events)
+    {
+        mEventList.setAdapter(new EventsAdapter(events, mLayoutManager));
     }
 }

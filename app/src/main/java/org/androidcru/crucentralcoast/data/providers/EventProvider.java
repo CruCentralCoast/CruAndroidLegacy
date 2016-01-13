@@ -21,6 +21,10 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+/**
+ * EventProvider is a Singleton class designed to provide Presenters with a static reference to
+ * the EventList object.
+ */
 public final class EventProvider
 {
     private static EventProvider eventProvider;
@@ -32,11 +36,12 @@ public final class EventProvider
 
     private EventProvider()
     {
+        //Configures RetroFit
         retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.CRU_SERVER)
                 .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
                 .build();
-
+        //Generates concrete implementation of CruService
         cruService = retrofit.create(CruService.class);
     }
 
@@ -69,6 +74,10 @@ public final class EventProvider
         });
     }
 
+    /**
+     * Posts an EventListEvent onto the EventBus if EventList is cached or otherwise, a cold request
+     * is issued.
+     */
     public void requestEvents()
     {
         if(cacheProvider == null)
@@ -87,12 +96,22 @@ public final class EventProvider
         }
     }
 
+    /**
+     * Invalidates the cache and issues a cold request for a new EventList via the network.
+     */
     public void forceUpdate()
     {
+        //Generates a queue for EventList related network requests
         Call<ArrayList<Event>> getEvents = cruService.getEvents();
 
+        //Adds a network events to the queue and asynchronously issues the request
         getEvents.enqueue(new Callback<ArrayList<Event>>()
         {
+            /**
+             * Called if the response succeeded
+             * @param response Parsed POJO of the JSON response
+             * @param retrofit Retrofit object
+             */
             @Override
             public void onResponse(Response<ArrayList<Event>> response, Retrofit retrofit)
             {
@@ -101,6 +120,10 @@ public final class EventProvider
                 EventBus.getDefault().post(new EventListEvent(response.body()));
             }
 
+            /**
+             * Called if the response failed
+             * @param t Exception that was thrown
+             */
             @Override
             public void onFailure(Throwable t)
             {
@@ -109,10 +132,18 @@ public final class EventProvider
         });
     }
 
+    /**
+     * EventCacheProvider handles caching the EventList to disk
+     */
     private class EventCacheProvider
     {
+        //key used to retrieve the EventList from disk
         private final String eventKey = "event_key";
 
+        /**
+         * Asks the disk cache if it has a copy of EventList
+         * @return EventList if if the cache has an entry, null otherwise
+         */
         public EventList checkCache()
         {
             EventList events = null;
@@ -131,6 +162,10 @@ public final class EventProvider
             return events;
         }
 
+        /**
+         * Invalidates cache and places a new EventList into cache
+         * @param events EventList to place into cache
+         */
         public void putCache(EventList events)
         {
             try

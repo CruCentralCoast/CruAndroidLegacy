@@ -6,12 +6,14 @@ public class Event
 {
     public String name;
     public String description;
-    //public URL url;
     public ZonedDateTime startDate;
     public ZonedDateTime endDate;
     public boolean rideSharingEnabled;
     public Location location;
 
+    /**
+     * Required by GSON/RetroFit in order to automatically create and populate via reflection
+     */
     public Event() {}
 
     public Event(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled)
