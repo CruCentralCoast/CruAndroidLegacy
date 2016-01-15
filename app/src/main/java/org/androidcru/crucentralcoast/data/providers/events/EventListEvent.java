@@ -1,6 +1,6 @@
 package org.androidcru.crucentralcoast.data.providers.events;
 
-import org.androidcru.crucentralcoast.data.models.Event;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 
 import java.util.ArrayList;
 
@@ -10,10 +10,10 @@ import java.util.ArrayList;
  */
 public class EventListEvent
 {
-    public ArrayList<Event> eventList;
+    public ArrayList<CruEvent> cruEventList;
 
-    public EventListEvent(ArrayList<Event> eventList)
+    public EventListEvent(ArrayList<CruEvent> cruEventList)
     {
-        this.eventList = eventList;
+        this.cruEventList = cruEventList;
     }
 }

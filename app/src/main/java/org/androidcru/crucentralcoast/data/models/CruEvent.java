@@ -1,15 +1,17 @@
 package org.androidcru.crucentralcoast.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.threeten.bp.ZonedDateTime;
 
 public class CruEvent
 {
-    public String name;
-    public String description;
-    public ZonedDateTime startDate;
-    public ZonedDateTime endDate;
-    public boolean rideSharingEnabled;
-    public Location location;
+    @SerializedName("mName") public String mName;
+    @SerializedName("mDescription") public String mDescription;
+    @SerializedName("mStartDate") public ZonedDateTime mStartDate;
+    @SerializedName("mEndDate") public ZonedDateTime mEndDate;
+    @SerializedName("mRideSharingEnabled") public boolean mRideSharingEnabled;
+    @SerializedName("mLocation") public Location mLocation;
 
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection
@@ -18,11 +20,11 @@ public class CruEvent
 
     public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled)
     {
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.location = location;
-        this.rideSharingEnabled = rideSharingEnabled;
+        this.mName = name;
+        this.mDescription = description;
+        this.mStartDate = startDate;
+        this.mEndDate = endDate;
+        this.mLocation = location;
+        this.mRideSharingEnabled = rideSharingEnabled;
     }
 }

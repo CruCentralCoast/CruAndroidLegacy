@@ -19,7 +19,7 @@ package org.androidcru.crucentralcoast.presentation.presenters;
 
 import android.support.annotation.Nullable;
 
-import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.MvpInteractor;
 
 import java.lang.ref.WeakReference;
 
@@ -33,11 +33,11 @@ import de.greenrobot.event.EventBus;
  * presenter before calling {@link #getView()} to access the view.
  * </p>
  *
- * @param <V> type of the {@link MvpView}
+ * @param <V> type of the {@link MvpInteractor}
  * @author Hannes Dorfmann
  * @since 1.0.0
  */
-public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V> {
+public class MvpBasePresenter<V extends MvpInteractor> implements MvpPresenter<V> {
 
     private WeakReference<V> viewRef;
     protected EventBus eventBus;

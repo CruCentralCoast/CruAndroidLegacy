@@ -2,16 +2,16 @@ package org.androidcru.crucentralcoast.presentation.presenters;
 
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.events.EventListEvent;
-import org.androidcru.crucentralcoast.presentation.views.views.EventsView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.EventsInteractor;
 
-public class EventsPresenter extends MvpBasePresenter<EventsView>
+public class EventsPresenter extends MvpBasePresenter<EventsInteractor>
 {
     /**
      * Invoked by MvpFragment (or MvpActivity) when their view is inflated
      * @param view Select methods allowed to execute on the view
      */
     @Override
-    public void onAttachView(EventsView view)
+    public void onAttachView(EventsInteractor view)
     {
         super.onAttachView(view);
         eventBus.register(this);
@@ -29,7 +29,7 @@ public class EventsPresenter extends MvpBasePresenter<EventsView>
      */
     public void onEventMainThread(EventListEvent eventListEvent)
     {
-        getView().setEvents(eventListEvent.eventList);
+        getView().setEvents(eventListEvent.cruEventList);
     }
 
     public void postRandomEvent()

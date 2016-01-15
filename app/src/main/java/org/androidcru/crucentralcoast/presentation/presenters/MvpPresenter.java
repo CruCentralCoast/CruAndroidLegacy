@@ -1,8 +1,8 @@
 package org.androidcru.crucentralcoast.presentation.presenters;
 
-import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.MvpInteractor;
 
-public interface MvpPresenter<V extends MvpView> {
+public interface MvpPresenter<V extends MvpInteractor> {
 
     void onAttachView(V view);
 

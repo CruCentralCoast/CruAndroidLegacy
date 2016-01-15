@@ -12,17 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.Event;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.presenters.EventsPresenter;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
-import org.androidcru.crucentralcoast.presentation.views.views.EventsView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.EventsInteractor;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class EventsFragment extends MvpFragment<EventsPresenter> implements EventsView
+public class EventsFragment extends MvpFragment<EventsPresenter> implements EventsInteractor
 {
     //Injected Views
     @Bind(R.id.event_list) RecyclerView mEventList;
@@ -78,7 +78,7 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        mEventAdapter = new EventsAdapter(new ArrayList<Event>(), mLayoutManager);
+        mEventAdapter = new EventsAdapter(new ArrayList<CruEvent>(), mLayoutManager);
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
@@ -124,11 +124,11 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
 
     /**
      * Updates the UI to reflect the Events in events
-     * @param events List of new Events the UI should adhere to
+     * @param cruEvents List of new Events the UI should adhere to
      */
     @Override
-    public void setEvents(ArrayList<Event> events)
+    public void setEvents(ArrayList<CruEvent> cruEvents)
     {
-        mEventList.setAdapter(new EventsAdapter(events, mLayoutManager));
+        mEventList.setAdapter(new EventsAdapter(cruEvents, mLayoutManager));
     }
 }

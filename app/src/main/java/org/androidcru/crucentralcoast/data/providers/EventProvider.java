@@ -5,12 +5,10 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.data.models.Event;
-import org.androidcru.crucentralcoast.data.models.EventList;
-import org.androidcru.crucentralcoast.data.models.Location;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.CruEventsList;
 import org.androidcru.crucentralcoast.data.providers.events.EventListEvent;
 import org.androidcru.crucentralcoast.data.services.CruService;
-import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 
@@ -52,28 +50,6 @@ public final class EventProvider
         return eventProvider;
     }
 
-    public void postRandomEvent()
-    {
-        ZonedDateTime nowish = ZonedDateTime.now().withNano(0).withSecond(0).withMinute(0);
-        Call<Event> call = cruService.postEvent(new Event("Test Event " + String.valueOf(++testCounter), "Test Description " + String.valueOf(testCounter),
-                nowish, nowish.plusHours(3),
-                new Location("TBD", "TBD", "TBD","TBD", "USA"), false));
-        call.enqueue(new Callback<Event>()
-        {
-            @Override
-            public void onResponse(Response<Event> response, Retrofit retrofit)
-            {
-                forceUpdate();
-            }
-
-            @Override
-            public void onFailure(Throwable t)
-            {
-                Logger.e(t.getMessage());
-            }
-        });
-    }
-
     /**
      * Posts an EventListEvent onto the EventBus if EventList is cached or otherwise, a cold request
      * is issued.
@@ -84,7 +60,7 @@ public final class EventProvider
         {
             cacheProvider = new EventCacheProvider();
         }
-        EventList events = cacheProvider.checkCache();
+        CruEventsList events = cacheProvider.checkCache();
         if(events == null)
         {
             forceUpdate();
@@ -92,7 +68,7 @@ public final class EventProvider
         else
         {
             Logger.d("Reservoir not empty! Loading from cache...");
-            EventBus.getDefault().post(new EventListEvent(events.events));
+            EventBus.getDefault().post(new EventListEvent(events.cruEvents));
         }
     }
 
@@ -102,10 +78,10 @@ public final class EventProvider
     public void forceUpdate()
     {
         //Generates a queue for EventList related network requests
-        Call<ArrayList<Event>> getEvents = cruService.getEvents();
+        Call<ArrayList<CruEvent>> getEvents = cruService.getEvents();
 
         //Adds a network events to the queue and asynchronously issues the request
-        getEvents.enqueue(new Callback<ArrayList<Event>>()
+        getEvents.enqueue(new Callback<ArrayList<CruEvent>>()
         {
             /**
              * Called if the response succeeded
@@ -113,10 +89,10 @@ public final class EventProvider
              * @param retrofit Retrofit object
              */
             @Override
-            public void onResponse(Response<ArrayList<Event>> response, Retrofit retrofit)
+            public void onResponse(Response<ArrayList<CruEvent>> response, Retrofit retrofit)
             {
                 Logger.d("Reservoir being refilled! Writing to cache...");
-                cacheProvider.putCache(new EventList(response.body()));
+                cacheProvider.putCache(new CruEventsList(response.body()));
                 EventBus.getDefault().post(new EventListEvent(response.body()));
             }
 
@@ -144,14 +120,14 @@ public final class EventProvider
          * Asks the disk cache if it has a copy of EventList
          * @return EventList if if the cache has an entry, null otherwise
          */
-        public EventList checkCache()
+        public CruEventsList checkCache()
         {
-            EventList events = null;
+            CruEventsList events = null;
             try
             {
                 if(Reservoir.contains(eventKey))
                 {
-                    events = Reservoir.get(eventKey, EventList.class);
+                    events = Reservoir.get(eventKey, CruEventsList.class);
                 }
 
             }
@@ -166,7 +142,7 @@ public final class EventProvider
          * Invalidates cache and places a new EventList into cache
          * @param events EventList to place into cache
          */
-        public void putCache(EventList events)
+        public void putCache(CruEventsList events)
         {
             try
             {

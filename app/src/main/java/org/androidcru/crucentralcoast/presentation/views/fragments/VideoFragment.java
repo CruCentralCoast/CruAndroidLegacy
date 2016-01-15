@@ -16,12 +16,13 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.VideoPresenter;
-import org.androidcru.crucentralcoast.presentation.views.views.VideoView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.VideoInteractor;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class VideoFragment extends MvpFragment<VideoPresenter> implements VideoView {
+public class VideoFragment extends MvpFragment<VideoPresenter> implements VideoInteractor
+{
 
     YouTubePlayerSupportFragment youTubePlayerFragment;
 

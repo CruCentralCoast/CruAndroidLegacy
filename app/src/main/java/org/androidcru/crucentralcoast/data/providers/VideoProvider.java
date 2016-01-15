@@ -34,7 +34,7 @@ public final class VideoProvider {
         {
             query = youtube.videos().list("id,snippet");
             query.setKey(BuildConfig.YOUTUBEBROWSERAPIKEY);
-            query.setFields("items(snippet/title,snippet/description,snippet/thumbnails/default/url)");
+            query.setFields("items(snippet/title,snippet/mDescription,snippet/thumbnails/default/url)");
         }
         catch(IOException e)
         {

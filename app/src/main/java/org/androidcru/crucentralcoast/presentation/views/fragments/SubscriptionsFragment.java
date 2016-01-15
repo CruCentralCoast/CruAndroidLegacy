@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.SubscriptionsPresenter;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
-import org.androidcru.crucentralcoast.presentation.views.views.SubscriptionsView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.SubscriptionsInteractor;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Use the {@link SubscriptionsFragment#} factory method to
  * create an instance of this fragment.
  */
-public class SubscriptionsFragment extends MvpFragment<SubscriptionsPresenter> implements SubscriptionsView
+public class SubscriptionsFragment extends MvpFragment<SubscriptionsPresenter> implements SubscriptionsInteractor
 {
     @Bind(R.id.subscription_list)
     RecyclerView mSubscriptionsList;

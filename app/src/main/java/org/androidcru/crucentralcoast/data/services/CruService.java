@@ -1,5 +1,5 @@
 package org.androidcru.crucentralcoast.data.services;
-import org.androidcru.crucentralcoast.data.models.Event;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 
 import java.util.ArrayList;
 
@@ -15,8 +15,8 @@ public interface CruService
      * @return Callback request
      */
     @GET("/api/event/list")
-    public Call<ArrayList<Event>> getEvents();
+    public Call<ArrayList<CruEvent>> getEvents();
 
     @POST("api/event/create")
-    public Call<Event> postEvent(@Body Event event);
+    public Call<CruEvent> postEvent(@Body CruEvent cruEvent);
 }

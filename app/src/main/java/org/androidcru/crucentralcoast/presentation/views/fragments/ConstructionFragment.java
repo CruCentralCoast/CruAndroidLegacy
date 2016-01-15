@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
-import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.MvpInteractor;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ConstructionFragment extends MvpFragment<MvpBasePresenter> implements MvpView
+public class ConstructionFragment extends MvpFragment<MvpBasePresenter> implements MvpInteractor
 {
 
     @Bind(R.id.tv_title) TextView title;

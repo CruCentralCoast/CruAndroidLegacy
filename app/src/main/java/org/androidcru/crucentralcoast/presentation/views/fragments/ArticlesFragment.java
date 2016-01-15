@@ -12,19 +12,19 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
 import org.androidcru.crucentralcoast.presentation.util.CustomTabActivityHelper;
 import org.androidcru.crucentralcoast.presentation.views.activities.WebviewFallback;
-import org.androidcru.crucentralcoast.presentation.views.views.MvpView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.MvpInteractor;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ArticlesFragment extends MvpFragment<MvpBasePresenter<MvpView>>
+public class ArticlesFragment extends MvpFragment<MvpBasePresenter<MvpInteractor>>
 {
     private static final String URL = "http://www.slocru.com/";
 
     private CustomTabActivityHelper mCustomTabActivityHelper;
 
     @Override
-    protected MvpBasePresenter<MvpView> createPresenter()
+    protected MvpBasePresenter<MvpInteractor> createPresenter()
     {
         return new MvpBasePresenter<>();
     }

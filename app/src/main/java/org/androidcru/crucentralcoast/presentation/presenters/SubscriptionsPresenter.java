@@ -1,15 +1,14 @@
 package org.androidcru.crucentralcoast.presentation.presenters;
 
 import android.content.Context;
-import android.widget.ImageView;
 
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
-import org.androidcru.crucentralcoast.presentation.views.views.SubscriptionsView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.SubscriptionsInteractor;
 
 import java.util.ArrayList;
 
-public class SubscriptionsPresenter extends MvpBasePresenter<SubscriptionsView>
+public class SubscriptionsPresenter extends MvpBasePresenter<SubscriptionsInteractor>
 {
     public ArrayList<MinistrySubscription> getMinistrySubscriptionData(Context context)
     {

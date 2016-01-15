@@ -4,12 +4,12 @@ import com.google.api.services.youtube.model.VideoSnippet;
 
 import org.androidcru.crucentralcoast.data.providers.VideoProvider;
 import org.androidcru.crucentralcoast.data.providers.events.VideoDataEvent;
-import org.androidcru.crucentralcoast.presentation.views.views.VideoView;
+import org.androidcru.crucentralcoast.presentation.views.interactors.VideoInteractor;
 
-public class VideoPresenter extends MvpBasePresenter<VideoView> {
+public class VideoPresenter extends MvpBasePresenter<VideoInteractor> {
 
     @Override
-    public void onAttachView(VideoView view)
+    public void onAttachView(VideoInteractor view)
     {
         super.onAttachView(view);
         eventBus.register(this);
