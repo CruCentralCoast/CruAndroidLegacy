@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.views;
+package org.androidcru.crucentralcoast.presentation.views.interactors;
 
 /*
  * Copyright 2015 Hannes Dorfmann.
@@ -22,6 +22,6 @@ package org.androidcru.crucentralcoast.presentation.views.views;
  * @author Hannes Dorfmann
  * @since 1.0.0
  */
-public interface MvpView
+public interface MvpInteractor
 {
 }

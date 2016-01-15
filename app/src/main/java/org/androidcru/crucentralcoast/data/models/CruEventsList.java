@@ -5,17 +5,17 @@ import java.util.ArrayList;
 /**
  * Required for disk caching
  */
-public class EventList
+public class CruEventsList
 {
-    public ArrayList<Event> events;
+    public ArrayList<CruEvent> cruEvents;
 
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection
      */
-    public EventList() {};
+    public CruEventsList() {};
 
-    public EventList(ArrayList<Event> events)
+    public CruEventsList(ArrayList<CruEvent> cruEvents)
     {
-        this.events = events;
+        this.cruEvents = cruEvents;
     }
 }

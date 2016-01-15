@@ -1,10 +1,10 @@
-package org.androidcru.crucentralcoast.presentation.views.views;
+package org.androidcru.crucentralcoast.presentation.views.interactors;
 
 import org.androidcru.crucentralcoast.data.models.Event;
 
 import java.util.ArrayList;
 
-public interface EventsView extends MvpView
+public interface EventsInteractor extends MvpView
 {
     /**
      * Updates the UI to reflect the Events in events

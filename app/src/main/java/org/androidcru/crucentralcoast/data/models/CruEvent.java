@@ -2,7 +2,7 @@ package org.androidcru.crucentralcoast.data.models;
 
 import org.threeten.bp.ZonedDateTime;
 
-public class Event
+public class CruEvent
 {
     public String name;
     public String description;
@@ -14,9 +14,9 @@ public class Event
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection
      */
-    public Event() {}
+    public CruEvent() {}
 
-    public Event(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled)
+    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled)
     {
         this.name = name;
         this.description = description;
