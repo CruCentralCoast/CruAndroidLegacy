@@ -6,12 +6,12 @@ import org.threeten.bp.ZonedDateTime;
 
 public class CruEvent
 {
-    @SerializedName("mName") public String mName;
-    @SerializedName("mDescription") public String mDescription;
-    @SerializedName("mStartDate") public ZonedDateTime mStartDate;
-    @SerializedName("mEndDate") public ZonedDateTime mEndDate;
-    @SerializedName("mRideSharingEnabled") public boolean mRideSharingEnabled;
-    @SerializedName("mLocation") public Location mLocation;
+    @SerializedName("name") public String mName;
+    @SerializedName("description") public String mDescription;
+    @SerializedName("startDate") public ZonedDateTime mStartDate;
+    @SerializedName("endDate") public ZonedDateTime mEndDate;
+    @SerializedName("rideSharingEnabled") public boolean mRideSharingEnabled;
+    @SerializedName("location") public Location mLocation;
 
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection

@@ -1,19 +1,17 @@
 package org.androidcru.crucentralcoast.data.models;
 
-import android.widget.ImageView;
-
-import retrofit.http.Url;
+import com.google.gson.annotations.SerializedName;
 
 public class MinistrySubscription
 {
-    public Boolean isSubscribed;
-    public String subscriptionLogo;
-    public String subscriptionSlug;
+    @SerializedName("isSubscribed") public Boolean mIsSubscribed;
+    @SerializedName("subscriptionLogo") public String mSubscriptionLogo;
+    @SerializedName("subscriptionSlug") public String mSubscriptionSlug;
 
     public MinistrySubscription(String subscriptionLogo, String subscriptionSlug)
     {
-        this.isSubscribed = false;
-        this.subscriptionLogo = subscriptionLogo;
-        this.subscriptionSlug = subscriptionSlug;
+        this.mIsSubscribed = false;
+        this.mSubscriptionLogo = subscriptionLogo;
+        this.mSubscriptionSlug = subscriptionSlug;
     }
 }

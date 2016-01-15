@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,35 +12,51 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
-import org.androidcru.crucentralcoast.presentation.presenters.EventsPresenter;
+import org.androidcru.crucentralcoast.data.providers.CruEventsProvider;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
-import org.androidcru.crucentralcoast.presentation.views.interactors.EventsInteractor;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class EventsFragment extends MvpFragment<EventsPresenter> implements EventsInteractor
+public class EventsFragment extends Fragment
 {
     //Injected Views
     @Bind(R.id.event_list) RecyclerView mEventList;
 
     //View elements
-    LinearLayoutManager mLayoutManager;
-    EventsAdapter mEventAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private EventsAdapter mEventAdapter;
 
-    /**
-     * When the framework invokes onCreateView(), MvpFragment will invoke this method and create the
-     * corresponding presenter.
-     * @return EventPresenter
-     */
-    @Override
-    protected EventsPresenter createPresenter()
+    private Subscriber<ArrayList<CruEvent>> subscriber;
+
+    public EventsFragment()
     {
-        return new EventsPresenter();
+        subscriber = new Subscriber<ArrayList<CruEvent>>()
+        {
+            @Override
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Logger.e(e, "CruEvents failed to retreive.");
+            }
+
+            @Override
+            public void onNext(ArrayList<CruEvent> cruEvents)
+            {
+                setEvents(cruEvents);
+            }
+        };
     }
 
     /**
@@ -82,8 +99,7 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
-        //Ask presenter for data
-        presenter.getEventData();
+        getCruEvents();
 
 
     }
@@ -111,22 +127,35 @@ public class EventsFragment extends MvpFragment<EventsPresenter> implements Even
         int itemId = item.getItemId();
         switch(itemId)
         {
-            case R.id.action_add_event:
-                presenter.postRandomEvent();
-                return true;
             case R.id.action_refresh:
-                presenter.refresh();
+                forceUpdate();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void forceUpdate()
+    {
+        CruEventsProvider.getInstance().forceUpdate()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    private void getCruEvents()
+    {
+        CruEventsProvider.getInstance().requestEvents()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+
     /**
      * Updates the UI to reflect the Events in events
      * @param cruEvents List of new Events the UI should adhere to
      */
-    @Override
     public void setEvents(ArrayList<CruEvent> cruEvents)
     {
         mEventList.setAdapter(new EventsAdapter(cruEvents, mLayoutManager));

@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class Location
 {
-    @SerializedName("mPostcode") String mPostcode;
-    @SerializedName("mState") String mState;
-    @SerializedName("mSuburb") String mSuburb;
-    @SerializedName("mStreet1") String mStreet1;
-    @SerializedName("mCountry") String mCountry;
+    @SerializedName("postcode") String mPostcode;
+    @SerializedName("state") String mState;
+    @SerializedName("suburb") String mSuburb;
+    @SerializedName("street1") String mStreet1;
+    @SerializedName("country") String mCountry;
 
     public Location(String postcode, String state, String suburb, String street1, String country)
     {

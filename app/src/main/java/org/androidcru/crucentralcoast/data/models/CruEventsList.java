@@ -7,15 +7,15 @@ import java.util.ArrayList;
  */
 public class CruEventsList
 {
-    public ArrayList<CruEvent> cruEvents;
+    public ArrayList<CruEvent> mCruEvents;
 
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection
      */
-    public CruEventsList() {};
+    public CruEventsList() {}
 
     public CruEventsList(ArrayList<CruEvent> cruEvents)
     {
-        this.cruEvents = cruEvents;
+        this.mCruEvents = cruEvents;
     }
 }
