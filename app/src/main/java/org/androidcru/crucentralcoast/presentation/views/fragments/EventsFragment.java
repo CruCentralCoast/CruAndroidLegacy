@@ -25,7 +25,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class EventsFragment extends Fragment
 {
@@ -34,7 +33,6 @@ public class EventsFragment extends Fragment
 
     //View elements
     private LinearLayoutManager mLayoutManager;
-    private EventsAdapter mEventAdapter;
 
     private Subscriber<ArrayList<CruEvent>> subscriber;
 
@@ -48,7 +46,7 @@ public class EventsFragment extends Fragment
             @Override
             public void onError(Throwable e)
             {
-                Logger.e(e, "CruEvents failed to retreive.");
+                Logger.e(e, "CruEvents failed to retrieve.");
             }
 
             @Override
@@ -95,7 +93,7 @@ public class EventsFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        mEventAdapter = new EventsAdapter(new ArrayList<CruEvent>(), mLayoutManager);
+        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), mLayoutManager);
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
@@ -138,7 +136,6 @@ public class EventsFragment extends Fragment
     private void forceUpdate()
     {
         CruEventsProvider.getInstance().forceUpdate()
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
@@ -146,7 +143,6 @@ public class EventsFragment extends Fragment
     private void getCruEvents()
     {
         CruEventsProvider.getInstance().requestEvents()
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }

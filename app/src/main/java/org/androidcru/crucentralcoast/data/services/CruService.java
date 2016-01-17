@@ -4,10 +4,7 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 
 import java.util.ArrayList;
 
-import retrofit.Call;
-import retrofit.http.Body;
 import retrofit.http.GET;
-import retrofit.http.POST;
 import rx.Observable;
 
 public interface CruService
@@ -18,7 +15,4 @@ public interface CruService
      */
     @GET("/api/event/list")
     public Observable<ArrayList<CruEvent>> getEvents();
-
-    @POST("api/event/create")
-    public Call<CruEvent> postEvent(@Body CruEvent cruEvent);
 }

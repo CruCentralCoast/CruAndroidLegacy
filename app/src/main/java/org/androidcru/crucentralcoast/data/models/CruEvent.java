@@ -27,4 +27,14 @@ public class CruEvent
         this.mLocation = location;
         this.mRideSharingEnabled = rideSharingEnabled;
     }
+
+    public boolean isClean()
+    {
+        if(mName == null || mDescription == null || mStartDate == null || mEndDate == null
+                || mLocation == null)
+        {
+            return false;
+        }
+        return true;
+    }
 }

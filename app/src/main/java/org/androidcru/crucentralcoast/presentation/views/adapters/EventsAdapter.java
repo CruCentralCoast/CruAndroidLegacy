@@ -36,7 +36,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         this.mEvents = new ArrayList<>();
         for (CruEvent cruEvent : cruEvents)
         {
-            this.mEvents.add(new Pair<>(cruEvent, false));
+            if(cruEvent.isClean())
+                this.mEvents.add(new Pair<>(cruEvent, false));
         }
         this.mLayoutManager = layoutManager;
     }
@@ -121,7 +122,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             mEventDescription.setVisibility(visibility);
 
             CruEvent selectedEvent = mEvents.get(getAdapterPosition()).first;
-            mEvents.set(getAdapterPosition(), new Pair<CruEvent, Boolean>(selectedEvent, (mEventDescription.getVisibility() == View.VISIBLE)));
+            mEvents.set(getAdapterPosition(), new Pair<>(selectedEvent, (mEventDescription.getVisibility() == View.VISIBLE)));
 
             notifyItemChanged(getAdapterPosition());
             mLayoutManager.scrollToPosition(getAdapterPosition());
