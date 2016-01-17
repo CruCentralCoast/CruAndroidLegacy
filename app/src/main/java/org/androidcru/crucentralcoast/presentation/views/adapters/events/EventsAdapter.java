@@ -1,15 +1,18 @@
-package org.androidcru.crucentralcoast.presentation.views.adapters;
+package org.androidcru.crucentralcoast.presentation.views.adapters.events;
 
+import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.TextStyle;
 
@@ -18,6 +21,7 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
 /**
  * EventsAdapter is an RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -26,13 +30,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 {
     //Pair<Event, isDescriptionVisible>
     private ArrayList<Pair<CruEvent, Boolean>> mEvents;
+    private Activity mParent;
 
     public final static String TIME_FORMATTER = "h:mm";
 
     private LinearLayoutManager mLayoutManager;
 
-    public EventsAdapter(ArrayList<CruEvent> cruEvents, LinearLayoutManager layoutManager)
+    private Subscriber<Long> mOnCalendarWritten;
+
+    public EventsAdapter(Activity parent, ArrayList<CruEvent> cruEvents, LinearLayoutManager layoutManager, Subscriber<Long> onCalendarWritten)
     {
+        this.mParent = parent;
         this.mEvents = new ArrayList<>();
         for (CruEvent cruEvent : cruEvents)
         {
@@ -40,6 +48,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 this.mEvents.add(new Pair<>(cruEvent, false));
         }
         this.mLayoutManager = layoutManager;
+        this.mOnCalendarWritten = onCalendarWritten;
     }
 
     /**
@@ -92,11 +101,17 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         @Bind(R.id.event_name) TextView mEventName;
         @Bind(R.id.event_timeframe) TextView mEventTimeframe;
         @Bind(R.id.event_description) TextView mEventDescription;
+        @Bind(R.id.event_calendar) Button mEventCalendar;
 
         public ViewHolder(View rootView) {
             super(rootView);
             ButterKnife.bind(this, rootView);
             rootView.setOnClickListener(this);
+
+            mEventCalendar.setOnClickListener(v -> {
+                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).first;
+                CalendarProvider.newInstance().addEventToCalendar(mParent, selectedEvent, mOnCalendarWritten);
+            });
         }
 
         /**

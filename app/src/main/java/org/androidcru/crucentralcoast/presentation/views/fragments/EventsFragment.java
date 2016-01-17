@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,13 +12,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.CruEventsProvider;
-import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
+import org.androidcru.crucentralcoast.presentation.views.adapters.events.EventsAdapter;
 
 import java.util.ArrayList;
 
@@ -34,11 +36,13 @@ public class EventsFragment extends Fragment
     //View elements
     private LinearLayoutManager mLayoutManager;
 
-    private Subscriber<ArrayList<CruEvent>> subscriber;
+    private Subscriber<ArrayList<CruEvent>> mEventSubscriber;
+
+    private Subscriber<Long> mOnCalendarWrittenSubscriber;
 
     public EventsFragment()
     {
-        subscriber = new Subscriber<ArrayList<CruEvent>>()
+        mEventSubscriber = new Subscriber<ArrayList<CruEvent>>()
         {
             @Override
             public void onCompleted() {}
@@ -53,6 +57,25 @@ public class EventsFragment extends Fragment
             public void onNext(ArrayList<CruEvent> cruEvents)
             {
                 setEvents(cruEvents);
+            }
+        };
+
+        mOnCalendarWrittenSubscriber = new Subscriber<Long>()
+        {
+            @Override
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onNext(Long eventId)
+            {
+                if(eventId > -1)
+                {
+                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventId) + "added to default calendar",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         };
     }
@@ -93,7 +116,7 @@ public class EventsFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), mLayoutManager);
+        EventsAdapter mEventAdapter = new EventsAdapter(getActivity(), new ArrayList<>(), mLayoutManager, mOnCalendarWrittenSubscriber);
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
@@ -133,18 +156,33 @@ public class EventsFragment extends Fragment
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getExtras();
+        if(bundle != null)
+        {
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+                Logger.d(String.format("%s %s (%s)", key,
+                        value.toString(), value.getClass().getName()));
+            }
+        }
+    }
+
     private void forceUpdate()
     {
         CruEventsProvider.getInstance().forceUpdate()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
         CruEventsProvider.getInstance().requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(mEventSubscriber);
     }
 
 
@@ -154,6 +192,6 @@ public class EventsFragment extends Fragment
      */
     public void setEvents(ArrayList<CruEvent> cruEvents)
     {
-        mEventList.setAdapter(new EventsAdapter(cruEvents, mLayoutManager));
+        mEventList.setAdapter(new EventsAdapter(getActivity(), cruEvents, mLayoutManager, mOnCalendarWrittenSubscriber));
     }
 }

@@ -149,6 +149,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     /**
      * Determines if the current device is enabled for google play services and if not, will prompt
      * the user to enable it.

@@ -75,6 +75,11 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Medium Text"
                         android:id="@+id/event_timeframe" />
+                    <Button
+                        android:id="@+id/event_calendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ADD TO CALENDAR"/>
 
                 </LinearLayout>
             </LinearLayout>
