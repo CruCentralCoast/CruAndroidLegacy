@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,14 +17,12 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
-import org.androidcru.crucentralcoast.presentation.presenters.MvpBasePresenter;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ConstructionFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
-import org.androidcru.crucentralcoast.presentation.views.fragments.VideoFragment;
 
-public class MainActivity extends MvpActivity<MvpBasePresenter>
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
     // Variables for checking google play services
@@ -65,13 +64,6 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
     {
         getSupportFragmentManager().beginTransaction().replace(R.id.content, constructionFragment).commit();
     }
-
-    @Override
-    protected MvpBasePresenter createPresenter()
-    {
-        return new MvpBasePresenter();
-    }
-
 
     @Override
     public void onBackPressed()
@@ -148,7 +140,7 @@ public class MainActivity extends MvpActivity<MvpBasePresenter>
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new ArticlesFragment()).commit();
                 break;
             case R.id.nav_videos:
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideoFragment()).commit();
+                spawnConstructionFragment();
                 break;
         }
 

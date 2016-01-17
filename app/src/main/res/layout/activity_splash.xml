@@ -22,7 +22,8 @@
             android:id="@+id/logo"
             android:layout_width="300dp"
             android:layout_height="184dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/logo_grey"/>
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/central_coast"
@@ -33,6 +34,7 @@
             android:textSize="56sp"
             autofit:minTextSize="16sp"
             tools:text="cru"
+            android:text="@string/central_coast"
             android:textColor="@color/cruGray"
             android:layout_gravity="center_vertical"/>
     </LinearLayout>

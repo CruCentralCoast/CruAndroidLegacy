@@ -1,19 +1,21 @@
 package org.androidcru.crucentralcoast.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Location
 {
-    String postcode;
-    String state;
-    String suburb;
-    String street1;
-    String country;
+    @SerializedName("postcode") String mPostcode;
+    @SerializedName("state") String mState;
+    @SerializedName("suburb") String mSuburb;
+    @SerializedName("street1") String mStreet1;
+    @SerializedName("country") String mCountry;
 
     public Location(String postcode, String state, String suburb, String street1, String country)
     {
-        this.postcode = postcode;
-        this.state = state;
-        this.suburb = suburb;
-        this.street1 = street1;
-        this.country = country;
+        this.mPostcode = postcode;
+        this.mState = state;
+        this.mSuburb = suburb;
+        this.mStreet1 = street1;
+        this.mCountry = country;
     }
 }

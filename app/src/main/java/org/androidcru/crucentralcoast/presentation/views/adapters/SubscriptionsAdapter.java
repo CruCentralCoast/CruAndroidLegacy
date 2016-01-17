@@ -38,13 +38,13 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        if (ministries.get(position).isSubscribed)
+        if (ministries.get(position).mIsSubscribed)
         {
-            Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(holder.mSubscriptionLogo);
+            Glide.with(parent.getContext()).load(ministries.get(position).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(holder.mSubscriptionLogo);
         }
         else
         {
-            Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(holder.mSubscriptionLogo);
+            Glide.with(parent.getContext()).load(ministries.get(position).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(holder.mSubscriptionLogo);
         }
     }
 
@@ -65,17 +65,17 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
         @Override
         public void onClick(View v)
         {
-            if (!ministries.get(getAdapterPosition()).isSubscribed)
+            if (!ministries.get(getAdapterPosition()).mIsSubscribed)
             {
-                ministries.get(getAdapterPosition()).isSubscribed = !ministries.get(getAdapterPosition()).isSubscribed;
-                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(mSubscriptionLogo);
-                RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).subscriptionSlug);
+                ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
+                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(mSubscriptionLogo);
+                RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
             }
             else
             {
-                ministries.get(getAdapterPosition()).isSubscribed = !ministries.get(getAdapterPosition()).isSubscribed;
-                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(mSubscriptionLogo);
-                RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).subscriptionSlug);
+                ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
+                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(mSubscriptionLogo);
+                RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
             }
         }
     }
