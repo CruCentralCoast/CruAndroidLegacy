@@ -40,11 +40,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
     {
         if (ministries.get(position).mIsSubscribed)
         {
-            Glide.with(parent.getContext()).load(ministries.get(position).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(holder.mSubscriptionLogo);
+            Glide.with(parent.getContext()).load(ministries.get(position).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#007398"))).into(holder.mSubscriptionLogo);
         }
         else
         {
-            Glide.with(parent.getContext()).load(ministries.get(position).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(holder.mSubscriptionLogo);
+            Glide.with(parent.getContext()).load(ministries.get(position).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#666062"))).into(holder.mSubscriptionLogo);
         }
     }
 
@@ -68,13 +68,13 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
             if (!ministries.get(getAdapterPosition()).mIsSubscribed)
             {
                 ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.RED)).into(mSubscriptionLogo);
+                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#007398"))).into(mSubscriptionLogo);
                 RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
             }
             else
             {
                 ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(mSubscriptionLogo);
+                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mSubscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#666062"))).into(mSubscriptionLogo);
                 RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
             }
         }

@@ -61,6 +61,8 @@ public class SubscriptionsFragment extends Fragment
 
     public ArrayList<MinistrySubscription> getMinistrySubscriptionData()
     {
+        // TODO Communicate with server for this list
+
         ArrayList<MinistrySubscription> subscriptions = new ArrayList<MinistrySubscription>();
         subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/slo-cru.png", "slo-cru"));
         subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/cuesta-cru.png", "cru-1"));

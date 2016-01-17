@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.data.services;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 
 import java.util.ArrayList;
 
@@ -15,4 +16,7 @@ public interface CruService
      */
     @GET("/api/event/list")
     public Observable<ArrayList<CruEvent>> getEvents();
+
+    @GET("/api/ministry/list")
+    public Observable<ArrayList<MinistrySubscription>> getMinistries();
 }
