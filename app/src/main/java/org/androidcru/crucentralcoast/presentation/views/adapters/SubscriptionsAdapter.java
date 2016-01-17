@@ -44,7 +44,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
         }
         else
         {
-            Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.WHITE)).into(holder.mSubscriptionLogo);
+            Glide.with(parent.getContext()).load(ministries.get(position).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(holder.mSubscriptionLogo);
         }
     }
 
@@ -74,7 +74,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
             else
             {
                 ministries.get(getAdapterPosition()).isSubscribed = !ministries.get(getAdapterPosition()).isSubscribed;
-                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.WHITE)).into(mSubscriptionLogo);
+                Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).subscriptionLogo).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.BLACK)).into(mSubscriptionLogo);
                 RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).subscriptionSlug);
             }
         }
