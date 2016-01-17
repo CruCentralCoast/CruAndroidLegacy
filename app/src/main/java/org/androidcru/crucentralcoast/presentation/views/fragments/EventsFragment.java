@@ -1,8 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ public class EventsFragment extends Fragment
 {
     //Injected Views
     @Bind(R.id.event_list) RecyclerView mEventList;
+    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     //View elements
     private LinearLayoutManager mLayoutManager;
@@ -97,6 +100,15 @@ public class EventsFragment extends Fragment
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
+        //Set up SwipeRefreshLayout
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                forceUpdate();
+            }
+        });
+
         getCruEvents();
 
 
@@ -138,6 +150,7 @@ public class EventsFragment extends Fragment
         CruEventsProvider.getInstance().forceUpdate()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void getCruEvents()
