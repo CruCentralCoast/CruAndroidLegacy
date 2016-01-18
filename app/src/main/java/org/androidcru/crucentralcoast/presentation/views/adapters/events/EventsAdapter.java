@@ -1,9 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters.events;
 
 import android.app.Activity;
+import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.TextStyle;
@@ -29,24 +31,18 @@ import rx.Subscriber;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder>
 {
     //Pair<Event, isDescriptionVisible>
-    private ArrayList<Pair<CruEvent, Boolean>> mEvents;
+    private ArrayList<CruEventMV> mEvents;
     private Activity mParent;
 
     public final static String TIME_FORMATTER = "h:mm";
 
     private LinearLayoutManager mLayoutManager;
+    private Subscriber<Pair<String, Long>> mOnCalendarWritten;
 
-    private Subscriber<Long> mOnCalendarWritten;
-
-    public EventsAdapter(Activity parent, ArrayList<CruEvent> cruEvents, LinearLayoutManager layoutManager, Subscriber<Long> onCalendarWritten)
+    public EventsAdapter(Activity parent, ArrayList<CruEventMV> events, LinearLayoutManager layoutManager, Subscriber<Pair<String, Long>> onCalendarWritten)
     {
         this.mParent = parent;
-        this.mEvents = new ArrayList<>();
-        for (CruEvent cruEvent : cruEvents)
-        {
-            if(cruEvent.isClean())
-                this.mEvents.add(new Pair<>(cruEvent, false));
-        }
+        this.mEvents = events;
         this.mLayoutManager = layoutManager;
         this.mOnCalendarWritten = onCalendarWritten;
     }
@@ -72,14 +68,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        holder.mDateMonth.setText(mEvents.get(position).first.mStartDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()).toUpperCase());
-        String monthName = String.valueOf(mEvents.get(position).first.mStartDate.getDayOfMonth());
+        holder.mDateMonth.setText(mEvents.get(position).mCruEvent.mStartDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()).toUpperCase());
+        String monthName = String.valueOf(mEvents.get(position).mCruEvent.mStartDate.getDayOfMonth());
         holder.mDateDay.setText(monthName);
-        holder.mEventName.setText(mEvents.get(position).first.mName);
-        holder.mEventTimeframe.setText(mEvents.get(position).first.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
-                + " - " + mEvents.get(position).first.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
-        holder.mEventDescription.setText(mEvents.get(position).first.mDescription);
-        holder.mEventDescription.setVisibility(mEvents.get(position).second ? View.VISIBLE : View.GONE);
+        holder.mEventName.setText(mEvents.get(position).mCruEvent.mName);
+        holder.mEventTimeframe.setText(mEvents.get(position).mCruEvent.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
+                + " - " + mEvents.get(position).mCruEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
+        holder.mEventDescription.setText(mEvents.get(position).mCruEvent.mDescription);
+        holder.mEventDescription.setVisibility(mEvents.get(position).mIsExpanded ? View.VISIBLE : View.GONE);
+
+        if(mEvents.get(position).mAddedToCalendar)
+        {
+            holder.mEventCalendar.setText("Added to Calendar");
+        }
+        else
+        {
+            holder.mEventCalendar.setText("Add to Calendar");
+        }
     }
 
     /**
@@ -109,8 +114,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             rootView.setOnClickListener(this);
 
             mEventCalendar.setOnClickListener(v -> {
-                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).first;
-                CalendarProvider.newInstance().addEventToCalendar(mParent, selectedEvent, mOnCalendarWritten);
+
+                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
+                final boolean adding = !mEvents.get(getAdapterPosition()).mAddedToCalendar;
+                String operation = adding ? "Add " : "Remove ";
+                AlertDialog confirmDialog = new AlertDialog.Builder(mParent)
+                        .setTitle(operation + selectedEvent.mName + " to your calendar?")
+                        .setNegativeButton("NOPE", (dialog, which) -> {
+                        })
+                        .setPositiveButton("SURE", (dialog, which) -> {
+                            if(adding)
+                                CalendarProvider.getInstance().addEventToCalendar(mParent, selectedEvent, mOnCalendarWritten);
+                            else
+                                CalendarProvider.getInstance().removeEventFromCalendar(mParent, selectedEvent, mEvents.get(getAdapterPosition()).mLocalEventId, mOnCalendarWritten);
+                        })
+                        .create();
+                confirmDialog.show();
             });
         }
 
@@ -136,8 +155,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
             mEventDescription.setVisibility(visibility);
 
-            CruEvent selectedEvent = mEvents.get(getAdapterPosition()).first;
-            mEvents.set(getAdapterPosition(), new Pair<>(selectedEvent, (mEventDescription.getVisibility() == View.VISIBLE)));
+            mEvents.get(getAdapterPosition()).mIsExpanded = (View.VISIBLE == visibility);
 
             notifyItemChanged(getAdapterPosition());
             mLayoutManager.scrollToPosition(getAdapterPosition());

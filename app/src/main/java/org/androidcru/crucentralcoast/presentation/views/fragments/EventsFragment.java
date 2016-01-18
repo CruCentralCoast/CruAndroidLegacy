@@ -1,9 +1,11 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,32 +18,37 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.CruEventsProvider;
+import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.views.adapters.events.EventsAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class EventsFragment extends Fragment
 {
     //Injected Views
     @Bind(R.id.event_list) RecyclerView mEventList;
-
+    private ArrayList<CruEventMV> mCruEventMVs;
     //View elements
     private LinearLayoutManager mLayoutManager;
 
     private Subscriber<ArrayList<CruEvent>> mEventSubscriber;
+    private Subscriber<Pair<String, Long>> mOnCalendarWrittenSubscriber;
 
-    private Subscriber<Long> mOnCalendarWrittenSubscriber;
-
+    private SharedPreferences mSharedPreferences;
     public EventsFragment()
     {
+        mCruEventMVs = new ArrayList<>();
         mEventSubscriber = new Subscriber<ArrayList<CruEvent>>()
         {
             @Override
@@ -60,7 +67,7 @@ public class EventsFragment extends Fragment
             }
         };
 
-        mOnCalendarWrittenSubscriber = new Subscriber<Long>()
+        mOnCalendarWrittenSubscriber = new Subscriber<Pair<String, Long>>()
         {
             @Override
             public void onCompleted() {}
@@ -69,13 +76,27 @@ public class EventsFragment extends Fragment
             public void onError(Throwable e) {}
 
             @Override
-            public void onNext(Long eventId)
+            public void onNext(Pair<String, Long> eventInfo)
             {
-                if(eventId > -1)
+                if(eventInfo.second > -1)
                 {
-                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventId) + "added to default calendar",
+                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventInfo.second) + "added to default calendar",
                             Toast.LENGTH_LONG).show();
+                    mSharedPreferences.edit().putLong(eventInfo.first, eventInfo.second).commit();
                 }
+                else
+                {
+                    mSharedPreferences.edit().remove(eventInfo.first).commit();
+                }
+
+                Observable.from(mCruEventMVs)
+                    .filter(cruEventMV -> cruEventMV.mCruEvent.mId.equals(eventInfo.first))
+                    .subscribeOn(Schedulers.immediate())
+                    .subscribe(cruEventMV -> {
+                        cruEventMV.mAddedToCalendar = mSharedPreferences.contains(cruEventMV.mCruEvent.mId);
+                        cruEventMV.mLocalEventId = mSharedPreferences.getLong(cruEventMV.mCruEvent.mId, -1);
+                    });
+                mEventList.getAdapter().notifyDataSetChanged();
             }
         };
     }
@@ -107,6 +128,8 @@ public class EventsFragment extends Fragment
 
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
+
+        mSharedPreferences = getActivity().getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);
@@ -156,21 +179,6 @@ public class EventsFragment extends Fragment
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getExtras();
-        if(bundle != null)
-        {
-            for (String key : bundle.keySet()) {
-                Object value = bundle.get(key);
-                Logger.d(String.format("%s %s (%s)", key,
-                        value.toString(), value.getClass().getName()));
-            }
-        }
-    }
-
     private void forceUpdate()
     {
         CruEventsProvider.getInstance().forceUpdate()
@@ -192,6 +200,14 @@ public class EventsFragment extends Fragment
      */
     public void setEvents(ArrayList<CruEvent> cruEvents)
     {
-        mEventList.setAdapter(new EventsAdapter(getActivity(), cruEvents, mLayoutManager, mOnCalendarWrittenSubscriber));
+        mCruEventMVs.clear();
+        rx.Observable.from(cruEvents)
+                .map(cruEvent -> new CruEventMV(cruEvent, false,
+                        mSharedPreferences.contains(cruEvent.mId),
+                        mSharedPreferences.getLong(cruEvent.mId, -1)))
+                .subscribeOn(Schedulers.immediate())
+                .subscribe(mCruEventMVs::add);
+
+        mEventList.setAdapter(new EventsAdapter(getActivity(), mCruEventMVs, mLayoutManager, mOnCalendarWrittenSubscriber));
     }
 }
