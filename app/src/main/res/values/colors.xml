@@ -6,4 +6,7 @@
     <color name="colorConstruction">#00ade5</color>
 
     <color name="cruGray">#666062</color>
+    <color name="cruDarkBlue">#007398</color>
+    <color name="cruGold">#f9b625</color>
+    <color name="cruOrange">#dd7d1b</color>
 </resources>
