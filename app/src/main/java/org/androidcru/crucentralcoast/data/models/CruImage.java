@@ -10,6 +10,8 @@ public class CruImage {
     @SerializedName("width") public int mWidth;
     @SerializedName("height") public int mHeight;
 
+    public CruImage() {}
+
     public CruImage(String URL, int width, int height) {
         this.mURL = URL;
         this.mWidth = width;

@@ -93,7 +93,7 @@ public class EventsFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), mLayoutManager);
+        EventsAdapter mEventAdapter = new EventsAdapter(getActivity(), new ArrayList<>(), mLayoutManager);
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
@@ -154,6 +154,6 @@ public class EventsFragment extends Fragment
      */
     public void setEvents(ArrayList<CruEvent> cruEvents)
     {
-        mEventList.setAdapter(new EventsAdapter(cruEvents, mLayoutManager));
+        mEventList.setAdapter(new EventsAdapter(getActivity(), cruEvents, mLayoutManager));
     }
 }
