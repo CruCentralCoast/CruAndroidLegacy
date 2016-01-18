@@ -104,10 +104,10 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/calParent">
 
-                <ImageButton
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/chevButton"
+                    android:id="@+id/chevView"
                     android:src="@drawable/ic_chevron_down_grey600_36dp"
                     android:layout_centerInParent="true"
                     android:background="@null"

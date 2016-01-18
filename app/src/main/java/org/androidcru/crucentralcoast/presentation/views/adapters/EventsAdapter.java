@@ -86,6 +86,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                 + " - " + currEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
         holder.eventDescription.setText(mEvents.get(position).first.mDescription);
         holder.eventDescription.setVisibility(mEvents.get(position).second ? View.VISIBLE : View.GONE);
+        holder.chevView.setImageDrawable(
+                mParent.getDrawable(
+                holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
+                    : R.drawable.ic_chevron_down_grey600_36dp));
     }
 
     /**
@@ -109,6 +113,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         @Bind(R.id.eventName) TextView eventName;
         @Bind(R.id.eventDate) TextView eventDate;
         @Bind(R.id.eventDescription) TextView eventDescription;
+        @Bind(R.id.chevView) ImageView chevView;
 
         public CruEventViewHolder(View rootView) {
             super(rootView);
