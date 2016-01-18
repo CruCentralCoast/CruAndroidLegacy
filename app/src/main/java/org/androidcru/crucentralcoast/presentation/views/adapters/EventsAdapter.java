@@ -1,6 +1,9 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,13 +22,12 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.TextStyle;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
 import rx.Subscriber;
 
 /**
@@ -41,17 +42,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     public final static String TIME_FORMATTER = "h:mm a";
 
     private LinearLayoutManager mLayoutManager;
-    private Subscriber<Pair<String, Long>> mOnCalendarWritten;
+    private Observer<Pair<String, Long>> mOnCalendarWritten;
 
-    public EventsAdapter(Activity parent, ArrayList<CruEventMV> cruEvents, LinearLayoutManager layoutManager, Subscriber<Pair<String, Long>> onCalendarWritten)
+    public EventsAdapter(Activity parent, ArrayList<CruEventMV> cruEvents, LinearLayoutManager layoutManager, Observer<Pair<String, Long>> onCalendarWritten)
     {
         this.mParent = parent;
-        this.mEvents = new ArrayList<>();
-        for (CruEvent cruEvent : cruEvents)
-        {
-            if(cruEvent.isClean())
-                this.mEvents.add(new Pair<>(cruEvent, false));
-        }
+        this.mEvents = cruEvents;
         this.mLayoutManager = layoutManager;
         this.mOnCalendarWritten = onCalendarWritten;
     }
@@ -78,23 +74,31 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     @Override
     public void onBindViewHolder(CruEventViewHolder holder, int position)
     {
-        CruEvent currEvent = mEvents.get(position).first;
-        if(currEvent.mImage != null)
+        CruEvent cruEvent = mEvents.get(position).mCruEvent;
+        CruEventMV cruEventMV = mEvents.get(position);
+        if(cruEvent.mImage != null)
             Glide.with(mParent)
-                    .load(currEvent.mImage.mURL)
+                    .load(cruEvent.mImage.mURL)
                     .placeholder(R.drawable.logo_grey)
                     .dontAnimate()
                     .into(holder.banner);
-        holder.eventName.setText(currEvent.mName);
-        holder.eventDate.setText(currEvent.mStartDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
-                + " " + currEvent.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
-                + " - " + currEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
-        holder.eventDescription.setText(mEvents.get(position).first.mDescription);
-        holder.eventDescription.setVisibility(mEvents.get(position).second ? View.VISIBLE : View.GONE);
+        holder.eventName.setText(cruEvent.mName);
+        holder.eventDate.setText(cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
+                + " " + cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
+                + " - " + cruEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
+        holder.eventDescription.setText(cruEvent.mDescription);
+        holder.eventDescription.setVisibility(cruEventMV.mIsExpanded ? View.VISIBLE : View.GONE);
+
         holder.chevView.setImageDrawable(
                 mParent.getDrawable(
-                holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
-                    : R.drawable.ic_chevron_down_grey600_36dp));
+                        holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
+                                : R.drawable.ic_chevron_down_grey600_36dp));
+
+        Drawable coloredCal = DrawableCompat.wrap(mParent.getDrawable(R.drawable.ic_calendar_check_grey600_36dp));
+        coloredCal.setTintList(ContextCompat.getColorStateList(mParent, R.color.event_action));
+
+        holder.calButton.setSelected(cruEventMV.mAddedToCalendar);
+        holder.calButton.setImageDrawable(coloredCal);
     }
 
     /**
@@ -125,7 +129,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
             ButterKnife.bind(this, rootView);
             rootView.setOnClickListener(this);
 
-            mEventCalendar.setOnClickListener(v -> {
+            calButton.setOnClickListener(v -> {
 
                 CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
                 final boolean adding = !mEvents.get(getAdapterPosition()).mAddedToCalendar;

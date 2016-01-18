@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
-import rx.Subscriber;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -44,14 +44,14 @@ public class EventsFragment extends Fragment
     private ArrayList<CruEventMV> mCruEventMVs;
     private LinearLayoutManager mLayoutManager;
 
-    private Subscriber<ArrayList<CruEvent>> mEventSubscriber;
-    private Subscriber<Pair<String, Long>> mOnCalendarWrittenSubscriber;
+    private Observer<ArrayList<CruEvent>> mEventSubscriber;
+    private Observer<Pair<String, Long>> mOnCalendarWrittenSubscriber;
 
     private SharedPreferences mSharedPreferences;
     public EventsFragment()
     {
         mCruEventMVs = new ArrayList<>();
-        mEventSubscriber = new Subscriber<ArrayList<CruEvent>>()
+        mEventSubscriber = new Observer<ArrayList<CruEvent>>()
         {
             @Override
             public void onCompleted() {}
@@ -69,7 +69,7 @@ public class EventsFragment extends Fragment
             }
         };
 
-        mOnCalendarWrittenSubscriber = new Subscriber<Pair<String, Long>>()
+        mOnCalendarWrittenSubscriber = new Observer<Pair<String, Long>>()
         {
             @Override
             public void onCompleted() {}
@@ -82,7 +82,7 @@ public class EventsFragment extends Fragment
             {
                 if(eventInfo.second > -1)
                 {
-                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventInfo.second) + "added to default calendar",
+                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventInfo.second) + " added to default calendar",
                             Toast.LENGTH_LONG).show();
                     mSharedPreferences.edit().putLong(eventInfo.first, eventInfo.second).commit();
                 }
@@ -147,12 +147,7 @@ public class EventsFragment extends Fragment
 
         //Set up SwipeRefreshLayout
         mSwipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                forceUpdate();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
 
         getCruEvents();
 

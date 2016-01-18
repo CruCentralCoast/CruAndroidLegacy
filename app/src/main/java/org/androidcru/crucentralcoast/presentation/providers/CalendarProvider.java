@@ -18,7 +18,7 @@ import org.threeten.bp.DateTimeUtils;
 import java.util.Calendar;
 
 import rx.Observable;
-import rx.Subscriber;
+import rx.Observer;
 
 public final class CalendarProvider
 {
@@ -35,7 +35,7 @@ public final class CalendarProvider
         return mInstance;
     }
 
-    public void addEventToCalendar(Activity activity, CruEvent cruEvent, Subscriber<Pair<String, Long>> parentSubscriber)
+    public void addEventToCalendar(Activity activity, CruEvent cruEvent, Observer<Pair<String, Long>> parentSubscriber)
     {
         Calendar beginTime = DateTimeUtils.toGregorianCalendar(cruEvent.mStartDate);
         Calendar endTime = DateTimeUtils.toGregorianCalendar(cruEvent.mEndDate);
@@ -73,7 +73,7 @@ public final class CalendarProvider
             });
     }
 
-    public void removeEventFromCalendar(Activity activity, CruEvent cruEvent, long eventID, Subscriber<Pair<String, Long>> parentSubscriber)
+    public void removeEventFromCalendar(Activity activity, CruEvent cruEvent, long eventID, Observer<Pair<String, Long>> parentSubscriber)
     {
         ContentResolver cr = activity.getContentResolver();
         Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
