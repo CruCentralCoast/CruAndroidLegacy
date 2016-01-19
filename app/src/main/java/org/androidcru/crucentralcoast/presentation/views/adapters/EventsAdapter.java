@@ -21,6 +21,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
+import org.androidcru.crucentralcoast.presentation.providers.MapProvider;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -145,6 +146,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                         })
                         .create();
                 confirmDialog.show();
+            });
+
+            mapButton.setOnClickListener(v -> {
+                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
+                MapProvider.getInstance().openMap(selectedEvent);
             });
         }
 
