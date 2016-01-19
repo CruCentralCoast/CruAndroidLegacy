@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
-import org.androidcru.crucentralcoast.data.providers.CruEventsProvider;
+import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
 
 import java.util.ArrayList;
@@ -147,7 +146,7 @@ public class EventsFragment extends Fragment
 
     private void forceUpdate()
     {
-        CruEventsProvider.getInstance().forceUpdate()
+        CruServiceProvider.getInstance().forceUpdateEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
         mSwipeRefreshLayout.setRefreshing(false);
@@ -155,7 +154,7 @@ public class EventsFragment extends Fragment
 
     private void getCruEvents()
     {
-        CruEventsProvider.getInstance().requestEvents()
+        CruServiceProvider.getInstance().requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }

@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
+import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
+import org.androidcru.crucentralcoast.data.services.CruService;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
 
@@ -19,6 +21,9 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 
 /**
@@ -32,6 +37,26 @@ public class SubscriptionsFragment extends Fragment
 
     private GridLayoutManager mLayoutManager;
     private SubscriptionsAdapter mSubscriptionAdapter;
+
+    private Subscriber<ArrayList<MinistrySubscription>> mSubscriber;
+
+    public SubscriptionsFragment()
+    {
+        mSubscriber = new Subscriber<ArrayList<MinistrySubscription>>()
+        {
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onNext(ArrayList<MinistrySubscription> ministrySubscriptions)
+            {
+                mSubscriptionAdapter = new SubscriptionsAdapter(ministrySubscriptions);
+                mSubscriptionsList.setAdapter(mSubscriptionAdapter);
+            }
+        };
+    }
 
     @Nullable
     @Override
@@ -53,33 +78,18 @@ public class SubscriptionsFragment extends Fragment
         mSubscriptionsList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mSubscriptionAdapter = new SubscriptionsAdapter(getMinistrySubscriptionData());
+        mSubscriptionAdapter = new SubscriptionsAdapter(new ArrayList<>());
         mSubscriptionsList.setHasFixedSize(true);
         mSubscriptionsList.setAdapter(mSubscriptionAdapter);
+
+        getMinistrySubscriptionData();
     }
 
 
-    public ArrayList<MinistrySubscription> getMinistrySubscriptionData()
+    public void getMinistrySubscriptionData()
     {
-        // TODO Communicate with server for this list
-
-        ArrayList<MinistrySubscription> subscriptions = new ArrayList<MinistrySubscription>();
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/slo-cru.png", "slo-cru"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/cuesta-cru.png", "cru-1"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/epic.png", "epic"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/destino.png", "destino"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/greek-row.png", "greek-row"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/athletes.png", "fellowship-of-christian-athletes-in-action"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/faculty-commons.png", "faculty-commons"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/branded.png", "branded"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/cuesta-north.png", "cru-2"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/hancock.png", "cru"));
-        subscriptions.add(new MinistrySubscription("http://crucentralcoast.com/assets/img/landing/cru-high.png", "cru-high"));
-
-        for (MinistrySubscription s : subscriptions)
-        {
-            RegistrationIntentService.unsubscribeToMinistry(s.mSubscriptionSlug);
-        }
-        return subscriptions;
+        CruServiceProvider.getInstance().requestMinistries()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mSubscriber);
     }
 }
