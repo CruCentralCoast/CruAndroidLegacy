@@ -4,14 +4,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class MinistrySubscription
 {
-    @SerializedName("isSubscribed") public Boolean mIsSubscribed;
-    @SerializedName("subscriptionLogo") public String mSubscriptionLogo;
-    @SerializedName("subscriptionSlug") public String mSubscriptionSlug;
+    public boolean mIsSubscribed;
+    @SerializedName("image") public CruImage mCruImage;
+    @SerializedName("slug") public String mSubscriptionSlug;
 
-    public MinistrySubscription(String subscriptionLogo, String subscriptionSlug)
+    public MinistrySubscription() {}
+
+    public MinistrySubscription(CruImage cruImage, String subscriptionSlug)
     {
         this.mIsSubscribed = false;
-        this.mSubscriptionLogo = subscriptionLogo;
+        this.mCruImage = cruImage;
         this.mSubscriptionSlug = subscriptionSlug;
     }
 }

@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
-import org.androidcru.crucentralcoast.data.providers.CruEventsProvider;
+import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
 
@@ -187,14 +188,14 @@ public class EventsFragment extends Fragment
 
     private void forceUpdate()
     {
-        CruEventsProvider.getInstance().forceUpdate()
+        CruServiceProvider.getInstance().forceUpdateEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
-        CruEventsProvider.getInstance().requestEvents()
+        CruServiceProvider.getInstance().requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
