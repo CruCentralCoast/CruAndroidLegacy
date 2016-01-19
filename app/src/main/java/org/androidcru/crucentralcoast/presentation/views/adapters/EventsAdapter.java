@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.Subscriber;
 
 /**
  * EventsAdapter is an RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -90,12 +89,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         holder.eventDescription.setVisibility(cruEventMV.mIsExpanded ? View.VISIBLE : View.GONE);
 
         holder.chevView.setImageDrawable(
-                mParent.getDrawable(
+                ContextCompat.getDrawable(mParent,
                         holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
                                 : R.drawable.ic_chevron_down_grey600_36dp));
 
-        Drawable coloredCal = DrawableCompat.wrap(mParent.getDrawable(R.drawable.ic_calendar_check_grey600_36dp));
-        coloredCal.setTintList(ContextCompat.getColorStateList(mParent, R.color.event_action));
+        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, R.drawable.ic_calendar_check_grey600_36dp));
+        DrawableCompat.setTintList(coloredCal, ContextCompat.getColorStateList(mParent, R.color.event_action));
 
         holder.calButton.setSelected(cruEventMV.mAddedToCalendar);
         holder.calButton.setImageDrawable(coloredCal);
