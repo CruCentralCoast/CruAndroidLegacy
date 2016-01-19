@@ -1,8 +1,12 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,20 +16,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
+import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscriber;
+import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class EventsFragment extends Fragment
 {
@@ -33,14 +42,17 @@ public class EventsFragment extends Fragment
     @Bind(R.id.event_list) RecyclerView mEventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
-    //View elements
+    private ArrayList<CruEventMV> mCruEventMVs;
     private LinearLayoutManager mLayoutManager;
 
-    private Subscriber<ArrayList<CruEvent>> subscriber;
+    private Observer<ArrayList<CruEvent>> mEventSubscriber;
+    private Observer<Pair<String, Long>> mOnCalendarWrittenSubscriber;
 
+    private SharedPreferences mSharedPreferences;
     public EventsFragment()
     {
-        subscriber = new Subscriber<ArrayList<CruEvent>>()
+        mCruEventMVs = new ArrayList<>();
+        mEventSubscriber = new Observer<ArrayList<CruEvent>>()
         {
             @Override
             public void onCompleted() {}
@@ -55,6 +67,39 @@ public class EventsFragment extends Fragment
             public void onNext(ArrayList<CruEvent> cruEvents)
             {
                 setEvents(cruEvents);
+            }
+        };
+
+        mOnCalendarWrittenSubscriber = new Observer<Pair<String, Long>>()
+        {
+            @Override
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onNext(Pair<String, Long> eventInfo)
+            {
+                if(eventInfo.second > -1)
+                {
+                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventInfo.second) + " added to default calendar",
+                            Toast.LENGTH_LONG).show();
+                    mSharedPreferences.edit().putLong(eventInfo.first, eventInfo.second).commit();
+                }
+                else
+                {
+                    mSharedPreferences.edit().remove(eventInfo.first).commit();
+                }
+
+                Observable.from(mCruEventMVs)
+                    .filter(cruEventMV -> cruEventMV.mCruEvent.mId.equals(eventInfo.first))
+                    .subscribeOn(Schedulers.immediate())
+                    .subscribe(cruEventMV -> {
+                        cruEventMV.mAddedToCalendar = mSharedPreferences.contains(cruEventMV.mCruEvent.mId);
+                        cruEventMV.mLocalEventId = mSharedPreferences.getLong(cruEventMV.mCruEvent.mId, -1);
+                    });
+                mEventList.getAdapter().notifyDataSetChanged();
             }
         };
     }
@@ -87,6 +132,8 @@ public class EventsFragment extends Fragment
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
 
+        mSharedPreferences = getActivity().getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
+
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);
 
@@ -95,18 +142,13 @@ public class EventsFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), mLayoutManager);
+        EventsAdapter mEventAdapter = new EventsAdapter(getActivity(), new ArrayList<>(), mLayoutManager, mOnCalendarWrittenSubscriber);
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
         //Set up SwipeRefreshLayout
         mSwipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                forceUpdate();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
 
         getCruEvents();
 
@@ -148,15 +190,14 @@ public class EventsFragment extends Fragment
     {
         CruServiceProvider.getInstance().forceUpdateEvents()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-        mSwipeRefreshLayout.setRefreshing(false);
+                .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
         CruServiceProvider.getInstance().requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(mEventSubscriber);
     }
 
 
@@ -166,6 +207,15 @@ public class EventsFragment extends Fragment
      */
     public void setEvents(ArrayList<CruEvent> cruEvents)
     {
-        mEventList.setAdapter(new EventsAdapter(cruEvents, mLayoutManager));
+        mCruEventMVs.clear();
+        rx.Observable.from(cruEvents)
+                .map(cruEvent -> new CruEventMV(cruEvent, false,
+                        mSharedPreferences.contains(cruEvent.mId),
+                        mSharedPreferences.getLong(cruEvent.mId, -1)))
+                .subscribeOn(Schedulers.immediate())
+                .subscribe(mCruEventMVs::add);
+
+        mEventList.setAdapter(new EventsAdapter(getActivity(), mCruEventMVs, mLayoutManager, mOnCalendarWrittenSubscriber));
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

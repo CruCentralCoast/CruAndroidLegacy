@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.threeten.bp.ZonedDateTime;
 
+import java.util.UUID;
+
 public class CruEvent
 {
     @SerializedName("name") public String mName;
@@ -12,13 +14,15 @@ public class CruEvent
     @SerializedName("endDate") public ZonedDateTime mEndDate;
     @SerializedName("rideSharingEnabled") public boolean mRideSharingEnabled;
     @SerializedName("location") public Location mLocation;
+    @SerializedName("image") public CruImage mImage;
+    @SerializedName("_id") public String mId;
 
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection
      */
     public CruEvent() {}
 
-    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled)
+    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled, CruImage image)
     {
         this.mName = name;
         this.mDescription = description;
@@ -26,6 +30,8 @@ public class CruEvent
         this.mEndDate = endDate;
         this.mLocation = location;
         this.mRideSharingEnabled = rideSharingEnabled;
+        this.mImage = image;
+        this.mId = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     public boolean isClean()
