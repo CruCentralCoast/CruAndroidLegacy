@@ -30,6 +30,7 @@ public class CruApplication extends MultiDexApplication
     {
         return PACKAGE_NAME;
     }
+    public static final String FB_TOKEN_KEY = "fb_token_key";
 
     @Override
     public void onCreate()

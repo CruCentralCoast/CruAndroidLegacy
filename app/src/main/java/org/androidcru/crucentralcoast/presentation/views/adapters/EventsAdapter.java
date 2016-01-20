@@ -1,7 +1,9 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
@@ -146,7 +148,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
             rootView.setOnClickListener(this);
 
             calButton.setOnClickListener(v -> {
-
                 CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
                 final boolean adding = !mEvents.get(getAdapterPosition()).mAddedToCalendar;
                 String operation = adding ? "Add " : "Remove ";
@@ -162,6 +163,25 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                         })
                         .create();
                 confirmDialog.show();
+            });
+
+            fbButton.setOnClickListener(v -> {
+                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
+                AlertDialog loginDialog = new AlertDialog.Builder(mParent)
+                        .setTitle("Log in with Facebook")
+                        .setNegativeButton("JUST OPEN IN FACEBOOK", (dialog, which) -> {
+                            mParent.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.mUrl)));
+                        })
+                        .setPositiveButton("SURE", (dialog, which) -> {
+                            /*LoginManager.getInstance().logInWithReadPermissions(mParent, Collections.singletonList("rsvp_events"));
+                            FacebookProvider.getInstance().setupTokenCallback().subscribe(loginResult -> {
+
+                            });*/
+                        })
+                        .setMessage("If you log in with Facebook, you can set your RSVP directly from inside the Cru app.")
+                        .create();
+                if(selectedEvent.mUrl != null)
+                    loginDialog.show();
             });
         }
 

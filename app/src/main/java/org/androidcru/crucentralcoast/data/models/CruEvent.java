@@ -16,13 +16,14 @@ public class CruEvent
     @SerializedName("location") public Location mLocation;
     @SerializedName("image") public CruImage mImage;
     @SerializedName("_id") public String mId;
+    @SerializedName("url") public String mUrl;
 
     /**
      * Required by GSON/RetroFit in order to automatically create and populate via reflection
      */
     public CruEvent() {}
 
-    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled, CruImage image)
+    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate, Location location, boolean rideSharingEnabled, String url, CruImage image)
     {
         this.mName = name;
         this.mDescription = description;
@@ -31,6 +32,7 @@ public class CruEvent
         this.mLocation = location;
         this.mRideSharingEnabled = rideSharingEnabled;
         this.mImage = image;
+        this.mUrl = url;
         this.mId = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
