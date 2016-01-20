@@ -10,4 +10,8 @@
     <color name="cruGold">#f9b625</color>
     <color name="cruOrange">#dd7d1b</color>
     <color name="grey600">#757575</color>
+
+    <color name="compatGray">#1FFFFFFF</color>
+    <color name="fbBlue">#3B5999</color>
+    <color name="red600">#E53935</color>
 </resources>

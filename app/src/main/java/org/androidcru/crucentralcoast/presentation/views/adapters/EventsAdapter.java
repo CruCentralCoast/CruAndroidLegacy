@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
@@ -75,11 +75,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     {
         CruEvent cruEvent = mEvents.get(position).mCruEvent;
         CruEventMV cruEventMV = mEvents.get(position);
+
         if(cruEvent.mImage != null)
-            Glide.with(mParent)
+            Picasso.with(mParent)
                     .load(cruEvent.mImage.mURL)
                     .placeholder(R.drawable.logo_grey)
-                    .dontAnimate()
+                    .fit()
                     .into(holder.banner);
         holder.eventName.setText(cruEvent.mName);
         holder.eventDate.setText(cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
@@ -93,11 +94,27 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                         holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
                                 : R.drawable.ic_chevron_down_grey600_36dp));
 
-        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, R.drawable.ic_calendar_check_grey600_36dp));
-        DrawableCompat.setTintList(coloredCal, ContextCompat.getColorStateList(mParent, R.color.event_action));
-
         holder.calButton.setSelected(cruEventMV.mAddedToCalendar);
-        holder.calButton.setImageDrawable(coloredCal);
+        holder.calButton.setImageDrawable(getTintListedDrawable(cruEventMV.mAddedToCalendar
+                ? R.drawable.ic_calendar_check_grey600_36dp
+                : R.drawable.ic_calendar_plus_grey600_36dp, R.color.cal_action));
+
+        holder.fbButton.setImageDrawable(getTintedDrawable(R.drawable.ic_facebook_box_grey600_36dp, R.color.fbBlue));
+        holder.mapButton.setImageDrawable(getTintedDrawable(R.drawable.ic_map_marker_grey600_36dp, R.color.red600));
+    }
+
+    private Drawable getTintedDrawable(int drawableId, int colorId)
+    {
+        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, drawableId));
+        DrawableCompat.setTint(coloredCal, ContextCompat.getColor(mParent, colorId));
+        return coloredCal;
+    }
+
+    private Drawable getTintListedDrawable(int drawableId, int tintListId)
+    {
+        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, drawableId));
+        DrawableCompat.setTintList(coloredCal, ContextCompat.getColorStateList(mParent, tintListId));
+        return coloredCal;
     }
 
     /**

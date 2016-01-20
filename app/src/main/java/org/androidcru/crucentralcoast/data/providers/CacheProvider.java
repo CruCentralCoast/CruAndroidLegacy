@@ -73,7 +73,7 @@ public class CacheProvider<T>
             {
                 Logger.e(e, "Reservoir error!");
             }
-            return Observable.just(null);
+            return Observable.empty();
         }).subscribeOn(Schedulers.io());
     }
 

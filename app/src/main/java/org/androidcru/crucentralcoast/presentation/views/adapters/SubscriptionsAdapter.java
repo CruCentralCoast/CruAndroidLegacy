@@ -7,15 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.glide.transformations.ColorFilterTransformation;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
+
 
 public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdapter.ViewHolder>
 {
@@ -42,11 +42,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
         {
             if (ministries.get(position).mIsSubscribed)
             {
-                Glide.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#007398"))).into(holder.mSubscriptionLogo);
+                Picasso.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#007398"))).into(holder.mSubscriptionLogo);
             }
             else
             {
-                Glide.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#666062"))).into(holder.mSubscriptionLogo);
+                Picasso.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#666062"))).into(holder.mSubscriptionLogo);
             }
         }
     }
@@ -73,13 +73,13 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
                 if (!ministries.get(getAdapterPosition()).mIsSubscribed)
                 {
                     ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                    Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#007398"))).into(mSubscriptionLogo);
+                    Picasso.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#007398"))).into(mSubscriptionLogo);
                     //RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
                 }
                 else
                 {
                     ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                    Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#666062"))).into(mSubscriptionLogo);
+                    Picasso.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#666062"))).into(mSubscriptionLogo);
                     //RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
                 }
             }
