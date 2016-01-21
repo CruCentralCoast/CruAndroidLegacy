@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -52,14 +53,22 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
         {
             // sets if the ministry has been subscribed to from shared preferences, if it hasn't been written to before, it uses the default value of false.
             ministries.get(position).mIsSubscribed = mSharedPreferences.getBoolean(ministries.get(position).mSubscriptionSlug, false);
+            // sets the checkbox to checked or unchecked.
+            holder.mCheckBox.setChecked(ministries.get(position).mIsSubscribed);
 
             if (ministries.get(position).mIsSubscribed)
             {
-                Picasso.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#007398"))).into(holder.mSubscriptionLogo);
+                Picasso.with(parent.getContext())
+                        .load(ministries.get(position).mCruImage.mURL)
+                        .transform(new ColorFilterTransformation(Color.parseColor("#007398")))
+                        .into(holder.mSubscriptionLogo);
             }
             else
             {
-                Picasso.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#666062"))).into(holder.mSubscriptionLogo);
+                Picasso.with(parent.getContext())
+                        .load(ministries.get(position).mCruImage.mURL)
+                        .transform(new ColorFilterTransformation(Color.parseColor("#666062")))
+                        .into(holder.mSubscriptionLogo);
             }
         }
     }
@@ -70,11 +79,13 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         public ImageView mSubscriptionLogo;
+        public CheckBox mCheckBox;
 
         public ViewHolder(View itemView)
         {
             super(itemView);
             mSubscriptionLogo = (ImageView) itemView.findViewById(R.id.ministry_image);
+            mCheckBox = (CheckBox) itemView.findViewById(R.id.checkbox);
             itemView.setOnClickListener(this);
         }
 
@@ -86,7 +97,10 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
                 if (!ministries.get(getAdapterPosition()).mIsSubscribed)
                 {
                     ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                    Picasso.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#007398"))).into(mSubscriptionLogo);
+                    Picasso.with(parent.getContext())
+                            .load(ministries.get(getAdapterPosition()).mCruImage.mURL)
+                            .transform(new ColorFilterTransformation(Color.parseColor("#007398")))
+                            .into(mSubscriptionLogo);
                     RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
 
                     // stores in shared preferences that this ministry is subscribed to, key: ministry slug, value: true
@@ -95,12 +109,17 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
                 else
                 {
                     ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                    Picasso.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#666062"))).into(mSubscriptionLogo);
+                    Picasso.with(parent.getContext())
+                            .load(ministries.get(getAdapterPosition()).mCruImage.mURL)
+                            .transform(new ColorFilterTransformation(Color.parseColor("#666062")))
+                            .into(mSubscriptionLogo);
                     RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
 
                     // stores in shared preferences that this ministry is not subscribed to, key: ministry slug, value: false
                     mSharedPreferences.edit().putBoolean(ministries.get(getAdapterPosition()).mSubscriptionSlug, false).apply();
                 }
+                // set the state of the checkbox to reflect if the ministry is subscribed to.
+                mCheckBox.setChecked(ministries.get(getAdapterPosition()).mIsSubscribed);
             }
         }
     }
