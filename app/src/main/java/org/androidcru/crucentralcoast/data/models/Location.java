@@ -18,4 +18,10 @@ public class Location
         this.mStreet1 = street1;
         this.mCountry = country;
     }
+
+    public String toString()
+    {
+        String locString = String.format("%s %s, %s, %s, %s", mStreet1, mSuburb, mState, mPostcode, mCountry);
+        return locString.replace(" ", "+");
+    }
 }
