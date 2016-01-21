@@ -11,6 +11,8 @@ import com.orhanobut.logger.Logger;
 
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 
+import java.util.ArrayList;
+
 public class CruApplication extends MultiDexApplication
 {
 
