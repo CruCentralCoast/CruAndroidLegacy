@@ -90,8 +90,7 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
-            getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
-
+            startActivity(new Intent(this, SubscriptionStartupActivity.class));
             return true;
         }
 
