@@ -39,7 +39,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     private ArrayList<CruEventMV> mEvents;
     private Activity mParent;
 
-    public final static String DATE_FORMATTER = "EE MMMM ee,";
+    public final static String DATE_FORMATTER = "EEEE MMMM ee,";
     public final static String TIME_FORMATTER = "h:mm a";
 
     private LinearLayoutManager mLayoutManager;
