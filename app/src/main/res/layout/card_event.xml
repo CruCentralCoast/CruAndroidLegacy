@@ -8,6 +8,8 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="4dp"
     card_view:cardPreventCornerOverlap="true"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="4dp"
     android:layout_margin="8dp"
     android:foreground="?android:attr/selectableItemBackground">
 
@@ -20,16 +22,18 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:id="@+id/event_banner"/>
+            android:adjustViewBounds="true"
+            android:id="@+id/event_banner"
+            android:padding="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eventName"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
             tools:text="Fall Retreat"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textColor="@android:color/black"
+            android:textSize="32dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,12 +41,18 @@
             android:id="@+id/eventDate"
             tools:text="Tuesday, January 11 10:00am - 7:00pm"
             android:layout_marginLeft="24dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
 
         <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp">
 
             <RelativeLayout
@@ -54,8 +64,8 @@
                 android:layout_alignParentStart="false">
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:id="@+id/fbButton"
                     android:src="@drawable/ic_facebook_box_grey600_36dp"
                     android:layout_centerInParent="true"
@@ -71,8 +81,8 @@
                 android:layout_toRightOf="@+id/fbParent">
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:id="@+id/mapButton"
                     android:src="@drawable/ic_map_marker_grey600_36dp"
                     android:layout_centerInParent="true"
@@ -91,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/calButton"
-                    android:src="@drawable/ic_calendar_check_grey600_36dp"
+                    android:src="@drawable/ic_calendar_plus_grey600_36dp"
                     android:layout_centerInParent="true"
                     android:background="@null"
                     android:scaleType="fitCenter" />

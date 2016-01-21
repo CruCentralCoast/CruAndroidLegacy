@@ -11,6 +11,8 @@ import com.orhanobut.logger.Logger;
 
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 
+import java.util.ArrayList;
+
 public class CruApplication extends MultiDexApplication
 {
 
@@ -30,6 +32,7 @@ public class CruApplication extends MultiDexApplication
     {
         return PACKAGE_NAME;
     }
+    public static final String FB_TOKEN_KEY = "fb_token_key";
 
     @Override
     public void onCreate()

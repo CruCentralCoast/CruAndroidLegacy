@@ -17,6 +17,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
+import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ConstructionFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
@@ -170,5 +171,12 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        FacebookProvider.getInstance().tokenReceived(requestCode, resultCode, data);
     }
 }

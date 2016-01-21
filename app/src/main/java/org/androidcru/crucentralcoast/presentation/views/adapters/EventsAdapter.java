@@ -1,7 +1,9 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
@@ -15,16 +17,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
-import org.androidcru.crucentralcoast.presentation.providers.MapProvider;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,11 +80,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     {
         CruEvent cruEvent = mEvents.get(position).mCruEvent;
         CruEventMV cruEventMV = mEvents.get(position);
+
         if(cruEvent.mImage != null)
-            Glide.with(mParent)
+            Picasso.with(mParent)
                     .load(cruEvent.mImage.mURL)
                     .placeholder(R.drawable.logo_grey)
-                    .dontAnimate()
+                    .fit()
                     .into(holder.banner);
         holder.eventName.setText(cruEvent.mName);
         holder.eventDate.setText(cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
@@ -94,11 +99,27 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                         holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
                                 : R.drawable.ic_chevron_down_grey600_36dp));
 
-        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, R.drawable.ic_calendar_check_grey600_36dp));
-        DrawableCompat.setTintList(coloredCal, ContextCompat.getColorStateList(mParent, R.color.event_action));
-
         holder.calButton.setSelected(cruEventMV.mAddedToCalendar);
-        holder.calButton.setImageDrawable(coloredCal);
+        holder.calButton.setImageDrawable(getTintListedDrawable(cruEventMV.mAddedToCalendar
+                ? R.drawable.ic_calendar_check_grey600_36dp
+                : R.drawable.ic_calendar_plus_grey600_36dp, R.color.cal_action));
+
+        holder.fbButton.setImageDrawable(getTintedDrawable(R.drawable.ic_facebook_box_grey600_36dp, R.color.fbBlue));
+        holder.mapButton.setImageDrawable(getTintedDrawable(R.drawable.ic_map_marker_grey600_36dp, R.color.red600));
+    }
+
+    private Drawable getTintedDrawable(int drawableId, int colorId)
+    {
+        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, drawableId));
+        DrawableCompat.setTint(coloredCal, ContextCompat.getColor(mParent, colorId));
+        return coloredCal;
+    }
+
+    private Drawable getTintListedDrawable(int drawableId, int tintListId)
+    {
+        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, drawableId));
+        DrawableCompat.setTintList(coloredCal, ContextCompat.getColorStateList(mParent, tintListId));
+        return coloredCal;
     }
 
     /**
@@ -130,7 +151,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
             rootView.setOnClickListener(this);
 
             calButton.setOnClickListener(v -> {
-
                 CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
                 final boolean adding = !mEvents.get(getAdapterPosition()).mAddedToCalendar;
                 String operation = adding ? "Add " : "Remove ";
@@ -150,7 +170,31 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
 
             mapButton.setOnClickListener(v -> {
                 CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
-                MapProvider.getInstance().openMap(selectedEvent);
+                Location loc = selectedEvent.mLocation;
+                String uri = String.format(Locale.ENGLISH, "https://www.google.com/maps/place/%s", loc.toString());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                CruApplication.getContext().startActivity(intent);
+            });
+
+            fbButton.setOnClickListener(v -> {
+                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
+                AlertDialog loginDialog = new AlertDialog.Builder(mParent)
+                        .setTitle("Log in with Facebook")
+                        .setNegativeButton("JUST OPEN IN FACEBOOK", (dialog, which) -> {
+                            mParent.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.mUrl)));
+                        })
+                        .setPositiveButton("SURE", (dialog, which) -> {
+                            /*LoginManager.getInstance().logInWithReadPermissions(mParent, Collections.singletonList("rsvp_events"));
+                            FacebookProvider.getInstance().setupTokenCallback().subscribe(loginResult -> {
+
+                            });*/
+                        })
+                        .setMessage("If you log in with Facebook, you can set your RSVP directly from inside the Cru app.")
+                        .create();
+                if(selectedEvent.mUrl != null)
+                    loginDialog.show();
             });
         }
 

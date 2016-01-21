@@ -1,30 +1,40 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.glide.transformations.ColorFilterTransformation;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
+
 
 public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdapter.ViewHolder>
 {
     ArrayList<MinistrySubscription> ministries;
     ViewGroup parent;
+    Activity mParent;
+    SharedPreferences mSharedPreferences;
 
-    public SubscriptionsAdapter(ArrayList<MinistrySubscription> ministries)
+    public SubscriptionsAdapter(Activity parent, ArrayList<MinistrySubscription> ministries)
     {
+        this.mParent = parent;
         this.ministries = ministries;
+        this.mSharedPreferences = mParent.getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
     }
 
     @Override
@@ -40,13 +50,16 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
     {
         if (ministries.get(position).mCruImage != null)
         {
+            // sets if the ministry has been subscribed to from shared preferences, if it hasn't been written to before, it uses the default value of false.
+            ministries.get(position).mIsSubscribed = mSharedPreferences.getBoolean(ministries.get(position).mSubscriptionSlug, false);
+
             if (ministries.get(position).mIsSubscribed)
             {
-                Glide.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#007398"))).into(holder.mSubscriptionLogo);
+                Picasso.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#007398"))).into(holder.mSubscriptionLogo);
             }
             else
             {
-                Glide.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#666062"))).into(holder.mSubscriptionLogo);
+                Picasso.with(parent.getContext()).load(ministries.get(position).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#666062"))).into(holder.mSubscriptionLogo);
             }
         }
     }
@@ -73,14 +86,20 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
                 if (!ministries.get(getAdapterPosition()).mIsSubscribed)
                 {
                     ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                    Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#007398"))).into(mSubscriptionLogo);
-                    //RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
+                    Picasso.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#007398"))).into(mSubscriptionLogo);
+                    RegistrationIntentService.subscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
+
+                    // stores in shared preferences that this ministry is subscribed to, key: ministry slug, value: true
+                    mSharedPreferences.edit().putBoolean(ministries.get(getAdapterPosition()).mSubscriptionSlug, true).apply();
                 }
                 else
                 {
                     ministries.get(getAdapterPosition()).mIsSubscribed = !ministries.get(getAdapterPosition()).mIsSubscribed;
-                    Glide.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).bitmapTransform(new ColorFilterTransformation(parent.getContext(), Color.parseColor("#666062"))).into(mSubscriptionLogo);
-                    //RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
+                    Picasso.with(parent.getContext()).load(ministries.get(getAdapterPosition()).mCruImage.mURL).transform(new ColorFilterTransformation(Color.parseColor("#666062"))).into(mSubscriptionLogo);
+                    RegistrationIntentService.unsubscribeToMinistry(ministries.get(getAdapterPosition()).mSubscriptionSlug);
+
+                    // stores in shared preferences that this ministry is not subscribed to, key: ministry slug, value: false
+                    mSharedPreferences.edit().putBoolean(ministries.get(getAdapterPosition()).mSubscriptionSlug, false).apply();
                 }
             }
         }
