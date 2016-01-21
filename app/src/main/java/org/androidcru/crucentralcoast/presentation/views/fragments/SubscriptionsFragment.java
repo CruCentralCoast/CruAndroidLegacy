@@ -52,7 +52,7 @@ public class SubscriptionsFragment extends Fragment
             @Override
             public void onNext(ArrayList<MinistrySubscription> ministrySubscriptions)
             {
-                mSubscriptionAdapter = new SubscriptionsAdapter(ministrySubscriptions);
+                mSubscriptionAdapter = new SubscriptionsAdapter(getActivity(), ministrySubscriptions);
                 mSubscriptionsList.setAdapter(mSubscriptionAdapter);
             }
         };
@@ -78,7 +78,7 @@ public class SubscriptionsFragment extends Fragment
         mSubscriptionsList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mSubscriptionAdapter = new SubscriptionsAdapter(new ArrayList<>());
+        mSubscriptionAdapter = new SubscriptionsAdapter(getActivity(), new ArrayList<>());
         mSubscriptionsList.setHasFixedSize(true);
         mSubscriptionsList.setAdapter(mSubscriptionAdapter);
 

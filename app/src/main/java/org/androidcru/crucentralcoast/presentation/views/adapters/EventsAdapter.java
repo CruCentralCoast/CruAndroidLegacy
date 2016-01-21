@@ -19,13 +19,16 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -163,6 +166,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                         })
                         .create();
                 confirmDialog.show();
+            });
+
+            mapButton.setOnClickListener(v -> {
+                CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
+                Location loc = selectedEvent.mLocation;
+                String uri = String.format(Locale.ENGLISH, "https://www.google.com/maps/place/%s", loc.toString());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                CruApplication.getContext().startActivity(intent);
             });
 
             fbButton.setOnClickListener(v -> {

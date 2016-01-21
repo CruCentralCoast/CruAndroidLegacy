@@ -155,37 +155,6 @@ public class EventsFragment extends Fragment
 
     }
 
-    /**
-     * Inovoked by the Android framework if setHasOptionsMenu() is called
-     * @param menu Reference to Menu, provided by Android
-     * @param inflater Inflater object, provided by Android
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_events, menu);
-    }
-
-    /**
-     * Click listener for when actions in the Toolbar are clicked
-     * @param item Item clicked, provided by Android
-     * @return True to consume the touch event or false to allow Android to handle it
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int itemId = item.getItemId();
-        switch(itemId)
-        {
-            case R.id.action_refresh:
-                forceUpdate();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     private void forceUpdate()
     {
         CruServiceProvider.getInstance().forceUpdateEvents()
