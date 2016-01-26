@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -171,11 +173,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
             mapButton.setOnClickListener(v -> {
                 CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
                 Location loc = selectedEvent.mLocation;
-                String uri = String.format(Locale.ENGLISH, "https://www.google.com/maps/place/%s", loc.toString());
+                String uri = String.format("geo:0,0?q=%s", loc.toString());
+                //Uri gmmIntentUri = Uri.parse(String.format("geo:0,0?q=%s"), loc.toString());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                CruApplication.getContext().startActivity(intent);
+
+                try
+                {
+                    mParent.startActivity(intent);
+                }
+                catch(ActivityNotFoundException ex)
+                {
+                    Toast.makeText(mParent, "Please install Google Maps to view this event's location", Toast.LENGTH_LONG).show();
+                }
+                //CruApplication.getContext().startActivity(intent);
             });
 
             fbButton.setOnClickListener(v -> {
