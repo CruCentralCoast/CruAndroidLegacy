@@ -31,8 +31,8 @@ import butterknife.ButterKnife;
 public class DriverFragment extends Fragment implements Validator.ValidationListener
 {
     //lol don't ask. SO is God. http://stackoverflow.com/a/124179/1822968
-    public static final String PHONE_REGEX = "1?\\W*([2-9][0-8][0-9])\\W*([2-9][0-9]{2})\\" +
-            "W*([0-9]{4})(\\se?x?t?(\\d*))?";
+    public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
+            "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
 
     @NotEmpty @Bind(R.id.name_field) EditText mNameField;
     @NotEmpty @Pattern(regex = PHONE_REGEX) @Bind(R.id.phone_field) EditText mPhoneField;
