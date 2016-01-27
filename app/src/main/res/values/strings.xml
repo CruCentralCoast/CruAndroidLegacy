@@ -25,4 +25,7 @@
 
     <string name="central_coast">CENTRAL COAST</string>
     <string name="done">DONE</string>
+
+    <string name="select_sex">Select Sex</string>
+    <string name="select_car_capacity">Select Car Capacity</string>
 </resources>
