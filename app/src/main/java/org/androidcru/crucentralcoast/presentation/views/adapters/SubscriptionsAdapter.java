@@ -1,10 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +25,12 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<SubscriptionsAdap
 {
     ArrayList<MinistrySubscription> ministries;
     ViewGroup parent;
-    Activity mParent;
     SharedPreferences mSharedPreferences;
 
-    public SubscriptionsAdapter(Activity parent, ArrayList<MinistrySubscription> ministries)
+    public SubscriptionsAdapter(ArrayList<MinistrySubscription> ministries)
     {
-        this.mParent = parent;
         this.ministries = ministries;
-        this.mSharedPreferences = mParent.getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
+        this.mSharedPreferences = CruApplication.getSharedPreferences();
     }
 
     @Override

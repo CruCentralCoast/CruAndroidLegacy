@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -132,7 +128,7 @@ public class EventsFragment extends Fragment
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
 
-        mSharedPreferences = getActivity().getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
+        mSharedPreferences = CruApplication.getSharedPreferences();
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);

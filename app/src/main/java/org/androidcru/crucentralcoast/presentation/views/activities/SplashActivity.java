@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -35,7 +34,7 @@ public class SplashActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
-        this.mSharedPreferences = getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
+        this.mSharedPreferences = CruApplication.getSharedPreferences();
 
         centralCoast.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/FreigSanProLig.otf"));
         switchToApp();

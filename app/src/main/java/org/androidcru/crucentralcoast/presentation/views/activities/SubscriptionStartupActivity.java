@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ public class SubscriptionStartupActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_startup);
 
-        this.mSharedPreferences = getSharedPreferences(CruApplication.retrievePackageName(), Context.MODE_PRIVATE);
+        this.mSharedPreferences = CruApplication.getSharedPreferences();
         getSupportActionBar().setTitle("Subscriptions");
         getSupportActionBar().setSubtitle("Select ministries of interest");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();

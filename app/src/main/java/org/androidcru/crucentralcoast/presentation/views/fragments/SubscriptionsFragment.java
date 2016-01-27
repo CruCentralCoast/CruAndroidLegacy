@@ -13,15 +13,12 @@ import android.view.ViewGroup;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
-import org.androidcru.crucentralcoast.data.services.CruService;
-import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -52,7 +49,7 @@ public class SubscriptionsFragment extends Fragment
             @Override
             public void onNext(ArrayList<MinistrySubscription> ministrySubscriptions)
             {
-                mSubscriptionAdapter = new SubscriptionsAdapter(getActivity(), ministrySubscriptions);
+                mSubscriptionAdapter = new SubscriptionsAdapter(ministrySubscriptions);
                 mSubscriptionsList.setAdapter(mSubscriptionAdapter);
             }
         };
@@ -78,7 +75,7 @@ public class SubscriptionsFragment extends Fragment
         mSubscriptionsList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mSubscriptionAdapter = new SubscriptionsAdapter(getActivity(), new ArrayList<>());
+        mSubscriptionAdapter = new SubscriptionsAdapter(new ArrayList<>());
         mSubscriptionsList.setHasFixedSize(true);
         mSubscriptionsList.setAdapter(mSubscriptionAdapter);
 

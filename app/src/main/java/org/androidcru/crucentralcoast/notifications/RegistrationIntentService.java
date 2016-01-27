@@ -1,10 +1,8 @@
 package org.androidcru.crucentralcoast.notifications;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -32,7 +30,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
         try {
             // [START register_for_gcm]
@@ -84,19 +82,14 @@ public class RegistrationIntentService extends IntentService {
     public static void subscribeToMinistry(final String topic)
     {
 
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
+        new Thread(() -> {
+            try
             {
-                try
-                {
-                    pubSub.subscribe(token, "/topics/" + topic, null);
-                }
-                catch (IOException e)
-                {
-                    Logger.e(e, e.getStackTrace().toString());
-                }
+                pubSub.subscribe(token, "/topics/" + topic, null);
+            }
+            catch (IOException e)
+            {
+                Logger.e(e, e.getStackTrace().toString());
             }
         }).start();
 
@@ -104,19 +97,14 @@ public class RegistrationIntentService extends IntentService {
 
     public static void unsubscribeToMinistry(final String topic)
     {
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
+        new Thread(() -> {
+            try
             {
-                try
-                {
-                    pubSub.unsubscribe(token, "/topics/" + topic);
-                }
-                catch (IOException e)
-                {
-                    Logger.e(e, e.getStackTrace().toString());
-                }
+                pubSub.unsubscribe(token, "/topics/" + topic);
+            }
+            catch (IOException e)
+            {
+                Logger.e(e, e.getStackTrace().toString());
             }
         }).start();
 
