@@ -3,10 +3,8 @@ package org.androidcru.crucentralcoast.presentation.views.adapters;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,16 +19,15 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -102,27 +99,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                                 : R.drawable.ic_chevron_down_grey600_36dp));
 
         holder.calButton.setSelected(cruEventMV.mAddedToCalendar);
-        holder.calButton.setImageDrawable(getTintListedDrawable(cruEventMV.mAddedToCalendar
+        holder.calButton.setImageDrawable(DrawableUtil.getTintListedDrawable(mParent, cruEventMV.mAddedToCalendar
                 ? R.drawable.ic_calendar_check_grey600_36dp
                 : R.drawable.ic_calendar_plus_grey600_36dp, R.color.cal_action));
 
-        holder.fbButton.setImageDrawable(getTintedDrawable(R.drawable.ic_facebook_box_grey600_36dp, R.color.fbBlue));
-        holder.mapButton.setImageDrawable(getTintedDrawable(R.drawable.ic_map_marker_grey600_36dp, R.color.red600));
+        holder.fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(mParent, R.drawable.ic_facebook_box_grey600_36dp, R.color.fbBlue));
+        holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(mParent, R.drawable.ic_map_marker_grey600_36dp, R.color.red600));
     }
 
-    private Drawable getTintedDrawable(int drawableId, int colorId)
-    {
-        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, drawableId));
-        DrawableCompat.setTint(coloredCal, ContextCompat.getColor(mParent, colorId));
-        return coloredCal;
-    }
 
-    private Drawable getTintListedDrawable(int drawableId, int tintListId)
-    {
-        Drawable coloredCal = DrawableCompat.wrap(ContextCompat.getDrawable(mParent, drawableId));
-        DrawableCompat.setTintList(coloredCal, ContextCompat.getColorStateList(mParent, tintListId));
-        return coloredCal;
-    }
 
     /**
      * Invoked by the Adapter when Android needs to know how many items are in this list

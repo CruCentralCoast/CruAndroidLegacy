@@ -3,16 +3,14 @@ package org.androidcru.crucentralcoast.presentation.views.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 
 public class SubscriptionStartupActivity extends AppCompatActivity
@@ -37,10 +35,7 @@ public class SubscriptionStartupActivity extends AppCompatActivity
     {
         getMenuInflater().inflate(R.menu.subscription_startup_menu, menu);
 
-        Drawable drawable = menu.findItem(R.id.action_done).getIcon();
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
-        menu.findItem(R.id.action_done).setIcon(drawable);
+        menu.findItem(R.id.action_done).setIcon(DrawableUtil.getTintedDrawable(this, R.drawable.ic_calendar_check_grey600_36dp, android.R.color.white));
 
         return super.onCreateOptionsMenu(menu);
     }
