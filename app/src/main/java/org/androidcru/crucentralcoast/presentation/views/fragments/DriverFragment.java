@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
 import com.orhanobut.logger.Logger;
 
@@ -29,8 +30,11 @@ import butterknife.ButterKnife;
 
 public class DriverFragment extends Fragment implements Validator.ValidationListener
 {
+    //lol don't ask.
+    public static final String PHONE_REGEX = "^\\(?\\d{3}\\)?[- ]?\\d{3}[- ]?\\d{4}$";
+
     @NotEmpty @Bind(R.id.name_field) EditText mNameField;
-    @NotEmpty @Bind(R.id.phone_field) EditText mPhoneField;
+    @NotEmpty @Pattern(regex = PHONE_REGEX) @Bind(R.id.phone_field) EditText mPhoneField;
     @Select(defaultSelection = -1) @Bind(R.id.sex_field) Spinner mSexField;
     @Select(defaultSelection = -1) @Bind(R.id.car_capacity_field) Spinner mCarCapacityField;
     @Bind(R.id.submit_button) FloatingActionButton mSubmitButton;
