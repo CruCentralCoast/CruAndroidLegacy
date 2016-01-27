@@ -21,6 +21,7 @@ import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ConstructionFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.fragments.RideSharingFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
                 break;
             case R.id.nav_cruber:
-                spawnConstructionFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new RideSharingFragment()).commit();
                 break;
             case R.id.nav_summer_missions:
                 spawnConstructionFragment();
