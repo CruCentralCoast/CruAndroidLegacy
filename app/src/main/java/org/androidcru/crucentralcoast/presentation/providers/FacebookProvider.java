@@ -7,10 +7,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.orhanobut.hawk.Hawk;
 import com.orhanobut.logger.Logger;
-
-import org.androidcru.crucentralcoast.CruApplication;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -34,8 +31,8 @@ public final class FacebookProvider
         Logger.d("Attempting to decrypt accessToken from SharedPreferences");
         if(hasToken())
         {
-            String accessToken= Hawk.get(CruApplication.FB_TOKEN_KEY);
-            Logger.d("Decryption successful\ntoken: " + accessToken);
+            //String accessToken= Hawk.get(CruApplication.FB_TOKEN_KEY);
+            //Logger.d("Decryption successful\ntoken: " + accessToken);
         }
         else
             Logger.d("accessToken not found in SharedPreferences");
@@ -51,7 +48,7 @@ public final class FacebookProvider
                     public void onSuccess(LoginResult loginResult)
                     {
                         Logger.d(loginResult.getAccessToken().getToken());
-                        Hawk.put(CruApplication.FB_TOKEN_KEY, loginResult.getAccessToken().getToken());
+                        //CruApplication.FB_TOKEN_KEY, loginResult.getAccessToken().getToken());
                         Logger.d("accessToken stored and encrypted");
                         subscriber.onNext(loginResult);
                     }
@@ -79,6 +76,7 @@ public final class FacebookProvider
 
     public Boolean hasToken()
     {
-        return Hawk.contains(CruApplication.FB_TOKEN_KEY);
+        return false;
+        //return Hawk.contains(CruApplication.FB_TOKEN_KEY);
     }
 }

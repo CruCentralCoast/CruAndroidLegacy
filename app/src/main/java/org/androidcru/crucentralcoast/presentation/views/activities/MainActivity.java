@@ -6,17 +6,17 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ConstructionFragment;
@@ -26,9 +26,6 @@ import org.androidcru.crucentralcoast.presentation.views.fragments.Subscriptions
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-    // Variables for checking google play services
-    private static final String TAG = "MainActivity";
-
     private ConstructionFragment constructionFragment;
 
     @Override
@@ -50,6 +47,30 @@ public class MainActivity extends AppCompatActivity
 
         constructionFragment = new ConstructionFragment();
         spawnConstructionFragment();
+
+        checkPlayServicesCode();
+    }
+
+    private void checkPlayServicesCode()
+    {
+        int playServicesCode = CruApplication.getSharedPreferences().getInt(CruApplication.PLAY_SERVICES, ConnectionResult.SUCCESS);
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        if(playServicesCode != ConnectionResult.SUCCESS)
+        {
+            if(apiAvailability.isUserResolvableError(playServicesCode))
+            {
+                apiAvailability.getErrorDialog(this, playServicesCode, CruApplication.PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            }
+            else
+            {
+                new AlertDialog.Builder(this)
+                        .setTitle("Unsupported Device")
+                        .setMessage("Sorry but your device does not support Google Play Services")
+                        .setOnCancelListener(dialog -> finish())
+                        .show();
+            }
+        }
     }
 
     private void spawnConstructionFragment()

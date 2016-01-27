@@ -2,8 +2,9 @@ package org.androidcru.crucentralcoast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
 import com.google.android.gms.common.ConnectionResult;
@@ -15,8 +16,6 @@ import com.orhanobut.logger.Logger;
 
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
-
-import java.util.ArrayList;
 
 public class CruApplication extends MultiDexApplication
 {
@@ -32,13 +31,16 @@ public class CruApplication extends MultiDexApplication
     {
         return context;
     }
-
     public static String retrievePackageName()
     {
         return PACKAGE_NAME;
     }
     public static final String FB_TOKEN_KEY = "fb_token_key";
     public static final String FIRST_LAUNCH = "first_launch";
+
+    private static SharedPreferences sharedPreferences;
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public static final String PLAY_SERVICES = "play_services";
 
 
     @Override
@@ -52,12 +54,45 @@ public class CruApplication extends MultiDexApplication
         builder = ThreeTenGsonAdapter.registerAll(builder);
         gson = builder.create();
 
-        try {
+        try
+        {
             Reservoir.init(this, 10240, gson); //in bytes
-        } catch (Exception e) {
-            Logger.e(e,"Not enough space for disk cache!");
+        } catch (Exception e)
+        {
+            Logger.e(e, "Not enough space for disk cache!");
+        }
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (checkPlayServices())
+        {
+            // Start IntentService to register this application with GCM.
+            Intent service = new Intent(this, RegistrationIntentService.class);
+            startService(service);
         }
     }
 
+    /**
+     * Important because it's essential that SharedPreferences doesn't get overwritten
+     * @return
+     */
+    public static SharedPreferences getSharedPreferences()
+    {
+        return sharedPreferences;
+    }
+
+
+    /**
+     * Determines if the current device is enabled for google play services and if not, will prompt
+     * the user to enable it.
+     *
+     * @return true if enabled, otherwise false
+     */
+    private boolean checkPlayServices()
+    {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        sharedPreferences.edit().putInt(PLAY_SERVICES, resultCode).apply();
+        return resultCode == ConnectionResult.SUCCESS;
+    }
 
 }
