@@ -2,16 +2,20 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.services.CruService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 /**
@@ -71,6 +75,54 @@ public final class CruServiceProvider
     public Observable<ArrayList<MinistrySubscription>> requestMinistries()
     {
         return mCruService.getMinistries().subscribeOn(Schedulers.io());
+    }
+
+    /**
+     * Gets the list of campuses from the server.
+     */
+    public Observable<ArrayList<Campus>> requestCampuses()
+    {
+        return mCruService.getCampuses().subscribeOn(Schedulers.io());
+    }
+
+    public Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> getCampusMinistryMap()
+    {
+        return Observable.create(new Observable.OnSubscribe<HashMap<Campus, ArrayList<MinistrySubscription>>>()
+        {
+            @Override
+            public void call(Subscriber<? super HashMap<Campus, ArrayList<MinistrySubscription>>> subscriber)
+            {
+                ArrayList<Campus> campuses = requestCampuses().toBlocking().single();
+                ArrayList<MinistrySubscription> ministries = requestMinistries().toBlocking().single();
+
+                HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap = new HashMap<>();
+
+                for(MinistrySubscription m : ministries)
+                {
+                    Campus selectedCampus = null;
+
+                    for(Campus c : campuses)
+                        if(m.mCampusId.get(0).equals(c.mId))
+                            selectedCampus = c;
+
+                    if(campusMinistryMap.containsKey(selectedCampus))
+                    {
+                        ArrayList<MinistrySubscription> ministriesSoFar = campusMinistryMap.get(selectedCampus);
+                        ministriesSoFar.add(m);
+                        campusMinistryMap.put(selectedCampus, ministriesSoFar);
+                    }
+                    else
+                    {
+                        ArrayList<MinistrySubscription> newMinistries = new ArrayList<>();
+                        newMinistries.add(m);
+                        campusMinistryMap.put(selectedCampus, newMinistries);
+                    }
+                }
+
+                subscriber.onNext(campusMinistryMap);
+            }
+        })
+        .subscribeOn(Schedulers.io());
     }
 
 }

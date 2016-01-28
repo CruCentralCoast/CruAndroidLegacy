@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,25 +37,6 @@ public class SubscriptionsFragment extends Fragment
     private GridLayoutManager mLayoutManager;
     private SubscriptionsAdapter mSubscriptionAdapter;
 
-    private Subscriber<ArrayList<MinistrySubscription>> mSubscriber;
-
-    public SubscriptionsFragment()
-    {
-        mSubscriber = new Subscriber<ArrayList<MinistrySubscription>>()
-        {
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(ArrayList<MinistrySubscription> ministrySubscriptions)
-            {
-                mSubscriptionAdapter = new SubscriptionsAdapter(ministrySubscriptions);
-                mSubscriptionsList.setAdapter(mSubscriptionAdapter);
-            }
-        };
-    }
 
     @Nullable
     @Override
@@ -70,23 +53,37 @@ public class SubscriptionsFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        // use a grid layout manager
-        mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        mSubscriptionsList.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        mSubscriptionAdapter = new SubscriptionsAdapter(new ArrayList<>());
+        mSubscriptionAdapter = new SubscriptionsAdapter(new HashMap<>());
         mSubscriptionsList.setHasFixedSize(true);
         mSubscriptionsList.setAdapter(mSubscriptionAdapter);
 
-        getMinistrySubscriptionData();
+        // use a grid layout manager
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        {
+            @Override
+            public int getSpanSize(int position)
+            {
+                return mSubscriptionAdapter.isHeader(position) ? mLayoutManager.getSpanCount() : 1;
+            }
+        });
+        mSubscriptionsList.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+
+
+        getCampusMinistryMap();
     }
 
 
-    public void getMinistrySubscriptionData()
+
+    public void getCampusMinistryMap()
     {
-        CruServiceProvider.getInstance().requestMinistries()
+        CruServiceProvider.getInstance().getCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mSubscriber);
+                .subscribe(ministries -> {
+                    mSubscriptionAdapter = new SubscriptionsAdapter(ministries);
+                    mSubscriptionsList.setAdapter(mSubscriptionAdapter);
+                });
     }
 }
