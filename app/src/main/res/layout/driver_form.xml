@@ -309,6 +309,42 @@
                     </RelativeLayout>
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:id="@+id/radius_layout"
+                android:padding="8dp"
+                android:layout_below="@+id/return_layout">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_radius"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radius_field"
+                        android:layout_centerVertical="true"
+                        android:inputType="phone"
+                        android:hint="Circle Radius (Miles)"/>
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="288dp"
+                android:id="@+id/map_layout"
+                android:padding="8dp"
+                android:layout_below="@+id/radius_layout">
+                <FrameLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 

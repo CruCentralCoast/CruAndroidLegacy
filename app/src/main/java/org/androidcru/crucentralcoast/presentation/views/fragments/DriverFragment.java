@@ -9,6 +9,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,16 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mobsandgeeks.saripaar.QuickRule;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -57,11 +69,12 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 
-public class DriverFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener
+public class DriverFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, OnMapReadyCallback
 {
     //lol don't ask. SO is God. http://stackoverflow.com/a/124179/1822968
     public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
             "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
+    public static final double MILE_METER_CONV = 1609.34;
 
     @NotEmpty @Bind(R.id.name_field) EditText mNameField;
     @NotEmpty @Pattern(regex = PHONE_REGEX) @Bind(R.id.phone_field) EditText mPhoneField;
@@ -74,20 +87,31 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
     @Bind(R.id.return_date_field) EditText mReturnDateField;
     @Bind(R.id.depart_layout) RelativeLayout mDepartLayout;
     @Bind(R.id.return_layout) RelativeLayout mReturnLayout;
+    @Bind(R.id.radius_field) EditText mRadiusField;
     @Bind(R.id.submit_button) FloatingActionButton mSubmitButton;
 
     private Validator mValidator;
     private boolean mDepart; /*used for setting time in appropriate field*/
+    private int mMapSetter;  /*used for setting markers in map appropriately*/
     public final static String DATE_FORMATTER = "M/d/y";
 
     private SupportPlaceAutocompleteFragment mDepartAutocompleteFragment;
+    private SupportMapFragment mMapFragment;
+    private GoogleMap mMap;
+    private Circle mMapCircle;
+    private Marker mDepartMarker;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        /*autocomplete*/
         mDepartAutocompleteFragment = new SupportPlaceAutocompleteFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.depart_place_autocomplete_layout, mDepartAutocompleteFragment).commit();
+        /*map*/
+        mMapFragment = new SupportMapFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.map, mMapFragment).commit();
+        mMapFragment.getMapAsync(this);
         return inflater.inflate(R.layout.driver_form, container, false);
     }
 
@@ -198,8 +222,7 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
             mDepart = false;
         });
 
-        /*autocomplete map*/
-
+        /*autocomplete search*/
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
@@ -210,6 +233,18 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
             public void onPlaceSelected(Place place)
             {
                 Logger.i("Depart", "Place: " + place.getName());
+                /*remove other departure markers on the map*/
+                if (mDepartMarker != null)
+                {
+                    mDepartMarker.remove();
+                }
+                /*add new marker and circle to the map*/
+                mDepartMarker = mMap.addMarker(new MarkerOptions()
+                        .position(place.getLatLng())
+                        .title("Departure Location"));
+                mMapCircle = mMap.addCircle(new CircleOptions()
+                        .center(place.getLatLng())
+                        .radius(getMapRadius(mRadiusField.getText().toString())));
             }
 
             @Override
@@ -219,8 +254,50 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
             }
         });
 
+        /*radius watcher*/
+        mRadiusField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (mMapCircle != null)
+                {
+                    LatLng temp = mMapCircle.getCenter();
+                    mMapCircle.remove();
+                    mMapCircle = mMap.addCircle(new CircleOptions()
+                            .center(temp)
+                            .radius(getMapRadius(s.toString())));
+                }
+            }
+        });
     }
+
+    private double getMapRadius(String input)
+    {
+        double radius;
+        try
+        {
+            radius = Double.parseDouble(input.toString());
+            radius *= MILE_METER_CONV;
+        }
+        catch (NumberFormatException e)
+        {
+            /*default is 1 mile radius*/
+            radius = MILE_METER_CONV;
+            Logger.i(input + " was not a number");
+        }
+        Logger.i("using number " + radius);
+        return radius;
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -313,4 +390,20 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
     };
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        /*default*/
+        if (mMap == null)
+        {
+            mMap = googleMap;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(35.30021, -120.66310), 14.0f));
+        }
+        else
+        {
+            /*hmmm what to do here*/
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(40, 130))
+                    .title("Other Marker"));
+        }
+    }
 }
