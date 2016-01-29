@@ -34,7 +34,7 @@ public class SubscriptionStartupActivity extends AppCompatActivity
     {
         getMenuInflater().inflate(R.menu.subscription_startup_menu, menu);
 
-        menu.findItem(R.id.action_done).setIcon(DrawableUtil.getTintedDrawable(this, R.drawable.ic_calendar_check_grey600_36dp, android.R.color.white));
+        menu.findItem(R.id.action_done).setIcon(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600_48dp, android.R.color.white));
 
         return super.onCreateOptionsMenu(menu);
     }

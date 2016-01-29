@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
@@ -24,10 +27,14 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
+import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -172,26 +179,63 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                 {
                     Toast.makeText(mParent, "Please install Google Maps to view this event's location", Toast.LENGTH_LONG).show();
                 }
-                //CruApplication.getContext().startActivity(intent);
             });
 
             fbButton.setOnClickListener(v -> {
                 CruEvent selectedEvent = mEvents.get(getAdapterPosition()).mCruEvent;
+                Intent openInFacebook = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.mUrl));
+                openInFacebook.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                RsvpDialog rsvpDialog = new RsvpDialog(mParent, selectedEvent.mUrl);
+
+                Observer<LoginResult> loginResultObserver = new Observer<LoginResult>()
+                {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {}
+
+                    @Override
+                    public void onNext(LoginResult loginResult) {
+                        Set<String> grantedPermissions = FacebookProvider.getInstance().getPermissions();
+                        if(grantedPermissions.contains("rsvp_event"))
+                            rsvpDialog.show();
+                        else
+                            mParent.startActivity(openInFacebook);
+                    }
+                };
+
+
                 AlertDialog loginDialog = new AlertDialog.Builder(mParent)
                         .setTitle("Log in with Facebook")
                         .setNegativeButton("JUST OPEN IN FACEBOOK", (dialog, which) -> {
-                            mParent.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.mUrl)));
+                            mParent.startActivity(openInFacebook);
                         })
                         .setPositiveButton("SURE", (dialog, which) -> {
-                            /*LoginManager.getInstance().logInWithReadPermissions(mParent, Collections.singletonList("rsvp_events"));
-                            FacebookProvider.getInstance().setupTokenCallback().subscribe(loginResult -> {
-
-                            });*/
+                                LoginManager.getInstance().logInWithPublishPermissions(mParent, Collections.singletonList("rsvp_event"));
+                                FacebookProvider.getInstance().setupTokenCallback(loginResultObserver);
                         })
                         .setMessage("If you log in with Facebook, you can set your RSVP directly from inside the Cru app.")
                         .create();
+
                 if(selectedEvent.mUrl != null)
-                    loginDialog.show();
+                {
+                    if(FacebookProvider.getInstance().isTokenValid())
+                    {
+                        if (!FacebookProvider.getInstance().getPermissions().contains("rsvp_event"))
+                            loginDialog.show();
+                        else
+                            rsvpDialog.show();
+                    }
+                    else
+                    {
+                        loginDialog.show();
+                    }
+
+                }
+                else
+                    Logger.d("No Facebook URL set");
+
             });
         }
 

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.multidex.MultiDexApplication;
 
 import com.anupcowkur.reservoir.Reservoir;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
@@ -47,21 +48,18 @@ public class CruApplication extends MultiDexApplication
     public void onCreate()
     {
         super.onCreate();
-        Logger.init().setLogLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
-        context = this;
-        PACKAGE_NAME = context.getPackageName();
-        GsonBuilder builder = new GsonBuilder();
-        builder = ThreeTenGsonAdapter.registerAll(builder);
-        gson = builder.create();
 
-        try
-        {
-            Reservoir.init(this, 10240, gson); //in bytes
-        } catch (Exception e)
-        {
-            Logger.e(e, "Not enough space for disk cache!");
-        }
+        Logger.init().setLogLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
+
+        context = this;
+        PACKAGE_NAME = getPackageName();
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        FacebookSdk.sdkInitialize(context);
+
+        setupDiskCache();
+        setupGson();
 
         if (checkPlayServices())
         {
@@ -93,6 +91,24 @@ public class CruApplication extends MultiDexApplication
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         sharedPreferences.edit().putInt(PLAY_SERVICES, resultCode).apply();
         return resultCode == ConnectionResult.SUCCESS;
+    }
+
+    private void setupDiskCache()
+    {
+        try
+        {
+            Reservoir.init(this, 10240, gson); //in bytes
+        } catch (Exception e)
+        {
+            Logger.e(e, "Not enough space for disk cache!");
+        }
+    }
+
+    private void setupGson()
+    {
+        GsonBuilder builder = new GsonBuilder();
+        builder = ThreeTenGsonAdapter.registerAll(builder);
+        gson = builder.create();
     }
 
 }

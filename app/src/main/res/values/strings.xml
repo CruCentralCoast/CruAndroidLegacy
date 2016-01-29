@@ -25,4 +25,11 @@
 
     <string name="central_coast">CENTRAL COAST</string>
     <string name="done">DONE</string>
+
+    <string name="going">Attending</string>
+    <string name="interested">Interested</string>
+    <string name="no_reply">No Reply</string>
+
+    <string name="facebook_app_id">544416192400105</string>
+    <string name="rsvp_title">Set RSVP Status</string>
 </resources>
