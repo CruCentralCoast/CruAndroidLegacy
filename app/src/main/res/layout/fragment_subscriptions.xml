@@ -5,7 +5,6 @@
      android:layout_height="match_parent"
      xmlns:app="http://schemas.android.com/apk/res-auto"
      android:padding="8dp"
-
      tools:context="org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment">
 
     <android.support.v7.widget.RecyclerView
@@ -21,6 +20,5 @@
         android:layout_margin="16dp"
         android:clickable="true"
         app:layout_anchor="@id/subscription_list"
-        app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="org.androidcru.crucentralcoast.presentation.util.ScrollAwareFABBehavior"/>
+        app:layout_anchorGravity="bottom|right|end"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -36,6 +36,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
     
     public static final int MINISTRY_VIEW = 0;
     public static final int HEADER_VIEW = 1;
+    public static final int FOOTER_VIEW = 2;
 
     public SubscriptionsAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinisryMap)
     {
@@ -62,8 +63,10 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         {
             case MINISTRY_VIEW:
                 return new MinistryHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_subscription, parent, false));
-            default:
+            case HEADER_VIEW:
                 return new HeaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.subscription_header, parent, false));
+            default:
+                return new FooterHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.blank_footer, parent, false));
         }
     }
 
@@ -96,7 +99,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             }
         }
-        else
+        else if(holder instanceof HeaderHolder)
         {
             HeaderHolder headerHolder = (HeaderHolder) holder;
             headerHolder.mHeader.setText(mMinistries.get(position).first);
@@ -106,15 +109,15 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position)
     {
-        return isHeader(position) ? HEADER_VIEW : MINISTRY_VIEW;
+        return position >= mMinistries.size() ? FOOTER_VIEW : (isHeader(position) ? HEADER_VIEW : MINISTRY_VIEW);
     }
 
     @Override
-    public int getItemCount() {return mMinistries.size();}
+    public int getItemCount() {return mMinistries.size() + 1;}
 
     public boolean isHeader(int position)
     {
-        return mMinistries.get(position).first != null;
+        return position >= mMinistries.size() || mMinistries.get(position).first != null;
     }
 
     public class HeaderHolder extends RecyclerView.ViewHolder
@@ -174,6 +177,15 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // set the state of the checkbox to reflect if the ministry is subscribed to.
                 mCheckBox.setChecked(mMinistries.get(getAdapterPosition()).second.mIsSubscribed);
             }
+        }
+    }
+
+    public class FooterHolder extends RecyclerView.ViewHolder
+    {
+
+        public FooterHolder(View itemView)
+        {
+            super(itemView);
         }
     }
 }
