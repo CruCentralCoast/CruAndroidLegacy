@@ -12,7 +12,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.MainApplication;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.presentation.modelviews.FBGuestListVM;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
@@ -53,7 +53,7 @@ public final class FacebookProvider
                     @Override
                     public void onSuccess(LoginResult loginResult)
                     {
-                        MainApplication.getSharedPreferences().edit().putString(MainApplication.FB_TOKEN_KEY, loginResult.getAccessToken().getToken()).apply();
+                        CruApplication.getSharedPreferences().edit().putString(CruApplication.FB_TOKEN_KEY, loginResult.getAccessToken().getToken()).apply();
                         subscriber.onNext(loginResult);
                     }
 
@@ -85,7 +85,7 @@ public final class FacebookProvider
 
     public void invalidate()
     {
-        MainApplication.getSharedPreferences().edit().remove(MainApplication.FB_TOKEN_KEY).apply();
+        CruApplication.getSharedPreferences().edit().remove(CruApplication.FB_TOKEN_KEY).apply();
     }
 
     public String getEventId(String eventURL)
@@ -119,7 +119,7 @@ public final class FacebookProvider
                             null,
                             HttpMethod.GET,
                             response -> {
-                                FBGuestListVM guestList = MainApplication.gson.fromJson(response.getRawResponse(), FBGuestListVM.class);
+                                FBGuestListVM guestList = CruApplication.gson.fromJson(response.getRawResponse(), FBGuestListVM.class);
                                 if(!guestList.data.isEmpty())
                                 {
                                     status.hold(RsvpDialog.RSVP_STATUS.ATTENDING);
@@ -135,7 +135,7 @@ public final class FacebookProvider
                                 null,
                                 HttpMethod.GET,
                                 response -> {
-                                    FBGuestListVM guestList = MainApplication.gson.fromJson(response.getRawResponse(), FBGuestListVM.class);
+                                    FBGuestListVM guestList = CruApplication.gson.fromJson(response.getRawResponse(), FBGuestListVM.class);
                                     if(!guestList.data.isEmpty())
                                     {
                                         status.hold(RsvpDialog.RSVP_STATUS.INTERESTED);

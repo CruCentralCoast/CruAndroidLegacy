@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.androidcru.crucentralcoast.MainApplication;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
@@ -50,7 +50,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
         }
 
-        this.mSharedPreferences = MainApplication.getSharedPreferences();
+        this.mSharedPreferences = CruApplication.getSharedPreferences();
 
     }
 

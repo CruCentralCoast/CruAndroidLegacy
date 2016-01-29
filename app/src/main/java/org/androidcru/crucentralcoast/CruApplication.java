@@ -18,7 +18,7 @@ import com.orhanobut.logger.Logger;
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
-public class MainApplication extends MultiDexApplication
+public class CruApplication extends MultiDexApplication
 {
 
 

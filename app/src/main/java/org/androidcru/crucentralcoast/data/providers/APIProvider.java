@@ -1,14 +1,14 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.BuildConfig;
-import org.androidcru.crucentralcoast.MainApplication;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
-public final class ApiProvider
+public class ApiProvider
 {
     private CruApiService service;
     private static ApiProvider instance;
@@ -23,7 +23,7 @@ public final class ApiProvider
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.CRU_SERVER)
-                .addConverterFactory(GsonConverterFactory.create(MainApplication.gson))
+                .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 

@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.MainApplication;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
@@ -128,7 +128,7 @@ public class EventsFragment extends Fragment
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
 
-        mSharedPreferences = MainApplication.getSharedPreferences();
+        mSharedPreferences = CruApplication.getSharedPreferences();
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);

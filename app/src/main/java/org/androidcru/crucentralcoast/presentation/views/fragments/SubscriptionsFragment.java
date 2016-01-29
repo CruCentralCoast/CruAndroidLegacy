@@ -1,8 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.MinistryProvider;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.views.activities.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
 
 import java.util.HashMap;
@@ -29,6 +34,7 @@ import rx.android.schedulers.AndroidSchedulers;
 public class SubscriptionsFragment extends Fragment
 {
     @Bind(R.id.subscription_list) RecyclerView mSubscriptionsList;
+    @Bind(R.id.fab) FloatingActionButton mFAB;
 
     private GridLayoutManager mLayoutManager;
     private SubscriptionsAdapter mSubscriptionAdapter;
@@ -48,6 +54,16 @@ public class SubscriptionsFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        mFAB.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
+
+        mFAB.setOnClickListener(v -> {
+            CruApplication.getSharedPreferences().edit().putBoolean(CruApplication.FIRST_LAUNCH, true).apply();
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            getActivity().finish();
+        });
 
         mSubscriptionAdapter = new SubscriptionsAdapter(new HashMap<>());
         mSubscriptionsList.setHasFixedSize(true);
