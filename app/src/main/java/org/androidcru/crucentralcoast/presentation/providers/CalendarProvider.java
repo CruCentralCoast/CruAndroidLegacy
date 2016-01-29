@@ -1,10 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.providers;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.util.Pair;
@@ -35,12 +35,12 @@ public final class CalendarProvider
         return mInstance;
     }
 
-    public void addEventToCalendar(Activity activity, CruEvent cruEvent, Observer<Pair<String, Long>> parentSubscriber)
+    public void addEventToCalendar(Context context, CruEvent cruEvent, Observer<Pair<String, Long>> parentSubscriber)
     {
         Calendar beginTime = DateTimeUtils.toGregorianCalendar(cruEvent.mStartDate);
         Calendar endTime = DateTimeUtils.toGregorianCalendar(cruEvent.mEndDate);
 
-        ContentResolver cr = activity.getContentResolver();
+        ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
         values.put(CalendarContract.Events.DTEND, endTime.getTimeInMillis());
@@ -49,7 +49,7 @@ public final class CalendarProvider
         values.put(CalendarContract.Events.CALENDAR_ID, 1);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, cruEvent.mStartDate.getZone().toString());
 
-        RxPermissions.getInstance(activity)
+        RxPermissions.getInstance(context)
             .request(Manifest.permission.WRITE_CALENDAR)
             .subscribe(granted -> {
                 if (granted)
@@ -73,9 +73,9 @@ public final class CalendarProvider
             });
     }
 
-    public void removeEventFromCalendar(Activity activity, CruEvent cruEvent, long eventID, Observer<Pair<String, Long>> parentSubscriber)
+    public void removeEventFromCalendar(Context context, CruEvent cruEvent, long eventID, Observer<Pair<String, Long>> parentSubscriber)
     {
-        ContentResolver cr = activity.getContentResolver();
+        ContentResolver cr = context.getContentResolver();
         Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
         cr.delete(deleteUri, null, null);
         Observable.just(new Pair<>(cruEvent.mId, -1l)).subscribe(parentSubscriber);

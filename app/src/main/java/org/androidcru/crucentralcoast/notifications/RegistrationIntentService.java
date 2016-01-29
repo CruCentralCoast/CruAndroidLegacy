@@ -11,7 +11,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.MainApplication;
 import org.androidcru.crucentralcoast.R;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
+        SharedPreferences sharedPreferences = MainApplication.getSharedPreferences();
 
         try {
             // [START register_for_gcm]

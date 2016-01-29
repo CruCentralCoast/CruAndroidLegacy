@@ -11,17 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.Campus;
-import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
+import org.androidcru.crucentralcoast.data.providers.MinistryProvider;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
 
@@ -79,7 +75,7 @@ public class SubscriptionsFragment extends Fragment
 
     public void getCampusMinistryMap()
     {
-        CruServiceProvider.getInstance().getCampusMinistryMap()
+        MinistryProvider.getInstance().requestCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministries -> {
                     mSubscriptionAdapter = new SubscriptionsAdapter(ministries);

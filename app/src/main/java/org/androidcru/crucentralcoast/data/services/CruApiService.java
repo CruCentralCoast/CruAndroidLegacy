@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import retrofit.http.GET;
 import rx.Observable;
 
-public interface CruService
+public interface CruApiService
 {
     /**
      * Method modeling the GET request for Events

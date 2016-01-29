@@ -2,11 +2,17 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Java representation of the model from the server
+ */
 public class Campus
 {
     @SerializedName("_id") public String mId;
     @SerializedName("name") public String mCampusName;
 
+    /**
+     * Required for Gson/RetroFit
+     */
     public Campus() {}
 
     public Campus(String mId, String mCampusName)

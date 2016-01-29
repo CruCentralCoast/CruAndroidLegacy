@@ -10,6 +10,11 @@ public class Location
     @SerializedName("street1") String mStreet1;
     @SerializedName("country") String mCountry;
 
+    /**
+     * Required for Gson/RetroFit
+     */
+    public Location() {}
+
     public Location(String postcode, String state, String suburb, String street1, String country)
     {
         this.mPostcode = postcode;

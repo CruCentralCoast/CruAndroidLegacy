@@ -1,73 +1,29 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import org.androidcru.crucentralcoast.BuildConfig;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Campus;
-import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.data.services.CruService;
+import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
-/**
- * EventProvider is a Singleton class designed to provide Presenters with a static reference to
- * the EventList object.
- */
-public final class CruServiceProvider
+public final class MinistryProvider
 {
-    private static CruServiceProvider mCruServiceProvider;
+    private static CruApiService mCruService = ApiProvider.getInstance().getService();
+    private static MinistryProvider mInstance;
 
-    private CruService mCruService;
+    private MinistryProvider() {}
 
-    private CruServiceProvider()
+    public static MinistryProvider getInstance()
     {
-        //Configures RetroFit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.CRU_SERVER)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
-                .build();
-
-        //Generates concrete implementation of CruService
-        mCruService = retrofit.create(CruService.class);
+        if(mInstance == null)
+            mInstance = new MinistryProvider();
+        return mInstance;
     }
-
-    public static CruServiceProvider getInstance()
-    {
-        if (mCruServiceProvider == null)
-        {
-            mCruServiceProvider = new CruServiceProvider();
-        }
-        return mCruServiceProvider;
-    }
-
-
-    public Observable<ArrayList<CruEvent>> requestEvents()
-    {
-        return forceUpdateEvents();
-    }
-
-    /**
-     * Invalidates the cache and issues a cold request for a new EventList via the network.
-     */
-    public Observable<ArrayList<CruEvent>> forceUpdateEvents()
-    {
-        Observable<ArrayList<CruEvent>> cruEventsStream = mCruService.getEvents()
-                .subscribeOn(Schedulers.io());
-
-        return cruEventsStream;
-    }
-
-
     /**
      * Gets the list of available ministries from the server.
      * @return list of ministries
@@ -85,7 +41,7 @@ public final class CruServiceProvider
         return mCruService.getCampuses().subscribeOn(Schedulers.io());
     }
 
-    public Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> getCampusMinistryMap()
+    public Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
     {
         return Observable.create(new Observable.OnSubscribe<HashMap<Campus, ArrayList<MinistrySubscription>>>()
         {
@@ -122,7 +78,6 @@ public final class CruServiceProvider
                 subscriber.onNext(campusMinistryMap);
             }
         })
-        .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());
     }
-
 }

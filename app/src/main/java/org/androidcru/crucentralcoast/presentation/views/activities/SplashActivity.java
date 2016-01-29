@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.MainApplication;
 import org.androidcru.crucentralcoast.R;
 
 import java.util.concurrent.TimeUnit;
@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
-        this.mSharedPreferences = CruApplication.getSharedPreferences();
+        this.mSharedPreferences = MainApplication.getSharedPreferences();
 
         centralCoast.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/FreigSanProLig.otf"));
         switchToApp();
@@ -45,7 +45,7 @@ public class SplashActivity extends AppCompatActivity
         final Intent intent = new Intent(this, MainActivity.class);
 
         // Determine if the app has launched before.
-        if (mSharedPreferences.getBoolean(CruApplication.FIRST_LAUNCH, false))
+        if (mSharedPreferences.getBoolean(MainApplication.FIRST_LAUNCH, false))
             intent.setClass(this, MainActivity.class);
         else
             intent.setClass(this, SubscriptionStartupActivity.class);

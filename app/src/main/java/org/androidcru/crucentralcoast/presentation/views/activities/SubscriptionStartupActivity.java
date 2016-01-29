@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.MainApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
@@ -23,7 +23,7 @@ public class SubscriptionStartupActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_startup);
 
-        this.mSharedPreferences = CruApplication.getSharedPreferences();
+        this.mSharedPreferences = MainApplication.getSharedPreferences();
         getSupportActionBar().setTitle("Subscriptions");
         getSupportActionBar().setSubtitle("Select ministries of interest");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
@@ -46,7 +46,7 @@ public class SubscriptionStartupActivity extends AppCompatActivity
         switch(item.getItemId())
         {
             case R.id.action_done:
-                mSharedPreferences.edit().putBoolean(CruApplication.FIRST_LAUNCH, true).apply();
+                mSharedPreferences.edit().putBoolean(MainApplication.FIRST_LAUNCH, true).apply();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

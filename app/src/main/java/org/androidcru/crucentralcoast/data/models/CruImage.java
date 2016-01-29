@@ -8,6 +8,9 @@ public class CruImage
     @SerializedName("width") public int mWidth;
     @SerializedName("height") public int mHeight;
 
+    /**
+     * Required for Gson/RetroFit
+     */
     public CruImage() {}
 
     public CruImage(String URL, int width, int height) {

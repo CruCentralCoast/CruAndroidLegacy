@@ -11,6 +11,9 @@ public class MinistrySubscription
     @SerializedName("slug") public String mSubscriptionSlug;
     @SerializedName("campuses") public ArrayList<String> mCampusId;
 
+    /**
+     * Required for Gson/RetroFit
+     */
     public MinistrySubscription() {}
 
     public MinistrySubscription(CruImage cruImage, String subscriptionSlug, ArrayList<String> campusId)
