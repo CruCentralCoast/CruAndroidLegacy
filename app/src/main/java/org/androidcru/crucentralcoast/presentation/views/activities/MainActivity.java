@@ -16,12 +16,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.androidcru.crucentralcoast.CruApplication;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ConstructionFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.DriverFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.fragments.RideSharingFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.SubscriptionsFragment;
 
 public class MainActivity extends AppCompatActivity

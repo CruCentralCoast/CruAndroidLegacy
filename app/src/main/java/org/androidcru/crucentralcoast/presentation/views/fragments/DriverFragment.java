@@ -2,11 +2,13 @@ package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
 import com.orhanobut.logger.Logger;
+
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -44,6 +48,14 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+
 
 public class DriverFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener
 {
@@ -111,32 +123,26 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
         mValidator.setValidationListener(this);
 
         /*determine which types of trips are visible*/
-        mTripTypeField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        mTripTypeField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                if (selectedItem.equals("Departure"))
-                {
+                if(selectedItem.equals("Departure")) {
                     mDepartLayout.setVisibility(View.VISIBLE);
                     mReturnLayout.setVisibility(View.GONE);
-                } else if (selectedItem.equals("Return"))
-                {
+                }
+                else if(selectedItem.equals("Return")) {
                     mDepartLayout.setVisibility(View.GONE);
                     mReturnLayout.setVisibility(View.VISIBLE);
-                } else
-                {
+                }
+                else {
                     mDepartLayout.setVisibility(View.VISIBLE);
                     mReturnLayout.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         /*set up time field listeners*/
