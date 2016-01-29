@@ -102,16 +102,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
 
         holder.chevView.setImageDrawable(
                 ContextCompat.getDrawable(mParent,
-                        holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_36dp
-                                : R.drawable.ic_chevron_down_grey600_36dp));
+                        holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_48dp
+                                : R.drawable.ic_chevron_down_grey600_48dp));
 
         holder.calButton.setSelected(cruEventMV.mAddedToCalendar);
         holder.calButton.setImageDrawable(DrawableUtil.getTintListedDrawable(mParent, cruEventMV.mAddedToCalendar
-                ? R.drawable.ic_calendar_check_grey600_36dp
-                : R.drawable.ic_calendar_plus_grey600_36dp, R.color.cal_action));
+                ? R.drawable.ic_calendar_check_grey600_48dp
+                : R.drawable.ic_calendar_plus_grey600_48dp, R.color.cal_action));
 
-        holder.fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(mParent, R.drawable.ic_facebook_box_grey600_36dp, R.color.fbBlue));
-        holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(mParent, R.drawable.ic_map_marker_grey600_36dp, R.color.red600));
+        holder.fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(mParent, R.drawable.ic_facebook_box_grey600_48dp, R.color.fbBlue));
+        holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(mParent, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
     }
 
 
