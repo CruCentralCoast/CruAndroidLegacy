@@ -1,12 +1,12 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,10 +29,12 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
 import com.orhanobut.logger.Logger;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
-import org.androidcru.crucentralcoast.presentation.views.activities.MainActivity;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -43,12 +44,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
-import com.google.android.gms.common.api.GoogleApiClient;
 
 public class DriverFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener
 {
@@ -73,12 +68,14 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
     private boolean mDepart; /*used for setting time in appropriate field*/
     public final static String DATE_FORMATTER = "M/d/y";
 
-    SupportPlaceAutocompleteFragment mDepartAutocompleteFragment;
+    private SupportPlaceAutocompleteFragment mDepartAutocompleteFragment;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        mDepartAutocompleteFragment = new SupportPlaceAutocompleteFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.depart_place_autocomplete_layout, mDepartAutocompleteFragment).commit();
         return inflater.inflate(R.layout.driver_form, container, false);
     }
 
@@ -114,114 +111,119 @@ public class DriverFragment extends Fragment implements Validator.ValidationList
         mValidator.setValidationListener(this);
 
         /*determine which types of trips are visible*/
-        mTripTypeField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mTripTypeField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                if(selectedItem.equals("Departure")) {
+                if (selectedItem.equals("Departure"))
+                {
                     mDepartLayout.setVisibility(View.VISIBLE);
                     mReturnLayout.setVisibility(View.GONE);
-                }
-                else if(selectedItem.equals("Return")) {
+                } else if (selectedItem.equals("Return"))
+                {
                     mDepartLayout.setVisibility(View.GONE);
                     mReturnLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else
+                {
                     mDepartLayout.setVisibility(View.VISIBLE);
                     mReturnLayout.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent)
+            {
 
             }
         });
 
         /*set up time field listeners*/
         mDepartTimeField.setKeyListener(null);
-        mDepartTimeField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                TimePickerDialog tpd = TimePickerDialog.newInstance(
-                        DriverFragment.this,
-                        now.get(Calendar.HOUR_OF_DAY),
-                        now.get(Calendar.MINUTE),
-                        false
-                );
-                tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
-                mDepart = true;
-            }
+        mDepartTimeField.setOnClickListener(v -> {
+            Calendar now = Calendar.getInstance();
+            TimePickerDialog tpd = TimePickerDialog.newInstance(
+                    DriverFragment.this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    false
+            );
+            tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
+            mDepart = true;
         });
 
         mDepartDateField.setKeyListener(null);
-        mDepartDateField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                DatePickerDialog dpd = DatePickerDialog.newInstance(
-                        DriverFragment.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
-                );
-                dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
-                mDepart = true;
-            }
+        mDepartDateField.setOnClickListener(v -> {
+            Calendar now = Calendar.getInstance();
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    DriverFragment.this,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+            );
+            dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+            mDepart = true;
         });
 
         mReturnTimeField.setKeyListener(null);
-        mReturnTimeField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                TimePickerDialog tpd = TimePickerDialog.newInstance(
-                        DriverFragment.this,
-                        now.get(Calendar.HOUR_OF_DAY),
-                        now.get(Calendar.MINUTE),
-                        false
-                );
-                tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
-                mDepart = false;
-            }
+        mReturnTimeField.setOnClickListener(v -> {
+            Calendar now = Calendar.getInstance();
+            TimePickerDialog tpd = TimePickerDialog.newInstance(
+                    DriverFragment.this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    false
+            );
+            tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
+            mDepart = false;
         });
 
         mReturnDateField.setKeyListener(null);
-        mReturnDateField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
-                DatePickerDialog dpd = DatePickerDialog.newInstance(
-                        DriverFragment.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
-                );
-                dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
-                mDepart = false;
-            }
+        mReturnDateField.setOnClickListener(v -> {
+            Calendar now = Calendar.getInstance();
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    DriverFragment.this,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+            );
+            dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+            mDepart = false;
         });
 
         /*autocomplete map*/
-        mDepartAutocompleteFragment = (SupportPlaceAutocompleteFragment)getChildFragmentManager().findFragmentById(R.id.depart_place_autocomplete_layout);
+
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         mDepartAutocompleteFragment.setFilter(typeFilter);
-        mDepartAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        mDepartAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener()
+        {
             @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-//                Log.i("Depart", "Place: " + place.getName());
+            public void onPlaceSelected(Place place)
+            {
+                Logger.i("Depart", "Place: " + place.getName());
             }
 
             @Override
-            public void onError(Status status) {
-                Logger.d("Error for departing autocomplete");
-//                Log.i("ERROR:", "An error occurred: " + status);
+            public void onError(Status status)
+            {
+                Logger.i("ERROR:", "An error occurred: " + status);
             }
         });
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(mDepartAutocompleteFragment != null)
+        {
+            mDepartAutocompleteFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
