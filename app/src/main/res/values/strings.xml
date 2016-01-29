@@ -34,4 +34,5 @@
     <string name="rsvp_title">Set RSVP Status</string>
     <string name="select_sex">Select Sex</string>
     <string name="select_car_capacity">Select Car Capacity</string>
+    <string name="select_trip_type">Select Trip Type</string>
 </resources>
