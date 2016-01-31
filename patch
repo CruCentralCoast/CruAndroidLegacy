@@ -1,0 +1,118 @@
+diff --git a/app/src/main/java/org/androidcru/crucentralcoast/presentation/views/activities/forms/FormActivity.java b/app/src/main/java/org/androidcru/crucentralcoast/presentation/views/activities/forms/FormActivity.java
+new file mode 100644
+index 0000000..48e97d4
+--- /dev/null
++++ b/app/src/main/java/org/androidcru/crucentralcoast/presentation/views/activities/forms/FormActivity.java
+@@ -0,0 +1,28 @@
++package org.androidcru.crucentralcoast.presentation.views.activities.forms;
++
++import android.os.Bundle;
++import android.support.v7.app.AppCompatActivity;
++import android.widget.ImageButton;
++import android.widget.TextView;
++
++import org.androidcru.crucentralcoast.R;
++import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
++
++import butterknife.Bind;
++import butterknife.ButterKnife;
++
++public class FormActivity extends AppCompatActivity
++{
++    @Bind(R.id.close) ImageButton mCloseButton;
++    @Bind(R.id.title) TextView mTitle;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState)
++    {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_form);
++        ButterKnife.bind(this);
++
++        mCloseButton.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_close_grey600_48dp, android.R.color.white));
++    }
++}
+diff --git a/app/src/main/res/layout/activity_form.xml b/app/src/main/res/layout/activity_form.xml
+new file mode 100644
+index 0000000..78da3d6
+--- /dev/null
++++ b/app/src/main/res/layout/activity_form.xml
+@@ -0,0 +1,67 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++
++    <RelativeLayout
++        android:layout_width="match_parent"
++        android:layout_height="120dp"
++        android:id="@+id/topbar"
++        android:background="@color/colorPrimary">
++
++        <TextView
++            android:layout_width="fill_parent"
++            android:layout_height="wrap_content"
++            tools:text="Event information"
++            android:id="@+id/textView"
++            android:layout_alignParentBottom="true"
++            android:textColor="@android:color/white"
++            android:textSize="20sp"
++            android:layout_margin="16dp"/>
++
++        <ImageButton
++            android:layout_width="48dp"
++            android:layout_height="48dp"
++            android:id="@+id/close"
++            android:layout_alignParentStart="true"
++            android:background="@null"
++            android:padding="8dp"
++            android:contentDescription="@string/close"/>
++    </RelativeLayout>
++
++
++    <FrameLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <FrameLayout
++            android:id="@id/content"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"/>
++
++        <RelativeLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_gravity="bottom">
++
++            <ImageButton
++                android:id="@+id/prev"
++                android:layout_width="48dp"
++                android:layout_height="48dp"
++                android:padding="8dp"
++                android:layout_alignParentStart="true"/>
++
++            <ImageButton
++                android:id="@+id/next"
++                android:layout_width="48dp"
++                android:layout_height="48dp"
++                android:padding="8dp"
++                android:layout_alignParentEnd="true"/>
++
++        </RelativeLayout>
++    </FrameLayout>
++</LinearLayout>
+\ No newline at end of file
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+index 65708e5..f40085e 100644
+--- a/app/src/main/res/values/strings.xml
++++ b/app/src/main/res/values/strings.xml
+@@ -37,4 +37,5 @@
+     <string name="select_car_capacity">Select Car Capacity</string>
+     <string name="select_trip_type">Select Trip Type</string>
+     <string name="select_circle_radius">Select Circle Radius</string>
++    <string name="close">Close</string>
+ </resources>
