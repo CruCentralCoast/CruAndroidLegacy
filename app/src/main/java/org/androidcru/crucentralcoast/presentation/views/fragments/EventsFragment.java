@@ -19,7 +19,7 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
-import org.androidcru.crucentralcoast.data.providers.CruServiceProvider;
+import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
 
@@ -153,14 +153,14 @@ public class EventsFragment extends Fragment
 
     private void forceUpdate()
     {
-        CruServiceProvider.getInstance().forceUpdateEvents()
+        EventProvider.getInstance().requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
-        CruServiceProvider.getInstance().requestEvents()
+        EventProvider.getInstance().requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }

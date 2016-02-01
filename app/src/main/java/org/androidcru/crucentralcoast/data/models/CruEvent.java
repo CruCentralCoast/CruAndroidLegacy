@@ -19,7 +19,7 @@ public class CruEvent
     @SerializedName("url") public String mUrl;
 
     /**
-     * Required by GSON/RetroFit in order to automatically create and populate via reflection
+     * Required by GSON/RetroFit
      */
     public CruEvent() {}
 
