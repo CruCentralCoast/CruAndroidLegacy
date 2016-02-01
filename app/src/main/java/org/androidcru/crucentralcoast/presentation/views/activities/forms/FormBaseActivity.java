@@ -77,7 +77,7 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        appBarLayout.setExpanded(false, false);
+        //appBarLayout.setExpanded(false, false);
 
         previousView = (RelativeLayout) findViewById(R.id.prev);
         nextView = (RelativeLayout) findViewById(R.id.next);

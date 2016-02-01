@@ -49,13 +49,13 @@ public class DriverFragment extends Fragment implements FormPage
 
     @Override
     public void onNext() {
-        if(viewPager.getCurrentItem() + 1 >= viewPager.getChildCount() - 1)
+        if(viewPager.getCurrentItem() + 1 >= driverPagerAdapter.getCount() - 1)
         {
-            formHolder.setToolbarExpansion(true);
+            formHolder.setToolbarExpansion(false);
         }
         else
         {
-            formHolder.setToolbarExpansion(false);
+            formHolder.setToolbarExpansion(true);
         }
         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
     }
@@ -63,7 +63,7 @@ public class DriverFragment extends Fragment implements FormPage
     @Override
     public void onPrevious() {
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        formHolder.setToolbarExpansion(false);
+        formHolder.setToolbarExpansion(true);
     }
 
     @Override

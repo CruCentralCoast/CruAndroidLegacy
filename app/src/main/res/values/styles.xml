@@ -21,4 +21,13 @@
         <item name="colorControlActivated">@color/cruDarkBlue</item>
     </style>
 
+    <style name="ExpandedAppBar" parent="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="CollapsedAppBar" parent="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
