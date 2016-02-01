@@ -160,6 +160,11 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         });
     }
 
+    public void validate()
+    {
+        validator.validate();
+    }
+
     @Override
     public void onValidationSucceeded()
     {

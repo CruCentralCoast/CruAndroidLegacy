@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mobsandgeeks.saripaar.Validator;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
@@ -38,12 +37,14 @@ import butterknife.ButterKnife;
  */
 public class DriverRideLocFragment extends Fragment implements OnMapReadyCallback {
 
-    public static final double MILE_METER_CONV = 1609.34;
+    private static final double MILE_METER_CONV = 1609.34;
+    private static final double CALPOLY_LAT = 35.30021;
+    private static final double CALPOLY_LNG = -120.66310;
 
     @Bind(R.id.radius_field) EditText radiusField;
 
     private int mapSetter;  /*used for setting markers in map appropriately*/
-    private SupportPlaceAutocompleteFragment departAutocompleteFragment;
+    private SupportPlaceAutocompleteFragment autocompleteFragment;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private Circle mapCircle;
@@ -54,8 +55,8 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         /*autocomplete*/
-        departAutocompleteFragment = new SupportPlaceAutocompleteFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.depart_place_autocomplete_layout, departAutocompleteFragment).commit();
+        autocompleteFragment = new SupportPlaceAutocompleteFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.place_autocomplete_frag, autocompleteFragment).commit();
         /*map*/
         mapFragment = new SupportMapFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
@@ -72,11 +73,12 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
-        departAutocompleteFragment.setFilter(typeFilter);
-        departAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        autocompleteFragment.setFilter(typeFilter);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 Logger.i("Depart", "Place: " + place.getName());
+                Logger.d("Depart + Place: " + place.getName());
                 /*remove other departure markers on the map*/
                 if (departMarker != null) {
                     departMarker.remove();
@@ -84,7 +86,7 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
                 /*add new marker and circle to the map*/
                 departMarker = map.addMarker(new MarkerOptions()
                         .position(place.getLatLng())
-                        .title("Departure Location"));
+                        .title("Target Location"));
                 mapCircle = map.addCircle(new CircleOptions()
                         .center(place.getLatLng())
                         .radius(getMapRadius(radiusField.getText().toString())));
@@ -123,7 +125,8 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
 
     private double getMapRadius(String input)
     {
-        double radius;
+        /*default is 1 mile radius*/
+        double radius = MILE_METER_CONV;;
         try
         {
             radius = Double.parseDouble(input.toString());
@@ -131,7 +134,6 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
         }
         catch (NumberFormatException e)
         {
-            /*default is 1 mile radius*/
             radius = MILE_METER_CONV;
             Logger.i(input + " was not a number");
         }
@@ -144,9 +146,9 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(departAutocompleteFragment != null)
+        if(autocompleteFragment != null)
         {
-            departAutocompleteFragment.onActivityResult(requestCode, resultCode, data);
+            autocompleteFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -156,14 +158,12 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
         if (map == null)
         {
             map = googleMap;
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(35.30021, -120.66310), 14.0f));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(CALPOLY_LAT, CALPOLY_LNG), 14.0f));
         }
         else
         {
             /*hmmm what to do here*/
-            map.addMarker(new MarkerOptions()
-                    .position(new LatLng(40, 130))
-                    .title("Other Marker"));
+            Logger.d("Unable to display map....");
         }
     }
 }

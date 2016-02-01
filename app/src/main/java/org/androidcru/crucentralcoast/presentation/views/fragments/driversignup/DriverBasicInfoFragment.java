@@ -72,6 +72,11 @@ public class DriverBasicInfoFragment extends Fragment implements Validator.Valid
         validator.setValidationListener(this);
     }
 
+    public void validate()
+    {
+        validator.validate();
+    }
+
     @Override
     public void onValidationSucceeded()
     {
