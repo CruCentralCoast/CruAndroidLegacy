@@ -1,9 +1,9 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,7 @@ public class DriverFragment extends Fragment implements FormPage
     @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
 
     private FormHolder formHolder;
+    private DriverPagerAdapter driverPagerAdapter;
 
     @Nullable
     @Override
@@ -34,8 +35,15 @@ public class DriverFragment extends Fragment implements FormPage
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        driverPagerAdapter = new DriverPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(driverPagerAdapter);
+    }
 
-        viewPager.setAdapter(new DriverPagerAdapter(getChildFragmentManager()));
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        driverPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -1,17 +1,12 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,19 +26,16 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by main on 1/31/2016.
- */
 public class DriverBasicInfoFragment extends Fragment implements Validator.ValidationListener {
 
     //lol don't ask. SO is God. http://stackoverflow.com/a/124179/1822968
     public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
             "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
 
-    @NotEmpty
-    @Bind(R.id.name_field) EditText nameField;
+    @NotEmpty @Bind(R.id.name_field) EditText nameField;
     @NotEmpty @Pattern(regex = PHONE_REGEX) @Bind(R.id.phone_field) EditText phoneField;
     @Select(defaultSelection = -1) @Bind(R.id.sex_field) Spinner sexField;
+
     private Validator validator;
 
     @Nullable
@@ -65,9 +57,6 @@ public class DriverBasicInfoFragment extends Fragment implements Validator.Valid
         ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Male", "Female"});
         sexAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sexField.setAdapter(sexAdapter);
-
-        //submitButton.setOnClickListener(v -> validator.validate());
-        //submitButton.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
 
         validator.setValidationListener(this);
     }

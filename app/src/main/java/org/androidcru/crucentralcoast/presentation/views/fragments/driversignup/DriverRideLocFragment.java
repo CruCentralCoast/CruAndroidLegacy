@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,7 +24,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mobsandgeeks.saripaar.Validator;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
@@ -33,9 +31,6 @@ import org.androidcru.crucentralcoast.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by main on 1/31/2016.
- */
 public class DriverRideLocFragment extends Fragment implements OnMapReadyCallback {
 
     public static final double MILE_METER_CONV = 1609.34;
@@ -137,17 +132,6 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
         }
         Logger.i("using number " + radius);
         return radius;
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(departAutocompleteFragment != null)
-        {
-            departAutocompleteFragment.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
