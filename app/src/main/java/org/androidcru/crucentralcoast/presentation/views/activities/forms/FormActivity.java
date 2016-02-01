@@ -12,10 +12,10 @@ import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FormActivity extends AppCompatActivity
+public class FormActivity extends AppCompatActivity implements FormHolder
 {
     @Bind(R.id.close) ImageButton closeButton;
-    @Bind(R.id.title) TextView title;
+    @Bind(R.id.title) TextView titleView;
 
     @Bind(R.id.prev) ImageButton previous;
     @Bind(R.id.next) ImageButton next;
@@ -47,7 +47,7 @@ public class FormActivity extends AppCompatActivity
         {
             currentFormPage = (FormPage) fragment;
             setupButtonListeners();
-            setupTitle();
+            currentFormPage.setFormHolder(this);
         }
     }
 
@@ -59,14 +59,15 @@ public class FormActivity extends AppCompatActivity
         });
 
         next.setOnClickListener(v -> {
-            if(currentFormPage != null)
+            if (currentFormPage != null)
                 currentFormPage.onNext();
         });
     }
 
-    private void setupTitle()
+    @Override
+    public void setTitle(String title)
     {
-        title.setText(currentFormPage.getTitle());
+        titleView.setText(title);
     }
 }
 

@@ -4,6 +4,5 @@ public interface FormPage
 {
     void onNext();
     void onPrevious();
-
-    String getTitle();
+    void setFormHolder(FormHolder holder);
 }
