@@ -32,9 +32,6 @@ import org.androidcru.crucentralcoast.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by main on 1/31/2016.
- */
 public class DriverRideLocFragment extends Fragment implements OnMapReadyCallback {
 
     private static final double MILE_METER_CONV = 1609.34;

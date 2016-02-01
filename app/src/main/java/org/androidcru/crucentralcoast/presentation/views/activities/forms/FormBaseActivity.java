@@ -3,22 +3,20 @@ package org.androidcru.crucentralcoast.presentation.views.activities.forms;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class FormActivity extends AppCompatActivity implements FormHolder
+public class FormBaseActivity extends AppCompatActivity implements FormHolder
 {
     ImageButton closeButton;
     TextView titleView;
 
-    ImageButton previous;
-    ImageButton next;
+    Button previous;
+    Button next;
 
     private FormPage currentFormPage;
 
@@ -36,15 +34,15 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         closeButton = (ImageButton) findViewById(R.id.close);
         titleView = (TextView) findViewById(R.id.title);
 
-        previous = (ImageButton) findViewById(R.id.prev);
-        next = (ImageButton) findViewById(R.id.next);
+        previous = (Button) findViewById(R.id.prev);
+        next = (Button) findViewById(R.id.next);
     }
 
     private void setupButtons()
     {
         closeButton.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_close_grey600_48dp, android.R.color.white));
-        previous.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_chevron_left_grey600_48dp, android.R.color.white));
-        next.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_chevron_right_grey600_48dp, android.R.color.white));
+        previous.setCompoundDrawablesWithIntrinsicBounds(DrawableUtil.getTintedDrawable(this, R.drawable.ic_chevron_left_grey600_48dp, android.R.color.white), null, null, null);
+        next.setCompoundDrawablesWithIntrinsicBounds(null, null, DrawableUtil.getTintedDrawable(this, R.drawable.ic_chevron_right_grey600_48dp, android.R.color.white), null);
     }
 
     @Override
@@ -76,6 +74,18 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     public void setTitle(String title)
     {
         titleView.setText(title);
+    }
+
+    @Override
+    public void setPreviousVisbility(int visibility)
+    {
+        previous.setVisibility(visibility);
+    }
+
+    @Override
+    public void setNextVisibility(int visibility)
+    {
+        next.setVisibility(visibility);
     }
 }
 
