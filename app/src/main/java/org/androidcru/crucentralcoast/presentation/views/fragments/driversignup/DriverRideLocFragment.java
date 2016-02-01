@@ -74,13 +74,13 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Logger.i("Depart", "Place: " + place.getName());
-                Logger.d("Depart + Place: " + place.getName());
+                Logger.i("Location ", "Place: " + place.getName());
                 /*remove other departure markers on the map*/
                 if (departMarker != null) {
                     departMarker.remove();
                 }
                 /*add new marker and circle to the map*/
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
                 departMarker = map.addMarker(new MarkerOptions()
                         .position(place.getLatLng())
                         .title("Target Location"));
@@ -134,7 +134,6 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
             radius = MILE_METER_CONV;
             Logger.i(input + " was not a number");
         }
-        Logger.i("using number " + radius);
         return radius;
     }
 
