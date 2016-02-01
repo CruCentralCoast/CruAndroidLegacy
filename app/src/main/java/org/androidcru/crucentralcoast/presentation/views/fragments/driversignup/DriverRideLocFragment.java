@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.fragments;
+package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +36,7 @@ import butterknife.ButterKnife;
 /**
  * Created by main on 1/31/2016.
  */
-public class DriverFragmentRideLoc extends Fragment implements OnMapReadyCallback {
+public class DriverRideLocFragment extends Fragment implements OnMapReadyCallback {
 
     public static final double MILE_METER_CONV = 1609.34;
 
@@ -60,7 +60,7 @@ public class DriverFragmentRideLoc extends Fragment implements OnMapReadyCallbac
         mapFragment = new SupportMapFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
         mapFragment.getMapAsync(this);
-        return inflater.inflate(R.layout.driver_form, container, false);
+        return inflater.inflate(R.layout.driver_form_ride_loc, container, false);
     }
 
     @Override

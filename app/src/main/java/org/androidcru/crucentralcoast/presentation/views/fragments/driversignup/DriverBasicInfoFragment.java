@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.fragments;
+package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
 
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +50,7 @@ public class DriverBasicInfoFragment extends Fragment implements Validator.Valid
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.driver_form, container, false);
+        return inflater.inflate(R.layout.driver_form_basic_info, container, false);
     }
 
     @Override

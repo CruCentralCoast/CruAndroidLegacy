@@ -14,11 +14,11 @@ import butterknife.ButterKnife;
 
 public class FormActivity extends AppCompatActivity implements FormHolder
 {
-    @Bind(R.id.close) ImageButton closeButton;
-    @Bind(R.id.title) TextView titleView;
+    ImageButton closeButton;
+    TextView titleView;
 
-    @Bind(R.id.prev) ImageButton previous;
-    @Bind(R.id.next) ImageButton next;
+    ImageButton previous;
+    ImageButton next;
 
     private FormPage currentFormPage;
 
@@ -27,9 +27,17 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
-        ButterKnife.bind(this);
-
+        setupUI();
         setupButtons();
+    }
+
+    private void setupUI()
+    {
+        closeButton = (ImageButton) findViewById(R.id.close);
+        titleView = (TextView) findViewById(R.id.title);
+
+        previous = (ImageButton) findViewById(R.id.prev);
+        next = (ImageButton) findViewById(R.id.next);
     }
 
     private void setupButtons()
