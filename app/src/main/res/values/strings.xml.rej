@@ -1,7 +1,0 @@
-diff a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml	(rejected hunks)
-@@ -37,4 +37,5 @@
-     <string name="select_car_capacity">Select Car Capacity</string>
-     <string name="select_trip_type">Select Trip Type</string>
-     <string name="select_circle_radius">Select Circle Radius</string>
-+    <string name="close">Close</string>
- </resources>
