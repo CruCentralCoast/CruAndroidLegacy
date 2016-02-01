@@ -116,6 +116,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
                     now.get(Calendar.MINUTE),
                     false
             );
+            tpd.vibrate(false);
             tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
             whichType = true;
         });
@@ -129,6 +130,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
+            dpd.vibrate(false);
             dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
             whichType = true;
         });
@@ -142,6 +144,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
                     now.get(Calendar.MINUTE),
                     false
             );
+            tpd.vibrate(false);
             tpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
             whichType = false;
         });
@@ -155,6 +158,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
+            dpd.vibrate(false);
             dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
             whichType = false;
         });

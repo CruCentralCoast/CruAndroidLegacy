@@ -37,6 +37,7 @@ public class DriverFragment extends Fragment implements FormPage
         ButterKnife.bind(this, view);
         driverPagerAdapter = new DriverPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(driverPagerAdapter);
+        formHolder.setTitle("Basic info");
     }
 
     @Override
@@ -48,12 +49,21 @@ public class DriverFragment extends Fragment implements FormPage
 
     @Override
     public void onNext() {
+        if(viewPager.getCurrentItem() + 1 >= viewPager.getChildCount() - 1)
+        {
+            formHolder.setToolbarExpansion(true);
+        }
+        else
+        {
+            formHolder.setToolbarExpansion(false);
+        }
         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
     }
 
     @Override
     public void onPrevious() {
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        formHolder.setToolbarExpansion(false);
     }
 
     @Override

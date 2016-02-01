@@ -39,6 +39,6 @@
     <string name="select_circle_radius">Select Circle Radius</string>
 
     <string name="close">Close</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="next">NEXT</string>
+    <string name="previous">PREVIOUS</string>
 </resources>
