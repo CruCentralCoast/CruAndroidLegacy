@@ -45,6 +45,7 @@ public class EventsFragment extends Fragment
     private Observer<Pair<String, Long>> mOnCalendarWrittenSubscriber;
 
     private SharedPreferences mSharedPreferences;
+
     public EventsFragment()
     {
         mCruEventMVs = new ArrayList<>();
