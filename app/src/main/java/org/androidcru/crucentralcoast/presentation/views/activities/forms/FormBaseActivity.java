@@ -28,7 +28,7 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     CollapsingToolbarLayout collapsingToolbarLayout;
     //NestedScrollView nestedScrollView;
 
-    private FormPage currentFormPage;
+    private FormContent currentFormContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,15 +69,10 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
 
     private void setupUI()
     {
-        //nestedScrollView = (NestedScrollView) findViewById(R.id.scrollView);
-        //nestedScrollView.setNestedScrollingEnabled(false);
-
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //appBarLayout.setExpanded(false, false);
 
         previousView = (RelativeLayout) findViewById(R.id.prev);
         nextView = (RelativeLayout) findViewById(R.id.next);
@@ -96,24 +91,23 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     public void onAttachFragment(Fragment fragment)
     {
         super.onAttachFragment(fragment);
-        if(fragment instanceof FormPage)
+        if(fragment instanceof FormContent)
         {
-            currentFormPage = (FormPage) fragment;
+            currentFormContent = (FormContent) fragment;
             setupButtonListeners();
-            currentFormPage.setFormHolder(this);
         }
     }
 
     private void setupButtonListeners()
     {
         previousView.setOnClickListener(v -> {
-            if (currentFormPage != null)
-                currentFormPage.onPrevious();
+            if (currentFormContent != null)
+                currentFormContent.onPrevious();
         });
 
         nextView.setOnClickListener(v -> {
-            if (currentFormPage != null)
-                currentFormPage.onNext();
+            if (currentFormContent != null)
+                currentFormContent.onNext();
         });
     }
 
@@ -124,7 +118,7 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     }
 
     @Override
-    public void setPreviousVisbility(int visibility)
+    public void setPreviousVisibility(int visibility)
     {
         previousView.setVisibility(visibility);
     }

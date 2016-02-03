@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,11 +27,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DriverRideLocFragment extends Fragment implements OnMapReadyCallback {
+public class DriverRideLocFragment extends ProvableFragment implements OnMapReadyCallback {
 
     private static final double MILE_METER_CONV = 1609.34;
     private static final double CALPOLY_LAT = 35.30021;
@@ -162,5 +162,11 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
             /*hmmm what to do here*/
             Logger.d("Unable to display map....");
         }
+    }
+
+    @Override
+    public boolean validate()
+    {
+        return true;
     }
 }

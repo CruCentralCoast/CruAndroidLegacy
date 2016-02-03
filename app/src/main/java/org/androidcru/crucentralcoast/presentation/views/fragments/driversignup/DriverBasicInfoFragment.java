@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +19,14 @@ import com.mobsandgeeks.saripaar.annotation.Select;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DriverBasicInfoFragment extends Fragment implements Validator.ValidationListener {
+public class DriverBasicInfoFragment extends ProvableFragment implements Validator.ValidationListener {
 
     //lol don't ask. SO is God. http://stackoverflow.com/a/124179/1822968
     public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
@@ -37,6 +37,7 @@ public class DriverBasicInfoFragment extends Fragment implements Validator.Valid
     @Select(defaultSelection = -1) @Bind(R.id.sex_field) Spinner sexField;
 
     private Validator validator;
+    private boolean isValid;
 
     @Nullable
     @Override
@@ -61,20 +62,24 @@ public class DriverBasicInfoFragment extends Fragment implements Validator.Valid
         validator.setValidationListener(this);
     }
 
-    public void validate()
+    @Override
+    public boolean validate()
     {
         validator.validate();
+        return isValid;
     }
 
     @Override
     public void onValidationSucceeded()
     {
         Logger.d("Successfully validated driver info");
+        isValid = true;
     }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors)
     {
+        isValid = false;
         for (ValidationError e : errors)
         {
             View v = e.getView();

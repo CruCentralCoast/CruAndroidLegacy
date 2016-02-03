@@ -3,27 +3,30 @@ package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.NonSwipeableViewPager;
-import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormHolder;
-import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormPage;
+import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormContent;
+import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.adapters.DriverPagerAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class DriverFragment extends Fragment implements FormPage
+public class DriverFragment extends FormContentFragment implements FormContent
 {
     @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
 
-    private FormHolder formHolder;
     private DriverPagerAdapter driverPagerAdapter;
+
+    public DriverFragment()
+    {
+        super();
+    }
 
     @Nullable
     @Override
@@ -35,7 +38,7 @@ public class DriverFragment extends Fragment implements FormPage
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        driverPagerAdapter = new DriverPagerAdapter(getChildFragmentManager());
+        driverPagerAdapter = new DriverPagerAdapter(getChildFragmentManager(), 3);
         viewPager.setAdapter(driverPagerAdapter);
         formHolder.setTitle("Basic info");
     }
@@ -49,6 +52,7 @@ public class DriverFragment extends Fragment implements FormPage
 
     @Override
     public void onNext() {
+        boolean isValid = driverPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).validate();
         if(viewPager.getCurrentItem() + 1 >= driverPagerAdapter.getCount() - 1)
         {
             formHolder.setToolbarExpansion(false);
@@ -57,17 +61,13 @@ public class DriverFragment extends Fragment implements FormPage
         {
             formHolder.setToolbarExpansion(true);
         }
-        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        if(isValid)
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
     }
 
     @Override
     public void onPrevious() {
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         formHolder.setToolbarExpansion(true);
-    }
-
-    @Override
-    public void setFormHolder(FormHolder holder) {
-        this.formHolder = holder;
     }
 }

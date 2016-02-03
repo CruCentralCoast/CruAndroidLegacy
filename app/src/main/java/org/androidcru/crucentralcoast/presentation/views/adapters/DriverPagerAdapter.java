@@ -1,32 +1,29 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.SparseArray;
-import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.driversignup.DriverBasicInfoFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.driversignup.DriverRideInfoFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.driversignup.DriverRideLocFragment;
 
-import java.lang.ref.WeakReference;
-
-public class DriverPagerAdapter extends FragmentStatePagerAdapter
+public class DriverPagerAdapter extends BaseFormAdapter
 {
-    SparseArray<WeakReference<Fragment>> registeredFragments = new SparseArray<>();
+    private int formCount;
 
-    public DriverPagerAdapter(FragmentManager fm) {
+    public DriverPagerAdapter(FragmentManager fm, int formCount) {
         super(fm);
+        this.formCount = formCount;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return formCount;
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public ProvableFragment getFormPage(int position)
+    {
         switch(position)
         {
             case 0:
@@ -38,22 +35,5 @@ public class DriverPagerAdapter extends FragmentStatePagerAdapter
             default:
                 return new DriverRideInfoFragment();
         }
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        registeredFragments.put(position, new WeakReference<>(fragment));
-        return fragment;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        registeredFragments.remove(position);
-        super.destroyItem(container, position, object);
-    }
-
-    public Fragment getRegisteredFragment(int position) {
-        return registeredFragments.get(position).get();
     }
 }

@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,12 +14,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
 import org.androidcru.crucentralcoast.presentation.views.activities.PassengerSignupActivity;
-import org.androidcru.crucentralcoast.presentation.views.fragments.RideSharingFragment;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -88,10 +85,9 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
         holder.eventDescription.setVisibility(cruEventMV.mIsExpanded ? View.VISIBLE : View.GONE);
         holder.launchDriver.setText("Driver");
         holder.launchPassenger.setText("Passenger");
-        Context c = CruApplication.getContext();
-        Intent passIntent = new Intent(c, PassengerSignupActivity.class);
-        passIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        holder.launchPassenger.setOnClickListener(v -> c.startActivity(passIntent));
+
+        Intent passIntent = new Intent(mParent, PassengerSignupActivity.class);
+        holder.launchPassenger.setOnClickListener(v -> mParent.startActivity(passIntent));
     }
 
 

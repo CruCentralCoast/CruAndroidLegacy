@@ -1,8 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.activities.forms;
 
-public interface FormPage
+public interface FormContent
 {
     void onNext();
     void onPrevious();
-    void setFormHolder(FormHolder holder);
 }

@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -34,7 +34,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DriverRideInfoFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener         {
+public class DriverRideInfoFragment extends ProvableFragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener         {
 
     @Select(defaultSelection = -1) @Bind(R.id.car_capacity_field) Spinner carCapacityField;
     @Select(defaultSelection = -1) @Bind(R.id.trip_type_field) Spinner tripTypeField;
@@ -46,6 +46,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
     @Bind(R.id.return_layout) RelativeLayout returnLayout;
 
     private Validator validator;
+    private boolean isValid;
     private boolean whichType; /*used for setting time in appropriate field*/
     public final static String DATE_FORMATTER = "M/d/y";
 
@@ -161,20 +162,24 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         });
     }
 
-    public void validate()
+    @Override
+    public boolean validate()
     {
         validator.validate();
+        return isValid;
     }
 
     @Override
     public void onValidationSucceeded()
     {
         Logger.d("Successfully validated driver info");
+        isValid = true;
     }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors)
     {
+        isValid = false;
         for (ValidationError e : errors)
         {
             View v = e.getView();

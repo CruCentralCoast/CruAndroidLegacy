@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.fragments.passengersig
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +25,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -37,7 +36,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PassengerLocFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class PassengerLocFragment extends ProvableFragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     @Select(defaultSelection = -1) @Bind(R.id.trip_type_field) Spinner tripTypeField;
     @Bind(R.id.depart_time_field) EditText departTimeField;
     @Bind(R.id.depart_date_field) EditText departDateField;
@@ -49,6 +48,7 @@ public class PassengerLocFragment extends Fragment implements Validator.Validati
 
     private SupportPlaceAutocompleteFragment autocompleteFragment;
     private Validator validator;
+    private boolean isValid;
     private boolean whichType; /*used for setting time in appropriate field*/
     public final static String DATE_FORMATTER = "M/d/y";
 
@@ -169,20 +169,24 @@ public class PassengerLocFragment extends Fragment implements Validator.Validati
         });
     }
 
-    public void validate()
+    @Override
+    public boolean validate()
     {
         validator.validate();
+        return isValid;
     }
 
     @Override
     public void onValidationSucceeded()
     {
         Logger.d("Successfully validated passenger info");
+        isValid = true;
     }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors)
     {
+        isValid = false;
         for (ValidationError e : errors)
         {
             View v = e.getView();
