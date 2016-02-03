@@ -1,9 +1,10 @@
-package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
+package org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.mobsandgeeks.saripaar.QuickRule;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -34,9 +37,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DriverRideInfoFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener         {
-
-    @Select(defaultSelection = -1) @Bind(R.id.car_capacity_field) Spinner carCapacityField;
+public class PassengerLocFragment extends Fragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     @Select(defaultSelection = -1) @Bind(R.id.trip_type_field) Spinner tripTypeField;
     @Bind(R.id.depart_time_field) EditText departTimeField;
     @Bind(R.id.depart_date_field) EditText departDateField;
@@ -45,6 +46,8 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
     @Bind(R.id.depart_layout) RelativeLayout departLayout;
     @Bind(R.id.return_layout) RelativeLayout returnLayout;
 
+
+    private SupportPlaceAutocompleteFragment autocompleteFragment;
     private Validator validator;
     private boolean whichType; /*used for setting time in appropriate field*/
     public final static String DATE_FORMATTER = "M/d/y";
@@ -53,14 +56,24 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.driver_form_ride_info, container, false);
+        /*autocomplete*/
+        autocompleteFragment = new SupportPlaceAutocompleteFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.place_autocomplete_frag, autocompleteFragment).commit();
+
+        return inflater.inflate(R.layout.passenger_form_loc, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        /*autocomplete search*/
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                .build();
+        autocompleteFragment.setFilter(typeFilter);
+//        autocompleteFragment.setText("Enter your location");
 
         validator = new Validator(this);
         validator.put(departTimeField, validTimeRule);
@@ -68,17 +81,12 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         validator.put(departDateField, validDateRule);
         validator.put(returnDateField, validDateRule);
 
-        ArrayAdapter<String> carCapacityAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"1", "2", "3", "4", "5", "6", "7"});
-        carCapacityAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        carCapacityField.setAdapter(carCapacityAdapter);
-
         ArrayAdapter<String> tripTypeAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Round Trip", "Departure", "Return"});
         tripTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         tripTypeField.setAdapter(tripTypeAdapter);
 
         //submitButton.setOnClickListener(v -> validator.validate());
         //submitButton.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
-
         validator.setValidationListener(this);
 
         /*determine which types of trips are visible*/
@@ -108,7 +116,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         departTimeField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
-                    DriverRideInfoFragment.this,
+                    PassengerLocFragment.this,
                     now.get(Calendar.HOUR_OF_DAY),
                     now.get(Calendar.MINUTE),
                     false
@@ -122,7 +130,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         departDateField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
             DatePickerDialog dpd = DatePickerDialog.newInstance(
-                    DriverRideInfoFragment.this,
+                    PassengerLocFragment.this,
                     now.get(Calendar.YEAR),
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
@@ -136,7 +144,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         returnTimeField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
-                    DriverRideInfoFragment.this,
+                    PassengerLocFragment.this,
                     now.get(Calendar.HOUR_OF_DAY),
                     now.get(Calendar.MINUTE),
                     false
@@ -150,7 +158,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
         returnDateField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
             DatePickerDialog dpd = DatePickerDialog.newInstance(
-                    DriverRideInfoFragment.this,
+                    PassengerLocFragment.this,
                     now.get(Calendar.YEAR),
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
@@ -169,7 +177,7 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
     @Override
     public void onValidationSucceeded()
     {
-        Logger.d("Successfully validated driver info");
+        Logger.d("Successfully validated passenger info");
     }
 
     @Override
@@ -187,28 +195,6 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
                 ((EditText)v).setError(e.getCollatedErrorMessage(getContext()));
             }
 
-        }
-    }
-
-    @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        String minuteString = minute < 10 ? "0"+minute : ""+minute;
-        String ampm = hourOfDay < 12 ? "AM" : "PM";
-        String time = "" + (hourOfDay % 12) + ":" + minuteString + " " + ampm;
-        if (whichType) {
-            departTimeField.setText(time);
-        } else {
-            returnTimeField.setText(time);
-        }
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = LocalDateTime.of(year, Month.of(monthOfYear + 1), dayOfMonth, 0, 0).format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
-        if (whichType) {
-            departDateField.setText(date);
-        } else {
-            returnDateField.setText(date);
         }
     }
 
@@ -245,4 +231,26 @@ public class DriverRideInfoFragment extends Fragment implements Validator.Valida
             return "Time not set";
         }
     };
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        String minuteString = minute < 10 ? "0"+minute : ""+minute;
+        String ampm = hourOfDay < 12 ? "AM" : "PM";
+        String time = "" + (hourOfDay % 12) + ":" + minuteString + " " + ampm;
+        if (whichType) {
+            departTimeField.setText(time);
+        } else {
+            returnTimeField.setText(time);
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String date = LocalDateTime.of(year, Month.of(monthOfYear + 1), dayOfMonth, 0, 0).format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+        if (whichType) {
+            departDateField.setText(date);
+        } else {
+            returnDateField.setText(date);
+        }
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.views.activities.DriverSignupActivity;
+import org.androidcru.crucentralcoast.presentation.views.activities.PassengerSignupActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,5 +35,6 @@ public class RideSharingFragment extends Fragment
         ButterKnife.bind(this, view);
 
         driverButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), DriverSignupActivity.class)));
+        passengerButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), PassengerSignupActivity.class)));
     }
 }

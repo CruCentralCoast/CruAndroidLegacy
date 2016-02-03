@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.fragments.driversignup;
+package org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,22 +12,22 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.NonSwipeableViewPager;
 import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormHolder;
 import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormPage;
-import org.androidcru.crucentralcoast.presentation.views.adapters.DriverPagerAdapter;
+import org.androidcru.crucentralcoast.presentation.views.adapters.PassengerPagerAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
-public class DriverFragment extends Fragment implements FormPage
+public class PassengerFragment extends Fragment implements FormPage
 {
     @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
 
     private FormHolder formHolder;
-    private DriverPagerAdapter driverPagerAdapter;
+    private PassengerPagerAdapter passengerPagerAdapter;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         return inflater.inflate(R.layout.form, container, false);
     }
 
@@ -35,21 +35,21 @@ public class DriverFragment extends Fragment implements FormPage
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        driverPagerAdapter = new DriverPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(driverPagerAdapter);
-        formHolder.setTitle("Basic info");
+        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(passengerPagerAdapter);
+        formHolder.setTitle("Passenger Information");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        driverPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+        passengerPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onNext() {
-        if(viewPager.getCurrentItem() + 1 >= driverPagerAdapter.getCount() - 1)
+        if(viewPager.getCurrentItem() + 1 >= passengerPagerAdapter.getCount() - 1)
         {
             formHolder.setToolbarExpansion(false);
         }
@@ -71,3 +71,4 @@ public class DriverFragment extends Fragment implements FormPage
         this.formHolder = holder;
     }
 }
+

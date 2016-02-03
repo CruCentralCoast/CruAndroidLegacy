@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.androidcru.crucentralcoast.presentation.views.fragments.driversignup.DriverFragment;
-import org.androidcru.crucentralcoast.presentation.views.fragments.PassengerFragment;
+import org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup.PassengerFragment;
 
 public class RideSharingAdapter extends FragmentPagerAdapter
 {

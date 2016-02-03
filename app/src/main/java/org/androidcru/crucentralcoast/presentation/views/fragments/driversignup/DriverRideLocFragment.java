@@ -58,6 +58,7 @@ public class DriverRideLocFragment extends Fragment implements OnMapReadyCallbac
         mapFragment = new SupportMapFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
         mapFragment.getMapAsync(this);
+
         return inflater.inflate(R.layout.driver_form_ride_loc, container, false);
     }
 
