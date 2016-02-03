@@ -134,6 +134,12 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     {
         appBarLayout.setExpanded(expanded);
     }
+
+    @Override
+    public void complete()
+    {
+        finish();
+    }
 }
 
 

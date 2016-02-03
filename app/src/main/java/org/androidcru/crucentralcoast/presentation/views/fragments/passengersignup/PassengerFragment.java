@@ -33,7 +33,11 @@ public class PassengerFragment extends FormContentFragment
         ButterKnife.bind(this, view);
         passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 1);
         viewPager.setAdapter(passengerPagerAdapter);
-        formHolder.setTitle("Passenger Information");
+
+
+        formHolder.setToolbarExpansion(true);
+        formHolder.setTitle("Basic info");
+        formHolder.setPreviousVisibility(View.GONE);
     }
 
     @Override
@@ -48,12 +52,16 @@ public class PassengerFragment extends FormContentFragment
         boolean isValid = passengerPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).validate();
         if(isValid)
         {
-            if (viewPager.getCurrentItem() + 1 >= passengerPagerAdapter.getCount() - 1)
+            switch(viewPager.getCurrentItem() + 1)
             {
-                formHolder.setToolbarExpansion(false);
-            } else
-            {
-                formHolder.setToolbarExpansion(true);
+                case 1:
+                    formHolder.setToolbarExpansion(false);
+                    formHolder.setTitle("Location info");
+                    formHolder.setPreviousVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    formHolder.complete();
+                    break;
             }
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         }
@@ -61,8 +69,15 @@ public class PassengerFragment extends FormContentFragment
 
     @Override
     public void onPrevious() {
+        switch(viewPager.getCurrentItem() - 1)
+        {
+            case 0:
+                formHolder.setToolbarExpansion(true);
+                formHolder.setTitle("Ride info");
+                formHolder.setPreviousVisibility(View.VISIBLE);
+                break;
+        }
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        formHolder.setToolbarExpansion(true);
     }
 }
 

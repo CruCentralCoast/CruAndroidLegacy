@@ -6,4 +6,5 @@ public interface FormHolder
     void setPreviousVisibility(int visibility);
     void setNextVisibility(int visibility);
     void setToolbarExpansion(boolean expanded);
+    void complete();
 }

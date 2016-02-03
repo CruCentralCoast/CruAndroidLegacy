@@ -39,7 +39,10 @@ public class DriverFragment extends FormContentFragment
         ButterKnife.bind(this, view);
         driverPagerAdapter = new DriverPagerAdapter(getChildFragmentManager(), 3);
         viewPager.setAdapter(driverPagerAdapter);
+
+        formHolder.setToolbarExpansion(true);
         formHolder.setTitle("Basic info");
+        formHolder.setPreviousVisibility(View.GONE);
     }
 
     @Override
@@ -54,12 +57,21 @@ public class DriverFragment extends FormContentFragment
         boolean isValid = driverPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).validate();
         if(isValid)
         {
-            if (viewPager.getCurrentItem() + 1 >= driverPagerAdapter.getCount() - 1)
+            switch(viewPager.getCurrentItem() + 1)
             {
-                formHolder.setToolbarExpansion(false);
-            } else
-            {
-                formHolder.setToolbarExpansion(true);
+                case 1:
+                    formHolder.setToolbarExpansion(true);
+                    formHolder.setTitle("Ride info");
+                    formHolder.setPreviousVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    formHolder.setToolbarExpansion(false);
+                    formHolder.setTitle("Location info");
+                    formHolder.setPreviousVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    formHolder.complete();
+                    break;
             }
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         }
@@ -67,7 +79,19 @@ public class DriverFragment extends FormContentFragment
 
     @Override
     public void onPrevious() {
+        switch(viewPager.getCurrentItem() - 1)
+        {
+            case 0:
+                formHolder.setToolbarExpansion(true);
+                formHolder.setTitle("Basic info");
+                formHolder.setPreviousVisibility(View.GONE);
+                break;
+            case 1:
+                formHolder.setToolbarExpansion(true);
+                formHolder.setTitle("Ride info");
+                formHolder.setPreviousVisibility(View.VISIBLE);
+                break;
+        }
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        formHolder.setToolbarExpansion(true);
     }
 }
