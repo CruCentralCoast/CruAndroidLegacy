@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.NonSwipeableViewPager;
-import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormContent;
 import org.androidcru.crucentralcoast.presentation.views.activities.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.adapters.DriverPagerAdapter;
 
@@ -17,7 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class DriverFragment extends FormContentFragment implements FormContent
+public class DriverFragment extends FormContentFragment
 {
     @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
 
@@ -53,16 +52,17 @@ public class DriverFragment extends FormContentFragment implements FormContent
     @Override
     public void onNext() {
         boolean isValid = driverPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).validate();
-        if(viewPager.getCurrentItem() + 1 >= driverPagerAdapter.getCount() - 1)
-        {
-            formHolder.setToolbarExpansion(false);
-        }
-        else
-        {
-            formHolder.setToolbarExpansion(true);
-        }
         if(isValid)
+        {
+            if (viewPager.getCurrentItem() + 1 >= driverPagerAdapter.getCount() - 1)
+            {
+                formHolder.setToolbarExpansion(false);
+            } else
+            {
+                formHolder.setToolbarExpansion(true);
+            }
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        }
     }
 
     @Override

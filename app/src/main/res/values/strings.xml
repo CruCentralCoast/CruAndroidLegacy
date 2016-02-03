@@ -42,4 +42,6 @@
     <string name="close">Close</string>
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>
+    <string name="driver">Driver</string>
+    <string name="passenger">Passenger</string>
 </resources>

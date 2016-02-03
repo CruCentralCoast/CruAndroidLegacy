@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
+import org.androidcru.crucentralcoast.presentation.views.activities.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.activities.PassengerSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -55,7 +57,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
     @Override
     public CruRideViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_ridesharing, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_ridesharing, parent, false);
         return new CruRideViewHolder(view);
     }
 
@@ -83,11 +85,17 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
                 + " - " + cruEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
         holder.eventDescription.setText(cruEvent.mDescription);
         holder.eventDescription.setVisibility(cruEventMV.mIsExpanded ? View.VISIBLE : View.GONE);
-        holder.launchDriver.setText("Driver");
-        holder.launchPassenger.setText("Passenger");
 
-        Intent passIntent = new Intent(mParent, PassengerSignupActivity.class);
-        holder.launchPassenger.setOnClickListener(v -> mParent.startActivity(passIntent));
+        holder.chevView.setImageDrawable(
+                ContextCompat.getDrawable(mParent,
+                        holder.eventDescription.getVisibility() == View.VISIBLE ? R.drawable.ic_chevron_up_grey600_48dp
+                                : R.drawable.ic_chevron_down_grey600_48dp));
+
+        holder.launchDriver.setText(R.string.driver);
+        holder.launchPassenger.setText(R.string.passenger);
+
+        holder.launchPassenger.setOnClickListener(v -> mParent.startActivity(new Intent(mParent, PassengerSignupActivity.class)));
+        holder.launchDriver.setOnClickListener(v -> mParent.startActivity(new Intent(mParent, DriverSignupActivity.class)));
     }
 
 
@@ -110,6 +118,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
         @Bind(R.id.eventName) TextView eventName;
         @Bind(R.id.eventDate) TextView eventDate;
         @Bind(R.id.eventDescription) TextView eventDescription;
+        @Bind(R.id.chevView) ImageView chevView;
         @Bind(R.id.launchPassenger) Button launchPassenger;
         @Bind(R.id.launchDriver) Button launchDriver;
 
