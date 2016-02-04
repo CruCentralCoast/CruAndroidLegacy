@@ -47,6 +47,9 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
 
     private Validator validator;
     private boolean isValid;
+    private Calendar departDate;
+    private Calendar returnDate;
+    private String selectedType;
     private boolean whichType; /*used for setting time in appropriate field*/
     public final static String DATE_FORMATTER = "M/d/y";
 
@@ -90,12 +93,15 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
                 if (selectedItem.equals("Departure")) {
                     departLayout.setVisibility(View.VISIBLE);
                     returnLayout.setVisibility(View.GONE);
+                    selectedType = "departure";
                 } else if (selectedItem.equals("Return")) {
                     departLayout.setVisibility(View.GONE);
                     returnLayout.setVisibility(View.VISIBLE);
+                    selectedType = "return";
                 } else {
                     departLayout.setVisibility(View.VISIBLE);
                     returnLayout.setVisibility(View.VISIBLE);
+                    selectedType = "roundtrip";
                 }
             }
 
@@ -122,6 +128,7 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
         departDateField.setKeyListener(null);
         departDateField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
+            departDate = now;
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     DriverRideInfoFragment.this,
                     now.get(Calendar.YEAR),
@@ -150,6 +157,7 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
         returnDateField.setKeyListener(null);
         returnDateField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
+            returnDate = now;
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     DriverRideInfoFragment.this,
                     now.get(Calendar.YEAR),
@@ -220,9 +228,8 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
     /*validates the date*/
     private boolean valiDATE(String inputDate)
     {
-        /*check date is at least x days before the event*/
-        /*check date is at least y days after event*/
-        return true;
+        /*this seems backward.... but it works*/
+        return !selectedType.equals("roundtrip") || returnDate.before(departDate);
     }
 
     private QuickRule<EditText> validDateRule = new QuickRule<EditText>() {
