@@ -62,7 +62,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType)
         {
             case MINISTRY_VIEW:
-                return new MinistryHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_subscription, parent, false));
+                return new MinistrySubscriptionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_subscription, parent, false));
             case HEADER_VIEW:
                 return new HeaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.subscription_header, parent, false));
             default:
@@ -73,29 +73,29 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
-        if(holder instanceof MinistryHolder)
+        if(holder instanceof MinistrySubscriptionHolder)
         {
-            MinistryHolder ministryHolder = (MinistryHolder) holder;
+            MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
             if (mMinistries.get(position).second.mCruImage != null)
             {
                 // sets if the ministry has been subscribed to from shared preferences, if it hasn't been written to before, it uses the default value of false.
                 mMinistries.get(position).second.mIsSubscribed = mSharedPreferences.getBoolean(mMinistries.get(position).second.mSubscriptionId, false);
                 // sets the checkbox to checked or unchecked.
-                ministryHolder.mCheckBox.setChecked(mMinistries.get(position).second.mIsSubscribed);
+                ministrySubscriptionHolder.mCheckBox.setChecked(mMinistries.get(position).second.mIsSubscribed);
 
                 if (mMinistries.get(position).second.mIsSubscribed)
                 {
                     Picasso.with(mParent.getContext())
                             .load(mMinistries.get(position).second.mCruImage.mURL)
                             .transform(new ColorFilterTransformation(Color.parseColor("#007398")))
-                            .into(ministryHolder.mSubscriptionLogo);
+                            .into(ministrySubscriptionHolder.mSubscriptionLogo);
                 }
                 else
                 {
                     Picasso.with(mParent.getContext())
                             .load(mMinistries.get(position).second.mCruImage.mURL)
                             .transform(new ColorFilterTransformation(Color.parseColor("#666062")))
-                            .into(ministryHolder.mSubscriptionLogo);
+                            .into(ministrySubscriptionHolder.mSubscriptionLogo);
                 }
             }
         }
@@ -132,12 +132,12 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public class MinistryHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         public ImageView mSubscriptionLogo;
         public CheckBox mCheckBox;
 
-        public MinistryHolder(View itemView)
+        public MinistrySubscriptionHolder(View itemView)
         {
             super(itemView);
             mSubscriptionLogo = (ImageView) itemView.findViewById(R.id.ministry_image);

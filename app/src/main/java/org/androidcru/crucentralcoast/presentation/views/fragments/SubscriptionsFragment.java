@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.providers.MinistryProvider;
+import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.activities.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.adapters.SubscriptionsAdapter;
@@ -58,10 +58,14 @@ public class SubscriptionsFragment extends Fragment
         mFAB.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
 
         mFAB.setOnClickListener(v -> {
+
+            if (!CruApplication.getSharedPreferences().getBoolean(CruApplication.FIRST_LAUNCH, false))
+            {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
             CruApplication.getSharedPreferences().edit().putBoolean(CruApplication.FIRST_LAUNCH, true).apply();
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
             getActivity().finish();
         });
 
@@ -91,7 +95,7 @@ public class SubscriptionsFragment extends Fragment
 
     public void getCampusMinistryMap()
     {
-        MinistryProvider.getInstance().requestCampusMinistryMap()
+        SubscriptionProvider.getInstance().requestCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministries -> {
                     mSubscriptionAdapter = new SubscriptionsAdapter(ministries);

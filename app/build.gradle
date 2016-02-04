@@ -101,6 +101,7 @@ dependencies {
     compile 'com.anupcowkur:reservoir:2.1'
     compile 'org.aaronhe:threetenbp-gson-adapter:1.0.0'
     compile 'me.grantland:autofittextview:0.2.+'
+    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
 
     //Testing
     compile 'com.orhanobut:logger:1.11'
