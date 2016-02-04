@@ -34,4 +34,16 @@
     <string name="rsvp_title">Set RSVP Status</string>
 
     <string name="gcm_registration_id">gcm_registration_id</string>
+    <string name="select_sex">Select Sex</string>
+    <string name="preferred_driver_sex">Select Preferred Driver Sex</string>
+    <string name="select_car_capacity">Select Car Capacity</string>
+    <string name="select_trip_type">Select Trip Type</string>
+    <string name="select_circle_radius">Select Circle Radius</string>
+    <string name="enter_location">Enter Pickup Location</string>
+
+    <string name="close">Close</string>
+    <string name="next">NEXT</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="driver">Driver</string>
+    <string name="passenger">Passenger</string>
 </resources>

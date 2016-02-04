@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,35 +12,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.modelviews.CruEventMV;
-import org.androidcru.crucentralcoast.presentation.views.activities.SubscriptionStartupActivity;
-import org.androidcru.crucentralcoast.presentation.views.adapters.EventsAdapter;
+import org.androidcru.crucentralcoast.presentation.views.adapters.RideSharingAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class EventsFragment extends Fragment
+public class RideSharingFragment extends Fragment
 {
     //Injected Views
     @Bind(R.id.event_list) RecyclerView mEventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.empty_events_view) RelativeLayout mEmptyEventsLayout;
 
     private ArrayList<CruEventMV> mCruEventMVs;
     private LinearLayoutManager mLayoutManager;
@@ -51,25 +47,13 @@ public class EventsFragment extends Fragment
 
     private SharedPreferences mSharedPreferences;
 
-    public EventsFragment()
+    public RideSharingFragment()
     {
         mCruEventMVs = new ArrayList<>();
         mEventSubscriber = new Observer<ArrayList<CruEvent>>()
         {
             @Override
-            public void onCompleted()
-            {
-                if (mCruEventMVs.isEmpty())
-                {
-                    mSwipeRefreshLayout.setVisibility(View.GONE);
-                    mEmptyEventsLayout.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-                    mEmptyEventsLayout.setVisibility(View.GONE);
-                }
-            }
+            public void onCompleted() {}
 
             @Override
             public void onError(Throwable e)
@@ -107,12 +91,12 @@ public class EventsFragment extends Fragment
                 }
 
                 Observable.from(mCruEventMVs)
-                    .filter(cruEventMV -> cruEventMV.mCruEvent.mId.equals(eventInfo.first))
-                    .subscribeOn(Schedulers.immediate())
-                    .subscribe(cruEventMV -> {
-                        cruEventMV.mAddedToCalendar = mSharedPreferences.contains(cruEventMV.mCruEvent.mId);
-                        cruEventMV.mLocalEventId = mSharedPreferences.getLong(cruEventMV.mCruEvent.mId, -1);
-                    });
+                        .filter(cruEventMV -> cruEventMV.mCruEvent.mId.equals(eventInfo.first))
+                        .subscribeOn(Schedulers.immediate())
+                        .subscribe(cruEventMV -> {
+                            cruEventMV.mAddedToCalendar = mSharedPreferences.contains(cruEventMV.mCruEvent.mId);
+                            cruEventMV.mLocalEventId = mSharedPreferences.getLong(cruEventMV.mCruEvent.mId, -1);
+                        });
                 mEventList.getAdapter().notifyDataSetChanged();
             }
         };
@@ -145,7 +129,7 @@ public class EventsFragment extends Fragment
 
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
-
+        
         mSharedPreferences = CruApplication.getSharedPreferences();
 
         //Enables actions in the Activity Toolbar (top-right buttons)
@@ -156,26 +140,15 @@ public class EventsFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(getActivity(), new ArrayList<>(), mLayoutManager, mOnCalendarWrittenSubscriber);
-        mEventList.setAdapter(mEventAdapter);
+        RideSharingAdapter mRideSharingAdapter = new RideSharingAdapter(getActivity(), new ArrayList<>(), mLayoutManager, mOnCalendarWrittenSubscriber);
+        mEventList.setAdapter(mRideSharingAdapter);
         mEventList.setHasFixedSize(true);
 
         //Set up SwipeRefreshLayout
         mSwipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
         mSwipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
-    }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
         getCruEvents();
-    }
-
-    @OnClick(R.id.subscription_button)
-    public void onManageSubscriptionsClicked()
-    {
-        startActivity(new Intent(getContext(), SubscriptionStartupActivity.class));
     }
 
     private void forceUpdate()
@@ -201,21 +174,13 @@ public class EventsFragment extends Fragment
     {
         mCruEventMVs.clear();
         rx.Observable.from(cruEvents)
-                .filter(cruEvent -> {
-                    for (String s : cruEvent.mParentMinistrySubscriptions)
-                        if (mSharedPreferences.getBoolean(s, false))
-                            return true;
-                    return false;
-                })
-                .map(cruEvent -> {
-                    return new CruEventMV(cruEvent, false,
-                            mSharedPreferences.contains(cruEvent.mId),
-                            mSharedPreferences.getLong(cruEvent.mId, -1));
-                })
+                .map(cruEvent -> new CruEventMV(cruEvent, false,
+                        mSharedPreferences.contains(cruEvent.mId),
+                        mSharedPreferences.getLong(cruEvent.mId, -1)))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(mCruEventMVs::add);
 
-        mEventList.setAdapter(new EventsAdapter(getActivity(), mCruEventMVs, mLayoutManager, mOnCalendarWrittenSubscriber));
+        mEventList.setAdapter(new RideSharingAdapter(getActivity(), mCruEventMVs, mLayoutManager, mOnCalendarWrittenSubscriber));
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

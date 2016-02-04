@@ -11,8 +11,9 @@
     <color name="cruOrange">#dd7d1b</color>
     <color name="grey600">#757575</color>
 
-    <color name="gray800">#424242</color>
-    <color name="gray200">#EEEEEE</color>
+    <color name="grey800">#424242</color>
+    <color name="grey200">#EEEEEE</color>
+    <color name="grey300">#E0E0E0</color>
     <color name="fbBlue">#3B5999</color>
     <color name="red600">#E53935</color>
 </resources>
