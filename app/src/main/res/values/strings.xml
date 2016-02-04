@@ -32,4 +32,6 @@
 
     <string name="facebook_app_id">544416192400105</string>
     <string name="rsvp_title">Set RSVP Status</string>
+
+    <string name="gcm_registration_id">gcm_registration_id</string>
 </resources>

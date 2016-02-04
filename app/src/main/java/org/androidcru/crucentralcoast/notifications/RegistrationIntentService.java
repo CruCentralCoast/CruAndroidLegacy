@@ -76,7 +76,9 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        // Saves this locally
+        CruApplication.getSharedPreferences().edit().putString(getString(R.string.gcm_registration_id), token).apply();
+        Logger.e(token);
     }
 
     public static void subscribeToMinistry(final String topic)
