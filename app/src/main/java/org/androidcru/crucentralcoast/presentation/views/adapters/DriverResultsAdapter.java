@@ -15,17 +15,20 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 
 public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder>
 {
 
     private Activity mParent;
     private ArrayList<Ride> mRides;
+    private Observable<Void> mOnNextCallback;
 
-    public DriverResultsAdapter(Activity parent, ArrayList<Ride> rides)
+    public DriverResultsAdapter(Activity parent, ArrayList<Ride> rides, Observable<Void> onNextCallback)
     {
         this.mParent = parent;
         this.mRides = rides;
+        this.mOnNextCallback = onNextCallback;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         return mRides.size();
     }
 
-    public class DriverResultViewHolder extends RecyclerView.ViewHolder
+    public class DriverResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
         @Bind(R.id.driverName) TextView mDriverName;
@@ -60,6 +63,14 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            mOnNextCallback.subscribe();
         }
     }
 }

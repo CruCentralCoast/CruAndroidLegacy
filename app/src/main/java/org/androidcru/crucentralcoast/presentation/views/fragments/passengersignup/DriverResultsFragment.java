@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.fragments;
+package org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,17 +12,27 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.adapters.DriverResultsAdapter;
+import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class DriverResultsFragment extends ProvableFragment
 {
 
     @Bind(R.id.driverresults_list) RecyclerView mDriverResultsList;
+    private Observable<Void> mOnNextCallback;
+
+    public DriverResultsFragment() {}
+
+    public DriverResultsFragment(Observable<Void> onNextCallback)
+    {
+        this.mOnNextCallback = onNextCallback;
+    }
 
     @Nullable
     @Override
@@ -54,7 +64,7 @@ public class DriverResultsFragment extends ProvableFragment
 
     private void handleResults(ArrayList<Ride> results)
     {
-        mDriverResultsList.setAdapter(new DriverResultsAdapter(getActivity(), results));
+        mDriverResultsList.setAdapter(new DriverResultsAdapter(getActivity(), results, mOnNextCallback));
     }
 
     @Override

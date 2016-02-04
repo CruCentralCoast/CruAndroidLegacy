@@ -65,4 +65,12 @@
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:text="This information will be sent to Cru Central Coast and your selected driver."/>
+
 </LinearLayout>

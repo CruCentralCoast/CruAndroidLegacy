@@ -14,6 +14,8 @@ import org.androidcru.crucentralcoast.presentation.views.adapters.PassengerPager
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
 
 public class PassengerFragment extends FormContentFragment
 {
@@ -31,7 +33,18 @@ public class PassengerFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 3);
+
+        Observable<Void> onNextCallback = Observable.create(new Observable.OnSubscribe<Void>()
+        {
+            @Override
+            public void call(Subscriber<? super Void> subscriber)
+            {
+                onNext();
+                subscriber.onCompleted();
+            }
+        });
+
+        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 3, onNextCallback);
         viewPager.setAdapter(passengerPagerAdapter);
 
 
@@ -55,14 +68,16 @@ public class PassengerFragment extends FormContentFragment
             switch(viewPager.getCurrentItem() + 1)
             {
                 case 1:
-                    formHolder.setToolbarExpansion(true);
+                    formHolder.setToolbarExpansion(false);
                     formHolder.setTitle("Select A Driver");
                     formHolder.setPreviousVisibility(View.VISIBLE);
+                    formHolder.setNextVisibility(View.GONE);
                     break;
                 case 2:
                     formHolder.setToolbarExpansion(false);
                     formHolder.setTitle("Basic Information");
                     formHolder.setPreviousVisibility(View.VISIBLE);
+                    formHolder.setNextVisibility(View.VISIBLE);
                     break;
                 case 3:
                     formHolder.complete();
@@ -82,9 +97,10 @@ public class PassengerFragment extends FormContentFragment
                 formHolder.setPreviousVisibility(View.GONE);
                 break;
             case 1:
-                formHolder.setToolbarExpansion(true);
+                formHolder.setToolbarExpansion(false);
                 formHolder.setTitle("Select A Driver");
                 formHolder.setPreviousVisibility(View.VISIBLE);
+                formHolder.setNextVisibility(View.GONE);
                 break;
 
         }
