@@ -11,17 +11,17 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
-public final class MinistryProvider
+public final class SubscriptionProvider
 {
     private static CruApiService mCruService = ApiProvider.getInstance().getService();
-    private static MinistryProvider mInstance;
+    private static SubscriptionProvider mInstance;
 
-    private MinistryProvider() {}
+    private SubscriptionProvider() {}
 
-    public static MinistryProvider getInstance()
+    public static SubscriptionProvider getInstance()
     {
         if(mInstance == null)
-            mInstance = new MinistryProvider();
+            mInstance = new SubscriptionProvider();
         return mInstance;
     }
     /**
