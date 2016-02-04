@@ -65,40 +65,4 @@
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:id="@+id/sex_layout"
-        android:padding="8dp"
-        android:layout_below="@+id/phone_layout">
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/sex_icon"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_account_multiple_outline_grey600_48dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:padding="8dp"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/sex_group"
-            android:orientation="vertical"
-            android:layout_toRightOf="@+id/sex_icon"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/preferred_driver_sex"/>
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sex_field"
-                android:inputType="phone"
-                android:prompt="@string/preferred_driver_sex"/>
-        </LinearLayout>
-    </RelativeLayout>
-
 </LinearLayout>

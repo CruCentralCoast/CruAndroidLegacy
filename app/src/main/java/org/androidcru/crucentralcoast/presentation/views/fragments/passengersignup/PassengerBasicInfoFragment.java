@@ -36,8 +36,6 @@ public class PassengerBasicInfoFragment extends ProvableFragment implements Vali
     @Bind(R.id.name_field)
     EditText nameField;
     @NotEmpty @Pattern(regex = PHONE_REGEX) @Bind(R.id.phone_field) EditText phoneField;
-    @Select(defaultSelection = -1) @Bind(R.id.sex_field)
-    Spinner sexField;
 
     private Validator validator;
     private boolean isValid;
@@ -57,10 +55,6 @@ public class PassengerBasicInfoFragment extends ProvableFragment implements Vali
         validator = new Validator(this);
 
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-
-        ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Male", "Female"});
-        sexAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        sexField.setAdapter(sexAdapter);
 
         validator.setValidationListener(this);
     }

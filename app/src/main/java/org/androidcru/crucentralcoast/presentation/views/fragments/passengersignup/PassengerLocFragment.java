@@ -51,6 +51,8 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
     @Bind(R.id.return_date_field) EditText returnDateField;
     @Bind(R.id.depart_layout) RelativeLayout departLayout;
     @Bind(R.id.return_layout) RelativeLayout returnLayout;
+    @Select(defaultSelection = -1) @Bind(R.id.sex_field)
+    Spinner sexField;
 
 
     private SupportPlaceAutocompleteFragment autocompleteFragment;
@@ -74,6 +76,10 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Male", "Female"});
+        sexAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        sexField.setAdapter(sexAdapter);
 
         /*autocomplete search*/
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
