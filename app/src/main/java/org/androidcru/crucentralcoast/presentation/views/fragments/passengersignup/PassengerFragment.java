@@ -31,13 +31,13 @@ public class PassengerFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 1);
+        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 2);
         viewPager.setAdapter(passengerPagerAdapter);
 
 
-        formHolder.setToolbarExpansion(true);
-        formHolder.setTitle("Basic info");
-        formHolder.setPreviousVisibility(View.GONE);
+        formHolder.setToolbarExpansion(false);
+        formHolder.setTitle("Location info");
+        formHolder.setPreviousVisibility(View.VISIBLE);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class PassengerFragment extends FormContentFragment
             switch(viewPager.getCurrentItem() + 1)
             {
                 case 1:
-                    formHolder.setToolbarExpansion(false);
-                    formHolder.setTitle("Location info");
+                    formHolder.setToolbarExpansion(true);
+                    formHolder.setTitle("Select Driver");
                     formHolder.setPreviousVisibility(View.VISIBLE);
                     break;
                 case 2:
@@ -72,8 +72,8 @@ public class PassengerFragment extends FormContentFragment
         switch(viewPager.getCurrentItem() - 1)
         {
             case 0:
-                formHolder.setToolbarExpansion(true);
-                formHolder.setTitle("Ride info");
+                formHolder.setToolbarExpansion(false);
+                formHolder.setTitle("Location info");
                 formHolder.setPreviousVisibility(View.VISIBLE);
                 break;
         }

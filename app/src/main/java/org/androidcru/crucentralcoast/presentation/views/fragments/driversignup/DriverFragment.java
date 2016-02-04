@@ -91,6 +91,7 @@ public class DriverFragment extends FormContentFragment
                 formHolder.setTitle("Ride info");
                 formHolder.setPreviousVisibility(View.VISIBLE);
                 break;
+
         }
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
     }

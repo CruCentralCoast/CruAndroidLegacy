@@ -17,6 +17,8 @@ import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 
 public class FormBaseActivity extends AppCompatActivity implements FormHolder
 {
+    RelativeLayout bottomBar;
+
     RelativeLayout previousView;
     RelativeLayout nextView;
 
@@ -74,6 +76,7 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        bottomBar = (RelativeLayout) findViewById(R.id.bottom_bar);
         previousView = (RelativeLayout) findViewById(R.id.prev);
         nextView = (RelativeLayout) findViewById(R.id.next);
 
@@ -139,6 +142,12 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     public void complete()
     {
         finish();
+    }
+
+    @Override
+    public void setNavigationVisbility(int visibility)
+    {
+
     }
 }
 
