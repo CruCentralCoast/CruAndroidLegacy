@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager;
 
 import org.androidcru.crucentralcoast.presentation.views.fragments.DriverResultsFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.ProvableFragment;
+import org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup.PassengerBasicInfoFragment;
 import org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup.PassengerLocFragment;
 
 public class PassengerPagerAdapter extends BaseFormAdapter
@@ -31,6 +32,8 @@ public class PassengerPagerAdapter extends BaseFormAdapter
                 return new PassengerLocFragment();
             case 1:
                 return new DriverResultsFragment();
+            case 2:
+                return new PassengerBasicInfoFragment();
             default:
                 return new PassengerLocFragment();
         }

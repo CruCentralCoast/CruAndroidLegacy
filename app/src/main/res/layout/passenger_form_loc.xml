@@ -9,11 +9,6 @@
         android:id="@+id/autocomplete_layout"
         android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/enter_location"/>
-
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"

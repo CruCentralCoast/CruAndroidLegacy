@@ -31,12 +31,12 @@ public class PassengerFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 2);
+        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 3);
         viewPager.setAdapter(passengerPagerAdapter);
 
 
         formHolder.setToolbarExpansion(false);
-        formHolder.setTitle("Location info");
+        formHolder.setTitle("Location Information");
         formHolder.setPreviousVisibility(View.VISIBLE);
     }
 
@@ -56,10 +56,15 @@ public class PassengerFragment extends FormContentFragment
             {
                 case 1:
                     formHolder.setToolbarExpansion(true);
-                    formHolder.setTitle("Select Driver");
+                    formHolder.setTitle("Select A Driver");
                     formHolder.setPreviousVisibility(View.VISIBLE);
                     break;
                 case 2:
+                    formHolder.setToolbarExpansion(false);
+                    formHolder.setTitle("Basic Information");
+                    formHolder.setPreviousVisibility(View.VISIBLE);
+                    break;
+                case 3:
                     formHolder.complete();
                     break;
             }
@@ -73,11 +78,16 @@ public class PassengerFragment extends FormContentFragment
         {
             case 0:
                 formHolder.setToolbarExpansion(false);
-                formHolder.setTitle("Location info");
+                formHolder.setTitle("Location Information");
+                formHolder.setPreviousVisibility(View.GONE);
+                break;
+            case 1:
+                formHolder.setToolbarExpansion(true);
+                formHolder.setTitle("Select A Driver");
                 formHolder.setPreviousVisibility(View.VISIBLE);
                 break;
+
         }
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
     }
 }
-

@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.fragments.passengersignup;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,8 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mobsandgeeks.saripaar.QuickRule;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -73,7 +80,18 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         autocompleteFragment.setFilter(typeFilter);
-//        autocompleteFragment.setText("Enter your location");
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Logger.i("Location ", "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Logger.i("ERROR:", "An error occurred: " + status);
+            }
+        });
 
         validator = new Validator(this);
         validator.put(departTimeField, validTimeRule);
@@ -81,12 +99,10 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
         validator.put(departDateField, validDateRule);
         validator.put(returnDateField, validDateRule);
 
-        ArrayAdapter<String> tripTypeAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Round Trip", "Departure", "Return"});
+        ArrayAdapter<String> tripTypeAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_spinner_item, new String[]{"Round Trip", "Departure", "Return"});
         tripTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         tripTypeField.setAdapter(tripTypeAdapter);
 
-        //submitButton.setOnClickListener(v -> validator.validate());
-        //submitButton.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
         validator.setValidationListener(this);
 
         /*determine which types of trips are visible*/
@@ -167,6 +183,8 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
             dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
             whichType = false;
         });
+
+//        autocompleteFragment.setHint("Enter your pickup location");
     }
 
     @Override
@@ -255,6 +273,16 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
             departDateField.setText(date);
         } else {
             returnDateField.setText(date);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(autocompleteFragment != null)
+        {
+            autocompleteFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 }
