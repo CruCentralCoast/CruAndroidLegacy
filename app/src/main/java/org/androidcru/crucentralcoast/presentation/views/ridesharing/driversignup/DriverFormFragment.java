@@ -15,13 +15,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class DriverFragment extends FormContentFragment
+public class DriverFormFragment extends FormContentFragment
 {
     @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
 
     private DriverPagerAdapter driverPagerAdapter;
 
-    public DriverFragment()
+    public DriverFormFragment()
     {
         super();
     }

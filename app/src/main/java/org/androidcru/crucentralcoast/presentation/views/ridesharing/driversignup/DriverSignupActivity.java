@@ -12,6 +12,6 @@ public class DriverSignupActivity extends FormBaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new DriverFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new DriverFormFragment()).commit();
     }
 }

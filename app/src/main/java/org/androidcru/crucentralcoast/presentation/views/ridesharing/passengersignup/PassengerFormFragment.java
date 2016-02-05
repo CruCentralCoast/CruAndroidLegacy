@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 
-public class PassengerFragment extends FormContentFragment
+public class PassengerFormFragment extends FormContentFragment
 {
     @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
     private PassengerPagerAdapter passengerPagerAdapter;
