@@ -15,7 +15,7 @@ buildscript {
         //Checks for DEX count
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.3.1'
 
-        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 
