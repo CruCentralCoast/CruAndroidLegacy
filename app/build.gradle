@@ -61,6 +61,10 @@ android {
         disable 'InvalidPackage'
         check 'NewApi'
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {

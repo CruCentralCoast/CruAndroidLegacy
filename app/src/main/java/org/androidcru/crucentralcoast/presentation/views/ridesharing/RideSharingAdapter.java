@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
-import org.androidcru.crucentralcoast.presentation.modelviews.CruEventVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -70,7 +70,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
     @Override
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
-        CruEvent cruEvent = mEvents.get(position).mCruEvent;
+        CruEvent cruEvent = mEvents.get(position).cruEvent;
         CruEventVM cruEventVM = mEvents.get(position);
 
         if(cruEvent.mImage != null)
@@ -84,7 +84,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
                 + " " + cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
                 + " - " + cruEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
         holder.eventDescription.setText(cruEvent.mDescription);
-        holder.eventDescription.setVisibility(cruEventVM.mIsExpanded ? View.VISIBLE : View.GONE);
+        holder.eventDescription.setVisibility(cruEventVM.isExpanded.get() ? View.VISIBLE : View.GONE);
 
         holder.chevView.setImageDrawable(
                 ContextCompat.getDrawable(mParent,
@@ -151,7 +151,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
             }
             eventDescription.setVisibility(visibility);
 
-            mEvents.get(getAdapterPosition()).mIsExpanded = (View.VISIBLE == visibility);
+            mEvents.get(getAdapterPosition()).isExpanded.set(View.VISIBLE == visibility);
             notifyItemChanged(getAdapterPosition());
             mLayoutManager.scrollToPosition(getAdapterPosition());
         }

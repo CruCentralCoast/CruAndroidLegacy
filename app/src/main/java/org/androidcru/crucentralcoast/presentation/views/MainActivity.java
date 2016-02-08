@@ -12,23 +12,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.androidcru.crucentralcoast.CruApplication;
-
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
-import org.androidcru.crucentralcoast.presentation.views.resources.articles.ArticlesFragment;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharingFragment;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
+import org.androidcru.crucentralcoast.presentation.views.resources.articles.ArticlesFragment;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharingFragment;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
+
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+    private static MainActivity self;
+
     private ConstructionFragment constructionFragment;
 
     @Override
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        self = this;
 
         constructionFragment = new ConstructionFragment();
         spawnConstructionFragment();
@@ -171,5 +177,10 @@ public class MainActivity extends AppCompatActivity
     {
         super.onActivityResult(requestCode, resultCode, data);
         FacebookProvider.getInstance().tokenReceived(requestCode, resultCode, data);
+    }
+
+    public static void loginWithFacebook()
+    {
+        LoginManager.getInstance().logInWithPublishPermissions(self, Collections.singletonList("rsvp_event"));
     }
 }

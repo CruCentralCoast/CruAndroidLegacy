@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
@@ -22,7 +20,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
-import org.androidcru.crucentralcoast.presentation.modelviews.CruEventVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
 
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -38,18 +35,14 @@ import rx.schedulers.Schedulers;
 public class EventsFragment extends Fragment
 {
     //Injected Views
-    @Bind(R.id.event_list)
-    RecyclerView mEventList;
-    @Bind(R.id.event_swipe_refresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.empty_events_view)
-    RelativeLayout mEmptyEventsLayout;
+    @Bind(R.id.event_list) RecyclerView mEventList;
+    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.empty_events_view) RelativeLayout mEmptyEventsLayout;
 
     private ArrayList<CruEventVM> mCruEventVMs;
     private LinearLayoutManager mLayoutManager;
 
     private Observer<ArrayList<CruEvent>> mEventSubscriber;
-    private Observer<Pair<String, Long>> mOnCalendarWrittenSubscriber;
 
     private SharedPreferences mSharedPreferences;
 
@@ -82,42 +75,6 @@ public class EventsFragment extends Fragment
             public void onNext(ArrayList<CruEvent> cruEvents)
             {
                 setEvents(cruEvents);
-            }
-        };
-
-        mOnCalendarWrittenSubscriber = new Observer<Pair<String, Long>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-            }
-
-            @Override
-            public void onNext(Pair<String, Long> eventInfo)
-            {
-                if (eventInfo.second > -1)
-                {
-                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventInfo.second) + " added to default calendar",
-                            Toast.LENGTH_LONG).show();
-                    mSharedPreferences.edit().putLong(eventInfo.first, eventInfo.second).commit();
-                } else
-                {
-                    mSharedPreferences.edit().remove(eventInfo.first).commit();
-                }
-
-                Observable.from(mCruEventVMs)
-                        .filter(cruEventMV -> cruEventMV.mCruEvent.mId.equals(eventInfo.first))
-                        .subscribeOn(Schedulers.immediate())
-                        .subscribe(cruEventMV -> {
-                            cruEventMV.mAddedToCalendar = mSharedPreferences.contains(cruEventMV.mCruEvent.mId);
-                            cruEventMV.mLocalEventId = mSharedPreferences.getLong(cruEventMV.mCruEvent.mId, -1);
-                        });
-                mEventList.getAdapter().notifyDataSetChanged();
             }
         };
     }
@@ -163,7 +120,7 @@ public class EventsFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(getActivity(), new ArrayList<>(), mLayoutManager, mOnCalendarWrittenSubscriber);
+        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), mLayoutManager);
         mEventList.setAdapter(mEventAdapter);
         mEventList.setHasFixedSize(true);
 
@@ -180,6 +137,7 @@ public class EventsFragment extends Fragment
     }
 
     @OnClick(R.id.subscription_button)
+    @SuppressWarnings("unused")
     public void onManageSubscriptionsClicked()
     {
         startActivity(new Intent(getContext(), SubscriptionStartupActivity.class));
@@ -223,7 +181,7 @@ public class EventsFragment extends Fragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(mCruEventVMs::add);
 
-        mEventList.setAdapter(new EventsAdapter(getActivity(), mCruEventVMs, mLayoutManager, mOnCalendarWrittenSubscriber));
+        mEventList.setAdapter(new EventsAdapter(mCruEventVMs, mLayoutManager));
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

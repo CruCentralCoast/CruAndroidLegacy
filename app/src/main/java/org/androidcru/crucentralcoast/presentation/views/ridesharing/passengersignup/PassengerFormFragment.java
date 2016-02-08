@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.util.NonSwipeableViewPager;
+import org.androidcru.crucentralcoast.presentation.customviews.NonSwipeableViewPager;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import butterknife.Bind;

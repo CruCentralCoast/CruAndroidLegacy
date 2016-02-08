@@ -21,7 +21,7 @@ import org.androidcru.crucentralcoast.R;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
-import org.androidcru.crucentralcoast.presentation.modelviews.CruEventVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 
 import java.util.ArrayList;
 
@@ -90,11 +90,11 @@ public class RideSharingFragment extends Fragment
                 }
 
                 Observable.from(mCruEventVMs)
-                        .filter(cruEventMV -> cruEventMV.mCruEvent.mId.equals(eventInfo.first))
+                        .filter(cruEventMV -> cruEventMV.cruEvent.mId.equals(eventInfo.first))
                         .subscribeOn(Schedulers.immediate())
                         .subscribe(cruEventMV -> {
-                            cruEventMV.mAddedToCalendar = mSharedPreferences.contains(cruEventMV.mCruEvent.mId);
-                            cruEventMV.mLocalEventId = mSharedPreferences.getLong(cruEventMV.mCruEvent.mId, -1);
+                            cruEventMV.addedToCalendar.set(mSharedPreferences.contains(cruEventMV.cruEvent.mId));
+                            cruEventMV.localEventId = mSharedPreferences.getLong(cruEventMV.cruEvent.mId, -1);
                         });
                 mEventList.getAdapter().notifyDataSetChanged();
             }
