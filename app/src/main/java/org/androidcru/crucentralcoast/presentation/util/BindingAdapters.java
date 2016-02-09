@@ -10,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import org.androidcru.crucentralcoast.R;
 
 import java.util.WeakHashMap;
+
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 @SuppressWarnings("unused")
 public class BindingAdapters
@@ -33,20 +36,40 @@ public class BindingAdapters
         view.setTypeface(fontCache.get(fontFileName));
     }
 
-    @BindingAdapter("bind:src")
-    public static void setSource(ImageView view, String url)
+    @BindingAdapter(value = {"bind:src", "bind:tint", "bind:placeholder", "bind:scaleType"}, requireAll = false)
+    public static void setSourcePHTint(ImageView view, String url, int tintColor, Drawable placeholder, String scaleType)
     {
+        RequestCreator request = Picasso.with(view.getContext()).load(url);
+
         if(url.isEmpty())
         {
             view.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.logo_grey));
         }
         else
         {
-            Picasso.with(view.getContext())
-                    .load(url)
-                    .placeholder(R.drawable.logo_grey)
-                    .fit()
-                    .into(view);
+            if(scaleType != null)
+            {
+                switch (scaleType)
+                {
+                    case "fit":
+                        request.fit();
+                        break;
+                    case "centerInside":
+                        request.centerInside();
+                        break;
+                    case "centerCrop":
+                        request.centerCrop();
+                        break;
+                }
+            }
+
+            if(placeholder != null)
+                request.placeholder(placeholder);
+
+            if(tintColor != 0)
+                request.transform(new ColorFilterTransformation(tintColor));
+
+            request.into(view);
         }
     }
 

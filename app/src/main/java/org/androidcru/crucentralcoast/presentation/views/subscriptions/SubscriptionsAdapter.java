@@ -1,108 +1,83 @@
 package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.v4.util.Pair;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
+import org.androidcru.crucentralcoast.databinding.SubscriptionHeaderBinding;
+import org.androidcru.crucentralcoast.databinding.TileSubscriptionBinding;
+import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
-
 
 public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    ArrayList<Pair<String, MinistrySubscription>> mMinistries;
-    ViewGroup mParent;
-    SharedPreferences mSharedPreferences;
+    private ArrayList<MinistrySubscriptionVM> mMinistries;
     
     public static final int MINISTRY_VIEW = 0;
     public static final int HEADER_VIEW = 1;
     public static final int FOOTER_VIEW = 2;
 
-    public SubscriptionsAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinisryMap)
+    public SubscriptionsAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
     {
         this.mMinistries = new ArrayList<>();
 
+        convertSubscriptions(campusMinistryMap);
+    }
+
+    private void convertSubscriptions(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinisryMap)
+    {
         for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinisryMap.entrySet())
         {
-            mMinistries.add(new Pair<>(entry.getKey().mCampusName, null));
+            mMinistries.add(new MinistrySubscriptionVM(entry.getKey().mCampusName, null));
             for(MinistrySubscription m : entry.getValue())
             {
-                mMinistries.add(new Pair<>(null, m));
+                mMinistries.add(new MinistrySubscriptionVM(null, m));
             }
         }
-
-        this.mSharedPreferences = CruApplication.getSharedPreferences();
-
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        this.mParent = parent;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType)
         {
             case MINISTRY_VIEW:
-                return new MinistrySubscriptionHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_subscription, parent, false));
+                TileSubscriptionBinding tileBinding = TileSubscriptionBinding.inflate(inflater, parent, false);
+                return new MinistrySubscriptionHolder(tileBinding.getRoot());
             case HEADER_VIEW:
-                return new HeaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.subscription_header, parent, false));
+                SubscriptionHeaderBinding headerBinding = SubscriptionHeaderBinding.inflate(inflater, parent, false);
+                return new HeaderHolder(headerBinding.getRoot());
             default:
-                return new FooterHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.blank_footer, parent, false));
+                return new FooterHolder(inflater.inflate(R.layout.blank_footer, parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
-        if(holder instanceof MinistrySubscriptionHolder)
+        if(position < mMinistries.size())
         {
-            MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
-            if (mMinistries.get(position).second.mCruImage != null)
+            MinistrySubscriptionVM ministrySubscriptionVM = mMinistries.get(position);
+            if (holder instanceof MinistrySubscriptionHolder)
             {
-                // sets if the ministry has been subscribed to from shared preferences, if it hasn't been written to before, it uses the default value of false.
-                mMinistries.get(position).second.mIsSubscribed = mSharedPreferences.getBoolean(mMinistries.get(position).second.mSubscriptionId, false);
-                // sets the checkbox to checked or unchecked.
-                ministrySubscriptionHolder.mCheckBox.setChecked(mMinistries.get(position).second.mIsSubscribed);
-
-                if (mMinistries.get(position).second.mIsSubscribed)
-                {
-                    Picasso.with(mParent.getContext())
-                            .load(mMinistries.get(position).second.mCruImage.mURL)
-                            .transform(new ColorFilterTransformation(Color.parseColor("#007398")))
-                            .into(ministrySubscriptionHolder.mSubscriptionLogo);
-                }
-                else
-                {
-                    Picasso.with(mParent.getContext())
-                            .load(mMinistries.get(position).second.mCruImage.mURL)
-                            .transform(new ColorFilterTransformation(Color.parseColor("#666062")))
-                            .into(ministrySubscriptionHolder.mSubscriptionLogo);
-                }
+                MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
+                ministrySubscriptionHolder.getBinding().setVariable(BR.subscription, ministrySubscriptionVM);
+            } else if (holder instanceof HeaderHolder)
+            {
+                HeaderHolder headerHolder = (HeaderHolder) holder;
+                headerHolder.getBinding().setVariable(BR.subscription, ministrySubscriptionVM);
             }
-        }
-        else if(holder instanceof HeaderHolder)
-        {
-            HeaderHolder headerHolder = (HeaderHolder) holder;
-            headerHolder.mHeader.setText(mMinistries.get(position).first);
         }
     }
 
@@ -117,66 +92,33 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public boolean isHeader(int position)
     {
-        return position >= mMinistries.size() || mMinistries.get(position).first != null;
+        return position >= mMinistries.size() || mMinistries.get(position).campusName != null;
     }
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {
-
-        @Bind(R.id.header) public TextView mHeader;
-
         public HeaderHolder(View itemView)
         {
             super(itemView);
-            ButterKnife.bind(this, itemView);
         }
+
+        public SubscriptionHeaderBinding getBinding() {
+            return DataBindingUtil.getBinding(itemView);
+        }
+
     }
 
-    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
     {
-        public ImageView mSubscriptionLogo;
-        public CheckBox mCheckBox;
 
         public MinistrySubscriptionHolder(View itemView)
         {
             super(itemView);
-            mSubscriptionLogo = (ImageView) itemView.findViewById(R.id.ministry_image);
-            mCheckBox = (CheckBox) itemView.findViewById(R.id.checkbox);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v)
+        public TileSubscriptionBinding getBinding()
         {
-            if (mMinistries.get(getAdapterPosition()).second.mCruImage != null)
-            {
-                if (!mMinistries.get(getAdapterPosition()).second.mIsSubscribed)
-                {
-                    mMinistries.get(getAdapterPosition()).second.mIsSubscribed = !mMinistries.get(getAdapterPosition()).second.mIsSubscribed;
-                    Picasso.with(mParent.getContext())
-                            .load(mMinistries.get(getAdapterPosition()).second.mCruImage.mURL)
-                            .transform(new ColorFilterTransformation(Color.parseColor("#007398")))
-                            .into(mSubscriptionLogo);
-                    RegistrationIntentService.subscribeToMinistry(mMinistries.get(getAdapterPosition()).second.mSubscriptionId);
-
-                    // stores in shared preferences that this ministry is subscribed to, key: ministry id, value: true
-                    mSharedPreferences.edit().putBoolean(mMinistries.get(getAdapterPosition()).second.mSubscriptionId, true).apply();
-                }
-                else
-                {
-                    mMinistries.get(getAdapterPosition()).second.mIsSubscribed = !mMinistries.get(getAdapterPosition()).second.mIsSubscribed;
-                    Picasso.with(mParent.getContext())
-                            .load(mMinistries.get(getAdapterPosition()).second.mCruImage.mURL)
-                            .transform(new ColorFilterTransformation(Color.parseColor("#666062")))
-                            .into(mSubscriptionLogo);
-                    RegistrationIntentService.unsubscribeToMinistry(mMinistries.get(getAdapterPosition()).second.mSubscriptionId);
-
-                    // stores in shared preferences that this ministry is not subscribed to, key: ministry id, value: false
-                    mSharedPreferences.edit().putBoolean(mMinistries.get(getAdapterPosition()).second.mSubscriptionId, false).apply();
-                }
-                // set the state of the checkbox to reflect if the ministry is subscribed to.
-                mCheckBox.setChecked(mMinistries.get(getAdapterPosition()).second.mIsSubscribed);
-            }
+            return DataBindingUtil.getBinding(itemView);
         }
     }
 

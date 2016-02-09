@@ -20,8 +20,6 @@ import java.util.ArrayList;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventViewHolder>
 {
     private ArrayList<CruEventVM> mEvents;
-
-
     private LinearLayoutManager mLayoutManager;
 
     public EventsAdapter(ArrayList<CruEventVM> cruEvents, LinearLayoutManager layoutManager)
