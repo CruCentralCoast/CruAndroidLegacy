@@ -2,18 +2,37 @@ package org.androidcru.crucentralcoast.presentation.util;
 
 import android.content.res.ColorStateList;
 import android.databinding.BindingAdapter;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
 
+import java.util.WeakHashMap;
+
 @SuppressWarnings("unused")
 public class BindingAdapters
 {
+
+    private static WeakHashMap<String, Typeface> fontCache = new WeakHashMap<>();
+    private static final String fontsDir = "fonts/";
+
+    @BindingAdapter("bind:font")
+    public static void setFont(TextView view, String fontFileName)
+    {
+        if(!fontCache.containsKey(fontFileName))
+        {
+            Typeface typeface = Typeface.createFromAsset(view.getContext().getAssets(), fontsDir + fontFileName);
+            view.setTypeface(fontCache.put(fontFileName, typeface));
+        }
+        view.setTypeface(fontCache.get(fontFileName));
+    }
+
     @BindingAdapter("bind:src")
     public static void setSource(ImageView view, String url)
     {

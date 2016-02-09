@@ -2,11 +2,9 @@ package org.androidcru.crucentralcoast.presentation.views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
@@ -14,16 +12,12 @@ import org.androidcru.crucentralcoast.presentation.views.subscriptions.Subscript
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity
 {
-    @Bind(R.id.logo) protected ImageView logo;
-    @Bind(R.id.central_coast) protected TextView centralCoast;
     private SharedPreferences mSharedPreferences;
 
 
@@ -31,13 +25,9 @@ public class SplashActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-
-        ButterKnife.bind(this);
+        DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
         this.mSharedPreferences = CruApplication.getSharedPreferences();
-
-        centralCoast.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/FreigSanProLig.otf"));
         switchToApp();
     }
 

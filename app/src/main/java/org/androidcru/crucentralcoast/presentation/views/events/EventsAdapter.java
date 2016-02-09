@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+//sometimes this import will be red but it will still compile
 import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.databinding.CardEventBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
