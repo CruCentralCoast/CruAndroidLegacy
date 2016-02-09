@@ -37,7 +37,7 @@ public class BindingAdapters
     }
 
     @BindingAdapter(value = {"bind:src", "bind:tint", "bind:placeholder", "bind:scaleType"}, requireAll = false)
-    public static void setSourcePHTint(ImageView view, String url, int tintColor, Drawable placeholder, String scaleType)
+    public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, String scaleType)
     {
         RequestCreator request = Picasso.with(view.getContext()).load(url);
 
