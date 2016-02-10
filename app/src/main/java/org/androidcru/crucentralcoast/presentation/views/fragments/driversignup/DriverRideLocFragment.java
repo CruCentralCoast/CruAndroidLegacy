@@ -155,11 +155,11 @@ public class DriverRideLocFragment extends ProvableFragment implements OnMapRead
         if (map == null)
         {
             map = googleMap;
+            /*initial map is of Cal Poly*/
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(CALPOLY_LAT, CALPOLY_LNG), 14.0f));
         }
         else
         {
-            /*hmmm what to do here*/
             Logger.d("Unable to display map....");
         }
     }

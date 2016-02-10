@@ -53,6 +53,7 @@ public class DriverBasicInfoFragment extends ProvableFragment implements Validat
 
         validator = new Validator(this);
 
+        /*set listeners on the phone and sex fields*/
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Male", "Female"});

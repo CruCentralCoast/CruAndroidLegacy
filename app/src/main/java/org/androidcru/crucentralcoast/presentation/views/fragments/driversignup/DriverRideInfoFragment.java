@@ -67,21 +67,21 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
         ButterKnife.bind(this, view);
 
         validator = new Validator(this);
+        /*add custom rules*/
         validator.put(departTimeField, validTimeRule);
         validator.put(returnTimeField, validTimeRule);
         validator.put(departDateField, validDateRule);
         validator.put(returnDateField, validDateRule);
 
+        /*car capacity field*/
         ArrayAdapter<String> carCapacityAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"1", "2", "3", "4", "5", "6", "7"});
         carCapacityAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         carCapacityField.setAdapter(carCapacityAdapter);
 
+        /*trip type field*/
         ArrayAdapter<String> tripTypeAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Round Trip", "Departure", "Return"});
         tripTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         tripTypeField.setAdapter(tripTypeAdapter);
-
-        //submitButton.setOnClickListener(v -> validator.validate());
-        //submitButton.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
 
         validator.setValidationListener(this);
 
@@ -110,7 +110,7 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
             }
         });
 
-        /*set up time field listeners*/
+        /*set up date and time field listeners*/
         departTimeField.setKeyListener(null);
         departTimeField.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
@@ -203,6 +203,7 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
         }
     }
 
+    /*sets up format for displaying the time after it has been set*/
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         String minuteString = minute < 10 ? "0"+minute : ""+minute;
@@ -215,6 +216,7 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
         }
     }
 
+    /*sets up format for displaying date after it has been set*/
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String date = LocalDateTime.of(year, Month.of(monthOfYear + 1), dayOfMonth, 0, 0).format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
@@ -225,13 +227,14 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
         }
     }
 
-    /*validates the date*/
+    /*does exactly what the name implies*/
     private boolean valiDATE(String inputDate)
     {
-        /*this seems backward.... but it works*/
+        /*if trip type isn't round trip, make sure depart date is before return date*/
         return !selectedType.equals("roundtrip") || returnDate.before(departDate);
     }
 
+    /*validator rule for date*/
     private QuickRule<EditText> validDateRule = new QuickRule<EditText>() {
         @Override
         public boolean isValid(EditText editText) {
@@ -241,11 +244,11 @@ public class DriverRideInfoFragment extends ProvableFragment implements Validato
 
         @Override
         public String getMessage(Context context) {
-            return "Date is not within proper range"; //what is proper range?
+            return "Date not set correctly";
         }
     };
 
-    //pretty sure these are not initialized correctly
+    /*validtor rule for time*/
     private QuickRule<EditText> validTimeRule = new QuickRule<EditText>() {
         @Override
         public boolean isValid(EditText timeEditText) {
