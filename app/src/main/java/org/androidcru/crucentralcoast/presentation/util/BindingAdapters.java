@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation;
+package org.androidcru.crucentralcoast.presentation.util;
 
 import android.content.res.ColorStateList;
 import android.databinding.BindingAdapter;
@@ -13,7 +13,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 
 import java.util.WeakHashMap;
 
