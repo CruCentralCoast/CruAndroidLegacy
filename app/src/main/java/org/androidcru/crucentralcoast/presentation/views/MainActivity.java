@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.MyRidesDriverFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.articles.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharingFragment;
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity
                 spawnConstructionFragment();
                 break;
             case R.id.nav_tools:
-                spawnConstructionFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new MyRidesDriverFragment()).commit();
                 break;
             case R.id.nav_events:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
