@@ -14,7 +14,7 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
-import org.androidcru.crucentralcoast.presentation.modelviews.FBGuestListVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.facebook.FBGuestListVM;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
 
 import java.util.Set;

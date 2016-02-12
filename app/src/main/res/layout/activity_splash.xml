@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/content"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_marginTopPercent="25%"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+    <android.support.percent.PercentRelativeLayout
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="300dp"
-            android:layout_height="184dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/logo_grey"/>
+        android:id="@+id/rootview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/central_coast"
-            android:layout_width="300dp"
+        <LinearLayout
+            android:id="@+id/content"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:textSize="56sp"
-            autofit:minTextSize="16sp"
-            tools:text="cru"
-            android:text="@string/central_coast"
-            android:textColor="@color/cruGray"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-</android.support.percent.PercentRelativeLayout>
+            app:layout_marginTopPercent="25%"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="300dp"
+                android:layout_height="184dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/logo_grey"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/central_coast"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textSize="56sp"
+                autofit:minTextSize="16sp"
+                tools:text="cru"
+                android:text="@string/central_coast"
+                android:textColor="@color/cruGray"
+                android:layout_gravity="center_vertical"
+                app:font="@{`FreigSanProLig.otf`}"/>
+        </LinearLayout>
+    </android.support.percent.PercentRelativeLayout>
+</layout>

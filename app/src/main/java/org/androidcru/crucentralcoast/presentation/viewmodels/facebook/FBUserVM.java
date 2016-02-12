@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.modelviews;
+package org.androidcru.crucentralcoast.presentation.viewmodels.facebook;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
