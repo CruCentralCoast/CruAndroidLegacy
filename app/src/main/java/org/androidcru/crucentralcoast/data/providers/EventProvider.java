@@ -21,14 +21,11 @@ public class EventProvider
             mInstance = new EventProvider();
         return mInstance;
     }
-    /**
-     * Invalidates the cache and issues a cold request for a new EventList via the network.
-     */
+
     public Observable<ArrayList<CruEvent>> requestEvents()
     {
-        Observable<ArrayList<CruEvent>> cruEventsStream = mCruService.getEvents()
-                .subscribeOn(Schedulers.io());
 
-        return cruEventsStream;
+        return mCruService.getEvents()
+                .subscribeOn(Schedulers.io());
     }
 }

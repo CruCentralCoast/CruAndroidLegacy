@@ -77,7 +77,7 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Saves this locally
-        CruApplication.getSharedPreferences().edit().putString(getString(R.string.gcm_registration_id), token).apply();
+        CruApplication.saveGCMKey(token);
         Logger.e(token);
     }
 
