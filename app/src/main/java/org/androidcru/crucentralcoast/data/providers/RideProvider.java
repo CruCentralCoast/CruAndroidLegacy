@@ -27,4 +27,22 @@ public final class RideProvider
         return mCruService.getRides()
                 .subscribeOn(Schedulers.io());
     }
+
+    public Ride requestRideByID(String id)
+    {
+//        ArrayList<Ride> newRides = new ArrayList<Ride>();
+////        rx.Observable.from(requestRides())
+//        requestRides()
+//                .map(ride -> new Ride(ride.mDriverName, ride.mDriverNumber, ride.mGender, ride.mEventId, ride.mTime, ride.mLocation, ride.mPassengers))
+//                .subscribeOn(Schedulers.immediate())
+//                .subscribe(newRides::add);
+//
+//        for (Ride r : newRides)
+//        {
+//            if (r.mEventId.equals(id))
+//                return r;
+//        }
+
+        return null;
+    }
 }

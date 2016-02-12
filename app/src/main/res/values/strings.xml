@@ -46,4 +46,5 @@
     <string name="previous">PREVIOUS</string>
     <string name="driver">Driver</string>
     <string name="passenger">Passenger</string>
+    <string name="edit">Edit</string>
 </resources>
