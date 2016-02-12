@@ -42,6 +42,4 @@ public interface CruApiService
 
     //@POST("/api/passenger/create")
     //Observable<Passenger> postPassenger(@Body Passenger passenger);
-
-
 }

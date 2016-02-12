@@ -27,6 +27,7 @@ import java.util.Set;
 
 import rx.Observer;
 
+@SuppressWarnings("unused")
 public class CruEventVM extends BaseObservable
 {
     public CruEvent cruEvent;
