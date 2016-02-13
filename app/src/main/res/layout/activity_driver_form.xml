@@ -6,6 +6,7 @@
     <data>
         <import type="android.view.View"/>
         <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideVM"/>
+        <import type="org.androidcru.crucentralcoast.data.models.Ride"/>
         <variable name="rideVM" type="RideVM"/>
     </data>
 
@@ -133,10 +134,10 @@
                         android:layout_toRightOf="@+id/gender_icon"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp">
-                        <TextView
+                        <!--<TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/select_gender"/>
+                            android:text="@string/select_gender"/>-->
                         <Spinner
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -168,10 +169,10 @@
                         android:layout_toEndOf="@+id/car_capacity_icon"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="8dp">
-                        <TextView
+                        <!--<TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/select_car_capacity"/>
+                            android:text="@string/select_car_capacity"/>-->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -214,10 +215,10 @@
                         android:layout_toRightOf="@+id/trip_type_icon"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp">
-                        <TextView
+                        <!--<TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/select_trip_type"/>
+                            android:text="@string/select_trip_type"/>-->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -241,7 +242,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="72dp"
                     android:id="@+id/to_event_layout"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:visibility="@{(rideVM.direction == Ride.Direction.TO || rideVM.direction == Ride.Direction.ROUNDTRIP) ? View.VISIBLE : View.GONE}">
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
@@ -274,7 +276,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="72dp"
                     android:id="@+id/from_event_layout"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:visibility="@{(rideVM.direction == Ride.Direction.FROM || rideVM.direction == Ride.Direction.ROUNDTRIP) ? View.VISIBLE : View.GONE}">
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
@@ -303,6 +306,9 @@
                             android:layout_toEndOf="@+id/from_event_date_field"
                             />
                 </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"/>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

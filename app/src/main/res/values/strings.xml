@@ -73,9 +73,9 @@
 
     <string-array name="trip_type">
         <item>Select Trip Type</item>
-        <item>Roundtrip</item>
         <item>To Event</item>
         <item>From Event</item>
+        <item>Roundtrip</item>
     </string-array>
 
 </resources>

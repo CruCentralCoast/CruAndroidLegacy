@@ -15,6 +15,8 @@ public class Ride
     @SerializedName("time") public ZonedDateTime time;
     @SerializedName("location") public Location location;
     @SerializedName("passengers") public ArrayList<String> passengers;
+    public Direction direction;
+    public int carCapacity;
 
     public Ride(String driverName, String driverNumber, String gender, String eventId, ZonedDateTime time, Location location, ArrayList<String> passengers)
     {
@@ -28,4 +30,23 @@ public class Ride
     }
 
     public Ride() {}
+
+    public enum Direction
+    {
+        TO("to"),
+        FROM("from"),
+        ROUNDTRIP("both");
+
+        private String direction;
+
+        Direction(String direction)
+        {
+            this.direction = direction;
+        }
+
+        public String getValue()
+        {
+            return direction;
+        }
+    }
 }

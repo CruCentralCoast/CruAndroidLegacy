@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.databinding.BaseObservable;
+import android.databinding.ObservableField;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +15,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
-import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.threeten.bp.DateTimeUtils;
@@ -26,7 +26,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.util.Calendar;
-import java.util.List;
 
 import rx.Observable;
 
@@ -34,6 +33,7 @@ import rx.Observable;
 public class RideVM extends BaseObservable
 {
     public Ride ride;
+    public ObservableField<Ride.Direction> direction;
 
     private static final int NUM_HOURS = 24;
     private static final int NUM_MINUTES = 60;
@@ -48,40 +48,41 @@ public class RideVM extends BaseObservable
     public RideVM(Ride ride)
     {
         this.ride = ride;
+        direction = new ObservableField<>(null);
     }
 
     public void onDriverNameChanged(CharSequence s, int start, int before, int count)
     {
         ride.driverName = s.toString();
-        notifyPropertyChanged(BR.rideVM);
     }
 
     public void onDriverNumberChanged(CharSequence s, int start, int before, int count)
     {
         ride.driverNumber = s.toString();
-        notifyPropertyChanged(BR.rideVM);
     }
-
+    
     public void setupGenderSpinner(Spinner spinner)
     {
         Context context = spinner.getContext();
         String[] genders = context.getResources().getStringArray(R.array.genders);
-        spinner.setAdapter(new ArrayAdapter<>(context, R.layout.spinner_dropdown_item,
-                genders));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
+                genders);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                ride.gender = genders[position];
-                notifyPropertyChanged(BR.rideVM);
+                if(position > 0)
+                {
+                    ride.gender = genders[position];
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
@@ -89,16 +90,20 @@ public class RideVM extends BaseObservable
     {
         Context context = spinner.getContext();
         String[] carCapacity = context.getResources().getStringArray(R.array.car_capacity);
-        spinner.setAdapter(new ArrayAdapter<>(context, R.layout.spinner_dropdown_item,
-                carCapacity));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
+                carCapacity);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                //ride. = carCapacity[position];
-               // notifyPropertyChanged(BR.rideVM);
+                if(position > 0)
+                {
+                    ride.carCapacity = Integer.valueOf(carCapacity[position]);
+                }
             }
 
             @Override
@@ -110,16 +115,17 @@ public class RideVM extends BaseObservable
     {
         Context context = spinner.getContext();
         String[] tripType = context.getResources().getStringArray(R.array.trip_type);
-        spinner.setAdapter(new ArrayAdapter<>(context, R.layout.spinner_dropdown_item,
-                tripType));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
+                tripType);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                //ride. = carCapacity[position];
-                // notifyPropertyChanged(BR.rideVM);
+                direction.set(position > 0 ? Ride.Direction.values()[position - 1] : null);
             }
 
             @Override
