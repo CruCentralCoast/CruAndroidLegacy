@@ -186,7 +186,7 @@ public class RideVM extends BaseObservable
         return v -> {
             TimePickerDialog tpd = getTimeDialog();
             tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-                LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME);
+                ((EditText) v).setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME));
                 //TODO sync data
             });
             tpd.show(fm, "whatever");
@@ -212,7 +212,7 @@ public class RideVM extends BaseObservable
         return v -> {
             TimePickerDialog tpd = getTimeDialog();
             tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-                LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME);
+                ((EditText) v).setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME));
                 //TODO sync data
             });
             tpd.show(fm, "whatever");
