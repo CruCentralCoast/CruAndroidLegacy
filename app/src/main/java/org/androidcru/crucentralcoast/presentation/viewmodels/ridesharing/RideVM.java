@@ -11,12 +11,25 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.orhanobut.logger.Logger;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -33,19 +46,27 @@ import rx.Observable;
 public class RideVM extends BaseObservable
 {
     public Ride ride;
+    private FragmentManager fm;
     public ObservableField<Ride.Direction> direction;
+    public Double radius;
 
     private static final int NUM_HOURS = 24;
     private static final int NUM_MINUTES = 60;
     private static final int INTERVAL = 15;
     private static final int NUM_TIMES = NUM_HOURS * (NUM_MINUTES / INTERVAL);
+    private static final double CALPOLY_LAT = 35.30021;
+    private static final double CALPOLY_LNG = -120.66310;
 
     private static Observable<Integer> hours = Observable.range(0, NUM_HOURS);
     private static Observable<Integer> minutes = Observable.range(0, NUM_MINUTES).filter(m -> m % INTERVAL == 0);
     private static Timepoint[] timepoints = hours.flatMap((h) -> minutes.map((m) -> new Timepoint(h, m)))
             .toList().toBlocking().first().toArray(new Timepoint[NUM_TIMES]);
 
-    private FragmentManager fm;
+    private GoogleMap map;
+    private Marker marker;
+    private Circle circle;
+    private LatLng center;
+
 
     public RideVM(FragmentManager fm, Ride ride)
     {
@@ -218,4 +239,73 @@ public class RideVM extends BaseObservable
             tpd.show(fm, "whatever");
         };
     }
+
+    public void onRadiusChanged(CharSequence s, int start, int before, int count)
+    {
+        if(!s.toString().isEmpty())
+        {
+            this.radius = Double.valueOf(s.toString());
+            setCircle(center, this.radius);
+            //TODO data sync
+        }
+    }
+
+    public OnMapReadyCallback onMapReady()
+    {
+        return googleMap -> {
+            if (map == null)
+            {
+                map = googleMap;
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(CALPOLY_LAT, CALPOLY_LNG), 14.0f));
+            }
+            else
+            {
+                Logger.d("Unable to display map....");
+            }
+        };
+    }
+
+    public PlaceSelectionListener onPlaceSelected()
+    {
+        return new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
+                center = place.getLatLng();
+                setMarker(center);
+                setCircle(center, radius);
+
+                //TODO data sync
+            }
+
+            @Override
+            public void onError(Status status) {
+                Logger.i("ERROR:", "An error occurred: " + status);
+            }
+        };
+    }
+
+    private void setMarker(LatLng latLng)
+    {
+        if (marker != null) {
+            marker.remove();
+        }
+
+        marker = map.addMarker(new MarkerOptions()
+                .position(latLng));
+    }
+
+    private void setCircle(LatLng center, double radius)
+    {
+        if(circle != null)
+            circle.remove();
+
+        if(center != null)
+        {
+            circle = map.addCircle(new CircleOptions()
+                    .center(center)
+                    .radius(MathUtil.convertMilesToMeters(radius)));
+        }
+    }
+
 }

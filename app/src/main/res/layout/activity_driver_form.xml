@@ -313,10 +313,11 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"/>
-                    <FrameLayout
-                        android:id="@+id/place_autocomplete_frag"
+                    <fragment
+                        android:id="@+id/place_autocomplete_fragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        class="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -336,20 +337,16 @@
                             android:id="@+id/radius_field"
                             android:layout_centerVertical="true"
                             android:inputType="phone"
-                            android:hint="Circle Radius (Miles)"/>
+                            android:hint="Circle Radius (Miles)"
+                            android:onTextChanged="@{rideVM.onRadiusChanged}"/>
                     </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
 
-                <RelativeLayout
+                <fragment
+                    android:id="@+id/map_fragment"
+                    class="com.google.android.gms.maps.MapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    android:id="@+id/map_layout"
-                    android:padding="8dp">
-                    <FrameLayout
-                        android:id="@+id/map"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </RelativeLayout>
+                    android:layout_height="256dp"/>
 
                 <View
                     android:layout_width="match_parent"
