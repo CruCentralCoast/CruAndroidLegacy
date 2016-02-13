@@ -133,7 +133,7 @@ public class RideVM extends BaseObservable
         Calendar c = DateTimeUtils.toGregorianCalendar(now);
         TimePickerDialog tpd = TimePickerDialog.newInstance(
                 (view, hourOfDay, minute, second) -> {
-                    textView.setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.RFC_1123_DATE_TIME));
+                    textView.setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME));
                     //TODO sync data
                 },
                 c.get(Calendar.HOUR_OF_DAY),
@@ -151,7 +151,7 @@ public class RideVM extends BaseObservable
         Calendar c = DateTimeUtils.toGregorianCalendar(now);
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 (view, year, monthOfYear, dayOfMonth) -> {
-                    textView.setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.RFC_1123_DATE_TIME));
+                    textView.setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.ISO_LOCAL_DATE));
                     //TODO sync data
                 },
                 c.get(Calendar.YEAR),
