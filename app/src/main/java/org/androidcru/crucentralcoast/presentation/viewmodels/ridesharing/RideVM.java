@@ -45,8 +45,11 @@ public class RideVM extends BaseObservable
     private static Timepoint[] timepoints = hours.flatMap((h) -> minutes.map((m) -> new Timepoint(h, m)))
             .toList().toBlocking().first().toArray(new Timepoint[NUM_TIMES]);
 
-    public RideVM(Ride ride)
+    private FragmentManager fm;
+
+    public RideVM(FragmentManager fm, Ride ride)
     {
+        this.fm = fm;
         this.ride = ride;
         direction = new ObservableField<>(null);
     }
@@ -60,55 +63,56 @@ public class RideVM extends BaseObservable
     {
         ride.driverNumber = s.toString();
     }
-    
-    public void setupGenderSpinner(Spinner spinner)
-    {
-        Context context = spinner.getContext();
-        String[] genders = context.getResources().getStringArray(R.array.genders);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
-                genders);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        spinner.setAdapter(adapter);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    public AdapterView.OnItemSelectedListener onGenderSelected()
+    {
+        return new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 if(position > 0)
                 {
-                    ride.gender = genders[position];
+                    ride.gender = ((TextView) view).getText().toString();
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        };
     }
 
-    public void setupCarCapacitySpinner(Spinner spinner)
+    public AdapterView.OnItemSelectedListener onCarCapacitySelected()
     {
-        Context context = spinner.getContext();
-        String[] carCapacity = context.getResources().getStringArray(R.array.car_capacity);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
-                carCapacity);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+       return new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 if(position > 0)
                 {
-                    ride.carCapacity = Integer.valueOf(carCapacity[position]);
+                    ride.carCapacity = Integer.valueOf(((TextView) view).getText().toString());
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        };
+    }
+
+    public AdapterView.OnItemSelectedListener onTripTypeSelected()
+    {
+        return new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                direction.set(position > 0 ? Ride.Direction.values()[position - 1] : null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
     }
 
     public void setupTripTypeSpinner(Spinner spinner)
@@ -129,19 +133,18 @@ public class RideVM extends BaseObservable
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
         });
     }
 
-    private TimePickerDialog getTimeDialog(TextView textView)
+    private TimePickerDialog getTimeDialog()
     {
         ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         Calendar c = DateTimeUtils.toGregorianCalendar(now);
         TimePickerDialog tpd = TimePickerDialog.newInstance(
-                (view, hourOfDay, minute, second) -> {
-                    textView.setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME));
-                    //TODO sync data
-                },
+                null,
                 c.get(Calendar.HOUR_OF_DAY),
                 c.get(Calendar.MINUTE),
                 false
@@ -151,15 +154,12 @@ public class RideVM extends BaseObservable
         return tpd;
     }
 
-    private DatePickerDialog getDateDialog(TextView textView)
+    private DatePickerDialog getDateDialog()
     {
         ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         Calendar c = DateTimeUtils.toGregorianCalendar(now);
         DatePickerDialog dpd = DatePickerDialog.newInstance(
-                (view, year, monthOfYear, dayOfMonth) -> {
-                    textView.setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.ISO_LOCAL_DATE));
-                    //TODO sync data
-                },
+                null,
                 c.get(Calendar.YEAR),
                 c.get(Calendar.MONTH),
                 c.get(Calendar.DAY_OF_MONTH)
@@ -168,13 +168,54 @@ public class RideVM extends BaseObservable
         return dpd;
     }
 
-    public void setupTimeDialog(FragmentManager fragmentManager, EditText editText)
+    public View.OnClickListener onToEventDateClicked()
     {
-        editText.setOnClickListener(v -> getTimeDialog(editText).show(fragmentManager, "whatever"));
+        return v -> {
+            DatePickerDialog dpd = getDateDialog();
+            dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
+                ((EditText) v).setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.ISO_LOCAL_DATE));
+                //TODO sync data
+            });
+            dpd.show(fm, "whatever");
+        };
     }
 
-    public void setupDateDialog(FragmentManager fragmentManager, EditText editText)
+    public View.OnClickListener onToEventTimeClicked()
     {
-        editText.setOnClickListener(v -> getDateDialog(editText).show(fragmentManager, "whatever"));
+
+        return v -> {
+            TimePickerDialog tpd = getTimeDialog();
+            tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
+                LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME);
+                //TODO sync data
+            });
+            tpd.show(fm, "whatever");
+        };
+
+
+    }
+
+    public View.OnClickListener onFromEventDateClicked()
+    {
+        return v -> {
+            DatePickerDialog dpd = getDateDialog();
+            dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
+                ((EditText) v).setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.ISO_LOCAL_DATE));
+                //TODO sync data
+            });
+            dpd.show(fm, "whatever");
+        };
+    }
+
+    public View.OnClickListener onFromEventTimeClicked()
+    {
+        return v -> {
+            TimePickerDialog tpd = getTimeDialog();
+            tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
+                LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME);
+                //TODO sync data
+            });
+            tpd.show(fm, "whatever");
+        };
     }
 }

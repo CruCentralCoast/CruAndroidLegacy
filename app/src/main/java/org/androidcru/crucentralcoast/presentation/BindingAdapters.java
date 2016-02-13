@@ -1,12 +1,18 @@
 package org.androidcru.crucentralcoast.presentation;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.databinding.BindingAdapter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.text.method.KeyListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -86,5 +92,24 @@ public class BindingAdapters
     {
         view.setSelected(selected);
         view.setImageDrawable(DrawableUtil.getTintListedDrawable(view.getContext(), selected ? selectedDrawable : unselectedDrawable, selectionTint));
+    }
+
+    @BindingAdapter({"bind:resources", "bind:onItemSelected"})
+    public static void setSpinner(Spinner spinner, int resourcesId, AdapterView.OnItemSelectedListener onItemSelected)
+    {
+        Context context = spinner.getContext();
+        String[] resources = context.getResources().getStringArray(resourcesId);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
+                resources);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(onItemSelected);
+    }
+
+    @BindingAdapter("bind:onKey")
+    public static void setKeyListener(EditText editText, KeyListener keyListener)
+    {
+        editText.setKeyListener(keyListener);
     }
 }
