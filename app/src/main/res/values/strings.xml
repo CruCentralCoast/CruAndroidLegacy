@@ -34,8 +34,8 @@
     <string name="rsvp_title">Set RSVP Status</string>
 
     <string name="gcm_registration_id">gcm_registration_id</string>
-    <string name="select_sex">Select Sex</string>
-    <string name="preferred_driver_sex">Select Preferred Driver Sex</string>
+    <string name="select_gender">Select Gender</string>
+    <string name="preferred_driver_gender">Select Preferred Driver Sex</string>
     <string name="select_car_capacity">Select Car Capacity</string>
     <string name="select_trip_type">Select Trip Type</string>
     <string name="select_circle_radius">Select Circle Radius</string>
@@ -47,4 +47,35 @@
     <string name="driver">Driver</string>
     <string name="passenger">Passenger</string>
     <string name="edit">Edit</string>
+    <string name="driver_signup">Driver Signup</string>
+
+    <string-array name="genders">
+        <item>Select Gender</item>
+        <item>Man</item>
+        <item>Woman</item>
+    </string-array>
+
+    <string-array name="car_capacity">
+        <item>Select Car Capacity</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="trip_type">
+        <item>Select Trip Type</item>
+        <item>Roundtrip</item>
+        <item>To Event</item>
+        <item>From Event</item>
+    </string-array>
+
 </resources>

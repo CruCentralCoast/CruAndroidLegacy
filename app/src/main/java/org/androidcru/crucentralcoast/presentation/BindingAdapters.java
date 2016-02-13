@@ -37,12 +37,19 @@ public class BindingAdapters
         view.setTypeface(fontCache.get(fontFileName));
     }
 
+
+    @BindingAdapter({"android:src", "bind:tint"})
+    public static void setTintedSource(ImageButton view, Drawable drawable, int tintColor)
+    {
+        view.setImageDrawable(DrawableUtil.getTintedDrawable(view.getContext(), drawable, tintColor));
+    }
+
     @BindingAdapter(value = {"bind:src", "bind:tint", "bind:placeholder", "bind:scaleType"}, requireAll = false)
     public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, String scaleType)
     {
         RequestCreator request = Picasso.with(view.getContext()).load(url);
 
-        if(url.isEmpty())
+        if(url == null || url.isEmpty())
         {
             view.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.logo_grey));
         }
@@ -72,12 +79,6 @@ public class BindingAdapters
 
             request.into(view);
         }
-    }
-
-    @BindingAdapter({"android:src", "bind:tint"})
-    public static void setTintedSource(ImageButton view, Drawable drawable, int tintColor)
-    {
-        view.setImageDrawable(DrawableUtil.getTintedDrawable(view.getContext(), drawable, tintColor));
     }
 
     @BindingAdapter({"bind:selected", "bind:selectedDrawable", "bind:unselectedDrawable", "bind:selectionTint"})

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideVM"/>
+        <variable name="rideVM" type="RideVM"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:orientation="vertical"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="?attr/actionBarSize"
+                                               android:minHeight="?attr/actionBarSize"
+                                               android:background="?attr/colorPrimary"
+                                               android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                               app:title="@string/driver_signup"
+                                               app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                               app:layout_scrollFlags="enterAlways|snap"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- name -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/name_layout"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/name_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_account_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/name_icon"
+                        android:layout_marginLeft="8dp"
+                        android:layout_centerVertical="true">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/name_field"
+                            android:layout_centerVertical="true"
+                            android:hint="Full Name"
+                            android:inputType="text"
+                            android:text="@{rideVM.ride.driverName ?? ``}"
+                            android:onTextChanged="@{rideVM.onDriverNameChanged}"/>
+                    </android.support.design.widget.TextInputLayout>
+                </RelativeLayout>
+                <!-- phone -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/phone_layout"
+                    android:padding="8dp"
+                    android:layout_below="@+id/name_layout">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/phone_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_phone_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/phone_icon"
+                        android:layout_marginLeft="8dp">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/phone_field"
+                            android:layout_centerVertical="true"
+                            android:inputType="phone"
+                            android:hint="Phone Number"
+                            android:text="@{rideVM.ride.driverNumber ?? ``}"
+                            android:onTextChanged="@{rideVM.onDriverNumberChanged}"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                </RelativeLayout>
+                <!-- gender -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/gender_layout"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/gender_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_account_multiple_outline_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/input_layout_gender"
+                        android:orientation="vertical"
+                        android:layout_toRightOf="@+id/gender_icon"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/select_gender"/>
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/gender_field"
+                            android:inputType="phone"
+                            android:prompt="@string/select_gender"/>
+                    </LinearLayout>
+                </RelativeLayout>
+                <!-- car capacity -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/car_capacity_layout"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/car_capacity_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_car_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/input_layout_car"
+                        android:orientation="vertical"
+                        android:layout_toEndOf="@+id/car_capacity_icon"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/select_car_capacity"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/car_capacity_field"
+                                android:prompt="@string/select_car_capacity"
+                                android:layout_marginRight="8dp"/>
+                            <!--<TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="available seats"
+                                android:id="@+id/car_capacity_detail"
+                                android:textSize="16sp"/>-->
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <!-- trip type -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/trip_type_layout"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/trip_type_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_car_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/trip_type_group"
+                        android:orientation="vertical"
+                        android:layout_toRightOf="@+id/trip_type_icon"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/select_trip_type"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/trip_type_field"
+                                android:prompt="@string/select_trip_type"
+                                android:layout_marginEnd="8dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/trip_type_detail"
+                                android:textSize="16sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <!-- to -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/to_event_layout"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/to_event_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_account_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/to_event_date_field"
+                        android:hint="To Event Date"
+                        android:inputType="date"
+                        android:focusable="false"
+                        android:layout_toEndOf="@+id/to_event_icon"/>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/to_event_time_field"
+                        android:hint="To EventTime"
+                        android:inputType="time"
+                        android:layout_alignParentEnd="false"
+                        android:focusable="false"
+                        android:layout_toEndOf="@+id/to_event_date_field"/>
+                </RelativeLayout>
+                <!-- from -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:id="@+id/from_event_layout"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/from_event_icon"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_account_grey600_48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"/>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/from_event_date_field"
+                            android:hint="From Event Date"
+                            android:inputType="date"
+                            android:focusable="false"
+                            android:layout_toEndOf="@+id/from_event_icon"/>
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/from_event_time_field"
+                            android:hint="From Event Time"
+                            android:inputType="time"
+                            android:layout_alignParentEnd="false"
+                            android:focusable="false"
+                            android:layout_toEndOf="@+id/from_event_date_field"
+                            />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:src="@{@drawable/ic_check_grey600_48dp}"
+            app:tint="@{@android:color/white}"
+            app:layout_anchor="@id/scrollView"
+            app:layout_anchorGravity="bottom|right|end"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

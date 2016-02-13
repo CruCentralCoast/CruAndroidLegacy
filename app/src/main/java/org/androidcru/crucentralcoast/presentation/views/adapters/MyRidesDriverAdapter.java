@@ -1,9 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,19 +11,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observer;
+
+//import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 
 /**
  * RideSharingAdapter is a RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -99,13 +94,13 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
 //        holder.launchDriver.setOnClickListener(v -> mParent.startActivity(new Intent(mParent, DriverSignupActivity.class)));
 //    }
 
-//    @SerializedName("driverName") public String mDriverName;
-//    @SerializedName("driverNumber") public String mDriverNumber;
-//    @SerializedName("gender") public String mGender;
-//    @SerializedName("event") public String mEventId;
-//    @SerializedName("time") public ZonedDateTime mTime;
-//    @SerializedName("location") public Location mLocation;
-//    @SerializedName("passengers") public ArrayList<String> mPassengers;
+//    @SerializedName("driverName") public String driverName;
+//    @SerializedName("driverNumber") public String driverNumber;
+//    @SerializedName("gender") public String gender;
+//    @SerializedName("event") public String eventId;
+//    @SerializedName("time") public ZonedDateTime time;
+//    @SerializedName("location") public Location location;
+//    @SerializedName("passengers") public ArrayList<String> passengers;
     //TODO support events spanning multiple days (fall retreat)
     /**
      * Invoked by the Adapter if a fresh view needs configuration or an old view needs to be recycled
@@ -117,12 +112,12 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
     {
         Ride ride = rides.get(position);
 
-        holder.eventName.setText(ride.mEventId);
-        holder.departureLoc.setText(ride.mLocation.toString());
-        holder.departureTime.setText("Departing: " + ride.mTime.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
-                + " " + ride.mTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
+        holder.eventName.setText(ride.eventId);
+        holder.departureLoc.setText(ride.location.toString());
+        holder.departureTime.setText("Departing: " + ride.time.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
+                + " " + ride.time.format(DateTimeFormatter.ofPattern(TIME_FORMATTER)));
 
-        holder.eventDescription.setText(formatPassengerList(ride.mPassengers));
+        holder.eventDescription.setText(formatPassengerList(ride.passengers));
         holder.eventDescription.setVisibility(mIsExpanded ? View.VISIBLE : View.GONE);
         holder.chevView.setImageDrawable(
                 ContextCompat.getDrawable(mParent,
@@ -130,7 +125,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
                                 : R.drawable.ic_chevron_down_grey600_48dp));
 
         holder.editOffering.setText(R.string.edit);
-        holder.editOffering.setOnClickListener(v -> mParent.startActivity(new Intent(mParent, DriverSignupActivity.class)));
+        //holder.editOffering.setOnClickListener(v -> mParent.startActivity(new Intent(mParent, DriverSignupActivity.class)));
     }
 
 

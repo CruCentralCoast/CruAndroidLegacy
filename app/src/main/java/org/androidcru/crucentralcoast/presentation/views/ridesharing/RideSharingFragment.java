@@ -1,33 +1,27 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing;
 
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
-import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.CruEventVM;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -42,9 +36,6 @@ public class RideSharingFragment extends Fragment
     private LinearLayoutManager mLayoutManager;
 
     private Observer<ArrayList<CruEvent>> mEventSubscriber;
-    private Observer<Pair<String, Long>> mOnCalendarWrittenSubscriber;
-
-    private SharedPreferences mSharedPreferences;
 
     public RideSharingFragment()
     {
@@ -64,39 +55,6 @@ public class RideSharingFragment extends Fragment
             public void onNext(ArrayList<CruEvent> cruEvents)
             {
                 setEvents(cruEvents);
-            }
-        };
-
-        mOnCalendarWrittenSubscriber = new Observer<Pair<String, Long>>()
-        {
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(Pair<String, Long> eventInfo)
-            {
-                if(eventInfo.second > -1)
-                {
-                    Toast.makeText(getActivity(), "EventID: " + Long.toString(eventInfo.second) + " added to default calendar",
-                            Toast.LENGTH_LONG).show();
-                    mSharedPreferences.edit().putLong(eventInfo.first, eventInfo.second).commit();
-                }
-                else
-                {
-                    mSharedPreferences.edit().remove(eventInfo.first).commit();
-                }
-
-                Observable.from(mCruEventVMs)
-                        .filter(cruEventMV -> cruEventMV.cruEvent.mId.equals(eventInfo.first))
-                        .subscribeOn(Schedulers.immediate())
-                        .subscribe(cruEventMV -> {
-                            cruEventMV.addedToCalendar.set(mSharedPreferences.contains(cruEventMV.cruEvent.mId));
-                            cruEventMV.localEventId = mSharedPreferences.getLong(cruEventMV.cruEvent.mId, -1);
-                        });
-                mEventList.getAdapter().notifyDataSetChanged();
             }
         };
     }
@@ -128,8 +86,6 @@ public class RideSharingFragment extends Fragment
 
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
-        
-        mSharedPreferences = CruApplication.getSharedPreferences();
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);
@@ -139,7 +95,7 @@ public class RideSharingFragment extends Fragment
         mEventList.setLayoutManager(mLayoutManager);
 
         //Adapter for RecyclerView
-        RideSharingAdapter mRideSharingAdapter = new RideSharingAdapter(getActivity(), new ArrayList<>(), mLayoutManager, mOnCalendarWrittenSubscriber);
+        RideSharingAdapter mRideSharingAdapter = new RideSharingAdapter(new ArrayList<>(), mLayoutManager);
         mEventList.setAdapter(mRideSharingAdapter);
         mEventList.setHasFixedSize(true);
 
@@ -173,13 +129,11 @@ public class RideSharingFragment extends Fragment
     {
         mCruEventVMs.clear();
         rx.Observable.from(cruEvents)
-                .map(cruEvent -> new CruEventVM(cruEvent, false,
-                        mSharedPreferences.contains(cruEvent.mId),
-                        mSharedPreferences.getLong(cruEvent.mId, -1)))
+                .map(cruEvent -> new CruEventVM(cruEvent, false, getActivity()))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(mCruEventVMs::add);
 
-        mEventList.setAdapter(new RideSharingAdapter(getActivity(), mCruEventVMs, mLayoutManager, mOnCalendarWrittenSubscriber));
+        mEventList.setAdapter(new RideSharingAdapter(mCruEventVMs, mLayoutManager));
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

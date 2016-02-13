@@ -8,23 +8,23 @@ import java.util.ArrayList;
 
 public class Ride
 {
-    @SerializedName("driverName") public String mDriverName;
-    @SerializedName("driverNumber") public String mDriverNumber;
-    @SerializedName("gender") public String mGender;
-    @SerializedName("event") public String mEventId;
-    @SerializedName("time") public ZonedDateTime mTime;
-    @SerializedName("location") public Location mLocation;
-    @SerializedName("passengers") public ArrayList<String> mPassengers;
+    @SerializedName("driverName") public String driverName;
+    @SerializedName("driverNumber") public String driverNumber;
+    @SerializedName("gender") public String gender;
+    @SerializedName("event") public String eventId;
+    @SerializedName("time") public ZonedDateTime time;
+    @SerializedName("location") public Location location;
+    @SerializedName("passengers") public ArrayList<String> passengers;
 
-    public Ride(String mDriverName, String mDriverNumber, String mGender, String mEventId, ZonedDateTime mTime, Location mLocation, ArrayList<String> mPassengers)
+    public Ride(String driverName, String driverNumber, String gender, String eventId, ZonedDateTime time, Location location, ArrayList<String> passengers)
     {
-        this.mDriverName = mDriverName;
-        this.mDriverNumber = mDriverNumber;
-        this.mGender = mGender;
-        this.mEventId = mEventId;
-        this.mTime = mTime;
-        this.mLocation = mLocation;
-        this.mPassengers = mPassengers;
+        this.driverName = driverName;
+        this.driverNumber = driverNumber;
+        this.gender = gender;
+        this.eventId = eventId;
+        this.time = time;
+        this.location = location;
+        this.passengers = passengers;
     }
 
     public Ride() {}

@@ -33,13 +33,13 @@ public final class RideProvider
 //        ArrayList<Ride> newRides = new ArrayList<Ride>();
 ////        rx.Observable.from(requestRides())
 //        requestRides()
-//                .map(ride -> new Ride(ride.mDriverName, ride.mDriverNumber, ride.mGender, ride.mEventId, ride.mTime, ride.mLocation, ride.mPassengers))
+//                .map(ride -> new Ride(ride.driverName, ride.driverNumber, ride.gender, ride.eventId, ride.time, ride.location, ride.passengers))
 //                .subscribeOn(Schedulers.immediate())
 //                .subscribe(newRides::add);
 //
 //        for (Ride r : newRides)
 //        {
-//            if (r.mEventId.equals(id))
+//            if (r.eventId.equals(id))
 //                return r;
 //        }
 
