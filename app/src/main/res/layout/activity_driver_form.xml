@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View"/>
@@ -184,6 +185,7 @@
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
+
                 <!-- trip type -->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -276,28 +278,28 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"/>
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/from_event_date_field"
-                            android:hint="From Event Date"
-                            android:inputType="date"
-                            android:focusable="false"
-                            android:layout_toEndOf="@+id/from_event_icon"
-                            app:onKey="@{null}"
-                            android:onClick="@{rideVM.onFromEventDateClicked}"/>
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/from_event_time_field"
-                            android:hint="From Event Time"
-                            android:inputType="time"
-                            android:layout_alignParentEnd="false"
-                            android:focusable="false"
-                            android:layout_toEndOf="@+id/from_event_date_field"
-                            app:onKey="@{null}"
-                            android:onClick="@{rideVM.onFromEventTimeClicked}"
-                            />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/from_event_date_field"
+                        android:hint="From Event Date"
+                        android:inputType="date"
+                        android:focusable="false"
+                        android:layout_toEndOf="@+id/from_event_icon"
+                        app:onKey="@{null}"
+                        android:onClick="@{rideVM.onFromEventDateClicked}"/>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/from_event_time_field"
+                        android:hint="From Event Time"
+                        android:inputType="time"
+                        android:layout_alignParentEnd="false"
+                        android:focusable="false"
+                        android:layout_toEndOf="@+id/from_event_date_field"
+                        app:onKey="@{null}"
+                        android:onClick="@{rideVM.onFromEventTimeClicked}"
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout

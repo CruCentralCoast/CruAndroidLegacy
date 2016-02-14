@@ -48,6 +48,7 @@
     <string name="passenger">Passenger</string>
     <string name="edit">Edit</string>
     <string name="driver_signup">Driver Signup</string>
+    <string name="passenger_signup">Passenger Signup</string>
 
     <string-array name="genders">
         <item>Select Gender</item>
