@@ -51,7 +51,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".presentation.views.forms.FormBaseActivity"
+            android:name=".presentation.views.forms.FormActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity

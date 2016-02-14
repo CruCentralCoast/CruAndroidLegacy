@@ -29,7 +29,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.ProvableFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -40,7 +40,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PassengerLocFragment extends ProvableFragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class PassengerLocFragment extends FormContentFragment implements Validator.ValidationListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     @Select(defaultSelection = -1) @Bind(R.id.trip_type_field) Spinner tripTypeField;
     @Bind(R.id.depart_time_field) EditText departTimeField;
     @Bind(R.id.depart_date_field) EditText departDateField;
@@ -74,7 +74,7 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, new String[]{"Male", "Female"});
+        ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, new String[]{"Male", "Female"});
         sexAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sexField.setAdapter(sexAdapter);
 
@@ -102,7 +102,7 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
         validator.put(departDateField, validDateRule);
         validator.put(returnDateField, validDateRule);
 
-        ArrayAdapter<String> tripTypeAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_spinner_item, new String[]{"Round Trip", "Departure", "Return"});
+        ArrayAdapter<String> tripTypeAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, new String[]{"Round Trip", "Departure", "Return"});
         tripTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         tripTypeField.setAdapter(tripTypeAdapter);
 
@@ -191,6 +191,12 @@ public class PassengerLocFragment extends ProvableFragment implements Validator.
     }
 
     @Override
+    public void onNext()
+    {
+        if(validate())
+            super.onNext();
+    }
+
     public boolean validate()
     {
         validator.validate();

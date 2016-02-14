@@ -17,14 +17,14 @@ import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.ProvableFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PassengerBasicInfoFragment extends ProvableFragment implements Validator.ValidationListener {
+public class PassengerBasicInfoFragment extends FormContentFragment implements Validator.ValidationListener {
 
     // Used for phone number validation
     public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
@@ -57,8 +57,7 @@ public class PassengerBasicInfoFragment extends ProvableFragment implements Vali
         validator.setValidationListener(this);
     }
 
-    @Override
-    public boolean validate()
+    private boolean validate()
     {
         validator.validate();
         return isValid;
@@ -88,6 +87,13 @@ public class PassengerBasicInfoFragment extends ProvableFragment implements Vali
             }
 
         }
+    }
+
+    @Override
+    public void onNext()
+    {
+        if(validate())
+            super.onNext();
     }
 }
 

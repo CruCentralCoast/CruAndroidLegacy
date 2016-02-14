@@ -13,20 +13,18 @@ import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideRe
 
 import java.util.ArrayList;
 import org.androidcru.crucentralcoast.BR;
-import rx.Observable;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContent;
 
 public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder>
 {
 
     private Activity mParent;
     private ArrayList<Ride> rides;
-    private Observable<Void> mOnNextCallback;
 
-    public DriverResultsAdapter(Activity parent, ArrayList<Ride> rides, Observable<Void> onNextCallback)
+    public DriverResultsAdapter(Activity parent, ArrayList<Ride> rides)
     {
         this.mParent = parent;
         this.rides = rides;
-        this.mOnNextCallback = onNextCallback;
     }
 
     @Override
@@ -69,7 +67,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         @Override
         public void onClick(View v)
         {
-            mOnNextCallback.subscribe();
+            ((FormContent) mParent).onNext();
         }
     }
 }

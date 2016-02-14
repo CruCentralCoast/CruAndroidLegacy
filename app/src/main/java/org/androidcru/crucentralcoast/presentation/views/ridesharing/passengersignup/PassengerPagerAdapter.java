@@ -1,43 +1,38 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup;
 
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
-import org.androidcru.crucentralcoast.presentation.views.forms.BaseFormAdapter;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.ProvableFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormAdapter;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
-import rx.Observable;
+import java.util.ArrayList;
 
-public class PassengerPagerAdapter extends BaseFormAdapter
+public class PassengerPagerAdapter extends FormAdapter
 {
+    private ArrayList<FormContentFragment> fragments;
+    private FormHolder formHolder;
 
-    private int formCount;
-    private Observable<Void> mOnNextCallback;
-
-    public PassengerPagerAdapter(FragmentManager fm, int formCount, Observable<Void> onNextCallback) {
+    public PassengerPagerAdapter(FragmentManager fm, ArrayList<FormContentFragment> fragments, FormHolder formHolder) {
         super(fm);
-        this.formCount = formCount;
-        this.mOnNextCallback = onNextCallback;
+        this.fragments = fragments;
+        this.formHolder = formHolder;
     }
 
     @Override
     public int getCount()
     {
-        return formCount;
+        return fragments.size();
     }
 
     @Override
-    public ProvableFragment getFormPage(int position)
+    public FormContentFragment getFormPage(int position)
     {
-        switch(position)
-        {
-            case 0:
-                return new PassengerLocFragment();
-            case 1:
-                return new DriverResultsFragment(mOnNextCallback);
-            case 2:
-                return new PassengerBasicInfoFragment();
-            default:
-                return new PassengerLocFragment();
-        }
+        formHolder.clearUI();
+        if(position == 0)
+            formHolder.setPreviousVisibility(View.GONE);
+
+        return fragments.get(position);
     }
 }

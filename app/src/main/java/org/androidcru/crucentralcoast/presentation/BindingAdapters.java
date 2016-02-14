@@ -53,14 +53,14 @@ public class BindingAdapters
     @BindingAdapter(value = {"bind:src", "bind:tint", "bind:placeholder", "bind:scaleType"}, requireAll = false)
     public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, String scaleType)
     {
-        RequestCreator request = Picasso.with(view.getContext()).load(url);
-
         if(url == null || url.isEmpty())
         {
             view.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.logo_grey));
         }
         else
         {
+            RequestCreator request = Picasso.with(view.getContext()).load(url);
+
             if(scaleType != null)
             {
                 switch (scaleType)
@@ -99,7 +99,7 @@ public class BindingAdapters
     {
         Context context = spinner.getContext();
         String[] resources = context.getResources().getStringArray(resourcesId);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item,
                 resources);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);

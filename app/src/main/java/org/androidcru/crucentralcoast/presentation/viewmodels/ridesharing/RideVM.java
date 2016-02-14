@@ -140,7 +140,7 @@ public class RideVM extends BaseObservable
     {
         Context context = spinner.getContext();
         String[] tripType = context.getResources().getStringArray(R.array.trip_type);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.simple_spinner_item,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item,
                 tripType);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);

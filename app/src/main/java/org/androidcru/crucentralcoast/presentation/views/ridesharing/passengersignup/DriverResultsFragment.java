@@ -11,43 +11,31 @@ import android.view.ViewGroup;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.ProvableFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class DriverResultsFragment extends ProvableFragment
+public class DriverResultsFragment extends FormContentFragment
 {
 
-    @Bind(R.id.driverresults_list) RecyclerView mDriverResultsList;
-    private Observable<Void> mOnNextCallback;
-
-    public DriverResultsFragment() {}
-
-    public DriverResultsFragment(Observable<Void> onNextCallback)
-    {
-        this.mOnNextCallback = onNextCallback;
-    }
+    private RecyclerView driverResultsList;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_driverresults, container, false);
+        return inflater.inflate(R.layout.fragment_driver_results, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-
-        mDriverResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        driverResultsList = (RecyclerView) view.findViewById(R.id.driver_results_list);
+        driverResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        formHolder.setNavigationVisbility(View.GONE);
         getRides();
     }
 
@@ -63,12 +51,6 @@ public class DriverResultsFragment extends ProvableFragment
 
     private void handleResults(ArrayList<Ride> results)
     {
-        mDriverResultsList.setAdapter(new DriverResultsAdapter(getActivity(), results, mOnNextCallback));
-    }
-
-    @Override
-    public boolean validate()
-    {
-        return true;
+        driverResultsList.setAdapter(new DriverResultsAdapter(getActivity(), results));
     }
 }

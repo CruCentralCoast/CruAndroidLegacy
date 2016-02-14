@@ -2,15 +2,22 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 
 import android.os.Bundle;
 
-import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.views.forms.FormBaseActivity;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
-public class PassengerSignupActivity extends FormBaseActivity
+import java.util.ArrayList;
+
+public class PassengerSignupActivity extends FormActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ArrayList<FormContentFragment> fragments = new ArrayList<>();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new PassengerFormFragment()).commit();
+        fragments.add(new PassengerLocFragment());
+        fragments.add(new DriverResultsFragment());
+        fragments.add(new PassengerBasicInfoFragment());
+
+        setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), fragments, this));
     }
 }

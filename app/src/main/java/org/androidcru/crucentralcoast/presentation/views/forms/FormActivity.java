@@ -1,34 +1,20 @@
 package org.androidcru.crucentralcoast.presentation.views.forms;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.view.View;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.databinding.ActivityFormBinding;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 
-public class FormBaseActivity extends AppCompatActivity implements FormHolder
+public class FormActivity extends AppCompatActivity implements FormHolder
 {
-    RelativeLayout bottomBar;
-
-    RelativeLayout previousView;
-    RelativeLayout nextView;
-
-    ImageView previousIcon;
-    ImageView nextIcon;
-
-    AppBarLayout appBarLayout;
-    Toolbar toolbar;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    //NestedScrollView nestedScrollView;
+    private ActivityFormBinding binding;
 
     private FormContent currentFormContent;
 
@@ -36,9 +22,7 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_form);
-        setupUI();
-        setupButtons();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_form);
     }
 
     @Override
@@ -69,27 +53,6 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
         }
     }
 
-    private void setupUI()
-    {
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        bottomBar = (RelativeLayout) findViewById(R.id.bottom_bar);
-        previousView = (RelativeLayout) findViewById(R.id.prev);
-        nextView = (RelativeLayout) findViewById(R.id.next);
-
-        previousIcon = (ImageView) findViewById(R.id.prevIcon);
-        nextIcon = (ImageView) findViewById(R.id.nextIcon);
-    }
-
-    private void setupButtons()
-    {
-        previousIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_chevron_left_grey600_48dp));
-        nextIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_chevron_right_grey600_48dp));
-    }
-
     @Override
     public void onAttachFragment(Fragment fragment)
     {
@@ -103,39 +66,55 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
 
     private void setupButtonListeners()
     {
-        previousView.setOnClickListener(v -> {
+        binding.prev.setOnClickListener(v -> {
             if (currentFormContent != null)
                 currentFormContent.onPrevious();
         });
 
-        nextView.setOnClickListener(v -> {
+        binding.next.setOnClickListener(v -> {
             if (currentFormContent != null)
                 currentFormContent.onNext();
         });
     }
 
     @Override
+    public void setAdapter(FormAdapter adapter)
+    {
+        binding.viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void clearUI()
+    {
+        setTitle(getResources().getString(R.string.app_name));
+        setNavigationVisbility(View.VISIBLE);
+        setPreviousVisibility(View.VISIBLE);
+        setNextVisibility(View.VISIBLE);
+        setToolbarExpansion(false);
+    }
+
+    @Override
     public void setTitle(String title)
     {
-        collapsingToolbarLayout.setTitle(title);
+        binding.collapsingToolbar.setTitle(title);
     }
 
     @Override
     public void setPreviousVisibility(int visibility)
     {
-        previousView.setVisibility(visibility);
+        binding.prev.setVisibility(visibility);
     }
 
     @Override
     public void setNextVisibility(int visibility)
     {
-        nextView.setVisibility(visibility);
+        binding.next.setVisibility(visibility);
     }
 
     @Override
     public void setToolbarExpansion(boolean expanded)
     {
-        appBarLayout.setExpanded(expanded);
+        binding.appbar.setExpanded(expanded);
     }
 
     @Override
@@ -147,7 +126,19 @@ public class FormBaseActivity extends AppCompatActivity implements FormHolder
     @Override
     public void setNavigationVisbility(int visibility)
     {
+        binding.bottomBar.setVisibility(visibility);
+    }
 
+    @Override
+    public void next()
+    {
+        binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
+    }
+
+    @Override
+    public void prev()
+    {
+        binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() - 1);
     }
 }
 
