@@ -2,6 +2,8 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 
 import android.os.Bundle;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
@@ -9,14 +11,30 @@ import java.util.ArrayList;
 
 public class PassengerSignupActivity extends FormActivity
 {
+    public static final String EVENT_ID = "event_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle == null || bundle.getString(EVENT_ID, "").isEmpty())
+        {
+            Logger.e("PassengerSignupActivity requires that you pass an event ID.");
+            Logger.e("Finishing activity...");
+            finish();
+            return;
+        }
+
         ArrayList<FormContentFragment> fragments = new ArrayList<>();
 
-        fragments.add(new PassengerLocFragment());
-        fragments.add(new DriverResultsFragment());
-        fragments.add(new PassengerBasicInfoFragment());
+        fragments.add(new RideInfoFragment());
+
+        DriverResultsFragment resultsFragment = new DriverResultsFragment();
+        resultsFragment.setArguments(bundle);
+        fragments.add(resultsFragment);
+
+        fragments.add(new BasicInfoFragment());
 
         setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), fragments, this));
     }

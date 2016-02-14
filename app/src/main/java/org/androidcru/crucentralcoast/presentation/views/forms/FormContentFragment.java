@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 public class FormContentFragment extends Fragment implements FormContent
 {
     protected FormHolder formHolder;
-    protected FormContent successor;
     protected FormAdapter adapter;
 
     @Override
@@ -26,15 +25,5 @@ public class FormContentFragment extends Fragment implements FormContent
     public void onPrevious()
     {
         formHolder.prev();
-    }
-
-    public void setSuccessor(FormContent formContent)
-    {
-        this.successor = formContent;
-    }
-
-    public FormContent getSuccessor()
-    {
-        return successor;
     }
 }

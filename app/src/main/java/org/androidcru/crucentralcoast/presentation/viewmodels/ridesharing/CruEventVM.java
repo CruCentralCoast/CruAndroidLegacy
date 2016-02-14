@@ -38,7 +38,9 @@ public class CruEventVM extends BaseObservable
 
     public View.OnClickListener onPassengerClicked()
     {
-        return v -> parent.startActivity(new Intent(parent, PassengerSignupActivity.class));
+        Intent intent = new Intent(parent, PassengerSignupActivity.class);
+        intent.putExtra(PassengerSignupActivity.EVENT_ID, cruEvent.mId);
+        return v -> parent.startActivity(intent);
     }
 
     public View.OnClickListener onDriverClicked()

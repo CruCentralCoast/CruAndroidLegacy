@@ -273,7 +273,9 @@ public class RideVM extends BaseObservable
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
                 center = place.getLatLng();
                 setMarker(center);
-                setCircle(center, radius);
+
+                if(radius != null)
+                    setCircle(center, radius);
 
                 //TODO data sync
             }
