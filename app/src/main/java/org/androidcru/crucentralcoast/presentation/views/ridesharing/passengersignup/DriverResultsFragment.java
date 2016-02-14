@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,19 +11,27 @@ import android.view.ViewGroup;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.ProvableFragment;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class DriverResultsFragment extends Fragment
+public class DriverResultsFragment extends ProvableFragment
 {
 
     @Bind(R.id.driverresults_list) RecyclerView mDriverResultsList;
+    private Observable<Void> mOnNextCallback;
 
     public DriverResultsFragment() {}
+
+    public DriverResultsFragment(Observable<Void> onNextCallback)
+    {
+        this.mOnNextCallback = onNextCallback;
+    }
 
     @Nullable
     @Override
@@ -56,6 +63,12 @@ public class DriverResultsFragment extends Fragment
 
     private void handleResults(ArrayList<Ride> results)
     {
-        mDriverResultsList.setAdapter(new DriverResultsAdapter(getActivity(), results));
+        mDriverResultsList.setAdapter(new DriverResultsAdapter(getActivity(), results, mOnNextCallback));
+    }
+
+    @Override
+    public boolean validate()
+    {
+        return true;
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
 @SuppressWarnings("unused")
@@ -37,7 +38,7 @@ public class CruEventVM extends BaseObservable
 
     public View.OnClickListener onPassengerClicked()
     {
-        return v -> { /*parent.startActivity(new Intent(parent, PassengerSignupActivity.class));*/ };
+        return v -> parent.startActivity(new Intent(parent, PassengerSignupActivity.class));
     }
 
     public View.OnClickListener onDriverClicked()

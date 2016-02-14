@@ -1,36 +1,108 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup;
 
-import android.databinding.DataBindingUtil;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.databinding.FragmentPassengerFormBinding;
+import org.androidcru.crucentralcoast.presentation.customviews.NonSwipeableViewPager;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
-public class PassengerFormFragment extends Fragment
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+
+public class PassengerFormFragment extends FormContentFragment
 {
-
-    private FragmentPassengerFormBinding binding;
-    private PassengerFormValidator validator;
+    @Bind(R.id.viewPager) NonSwipeableViewPager viewPager;
+    private PassengerPagerAdapter passengerPagerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_passenger_form, container, false);
-        return binding.getRoot();
+        return inflater.inflate(R.layout.form, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        validator = new PassengerFormValidator(binding);
+        ButterKnife.bind(this, view);
 
-        binding.fab.setOnClickListener();
+        Observable<Void> onNextCallback = Observable.create(new Observable.OnSubscribe<Void>()
+        {
+            @Override
+            public void call(Subscriber<? super Void> subscriber)
+            {
+                onNext();
+                subscriber.onCompleted();
+            }
+        });
+
+        passengerPagerAdapter = new PassengerPagerAdapter(getChildFragmentManager(), 3, onNextCallback);
+        viewPager.setAdapter(passengerPagerAdapter);
+
+
+        formHolder.setToolbarExpansion(false);
+        formHolder.setTitle("Location Information");
+        formHolder.setPreviousVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        passengerPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onNext() {
+        boolean isValid = passengerPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem()).validate();
+        if(isValid)
+        {
+            switch(viewPager.getCurrentItem() + 1)
+            {
+                case 1:
+                    formHolder.setToolbarExpansion(false);
+                    formHolder.setTitle("Select A Driver");
+                    formHolder.setPreviousVisibility(View.VISIBLE);
+                    formHolder.setNextVisibility(View.GONE);
+                    break;
+                case 2:
+                    formHolder.setToolbarExpansion(false);
+                    formHolder.setTitle("Basic Information");
+                    formHolder.setPreviousVisibility(View.VISIBLE);
+                    formHolder.setNextVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    formHolder.complete();
+                    break;
+            }
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        }
+    }
+
+    @Override
+    public void onPrevious() {
+        switch(viewPager.getCurrentItem() - 1)
+        {
+            case 0:
+                formHolder.setToolbarExpansion(false);
+                formHolder.setTitle("Location Information");
+                formHolder.setPreviousVisibility(View.GONE);
+                break;
+            case 1:
+                formHolder.setToolbarExpansion(false);
+                formHolder.setTitle("Select A Driver");
+                formHolder.setPreviousVisibility(View.VISIBLE);
+                formHolder.setNextVisibility(View.GONE);
+                break;
+
+        }
+        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
     }
 }

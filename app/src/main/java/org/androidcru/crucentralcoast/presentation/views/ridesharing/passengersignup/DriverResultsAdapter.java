@@ -7,23 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.databinding.ItemDriverResultBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideResultVM;
 
 import java.util.ArrayList;
+import org.androidcru.crucentralcoast.BR;
+import rx.Observable;
 
 public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder>
 {
 
+    private Activity mParent;
     private ArrayList<Ride> rides;
-    private Activity parent;
+    private Observable<Void> mOnNextCallback;
 
-    public DriverResultsAdapter(Activity parent, ArrayList<Ride> rides)
+    public DriverResultsAdapter(Activity parent, ArrayList<Ride> rides, Observable<Void> onNextCallback)
     {
+        this.mParent = parent;
         this.rides = rides;
-        this.parent = parent;
+        this.mOnNextCallback = onNextCallback;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         @Override
         public void onClick(View v)
         {
-            parent.finish();
+            mOnNextCallback.subscribe();
         }
     }
 }

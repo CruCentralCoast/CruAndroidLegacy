@@ -188,8 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sex_field"
-                android:inputType="phone"
-                android:prompt="@string/preferred_driver_sex"/>
+                android:inputType="phone"/>
         </LinearLayout>
     </RelativeLayout>
 
