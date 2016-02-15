@@ -40,6 +40,9 @@ public interface CruApiService
     @GET("/api/ride/list")
     Observable<ArrayList<Ride>> getRides();
 
+//    @GET("api/event/:id")
+//    public CruEvent getEventByID(String id);
+
     //@POST("/api/passenger/create")
     //Observable<Passenger> postPassenger(@Body Passenger passenger);
 }

@@ -49,6 +49,7 @@
     <string name="edit">Edit</string>
     <string name="driver_signup">Driver Signup</string>
     <string name="passenger_signup">Passenger Signup</string>
+    <string name="cancel">Cancel</string>
 
     <string-array name="genders">
         <item>Select Gender</item>

@@ -25,6 +25,7 @@ import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 @SuppressWarnings("unused")
 public class RideVM extends BaseRideVM
@@ -36,6 +37,8 @@ public class RideVM extends BaseRideVM
     private Marker marker;
     private Circle circle;
     private LatLng center;
+
+    private boolean editing; //ride is being editted
     private static final double CALPOLY_LAT = 35.30021;
     private static final double CALPOLY_LNG = -120.66310;
 
@@ -45,6 +48,19 @@ public class RideVM extends BaseRideVM
         super(fm);
         this.ride = ride;
         direction = new ObservableField<>(null);
+        editing = false;
+    }
+
+    public RideVM(FragmentManager fm, Ride ride, boolean editing)
+    {
+        super(fm);
+        this.ride = ride;
+        direction = new ObservableField<>(null);
+        editing = true;
+
+        if (editing) {
+            populateBinds();
+        }
     }
 
     @Override
@@ -74,14 +90,28 @@ public class RideVM extends BaseRideVM
     @Override
     protected void placeSelected(Place place)
     {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
-        center = place.getLatLng();
-        setMarker(center);
+        //TODO: there used to be a "return new AdapterView.OnItem... but its a void function.... why?
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        if(radius != null)
-            setCircle(center, radius);
+                direction.set(position > 0 ? Ride.Direction.values()[position - 1] : null);
 
-        //TODO data sync
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
+                center = place.getLatLng();
+                setMarker(center);
+
+                if (radius != null)
+                    setCircle(center, radius);
+
+                //TODO data sync
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
     }
 
     @Override
@@ -183,5 +213,33 @@ public class RideVM extends BaseRideVM
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             map.animateCamera(cu);
         }
+    }
+
+    private void populateBinds() {
+        //set gender
+        //set car capacity
+        //set trip type
+        //set times
+        //TODO: get 2 sets of dates and times
+        //set location
+
+        //set map
+        //TODO: somehow get a LatLng from an address
+        //TODO: save a radius
+        //LatLng latlng = new LatLng(ride.location.)
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14.0f));
+        //setMarker(latlng);
+        //setCircle(latlng, radius);
+    }
+
+    public final static String DATE_FORMATTER = "EEEE MMMM ee,";
+    public final static String TIME_FORMATTER = "h:mm a";
+
+    public String getTime() {
+        return ride.time.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
+    }
+
+    public String getDate() {
+        return ride.time.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
     }
 }
