@@ -49,10 +49,10 @@ public abstract class BaseRideVM
         direction = new ObservableField<>(null);
     }
 
-    protected abstract void syncFromDate();
-    protected abstract void syncFromTime();
-    protected abstract void syncToDate();
-    protected abstract void syncToTime();
+    protected abstract void syncFromDate(LocalDate date);
+    protected abstract void syncFromTime(LocalTime time);
+    protected abstract void syncToDate(LocalDate date);
+    protected abstract void syncToTime(LocalTime time);
     protected abstract void placeSelected(Place place);
     protected abstract void tripTypeSelected(Ride.Direction direction);
     protected abstract void genderSelected(String gender);
@@ -92,8 +92,9 @@ public abstract class BaseRideVM
         return v -> {
             DatePickerDialog dpd = getDateDialog();
             dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
-                ((EditText) v).setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.ISO_LOCAL_DATE));
-                syncToDate();
+                LocalDate date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
+                ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                syncToDate(date);
             });
             dpd.show(fm, "whatever");
         };
@@ -105,8 +106,9 @@ public abstract class BaseRideVM
         return v -> {
             TimePickerDialog tpd = getTimeDialog();
             tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-                ((EditText) v).setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME));
-                syncToTime();
+                LocalTime time = LocalTime.of(hourOfDay, minute, second);
+                ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+                syncToTime(time);
             });
             tpd.show(fm, "whatever");
         };
@@ -119,8 +121,9 @@ public abstract class BaseRideVM
         return v -> {
             DatePickerDialog dpd = getDateDialog();
             dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
-                ((EditText) v).setText(LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth).format(DateTimeFormatter.ISO_LOCAL_DATE));
-                syncFromDate();
+                LocalDate date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
+                ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                syncFromDate(date);
             });
             dpd.show(fm, "whatever");
         };
@@ -131,8 +134,9 @@ public abstract class BaseRideVM
         return v -> {
             TimePickerDialog tpd = getTimeDialog();
             tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-                ((EditText) v).setText(LocalTime.of(hourOfDay, minute, second).format(DateTimeFormatter.ISO_LOCAL_TIME));
-                syncFromTime();
+                LocalTime time = LocalTime.of(hourOfDay, minute, second);
+                ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+                syncFromTime(time);
             });
             tpd.show(fm, "whatever");
         };

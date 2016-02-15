@@ -23,6 +23,8 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 
 @SuppressWarnings("unused")
 public class RideVM extends BaseRideVM
@@ -46,25 +48,25 @@ public class RideVM extends BaseRideVM
     }
 
     @Override
-    protected void syncFromDate()
+    protected void syncFromDate(LocalDate date)
     {
         //TODO
     }
 
     @Override
-    protected void syncFromTime()
+    protected void syncFromTime(LocalTime time)
     {
         //TODO
     }
 
     @Override
-    protected void syncToDate()
+    protected void syncToDate(LocalDate date)
     {
         //TODO
     }
 
     @Override
-    protected void syncToTime()
+    protected void syncToTime(LocalTime time)
     {
         //TODO
     }

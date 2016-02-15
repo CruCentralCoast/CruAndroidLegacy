@@ -5,54 +5,86 @@ import android.app.FragmentManager;
 import com.google.android.gms.location.places.Place;
 
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.RideFilter;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 
 public class RideFilterVM extends BaseRideVM
 {
 
-    public RideFilterVM(FragmentManager fm)
+    public RideFilter rideFilter;
+    private LocalDate toDate;
+    private LocalDate fromDate;
+    private LocalTime toTime;
+    private LocalTime fromTime;
+
+    public RideFilterVM(FragmentManager fm, RideFilter rideFilter)
     {
         super(fm);
+        this.rideFilter = rideFilter;
+    }
+
+    private void updateFromDateTime()
+    {
+        if(fromDate != null && fromTime != null)
+        {
+            rideFilter.fromDateTime = ZonedDateTime.of(fromDate, fromTime, ZoneId.systemDefault());
+        }
+    }
+
+    private void updateToDateTime()
+    {
+        if(toDate != null && toTime != null)
+        {
+            rideFilter.toDateTime = ZonedDateTime.of(toDate, toTime, ZoneId.systemDefault());
+        }
     }
 
     @Override
-    protected void syncFromDate()
+    protected void syncFromDate(LocalDate date)
     {
-        //TODO
+        fromDate = date;
+        updateFromDateTime();
     }
 
     @Override
-    protected void syncFromTime()
+    protected void syncFromTime(LocalTime time)
     {
-        //TODO
+        fromTime = time;
+        updateFromDateTime();
     }
 
     @Override
-    protected void syncToDate()
+    protected void syncToDate(LocalDate date)
     {
-        //TODO
+        toDate = date;
+        updateToDateTime();
     }
 
     @Override
-    protected void syncToTime()
+    protected void syncToTime(LocalTime time)
     {
-        //TODO
+        toTime = time;
+        updateToDateTime();
     }
 
     @Override
     protected void placeSelected(Place place)
     {
-        //TODO
+        rideFilter.location = place.getLatLng();
     }
 
     @Override
     protected void tripTypeSelected(Ride.Direction direction)
     {
-        //TODO
+        rideFilter.direction = direction;
     }
 
     @Override
     protected void genderSelected(String gender)
     {
-        //TODO
+        rideFilter.gender = gender;
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
@@ -21,6 +22,7 @@ public class DriverResultsFragment extends FormContentFragment
 {
 
     private RecyclerView driverResultsList;
+    private RideFilter filter;
 
     @Nullable
     @Override
@@ -33,6 +35,9 @@ public class DriverResultsFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        filter = ((PassengerSignupActivity) getActivity()).filter;
+
         driverResultsList = (RecyclerView) view.findViewById(R.id.driver_results_list);
         driverResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
         formHolder.setNavigationVisbility(View.GONE);
