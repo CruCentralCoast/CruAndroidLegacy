@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <data>
+        <import type="android.view.View"/>
+        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM"/>
+        <import type="org.androidcru.crucentralcoast.data.models.Ride"/>
+        <variable name="rideFilterVM" type="RideFilterVM"/>
+    </data>
+
+    <LinearLayout 
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:id="@+id/autocomplete_layout"
+            android:padding="8dp">
+    
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/autocomplete_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"/>
+            <fragment
+                android:id="@+id/place_autocomplete_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                class="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"/>
+        </RelativeLayout>
+    
+        <!-- trip type -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:id="@+id/trip_type_layout"
+            android:padding="8dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/trip_type_icon"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_car_grey600_48dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/trip_type_group"
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/trip_type_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/trip_type_field"
+                        android:prompt="@string/select_trip_type"
+                        android:layout_marginEnd="8dp"
+                        app:resources="@{@stringArray/trip_type}"
+                        app:onItemSelected="@{rideFilterVM.onTripTypeSelected}"/>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <!-- to -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:id="@+id/to_event_layout"
+            android:padding="8dp"
+            android:visibility="@{(rideFilterVM.direction == Ride.Direction.TO || rideFilterVM.direction == Ride.Direction.ROUNDTRIP) ? View.VISIBLE : View.GONE}">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/to_event_icon"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_account_grey600_48dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/to_event_date_field"
+                android:hint="To Event Date"
+                android:inputType="date"
+                android:focusable="false"
+                android:layout_toEndOf="@+id/to_event_icon"
+                app:onKey="@{null}"
+                android:onClick="@{rideFilterVM.onToEventDateClicked}"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/to_event_time_field"
+                android:hint="To EventTime"
+                android:inputType="time"
+                android:layout_alignParentEnd="false"
+                android:focusable="false"
+                android:layout_toEndOf="@+id/to_event_date_field"
+                app:onKey="@{null}"
+                android:onClick="@{rideFilterVM.onToEventTimeClicked}"/>
+        </RelativeLayout>
+        <!-- from -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:id="@+id/from_event_layout"
+            android:padding="8dp"
+            android:visibility="@{(rideFilterVM.direction == Ride.Direction.FROM || rideFilterVM.direction == Ride.Direction.ROUNDTRIP) ? View.VISIBLE : View.GONE}">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/from_event_icon"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_account_grey600_48dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/from_event_date_field"
+                android:hint="From Event Date"
+                android:inputType="date"
+                android:focusable="false"
+                android:layout_toEndOf="@+id/from_event_icon"
+                app:onKey="@{null}"
+                android:onClick="@{rideFilterVM.onFromEventDateClicked}"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/from_event_time_field"
+                android:hint="From Event Time"
+                android:inputType="time"
+                android:layout_alignParentEnd="false"
+                android:focusable="false"
+                android:layout_toEndOf="@+id/from_event_date_field"
+                app:onKey="@{null}"
+                android:onClick="@{rideFilterVM.onFromEventTimeClicked}"
+                />
+        </RelativeLayout>
+
+        <!-- gender -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:id="@+id/gender_layout"
+            android:padding="8dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/gender_icon"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_account_multiple_outline_grey600_48dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_layout_gender"
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/gender_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp">
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gender_field"
+                    app:resources="@{@stringArray/genders}"
+                    app:onItemSelected="@{rideFilterVM.onGenderSelected}"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

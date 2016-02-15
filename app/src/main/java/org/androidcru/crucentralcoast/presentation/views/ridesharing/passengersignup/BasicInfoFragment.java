@@ -24,7 +24,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class PassengerBasicInfoFragment extends FormContentFragment implements Validator.ValidationListener {
+public class BasicInfoFragment extends FormContentFragment implements Validator.ValidationListener {
 
     // Used for phone number validation
     public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +

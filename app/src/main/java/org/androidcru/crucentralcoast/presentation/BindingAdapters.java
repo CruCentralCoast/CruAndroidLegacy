@@ -95,10 +95,9 @@ public class BindingAdapters
     }
 
     @BindingAdapter({"bind:resources", "bind:onItemSelected"})
-    public static void setSpinner(Spinner spinner, int resourcesId, AdapterView.OnItemSelectedListener onItemSelected)
+    public static void setSpinner(Spinner spinner, String[] resources, AdapterView.OnItemSelectedListener onItemSelected)
     {
         Context context = spinner.getContext();
-        String[] resources = context.getResources().getStringArray(resourcesId);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item,
                 resources);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);

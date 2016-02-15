@@ -4,6 +4,4 @@ public interface FormContent
 {
     void onNext();
     void onPrevious();
-    void setSuccessor(FormContent formContent);
-    FormContent getSuccessor();
 }
