@@ -66,6 +66,7 @@ public class RideVM extends BaseObservable
     private Marker marker;
     private Circle circle;
     private LatLng center;
+    private boolean editing; //ride is being editted
 
 
     public RideVM(FragmentManager fm, Ride ride)
@@ -73,6 +74,19 @@ public class RideVM extends BaseObservable
         this.fm = fm;
         this.ride = ride;
         direction = new ObservableField<>(null);
+        editing = false;
+    }
+
+    public RideVM(FragmentManager fm, Ride ride, boolean editing)
+    {
+        this.fm = fm;
+        this.ride = ride;
+        direction = new ObservableField<>(null);
+        editing = true;
+
+        if (editing) {
+            populateBinds();
+        }
     }
 
     public void onDriverNameChanged(CharSequence s, int start, int before, int count)
@@ -128,6 +142,7 @@ public class RideVM extends BaseObservable
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
+
                 direction.set(position > 0 ? Ride.Direction.values()[position - 1] : null);
             }
 
@@ -308,4 +323,31 @@ public class RideVM extends BaseObservable
         }
     }
 
+    private void populateBinds() {
+        //set gender
+        //set car capacity
+        //set trip type
+        //set times
+        //TODO: get 2 sets of dates and times
+        //set location
+
+        //set map
+        //TODO: somehow get a LatLng from an address
+        //TODO: save a radius
+        //LatLng latlng = new LatLng(ride.location.)
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14.0f));
+        //setMarker(latlng);
+        //setCircle(latlng, radius);
+    }
+
+    public final static String DATE_FORMATTER = "EEEE MMMM ee,";
+    public final static String TIME_FORMATTER = "h:mm a";
+
+    public String getTime() {
+        return ride.time.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
+    }
+
+    public String getDate() {
+        return ride.time.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+    }
 }
