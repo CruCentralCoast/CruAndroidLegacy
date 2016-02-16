@@ -121,7 +121,6 @@ public class MyRidesDriverFragment extends Fragment {
                 .subscribe(rideSubscriber);
     }
 
-
     /**
      * Updates the UI to reflect the Events in events
      * @param rides List of new Events the UI should adhere to

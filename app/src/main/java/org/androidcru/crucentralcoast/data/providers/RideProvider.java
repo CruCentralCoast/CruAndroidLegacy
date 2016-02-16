@@ -28,6 +28,12 @@ public final class RideProvider
                 .subscribeOn(Schedulers.io());
     }
 
+    public Observable<Ride> createRide(Ride ride)
+    {
+        return mCruService.postRide(ride)
+                .subscribeOn(Schedulers.io());
+    }
+
     public Ride requestRideByID(String id)
     {
 //        ArrayList<Ride> newRides = new ArrayList<Ride>();

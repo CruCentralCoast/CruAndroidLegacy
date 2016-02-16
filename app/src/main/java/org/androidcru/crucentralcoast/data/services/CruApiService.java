@@ -9,6 +9,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 
 import java.util.ArrayList;
 
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -39,6 +40,9 @@ public interface CruApiService
 
     @GET("/api/ride/list")
     Observable<ArrayList<Ride>> getRides();
+
+    @POST("/api/ride/create")
+    Observable<Ride> postRide(@Body Ride ride);
 
 //    @GET("api/event/:id")
 //    public CruEvent getEventByID(String id);
