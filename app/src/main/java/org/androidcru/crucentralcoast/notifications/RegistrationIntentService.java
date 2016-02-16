@@ -77,8 +77,8 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Saves this locally
-        CruApplication.saveGCMKey(token);
-        Logger.e(token);
+        CruApplication.saveGCMID(token);
+        Logger.d(token);
     }
 
     public static void subscribeToMinistry(final String topic)

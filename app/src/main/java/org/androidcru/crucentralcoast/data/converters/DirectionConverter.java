@@ -17,7 +17,7 @@ public class DirectionConverter implements JsonDeserializer<Ride.Direction>, Jso
 
     @Override
     public JsonElement serialize(Ride.Direction src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.toString());
+        return new JsonPrimitive(src.toString().toLowerCase());
     }
 
     @Override

@@ -17,9 +17,12 @@ public class Ride
     @SerializedName("passengers") public ArrayList<String> passengers;
     @SerializedName("radius") public double radius;
     @SerializedName("direction") public Direction direction;
+    @SerializedName("gcm_id") public String gcmID;
     public int carCapacity;
 
-    public Ride(String driverName, String driverNumber, String gender, String eventId, ZonedDateTime time, Location location, ArrayList<String> passengers)
+    public Ride(String driverName, String driverNumber, String gender, String eventId,
+                ZonedDateTime time, Location location, ArrayList<String> passengers,
+                double radius, Direction direction, String gcmID, int carCapacity)
     {
         this.driverName = driverName;
         this.driverNumber = driverNumber;
@@ -28,6 +31,10 @@ public class Ride
         this.time = time;
         this.location = location;
         this.passengers = passengers;
+        this.radius = radius;
+        this.direction = direction;
+        this.gcmID = gcmID;
+        this.carCapacity = carCapacity;
     }
 
     public Ride() {}

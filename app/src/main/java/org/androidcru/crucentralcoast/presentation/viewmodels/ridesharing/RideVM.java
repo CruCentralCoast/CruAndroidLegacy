@@ -21,7 +21,6 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
 import org.threeten.bp.LocalDate;
@@ -91,28 +90,14 @@ public class RideVM extends BaseRideVM
     @Override
     protected void placeSelected(Place place)
     {
-        //TODO: there used to be a "return new AdapterView.OnItem... but its a void function.... why?
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
+        center = place.getLatLng();
+        setMarker(center);
 
-                direction.set(position > 0 ? Ride.Direction.values()[position - 1] : null);
+        if (radius != null)
+            setCircle(center, radius);
 
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
-                center = place.getLatLng();
-                setMarker(center);
-
-                if (radius != null)
-                    setCircle(center, radius);
-
-                //TODO data sync
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
+        //TODO data sync
     }
 
     @Override

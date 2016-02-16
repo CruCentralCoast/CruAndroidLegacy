@@ -10,23 +10,18 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.databinding.ActivityDriverFormBinding;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideVM;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.MyRidesDriverAdapter;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 
-import rx.Observable;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-
-import org.androidcru.crucentralcoast.data.services.CruApiService;
-import org.threeten.bp.ZonedDateTime;
 
 public class DriverSignupActivity extends AppCompatActivity
 {
@@ -78,12 +73,14 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void createDriver()
     {
-        Ride ride = new Ride("Test", "4444444444", "", "563b11135e926d03001ac15c", null, null, new ArrayList<String>());
+        Ride ride = new Ride("Test", "4444444444", "Man", "563b11135e926d03001ac15c", ZonedDateTime.now(),
+                new Location("93405", "CA", "San Luis Obispo", "1 Grand Ave", "USA"), new ArrayList<>(), 1.0, Ride.Direction.TO,
+                CruApplication.getGCMID(), 4);
         // TODO: change this to use rideVM.ride.
         RideProvider.getInstance().createRide(ride)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
-                    Logger.e("Output is", current.toString());
+                    Logger.d("Output is", current.toString());
                 }, throwable -> {Logger.e("Error:", throwable.getMessage());
                 });
     }

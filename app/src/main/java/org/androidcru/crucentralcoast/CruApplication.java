@@ -114,12 +114,12 @@ public class CruApplication extends MultiDexApplication
         gson = builder.create();
     }
 
-    public static void saveGCMKey(String key)
+    public static void saveGCMID(String key)
     {
         CruApplication.getSharedPreferences().edit().putString(context.getString(R.string.gcm_registration_id), key).apply();
     }
 
-    public static String getGCMKey()
+    public static String getGCMID()
     {
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
     }
