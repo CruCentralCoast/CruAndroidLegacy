@@ -3,7 +3,7 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-public class FormContentFragment extends Fragment implements FormContent
+public abstract class FormContentFragment extends Fragment implements FormContent
 {
     protected FormHolder formHolder;
     protected FormAdapter adapter;

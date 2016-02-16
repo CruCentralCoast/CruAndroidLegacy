@@ -9,7 +9,7 @@ public interface FormHolder
     void setNextVisibility(int visibility);
     void setToolbarExpansion(boolean expanded);
     void complete();
-    void setNavigationVisbility(int visibility);
+    void setNavigationVisibility(int visibility);
     void next();
     void prev();
 }

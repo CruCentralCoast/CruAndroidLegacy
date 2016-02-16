@@ -16,6 +16,8 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
+import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
+import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
 public class CruApplication extends MultiDexApplication
@@ -108,6 +110,7 @@ public class CruApplication extends MultiDexApplication
     {
         GsonBuilder builder = new GsonBuilder();
         builder = ThreeTenGsonAdapter.registerAll(builder);
+        builder.registerTypeAdapter(Ride.Direction.class, new DirectionConverter());
         gson = builder.create();
     }
 

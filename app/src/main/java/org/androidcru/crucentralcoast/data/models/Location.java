@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.data.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 public class Location
@@ -9,6 +10,7 @@ public class Location
     @SerializedName("suburb") String mSuburb;
     @SerializedName("street1") String mStreet1;
     @SerializedName("country") String mCountry;
+    public LatLng preciseLocation;
 
     /**
      * Required for Gson/RetroFit
@@ -24,9 +26,15 @@ public class Location
         this.mCountry = country;
     }
 
-    public String toString()
+    public String getAsQuery()
     {
         String locString = String.format("%s %s, %s, %s, %s", mStreet1, mSuburb, mState, mPostcode, mCountry);
         return locString.replace(" ", "+");
+    }
+
+
+    public String toString()
+    {
+        return String.format("%s %s, %s, %s, %s", mStreet1, mSuburb, mState, mPostcode, mCountry);
     }
 }

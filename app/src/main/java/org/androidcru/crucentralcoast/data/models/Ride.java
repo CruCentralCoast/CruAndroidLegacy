@@ -15,7 +15,8 @@ public class Ride
     @SerializedName("time") public ZonedDateTime time;
     @SerializedName("location") public Location location;
     @SerializedName("passengers") public ArrayList<String> passengers;
-    public Direction direction;
+    @SerializedName("radius") public double radius;
+    @SerializedName("direction") public Direction direction;
     public int carCapacity;
 
     public Ride(String driverName, String driverNumber, String gender, String eventId, ZonedDateTime time, Location location, ArrayList<String> passengers)

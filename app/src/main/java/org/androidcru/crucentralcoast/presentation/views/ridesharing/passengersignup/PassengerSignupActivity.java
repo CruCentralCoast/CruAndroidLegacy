@@ -39,6 +39,6 @@ public class PassengerSignupActivity extends FormActivity
 
         fragments.add(new BasicInfoFragment());
 
-        setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), fragments, this));
+        setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), this, fragments));
     }
 }

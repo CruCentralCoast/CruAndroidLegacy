@@ -3,18 +3,17 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.SparseArray;
+import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
-
-import java.lang.ref.WeakReference;
 
 public abstract class FormAdapter extends FragmentStatePagerAdapter
 {
-    SparseArray<WeakReference<Fragment>> registeredFragments = new SparseArray<>();
-
-    public FormAdapter(FragmentManager fm)
+    private FormActivity parent;
+    public FormAdapter(FragmentManager fm, FormActivity parent)
     {
         super(fm);
+        this.parent = parent;
     }
 
     public abstract FormContentFragment getFormPage(int position);
@@ -26,19 +25,15 @@ public abstract class FormAdapter extends FragmentStatePagerAdapter
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        registeredFragments.put(position, new WeakReference<>(fragment));
-        return fragment;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        registeredFragments.remove(position);
-        super.destroyItem(container, position, object);
-    }
-
-    public Fragment getRegisteredFragment(int position) {
-        return registeredFragments.get(position).get();
+    public void finishUpdate(ViewGroup container)
+    {
+        super.finishUpdate(container);
+        if (((ViewPager) container).getCurrentItem() == 0)
+        {
+            getFormPage(0).formHolder.clearUI();
+            getFormPage(0).formHolder.setPreviousVisibility(View.GONE);
+            getFormPage(0).setupUI();
+        }
+        parent.setCurrentFormContent(getFormPage(((ViewPager) container).getCurrentItem()));
     }
 }

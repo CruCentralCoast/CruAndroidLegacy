@@ -31,8 +31,7 @@ public class BasicInfoFragment extends FormContentFragment implements Validator.
             "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
 
     @NotEmpty
-    @Bind(R.id.name_field)
-    EditText nameField;
+    @Bind(R.id.name_field) EditText nameField;
     @NotEmpty @Pattern(regex = PHONE_REGEX) @Bind(R.id.phone_field) EditText phoneField;
 
     private Validator validator;
@@ -55,6 +54,13 @@ public class BasicInfoFragment extends FormContentFragment implements Validator.
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         validator.setValidationListener(this);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Logger.d("OnResume called");
     }
 
     private boolean validate()
@@ -95,5 +101,8 @@ public class BasicInfoFragment extends FormContentFragment implements Validator.
         if(validate())
             super.onNext();
     }
+
+    @Override
+    public void setupUI() {}
 }
 

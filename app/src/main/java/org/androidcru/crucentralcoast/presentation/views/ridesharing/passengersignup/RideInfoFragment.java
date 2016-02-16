@@ -42,10 +42,12 @@ public class RideInfoFragment extends FormContentFragment {
 
         validator = new RideInfoValidator(binding);
 
-        autocompleteFragment = (SupportPlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         setupPlacesAutocomplete();
-
     }
+
+    @Override
+    public void setupUI() {}
 
     private void setupPlacesAutocomplete()
     {

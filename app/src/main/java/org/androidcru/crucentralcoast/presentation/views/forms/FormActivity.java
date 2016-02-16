@@ -2,7 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,15 +53,10 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         }
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment)
+    protected void setCurrentFormContent(FormContent content)
     {
-        super.onAttachFragment(fragment);
-        if(fragment instanceof FormContent)
-        {
-            currentFormContent = (FormContent) fragment;
-            setupButtonListeners();
-        }
+        currentFormContent = content;
+        setupButtonListeners();
     }
 
     private void setupButtonListeners()
@@ -78,16 +73,48 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     }
 
     @Override
+    public void onBackPressed()
+    {
+        if(binding.viewPager.getCurrentItem() != 0)
+        {
+            currentFormContent.onPrevious();
+        }
+        else
+        {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void setAdapter(FormAdapter adapter)
     {
         binding.viewPager.setAdapter(adapter);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                adapter.getFormPage(position).formHolder.clearUI();
+                adapter.getFormPage(position).setupUI();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+            }
+        });
     }
 
     @Override
     public void clearUI()
     {
         setTitle(getResources().getString(R.string.app_name));
-        setNavigationVisbility(View.VISIBLE);
+        setNavigationVisibility(View.VISIBLE);
         setPreviousVisibility(View.VISIBLE);
         setNextVisibility(View.VISIBLE);
         setToolbarExpansion(false);
@@ -124,7 +151,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     }
 
     @Override
-    public void setNavigationVisbility(int visibility)
+    public void setNavigationVisibility(int visibility)
     {
         binding.bottomBar.setVisibility(visibility);
     }
