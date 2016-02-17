@@ -73,7 +73,7 @@ public class RideInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            ((PassengerSignupActivity) getActivity()).filter = rideFilterVM.rideFilter;
+            formHolder.addDataObject(rideFilterVM.rideFilter);
             super.onNext();
         }
     }

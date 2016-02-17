@@ -11,6 +11,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.databinding.ItemDriverResultBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideResultVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContent;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 import java.util.List;
 
@@ -19,11 +20,13 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
 
     private FormContent formContent;
     private List<Ride> rides;
+    private FormHolder formHolder;
 
-    public DriverResultsAdapter(FormContent formContent, List<Ride> rides)
+    public DriverResultsAdapter(FormContent formContent, FormHolder holder, List<Ride> rides)
     {
         this.formContent = formContent;
         this.rides = rides;
+        this.formHolder = holder;
     }
 
     @Override
@@ -66,6 +69,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         @Override
         public void onClick(View v)
         {
+            formHolder.addDataObject(getBinding().getRideResultVM().ride);
             formContent.onNext();
         }
     }

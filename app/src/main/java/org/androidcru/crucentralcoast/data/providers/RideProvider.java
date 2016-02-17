@@ -34,6 +34,12 @@ public final class RideProvider
                 .subscribeOn(Schedulers.io());
     }
 
+    public Observable<Void> addPassengerToRide(String passengerId, String rideId)
+    {
+        return mCruService.addPassenger(rideId, passengerId)
+                .subscribeOn(Schedulers.io());
+    }
+
     public Ride requestRideByID(String id)
     {
 //        ArrayList<Ride> newRides = new ArrayList<Ride>();

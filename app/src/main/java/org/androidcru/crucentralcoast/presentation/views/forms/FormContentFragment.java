@@ -8,6 +8,8 @@ public abstract class FormContentFragment extends Fragment implements FormConten
     protected FormHolder formHolder;
     protected FormAdapter adapter;
 
+
+
     @Override
     public void onAttach(Context context)
     {
@@ -25,5 +27,11 @@ public abstract class FormContentFragment extends Fragment implements FormConten
     public void onPrevious()
     {
         formHolder.prev();
+    }
+
+    @Override
+    public void addDataObject(Object dataObject)
+    {
+        formHolder.addDataObject(dataObject);
     }
 }
