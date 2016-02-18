@@ -13,6 +13,7 @@ import android.view.View;
 
 import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.data.models.Passenger;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.PassengerProvider;
@@ -102,6 +103,7 @@ public class MyRidesDriverVM extends BaseObservable {
         Intent intent = new Intent(parent, DriverSignupActivity.class);
         Bundle extras = new Bundle();
         extras.putString(RIDE_KEY, ride.id);
+        extras.putString(CruApplication.EVENT_ID, ride.eventId);
         intent.putExtras(extras);
         return v -> parent.startActivity(intent);
     }

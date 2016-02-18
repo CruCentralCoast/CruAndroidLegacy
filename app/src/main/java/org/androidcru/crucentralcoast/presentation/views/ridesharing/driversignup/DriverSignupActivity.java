@@ -10,6 +10,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
@@ -32,8 +33,6 @@ public class DriverSignupActivity extends AppCompatActivity
 
     //TODO: put this somewhere else
     private static final String RIDE_KEY = "filled ride";
-    private Ride ride;
-    private String driverNum;
     private String eventID;
 
     @Override
@@ -41,7 +40,20 @@ public class DriverSignupActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.progress_layout);
 
-        if (getIntent().getExtras() != null) {
+        Bundle bundle = getIntent().getExtras();
+        if(bundle == null || bundle.getString(CruApplication.EVENT_ID, "").isEmpty())
+        {
+            Logger.e("PassengerSignupActivity requires that you pass an event ID.");
+            Logger.e("Finishing activity...");
+            finish();
+            return;
+        }
+        else
+        {
+            eventID = bundle.getString(CruApplication.EVENT_ID, "");
+        }
+
+        if (getIntent().getExtras().containsKey(RIDE_KEY)) {
             requestRides();
         }
         else
@@ -88,7 +100,6 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void requestRides()
     {
-        ride = null;
         String rideId = getIntent().getExtras().getString(RIDE_KEY);
         RideProvider.getInstance().requestRideByID(rideId)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -114,11 +125,13 @@ public class DriverSignupActivity extends AppCompatActivity
 
         setupFab();
         if (r == null) {
-            rideVM = new RideVM(getFragmentManager(), new Ride("563b11135e926d03001ac15c"));
+            rideVM = new RideVM(getFragmentManager(), new Ride());
         }
         else {
             rideVM = new RideVM(getFragmentManager(), r, true);
         }
+        rideVM.ride.eventId = eventID;
+        rideVM.ride.gcmID = CruApplication.getGCMID();
         mapFragment.getMapAsync(rideVM.onMapReady());
         setupPlacesAutocomplete();
 
