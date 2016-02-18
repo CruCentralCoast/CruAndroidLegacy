@@ -1,7 +1,9 @@
 package org.androidcru.crucentralcoast.data.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
@@ -21,9 +23,12 @@ public class Ride
     @SerializedName("_id") public String id;
     public int carCapacity;
 
+    // name, phone, gender, event id, car capacity, direction, time, location
+    // need gcmID, radius
     public Ride(String driverName, String driverNumber, String gender, String eventId,
-                ZonedDateTime time, Location location, ArrayList<String> passengers,
-                double radius, Direction direction, String gcmID, int carCapacity)
+                ZonedDateTime time, Location location, //ArrayList<String> passengers,
+                double radius, Direction direction, //String gcmID,
+                int carCapacity)
     {
         this.driverName = driverName;
         this.driverNumber = driverNumber;
@@ -31,14 +36,19 @@ public class Ride
         this.eventId = eventId;
         this.time = time;
         this.location = location;
-        this.passengers = passengers;
+        this.passengers = new ArrayList<>();
         this.radius = radius;
         this.direction = direction;
-        this.gcmID = gcmID;
+        this.gcmID = CruApplication.getGCMID();//gcmID;
         this.carCapacity = carCapacity;
     }
 
-    public Ride() {}
+    public Ride(String eventID)
+    {
+        this.eventId = eventID;
+        this.gcmID = CruApplication.getGCMID();
+        this.passengers = new ArrayList<>();
+    }
 
     public enum Direction
     {

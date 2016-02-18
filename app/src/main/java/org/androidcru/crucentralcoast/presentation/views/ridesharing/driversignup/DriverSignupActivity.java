@@ -73,11 +73,12 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void createDriver()
     {
-        Ride ride = new Ride("Test", "4444444444", "Man", "563b11135e926d03001ac15c", ZonedDateTime.now(),
-                new Location("93405", "CA", "San Luis Obispo", "1 Grand Ave", "USA"), new ArrayList<>(), 1.0, Ride.Direction.TO,
-                CruApplication.getGCMID(), 4);
+//        Ride ride = new Ride("Test", "4444444444", "Man", "563b11135e926d03001ac15c", ZonedDateTime.now(),
+//                new Location("93405", "CA", "San Luis Obispo", "1 Grand Ave", "USA"), new ArrayList<>(), 1.0, Ride.Direction.TO,
+//                CruApplication.getGCMID(), 4);
         // TODO: change this to use rideVM.ride.
-        RideProvider.getInstance().createRide(ride)
+        Logger.d(rideVM.ride.eventId);
+        RideProvider.getInstance().createRide(rideVM.ride)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
                     Logger.d("Output is", current.toString());
@@ -126,7 +127,7 @@ public class DriverSignupActivity extends AppCompatActivity
     //binds a ride to the view
     private void bindNewRideVM(Ride r) {
         if (r == null) {
-            rideVM = new RideVM(getFragmentManager(), new Ride());
+            rideVM = new RideVM(getFragmentManager(), new Ride("563b11135e926d03001ac15c"));
         }
         else {
             rideVM = new RideVM(getFragmentManager(), r, true);

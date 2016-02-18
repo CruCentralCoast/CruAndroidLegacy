@@ -20,12 +20,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class RideVM extends BaseRideVM
@@ -37,6 +43,8 @@ public class RideVM extends BaseRideVM
     private Marker marker;
     private Circle circle;
     private LatLng center;
+    private LocalDate date;
+    private LocalTime time;
 
     private boolean editing; //ride is being editted
     private static final double CALPOLY_LAT = 35.30021;
@@ -67,24 +75,29 @@ public class RideVM extends BaseRideVM
     protected void syncFromDate(LocalDate date)
     {
         //TODO
+        // server only supports one datetime at the moment.
     }
 
     @Override
     protected void syncFromTime(LocalTime time)
     {
         //TODO
+        // server only supports one datetime at the moment.
     }
 
     @Override
     protected void syncToDate(LocalDate date)
     {
-        //TODO
+        this.date = date;
+        updateToDateTime();
     }
 
     @Override
     protected void syncToTime(LocalTime time)
     {
-        //TODO
+        this.time = time;
+        updateToDateTime();
+
     }
 
     @Override
@@ -97,11 +110,20 @@ public class RideVM extends BaseRideVM
         if (radius != null)
             setCircle(center, radius);
 
-        //TODO data sync
+        //Logger.e(String.valueOf(place.getAddress()));
+        String address = String.valueOf(place.getAddress());
+        String[] splitAddress = address.split("\\s*,\\s*");
+        String[] splitStateZip = splitAddress[2].split(" ");
+        ride.location = new Location(splitStateZip[1], splitStateZip[0],
+                splitAddress[1], splitAddress[0], splitAddress[3]);
+        ride.location.preciseLocation = place.getLatLng();
     }
 
     @Override
-    protected void tripTypeSelected(Ride.Direction direction) {}
+    protected void tripTypeSelected(Ride.Direction direction)
+    {
+        ride.direction = direction;
+    }
 
     @Override
     protected void genderSelected(String gender)
@@ -117,6 +139,24 @@ public class RideVM extends BaseRideVM
     public void onDriverNumberChanged(CharSequence s, int start, int before, int count)
     {
         ride.driverNumber = s.toString();
+    }
+
+    public AdapterView.OnItemSelectedListener onGenderSelected()
+    {
+        return new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if(position > 0)
+                {
+                    ride.gender = ((TextView) view).getText().toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
     }
 
     public AdapterView.OnItemSelectedListener onCarCapacitySelected()
@@ -145,7 +185,7 @@ public class RideVM extends BaseRideVM
             {
                 this.radius = Double.valueOf(s.toString());
                 setCircle(center, this.radius);
-                //TODO data sync
+                ride.radius = radius;
             }
             catch (NumberFormatException e)
             {}
@@ -227,5 +267,13 @@ public class RideVM extends BaseRideVM
 
     public String getDate() {
         return ride.time.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+    }
+
+    private void updateToDateTime()
+    {
+        if(date != null && time != null)
+        {
+            ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());
+        }
     }
 }
