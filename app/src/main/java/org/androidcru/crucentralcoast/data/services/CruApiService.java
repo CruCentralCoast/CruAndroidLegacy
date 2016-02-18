@@ -68,7 +68,7 @@ public interface CruApiService
     Observable<Void> addPassenger(@Field("ride_id") String rideId, @Field("passenger_id") String passengerId);
 
     @FormUrlEncoded
-    @POST
+    @POST("/api/ride/dropPassenger")
     Observable<Void> dropPassenger(@Field("ride_id") String rideId, @Field("passengerSid") String passengerId);
 
     @FormUrlEncoded

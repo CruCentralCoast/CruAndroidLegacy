@@ -97,8 +97,11 @@ public class MyRidesPassengerVM extends BaseObservable {
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.getInstance().dropPassengerFromRide(ride.passengers.get(0), ride.id)
-                        .observeOn(AndroidSchedulers.mainThread());
+                if(!ride.passengers.isEmpty())
+                {
+                    RideProvider.getInstance().dropPassengerFromRide(ride.passengers.get(0), ride.id)
+                            .observeOn(AndroidSchedulers.mainThread());
+                }
             }
         });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
