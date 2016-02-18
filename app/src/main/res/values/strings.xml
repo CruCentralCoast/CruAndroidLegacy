@@ -53,8 +53,8 @@
 
     <string-array name="genders">
         <item>Select Gender</item>
-        <item>Man</item>
-        <item>Woman</item>
+        <item>Male</item>
+        <item>Female</item>
     </string-array>
 
     <string-array name="car_capacity">
