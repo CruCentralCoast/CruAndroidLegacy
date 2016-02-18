@@ -93,20 +93,20 @@ public class MyRidesPassengerAdapter extends RecyclerView.Adapter<MyRidesPasseng
         @Override
         public void onClick(View v)
         {
-            int visibility;
-            if(getBinding().passengerList.getVisibility() == View.VISIBLE)
-            {
-                visibility = View.GONE;
-            }
-            else
-            {
-                visibility = View.VISIBLE;
-            }
-            getBinding().passengerList.setVisibility(visibility);
+//            int visibility;
+//            if(getBinding().driverInfo.getVisibility() == View.VISIBLE)
+//            {
+//                visibility = View.GONE;
+//            }
+//            else
+//            {
+//                visibility = View.VISIBLE;
+//            }
+//            getBinding().driverInfo.setVisibility(visibility);
 
-            rides.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
-            notifyItemChanged(getAdapterPosition());
-            layoutManager.scrollToPosition(getAdapterPosition());
+//            rides.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
+//            notifyItemChanged(getAdapterPosition());
+//            layoutManager.scrollToPosition(getAdapterPosition());
         }
     }
 }

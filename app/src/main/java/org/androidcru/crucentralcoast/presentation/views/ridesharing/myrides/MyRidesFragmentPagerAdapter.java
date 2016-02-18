@@ -28,7 +28,7 @@ public class MyRidesFragmentPagerAdapter extends FragmentPagerAdapter {
                 frag = new MyRidesDriverFragment();
             break;
             case 1:
-                frag = new MyRidesDriverFragment();
+                frag = new MyRidesPassengerFragment();
             break;
         }
 

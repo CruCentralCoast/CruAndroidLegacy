@@ -42,6 +42,7 @@ public class MyRidesPassengerVM extends BaseObservable {
         passengerList = new ObservableField<>();
         eventName = new ObservableField<>();
         initAlertDialog();
+        updateEventName();
     }
 
     //TODO: will eventually need to get a to and from time, not just 1
@@ -60,7 +61,6 @@ public class MyRidesPassengerVM extends BaseObservable {
                 .subscribe(results -> {
                     eventName.set(results.mName);
                 });
-
     }
 
     public String getLocation() {
@@ -77,17 +77,17 @@ public class MyRidesPassengerVM extends BaseObservable {
     private static final String RIDE_KEY = "filled ride";
 
     //Sends the info about the ride to the DriverSignupActivity so that it can fill in the data
-    public View.OnClickListener onEditOfferingClicked()
-    {
-        Intent intent = new Intent(parent, DriverSignupActivity.class);
-        Bundle extras = new Bundle();
-        ArrayList<String> temp = new ArrayList<String>();
-        temp.add(ride.driverNumber);
-        temp.add(ride.eventId);
-        extras.putStringArrayList(RIDE_KEY, temp);
-        intent.putExtras(extras);
-        return v -> parent.startActivity(intent);
-    }
+//    public View.OnClickListener onEditOfferingClicked()
+//    {
+//        Intent intent = new Intent(parent, DriverSignupActivity.class);
+//        Bundle extras = new Bundle();
+//        ArrayList<String> temp = new ArrayList<String>();
+//        temp.add(ride.driverNumber);
+//        temp.add(ride.eventId);
+//        extras.putStringArrayList(RIDE_KEY, temp);
+//        intent.putExtras(extras);
+//        return v -> parent.startActivity(intent);
+//    }
 
     private void initAlertDialog()
     {
