@@ -3,6 +3,8 @@ package org.androidcru.crucentralcoast.data.providers;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -24,6 +26,20 @@ public final class PassengerProvider
     public Observable<Passenger> addPassenger(Passenger passenger)
     {
         return mCruService.createPassenger(passenger)
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<List<Passenger>> getPassengers(List<String> passengers)
+    {
+        return Observable.from(passengers)
+                .flatMap(passengerId -> {
+                    return mCruService.findSinglePassenger(passengerId)
+                            .flatMap(passengers1 -> {
+                                return Observable.from(passengers1);
+                            })
+                            .subscribeOn(Schedulers.io());
+                })
+                .toList()
                 .subscribeOn(Schedulers.io());
     }
 

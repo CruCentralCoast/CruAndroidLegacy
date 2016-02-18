@@ -9,6 +9,7 @@ import android.widget.EditText;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.orhanobut.logger.Logger;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -53,7 +54,7 @@ public abstract class BaseRideVM
     protected abstract void syncFromTime(LocalTime time);
     protected abstract void syncToDate(LocalDate date);
     protected abstract void syncToTime(LocalTime time);
-    protected abstract void placeSelected(Place place);
+    protected abstract void placeSelected(LatLng precisePlace, String placeAddress);
     protected abstract void tripTypeSelected(Ride.Direction direction);
     protected abstract void genderSelected(String gender);
 
@@ -183,7 +184,7 @@ public abstract class BaseRideVM
         return new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                placeSelected(place);
+                placeSelected(place.getLatLng(), place.getAddress().toString());
             }
 
             @Override

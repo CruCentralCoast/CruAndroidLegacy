@@ -12,15 +12,18 @@ import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -35,12 +38,12 @@ public class MyRidesDriverFragment extends Fragment {
     private ArrayList<MyRidesDriverVM> rideVMs;
     private LinearLayoutManager layoutManager;
 
-    private Observer<ArrayList<Ride>> rideSubscriber;
+    private Observer<List<Ride>> rideSubscriber;
 
     public MyRidesDriverFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = new Observer<ArrayList<Ride>>()
+        rideSubscriber = new Observer<List<Ride>>()
         {
             @Override
             public void onCompleted() {}
@@ -52,7 +55,7 @@ public class MyRidesDriverFragment extends Fragment {
             }
 
             @Override
-            public void onNext(ArrayList<Ride> rides)
+            public void onNext(List<Ride> rides)
             {
                 setRides(rides);
             }
@@ -110,7 +113,10 @@ public class MyRidesDriverFragment extends Fragment {
     private void forceUpdate()
     {
         RideProvider.getInstance().requestRides()
+                .flatMap(rides -> Observable.from(rides))
+                .filter(ride -> ride.gcmID.equals(CruApplication.getGCMID()))
                 .observeOn(AndroidSchedulers.mainThread())
+                .toList()
                 .subscribe(rideSubscriber);
     }
 
@@ -125,7 +131,7 @@ public class MyRidesDriverFragment extends Fragment {
      * Updates the UI to reflect the Events in events
      * @param rides List of new Events the UI should adhere to
      */
-    public void setRides(ArrayList<Ride> rides)
+    public void setRides(List<Ride> rides)
     {
         rideVMs.clear();
         rx.Observable.from(rides)

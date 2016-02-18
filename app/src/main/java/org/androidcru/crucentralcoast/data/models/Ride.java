@@ -1,6 +1,8 @@
 package org.androidcru.crucentralcoast.data.models;
 
 import com.google.android.gms.maps.model.LatLng;
+import android.location.Address;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.androidcru.crucentralcoast.CruApplication;
@@ -22,6 +24,7 @@ public class Ride
     @SerializedName("gcm_id") public String gcmID;
     @SerializedName("_id") public String id;
     public int carCapacity;
+    public Address address;
 
     // name, phone, gender, event id, car capacity, direction, time, location
     // need gcmID, radius
@@ -52,20 +55,26 @@ public class Ride
 
     public enum Direction
     {
-        TO("to"),
-        FROM("from"),
-        ROUNDTRIP("both");
+        TO("to", "To Event"),
+        FROM("from", "From Event"),
+        ROUNDTRIP("both", "Round-trip");
 
         private String direction;
+        private String directionDetailed;
 
-        Direction(String direction)
+        Direction(String direction, String directionDetailed)
         {
             this.direction = direction;
+            this.directionDetailed = directionDetailed;
         }
 
         public String getValue()
         {
             return direction;
+        }
+
+        public String getValueDetailed() {
+            return directionDetailed;
         }
 
         public String[] getAll()

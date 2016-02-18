@@ -144,7 +144,8 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/gender_field"
                             app:resources="@{@stringArray/genders}"
-                            app:onItemSelected="@{rideVM.onGenderSelected}"/>
+                            app:onItemSelected="@{rideVM.onGenderSelected}"
+                            app:selection="@{rideVM.genderSelection}"/>
                     </LinearLayout>
                 </RelativeLayout>
                 <!-- car capacity -->
@@ -180,7 +181,8 @@
                                 android:id="@+id/car_capacity_field"
                                 android:layout_marginRight="8dp"
                                 app:resources="@{@stringArray/car_capacity}"
-                                app:onItemSelected="@{rideVM.onCarCapacitySelected}"/>
+                                app:onItemSelected="@{rideVM.onCarCapacitySelected}"
+                                app:selection="@{rideVM.carCapacitySelection}"/>
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
@@ -218,7 +220,8 @@
                                 android:id="@+id/trip_type_field"
                                 android:prompt="@string/select_trip_type"
                                 android:layout_marginEnd="8dp"
-                                app:resources="@{@stringArray/trip_type}"
+                                app:resources="@{rideVM.tripOptions}"
+                                app:selection="@{rideVM.tripSelection}"
                                 app:onItemSelected="@{rideVM.onTripTypeSelected}"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -341,7 +344,8 @@
                             android:layout_centerVertical="true"
                             android:inputType="phone"
                             android:hint="Circle Radius (Miles)"
-                            android:onTextChanged="@{rideVM.onRadiusChanged}"/>
+                            android:onTextChanged="@{rideVM.onRadiusChanged}"
+                            android:text="@{rideVM.editing ? Double.toString(rideVM.ride.radius) : ``}"/>
                     </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
 

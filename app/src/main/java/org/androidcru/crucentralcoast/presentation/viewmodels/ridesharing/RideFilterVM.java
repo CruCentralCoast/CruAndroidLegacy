@@ -2,7 +2,7 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
 
-import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
@@ -71,9 +71,9 @@ public class RideFilterVM extends BaseRideVM
     }
 
     @Override
-    protected void placeSelected(Place place)
+    protected void placeSelected(LatLng precisePlace, String placeAdress)
     {
-        rideFilter.location = place.getLatLng();
+        rideFilter.location = precisePlace;
     }
 
     @Override

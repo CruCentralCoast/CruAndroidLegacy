@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,8 +22,6 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
 import org.threeten.bp.LocalDate;
@@ -33,11 +30,8 @@ import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
-
-import rx.android.schedulers.AndroidSchedulers;
+import java.util.Arrays;
 
 @SuppressWarnings("unused")
 public class RideVM extends BaseRideVM
@@ -52,9 +46,11 @@ public class RideVM extends BaseRideVM
     private LocalDate date;
     private LocalTime time;
 
-    private boolean editing; //ride is being editted
+    public boolean editing; //ride is being editted
     private static final double CALPOLY_LAT = 35.30021;
     private static final double CALPOLY_LNG = -120.66310;
+
+    private ArrayList<Ride.Direction> directions;
 
 
     public RideVM(FragmentManager fm, Ride ride)
@@ -63,17 +59,46 @@ public class RideVM extends BaseRideVM
         this.ride = ride;
         direction = new ObservableField<>(null);
         editing = false;
+        generateDirections();
     }
 
     public RideVM(FragmentManager fm, Ride ride, boolean editing)
     {
         super(fm);
         this.ride = ride;
-        direction = new ObservableField<>(null);
-        editing = true;
+        direction.set(ride.direction);
+        radius = ride.radius;
+        this.editing = editing;
+
+        generateDirections();
 
         if (editing) {
             populateBinds();
+        }
+    }
+
+    private void generateDirections()
+    {
+        if(editing)
+        {
+            directions = new ArrayList<>();
+            switch(ride.direction)
+            {
+                case TO:
+                    directions.add(Ride.Direction.TO);
+                    directions.add(Ride.Direction.ROUNDTRIP);
+                    break;
+                case FROM:
+                    directions.add(Ride.Direction.FROM);
+                    directions.add(Ride.Direction.ROUNDTRIP);
+                    break;
+                case ROUNDTRIP:
+                    directions.add(Ride.Direction.ROUNDTRIP);
+            }
+        }
+        else
+        {
+            directions = new ArrayList<>(Arrays.asList(Ride.Direction.TO, Ride.Direction.FROM, Ride.Direction.ROUNDTRIP));
         }
     }
 
@@ -107,22 +132,23 @@ public class RideVM extends BaseRideVM
     }
 
     @Override
-    protected void placeSelected(Place place)
+    protected void placeSelected(LatLng precisePlace, String placeAddress)
     {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14.0f));
-        center = place.getLatLng();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(precisePlace, 14.0f));
+        center = precisePlace;
         setMarker(center);
 
         if (radius != null)
             setCircle(center, radius);
 
-        //Logger.e(String.valueOf(place.getAddress()));
-        String address = String.valueOf(place.getAddress());
-        String[] splitAddress = address.split("\\s*,\\s*");
-        String[] splitStateZip = splitAddress[2].split(" ");
-        ride.location = new Location(splitStateZip[1], splitStateZip[0],
-                splitAddress[1], splitAddress[0], splitAddress[3]);
-        ride.location.preciseLocation = place.getLatLng();
+        if(placeAddress != null)
+        {
+            String[] splitAddress = placeAddress.split("\\s*,\\s*");
+            String[] splitStateZip = splitAddress[2].split(" ");
+            ride.location = new Location(splitStateZip[1], splitStateZip[0],
+                    splitAddress[1], splitAddress[0], splitAddress[3]);
+            ride.location.preciseLocation = precisePlace;
+        }
     }
 
     @Override
@@ -135,6 +161,53 @@ public class RideVM extends BaseRideVM
     protected void genderSelected(String gender)
     {
         ride.gender = gender;
+    }
+
+    public int getGenderSelection()
+    {
+        if(ride.gender != null)
+        {
+            Ride.Gender[] genders = Ride.Gender.values();
+            for (int i = 0; i < Ride.Gender.values().length; i++)
+            {
+                if (ride.gender.equals(genders[i].getValue()))
+                {
+                    return i + 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int getCarCapacitySelection()
+    {
+        return editing ? ride.carCapacity + 1 : 0;
+    }
+
+    public int getTripSelection()
+    {
+        if(editing)
+        {
+            for (int i = 0; i < directions.size(); i++)
+            {
+                if(ride.direction == directions.get(i))
+                {
+                    return i + 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public String[] getTripOptions()
+    {
+        String[] options = new String[directions.size() + 1];
+        options[0] = "Select Trip Type";
+        for(int i = 1; i < directions.size() + 1; i++)
+        {
+            options[i] = directions.get(i - 1).getValueDetailed();
+        }
+        return options;
     }
 
     public void onDriverNameChanged(CharSequence s, int start, int before, int count)
@@ -204,7 +277,10 @@ public class RideVM extends BaseRideVM
             if (map == null)
             {
                 map = googleMap;
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(CALPOLY_LAT, CALPOLY_LNG), 14.0f));
+                if(ride.address != null)
+                    placeSelected(new LatLng(ride.address.getLatitude(), ride.address.getLongitude()), null);
+                else
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(CALPOLY_LAT, CALPOLY_LNG), 14.0f));
             }
             else
             {

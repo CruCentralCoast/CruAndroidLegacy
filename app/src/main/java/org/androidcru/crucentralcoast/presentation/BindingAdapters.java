@@ -95,15 +95,15 @@ public class BindingAdapters
         view.setImageDrawable(DrawableUtil.getTintListedDrawable(view.getContext(), selected ? selectedDrawable : unselectedDrawable, selectionTint));
     }
 
-    @BindingAdapter({"bind:resources", "bind:onItemSelected"})
-    public static void setSpinner(Spinner spinner, String[] resources, AdapterView.OnItemSelectedListener onItemSelected)
+    @BindingAdapter(value = {"bind:resources", "bind:onItemSelected", "bind:selection"}, requireAll = false)
+    public static void setSpinner(Spinner spinner, String[] resources, AdapterView.OnItemSelectedListener onItemSelected, int index)
     {
         Context context = spinner.getContext();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item,
                 resources);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
+        spinner.setSelection(index);
         spinner.setOnItemSelectedListener(onItemSelected);
     }
 
@@ -114,10 +114,8 @@ public class BindingAdapters
     }
 
     @BindingAdapter("bind:textWatcher")
-    public static void setKeyListener(EditText editText, TextWatcher textWatcher)
+    public static void setTextWatcher(EditText editText, TextWatcher textWatcher)
     {
         editText.addTextChangedListener(textWatcher);
     }
-
-
 }

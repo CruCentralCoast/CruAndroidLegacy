@@ -42,8 +42,19 @@ public interface CruApiService
     @GET("/api/ride/list")
     Observable<ArrayList<Ride>> getRides();
 
+    @FormUrlEncoded
+    @POST("/api/ride/find")
+    Observable<ArrayList<Ride>> findSingleRide(@Field("_id") String id);
+
+    @FormUrlEncoded
+    @POST("/api/passenger/find")
+    Observable<ArrayList<Passenger>> findSinglePassenger(@Field("_id") String id);
+
     @POST("/api/ride/create")
     Observable<Ride> postRide(@Body Ride ride);
+
+    @POST("/api/ride/update")
+    Observable<Ride> updateRide(@Body Ride ride);
 
     @POST("/api/passenger/create")
     Observable<Passenger> createPassenger(@Body Passenger passenger);

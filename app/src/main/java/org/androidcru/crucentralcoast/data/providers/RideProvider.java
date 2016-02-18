@@ -1,5 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
@@ -34,27 +36,28 @@ public final class RideProvider
                 .subscribeOn(Schedulers.io());
     }
 
+    public Observable<Ride> updateRide(Ride ride)
+    {
+        return mCruService.updateRide(ride)
+                .subscribeOn(Schedulers.io());
+    }
+
     public Observable<Void> addPassengerToRide(String passengerId, String rideId)
     {
         return mCruService.addPassenger(rideId, passengerId)
                 .subscribeOn(Schedulers.io());
     }
 
-    public Ride requestRideByID(String id)
-    {
-//        ArrayList<Ride> newRides = new ArrayList<Ride>();
-////        rx.Observable.from(requestRides())
-//        requestRides()
-//                .map(ride -> new Ride(ride.driverName, ride.driverNumber, ride.gender, ride.eventId, ride.time, ride.location, ride.passengers))
-//                .subscribeOn(Schedulers.immediate())
-//                .subscribe(newRides::add);
-//
-//        for (Ride r : newRides)
-//        {
-//            if (r.eventId.equals(id))
-//                return r;
-//        }
 
-        return null;
+
+    public Observable<Ride> requestRideByID(String id)
+    {
+        return mCruService.findSingleRide(id)
+                .subscribeOn(Schedulers.io())
+                .flatMap(rides -> {
+                    Logger.d("Rides found");
+                    return Observable.from(rides);
+                });
+
     }
 }

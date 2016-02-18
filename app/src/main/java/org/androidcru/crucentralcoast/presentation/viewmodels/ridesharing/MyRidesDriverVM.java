@@ -11,8 +11,6 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.ArrayList;
-
 @SuppressWarnings("unused")
 public class MyRidesDriverVM extends BaseObservable {
 
@@ -67,10 +65,7 @@ public class MyRidesDriverVM extends BaseObservable {
     {
         Intent intent = new Intent(parent, DriverSignupActivity.class);
         Bundle extras = new Bundle();
-        ArrayList<String> temp = new ArrayList<String>();
-        temp.add(ride.driverNumber);
-        temp.add(ride.eventId);
-        extras.putStringArrayList(RIDE_KEY, temp);
+        extras.putString(RIDE_KEY, ride.id);
         intent.putExtras(extras);
         return v -> parent.startActivity(intent);
     }
