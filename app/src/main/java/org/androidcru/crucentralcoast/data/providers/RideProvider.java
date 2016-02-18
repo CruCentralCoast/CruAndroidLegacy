@@ -48,6 +48,12 @@ public final class RideProvider
                 .subscribeOn(Schedulers.io());
     }
 
+    public Observable<Void> dropPassengerFromRide(String passengerId, String rideId)
+    {
+        return mCruService.dropPassenger(rideId, passengerId)
+                .subscribeOn(Schedulers.io());
+    }
+
     public Observable<Void> dropRide(String rideId)
     {
         return mCruService.dropRide(rideId)

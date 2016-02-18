@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
@@ -12,6 +13,7 @@ import android.view.View;
 import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
+import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -37,6 +39,9 @@ public class MyRidesPassengerVM extends BaseObservable {
         this.ride = ride;
         this.isExpanded.set(isExpanded);
         this.parent = activity;
+        passengerList = new ObservableField<>();
+        eventName = new ObservableField<>();
+        initAlertDialog();
     }
 
     //TODO: will eventually need to get a to and from time, not just 1
@@ -91,9 +96,35 @@ public class MyRidesPassengerVM extends BaseObservable {
         return v -> parent.startActivity(intent);
     }
 
+    private void initAlertDialog()
+    {
+        alertDialog = new AlertDialog.Builder(parent).create();
+        alertDialog.setTitle("Cancel Ride");
+        alertDialog.setMessage("Are you sure that you want to drop yourself from this ride?");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RideProvider.getInstance().dropPassengerFromRide(ride.passengers.get(0), ride.id)
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.hide();
+            }
+        });
+    }
+
     //TODO: change thissssss
     public View.OnClickListener onCancelOfferingClicked()
     {
-        return v -> parent.startActivity(new Intent(parent, DriverSignupActivity.class));
+        return new View.OnClickListener(){
+          @Override
+          public void onClick(View v)
+          {
+              alertDialog.show();
+          }
+        };
     }
 }
