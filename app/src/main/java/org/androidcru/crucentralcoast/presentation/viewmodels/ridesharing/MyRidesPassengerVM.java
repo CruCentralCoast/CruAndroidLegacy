@@ -93,10 +93,11 @@ public class MyRidesPassengerVM extends BaseObservable {
         alertDialog.setMessage("Are you sure that you want to drop yourself from this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                for(Passenger p : ride.passengers)
+            public void onClick(DialogInterface dialog, int which)
+            {
+                for (Passenger p : ride.passengers)
                 {
-                    if(p.gcm_id.equals(CruApplication.getGCMID()))
+                    if (p.gcm_id.equals(CruApplication.getGCMID()))
                     {
                         RideProvider.getInstance().dropPassengerFromRide(p.id, ride.id)
                                 .observeOn(AndroidSchedulers.mainThread())
