@@ -71,10 +71,6 @@ public class RideVM extends BaseRideVM
         this.editing = editing;
 
         generateDirections();
-
-        if (editing) {
-            populateBinds();
-        }
     }
 
     private void generateDirections()
@@ -321,21 +317,6 @@ public class RideVM extends BaseRideVM
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             map.animateCamera(cu);
         }
-    }
-
-    private void populateBinds() {
-        //set gender
-        //set car capacity
-        //set trip type
-        //set times
-        //TODO: get 2 sets of dates and times
-        //set location
-
-        //set map
-        //TODO: somehow get a LatLng from an address
-        //TODO: save a radius
-
-
     }
 
     public void setMap(Address addr) {
