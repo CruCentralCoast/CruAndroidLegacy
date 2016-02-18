@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
-import android.app.usage.UsageEvents;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -11,19 +10,15 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.data.models.Passenger;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
-import org.androidcru.crucentralcoast.data.providers.PassengerProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.ArrayList;
-
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
 @SuppressWarnings("unused")
@@ -76,9 +71,17 @@ public class MyRidesDriverVM extends BaseObservable {
     //TODO: display actual info, but that'll wait for a passenger model implementation
     //TODO: also, pick some way to display the passenger stuff
     public void updatePassengerList() {
-        final Holder<String> list = new Holder<String>();
-
-        PassengerProvider.getInstance().getPassengers(ride.passengers)
+        StringBuilder list = new StringBuilder();
+        for (Passenger p : ride.passengers) {
+            //TODO: this is ugly, Jon tried to help, better?
+            if (list.toString().isEmpty())
+                list.append("Name: ").append(p.name).append("\nPhone: ").append(p.phone).append("\n\n");
+            else
+                list.append("Name: ").append(p.name).append("\nPhone: ").append(p.phone).append("\n\n");
+        }
+        passengerList.set(list.toString());
+        /*
+        PassengerProvider.getInstance().getPassengers(ride.passengerIds)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pList -> {
                     for (Passenger p : pList) {
@@ -92,6 +95,7 @@ public class MyRidesDriverVM extends BaseObservable {
                 }, () -> {
                     passengerList.set(list.held());
                 });
+        */
     }
 
     //TODO:put this somewhere else, like in strings.xml
@@ -125,7 +129,7 @@ public class MyRidesDriverVM extends BaseObservable {
         });
     }
 
-    //TODO: actually delete it from the database and do something to notify passengers
+    //TODO: actually delete it from the database and do something to notify passengerIds
     public View.OnClickListener onCancelOfferingClicked()
     {
         return new View.OnClickListener() {

@@ -2,22 +2,19 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
+import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
-
-import java.util.ArrayList;
 
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -97,8 +94,15 @@ public class MyRidesPassengerVM extends BaseObservable {
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.getInstance().dropPassengerFromRide(ride.passengers.get(0), ride.id)
-                        .observeOn(AndroidSchedulers.mainThread());
+                for(Passenger p : ride.passengers)
+                {
+                    if(p.gcm_id.equals(CruApplication.getGCMID()))
+                    {
+                        RideProvider.getInstance().dropPassengerFromRide(p.id, ride.id)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe();
+                    }
+                }
             }
         });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {

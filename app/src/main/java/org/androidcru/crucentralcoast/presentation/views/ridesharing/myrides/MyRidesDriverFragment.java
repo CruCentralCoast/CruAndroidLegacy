@@ -107,7 +107,7 @@ public class MyRidesDriverFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
 
-        getRides();
+        forceUpdate();
     }
 
     private void forceUpdate()
@@ -117,13 +117,6 @@ public class MyRidesDriverFragment extends Fragment {
                 .filter(ride -> ride.gcmID.equals(CruApplication.getGCMID()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
-                .subscribe(rideSubscriber);
-    }
-
-    private void getRides()
-    {
-        RideProvider.getInstance().requestRides()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rideSubscriber);
     }
 

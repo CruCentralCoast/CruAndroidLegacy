@@ -57,6 +57,26 @@
                 android:layout_marginBottom="4dp"
                 android:textSize="16sp"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/driverTitle"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="4dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="@string/YourDriver"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/driverInfo"
+                android:layout_below="@+id/driverTitle"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="4dp"
+                android:textSize="16sp"
+                android:text="@{ride.driverInfo}"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,25 +97,6 @@
                     <!--android:onClick="@{ride.onEditOfferingClicked}"-->
                     <!--android:foreground="?android:attr/selectableItemBackground"/>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/driverTitle"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginBottom="4dp"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:text="@string/YourDriver"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/driverInfo"
-                    android:layout_below="@+id/driverTitle"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginBottom="4dp"
-                    android:textSize="16sp"
-                    android:text="@{ride.driverInfo}"/>
                 <!--android:visibility="@{ride.isExpanded ? View.VISIBLE : View.GONE}" />-->
 
                 <Button

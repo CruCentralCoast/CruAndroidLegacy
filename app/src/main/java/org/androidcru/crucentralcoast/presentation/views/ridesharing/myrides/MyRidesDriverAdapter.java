@@ -96,15 +96,6 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
             {
                 visibility = View.GONE;
             }
-            else
-            {
-                visibility = View.VISIBLE;
-            }
-            getBinding().passengerList.setVisibility(visibility);
-
-            rides.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
-            notifyItemChanged(getAdapterPosition());
-            layoutManager.scrollToPosition(getAdapterPosition());
         }
     }
 }

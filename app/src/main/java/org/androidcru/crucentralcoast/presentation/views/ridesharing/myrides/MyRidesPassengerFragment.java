@@ -12,16 +12,19 @@ import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesPassengerVM;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -36,12 +39,12 @@ public class MyRidesPassengerFragment extends Fragment {
     private ArrayList<MyRidesPassengerVM> rideVMs;
     private LinearLayoutManager layoutManager;
 
-    private Observer<ArrayList<Ride>> rideSubscriber;
+    private Observer<List<Ride>> rideSubscriber;
 
     public MyRidesPassengerFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = new Observer<ArrayList<Ride>>()
+        rideSubscriber = new Observer<List<Ride>>()
         {
             @Override
             public void onCompleted() {}
@@ -53,7 +56,7 @@ public class MyRidesPassengerFragment extends Fragment {
             }
 
             @Override
-            public void onNext(ArrayList<Ride> rides)
+            public void onNext(List<Ride> rides)
             {
                 setRides(rides);
             }
@@ -105,20 +108,27 @@ public class MyRidesPassengerFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
 
-        getRides();
+        forceUpdate();
     }
+
+
 
     private void forceUpdate()
     {
         RideProvider.getInstance().requestRides()
+                .flatMap(rides -> Observable.from(rides))
+                .filter(ride -> {
+                    for (Passenger p : ride.passengers)
+                    {
+                        if (p.gcm_id != null && p.gcm_id.equals(CruApplication.getGCMID()))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(rideSubscriber);
-    }
-
-    private void getRides()
-    {
-        RideProvider.getInstance().requestRides()
-                .observeOn(AndroidSchedulers.mainThread())
+                .toList()
                 .subscribe(rideSubscriber);
     }
 
@@ -126,7 +136,7 @@ public class MyRidesPassengerFragment extends Fragment {
      * Updates the UI to reflect the Events in events
      * @param rides List of new Events the UI should adhere to
      */
-    public void setRides(ArrayList<Ride> rides)
+    public void setRides(List<Ride> rides)
     {
         rideVMs.clear();
         rx.Observable.from(rides)

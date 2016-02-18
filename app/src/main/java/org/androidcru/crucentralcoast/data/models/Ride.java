@@ -8,6 +8,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Ride
 {
@@ -17,20 +18,21 @@ public class Ride
     @SerializedName("event") public String eventId;
     @SerializedName("time") public ZonedDateTime time;
     @SerializedName("location") public Location location;
-    @SerializedName("passengers") public ArrayList<String> passengers;
+    @SerializedName("passengers") public ArrayList<String> passengerIds;
     @SerializedName("radius") public double radius;
     @SerializedName("direction") public Direction direction;
     @SerializedName("gcm_id") public String gcmID;
     @SerializedName("_id") public String id;
     public int carCapacity;
     public Address address;
+    public transient List<Passenger> passengers;
 
     public Ride() {}
 
     // name, phone, gender, event id, car capacity, direction, time, location
     // need gcmID, radius
     public Ride(String driverName, String driverNumber, String gender, String eventId,
-                ZonedDateTime time, Location location, //ArrayList<String> passengers,
+                ZonedDateTime time, Location location, //ArrayList<String> passengerIds,
                 double radius, Direction direction, //String gcmID,
                 int carCapacity)
     {
@@ -40,7 +42,7 @@ public class Ride
         this.eventId = eventId;
         this.time = time;
         this.location = location;
-        this.passengers = new ArrayList<>();
+        this.passengerIds = new ArrayList<>();
         this.radius = radius;
         this.direction = direction;
         this.gcmID = CruApplication.getGCMID();//gcmID;
