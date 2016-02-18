@@ -64,15 +64,8 @@ public class MyRidesPassengerVM extends BaseObservable {
 
     //TODO: display actual info, but that'll wait for a passenger model implementation
     //TODO: also, pick some way to display the passenger stuff
-    public String getPassengerList() {
-        String list = "";
-
-        for (String passenger : ride.passengers)
-        {
-            list += passenger + "\n";
-        }
-
-        return list;
+    public String getDriverInfo() {
+        return "Name: " + ride.driverName + "\nPhone: " + ride.driverNumber;
     }
 
     //TODO:put this somewhere else, like in strings.xml
