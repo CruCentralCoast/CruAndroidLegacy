@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
@@ -11,14 +12,12 @@ import java.util.ArrayList;
 
 public class PassengerSignupActivity extends FormActivity
 {
-    public static final String EVENT_ID = "event_ID";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null || bundle.getString(EVENT_ID, "").isEmpty())
+        if(bundle == null || bundle.getString(CruApplication.EVENT_ID, "").isEmpty())
         {
             Logger.e("PassengerSignupActivity requires that you pass an event ID.");
             Logger.e("Finishing activity...");

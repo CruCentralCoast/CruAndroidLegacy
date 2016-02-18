@@ -40,6 +40,8 @@ public class CruApplication extends MultiDexApplication
     }
     public static final String FB_TOKEN_KEY = "fb_token_key";
     public static final String FIRST_LAUNCH = "first_launch";
+    public static final String EVENT_ID = "event_ID";
+
 
     private static SharedPreferences sharedPreferences;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
