@@ -50,6 +50,7 @@
     <string name="driver_signup">Driver Signup</string>
     <string name="passenger_signup">Passenger Signup</string>
     <string name="cancel">Cancel</string>
+    <string name="nav_my_rides">My Rides</string>
 
     <string-array name="genders">
         <item>Select Gender</item>

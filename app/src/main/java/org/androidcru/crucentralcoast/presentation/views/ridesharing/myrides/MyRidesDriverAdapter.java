@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.ridesharing;
+package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.LinearLayoutManager;

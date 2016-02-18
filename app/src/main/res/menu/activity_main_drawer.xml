@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_maps_directions_car"
             android:title="@string/nav_cruber"/>
         <item
+            android:id="@+id/nav_my_rides"
+            android:icon="@drawable/ic_maps_directions_car"
+            android:title="@string/nav_my_rides"/>
+        <item
             android:id="@+id/nav_summer_missions"
             android:icon="@drawable/ic_place"
             android:title="@string/nav_summer_missions"/>
