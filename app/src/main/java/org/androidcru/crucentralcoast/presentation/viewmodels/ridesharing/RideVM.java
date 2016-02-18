@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
 import android.databinding.ObservableField;
+import android.location.Address;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.util.MathUtil;
 import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
 import org.threeten.bp.LocalDate;
@@ -32,6 +35,9 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
+
+import rx.android.schedulers.AndroidSchedulers;
 
 @SuppressWarnings("unused")
 public class RideVM extends BaseRideVM
@@ -252,10 +258,16 @@ public class RideVM extends BaseRideVM
         //set map
         //TODO: somehow get a LatLng from an address
         //TODO: save a radius
-        //LatLng latlng = new LatLng(ride.location.)
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14.0f));
-        //setMarker(latlng);
-        //setCircle(latlng, radius);
+
+
+    }
+
+    public void setMap(Address addr) {
+        Logger.d("trying to set to lat: " + addr.getLatitude() + " lng: " + addr.getLongitude());
+        LatLng latlng = new LatLng(addr.getLatitude(), addr.getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14.0f));
+        setMarker(latlng);
+        setCircle(latlng, ride.radius);
     }
 
     public final static String DATE_FORMATTER = "EEEE MMMM ee,";

@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup;
 
 import android.databinding.DataBindingUtil;
+import android.location.Address;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.databinding.ActivityDriverFormBinding;
+import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideVM;
 import org.threeten.bp.ZonedDateTime;
 
@@ -47,10 +49,11 @@ public class DriverSignupActivity extends AppCompatActivity
         if (getIntent().getExtras() != null) {
             findRide();
         }
+        else
+            bindNewRideVM(null);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_driver_form);
         //TODO ride may not always be invoked by constructor
-        bindNewRideVM(null);
 
         validator = new DriverSignupValidator(binding);
 
@@ -77,12 +80,13 @@ public class DriverSignupActivity extends AppCompatActivity
 //                new Location("93405", "CA", "San Luis Obispo", "1 Grand Ave", "USA"), new ArrayList<>(), 1.0, Ride.Direction.TO,
 //                CruApplication.getGCMID(), 4);
         // TODO: change this to use rideVM.ride.
-        Logger.d(rideVM.ride.eventId);
+        //Logger.d(rideVM.ride.eventId);
         RideProvider.getInstance().createRide(rideVM.ride)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
                     Logger.d("Output is", current.toString());
-                }, throwable -> {Logger.e("Error:", throwable.getMessage());
+                }, throwable -> {
+                    Logger.e("Error:", throwable.getMessage());
                 });
     }
 
@@ -104,7 +108,7 @@ public class DriverSignupActivity extends AppCompatActivity
             eventID = rideInfo.get(1);
             Logger.d("driver number: " + driverNum + " eventID: " + eventID);
 
-            ArrayList<Ride> rideList = new ArrayList<Ride>();
+            ArrayList<Ride> rideList = new ArrayList<Ride>(); //TODO: not needed?
             RideProvider.getInstance().requestRides()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(results -> findRide(results));
@@ -133,5 +137,23 @@ public class DriverSignupActivity extends AppCompatActivity
             rideVM = new RideVM(getFragmentManager(), r, true);
         }
         binding.setRideVM(rideVM);
+        if (r != null) {
+            fillForm(r);
+        }
+    }
+
+    private void fillForm(Ride r) {
+        Logger.d("car capacity is " + r.carCapacity);
+        binding.carCapacityField.setSelection(r.carCapacity + 1, true);
+        //TODO: find better way to do this
+        binding.genderField.setSelection(r.gender.equals("Male") ? 1 : 2);
+
+        binding.tripTypeField.setSelection(2); //TODO: someohow find an index... can we implement this in the ride class?
+
+        binding.radiusField.setText("" + r.radius);
+
+//        GeocodeProvider.getLatLng(getApplicationContext(), r.location.toString())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(result -> rideVM.setMap(result));
     }
 }
