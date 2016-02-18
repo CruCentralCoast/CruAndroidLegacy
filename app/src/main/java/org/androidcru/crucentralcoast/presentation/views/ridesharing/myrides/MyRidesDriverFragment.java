@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.ridesharing;
+package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

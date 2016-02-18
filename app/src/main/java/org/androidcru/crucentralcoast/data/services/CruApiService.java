@@ -50,6 +50,10 @@ public interface CruApiService
     @POST("/api/passenger/find")
     Observable<ArrayList<Passenger>> findSinglePassenger(@Field("_id") String id);
 
+    @FormUrlEncoded
+    @POST("/api/event/find")
+    Observable<ArrayList<CruEvent>> findSingleCruEvent(@Field("_id") String id);
+
     @POST("/api/ride/create")
     Observable<Ride> postRide(@Body Ride ride);
 
@@ -62,6 +66,14 @@ public interface CruApiService
     @FormUrlEncoded
     @POST("/api/ride/addPassenger")
     Observable<Void> addPassenger(@Field("ride_id") String rideId, @Field("passenger_id") String passengerId);
+
+    @FormUrlEncoded
+    @POST
+    Observable<Void> dropPassenger(@Field("ride_id") String rideId, @Field("passengerSid") String passengerId);
+
+    @FormUrlEncoded
+    @POST("/api/ride/dropRide")
+    Observable<Void> dropRide(@Field("ride_id") String rideId);
 
 //    @GET("api/event/:id")
 //    public CruEvent getEventByID(String id);
