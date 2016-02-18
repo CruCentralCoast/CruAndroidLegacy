@@ -33,7 +33,7 @@ public class MyRidesPassengerFragment extends Fragment {
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
 
-    private ArrayList<MyRidesDriverVM> rideVMs;
+    private ArrayList<MyRidesPassengerVM> rideVMs;
     private LinearLayoutManager layoutManager;
 
     private Observer<ArrayList<Ride>> rideSubscriber;
@@ -130,10 +130,10 @@ public class MyRidesPassengerFragment extends Fragment {
     {
         rideVMs.clear();
         rx.Observable.from(rides)
-                .map(ride -> new MyRidesDriverVM(ride, false, getActivity()))
+                .map(ride -> new MyRidesPassengerVM(ride, false, getActivity()))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
-        eventList.setAdapter(new MyRidesDriverAdapter(rideVMs, layoutManager)); //MIGHT NEED TO CHANGE
+        eventList.setAdapter(new MyRidesPassengerAdapter(rideVMs, layoutManager));
         swipeRefreshLayout.setRefreshing(false);
     }
 }
