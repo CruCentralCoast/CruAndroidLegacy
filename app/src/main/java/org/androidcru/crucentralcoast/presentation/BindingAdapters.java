@@ -6,6 +6,7 @@ import android.databinding.BindingAdapter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -111,4 +112,12 @@ public class BindingAdapters
     {
         editText.setKeyListener(keyListener);
     }
+
+    @BindingAdapter("bind:textWatcher")
+    public static void setKeyListener(EditText editText, TextWatcher textWatcher)
+    {
+        editText.addTextChangedListener(textWatcher);
+    }
+
+
 }

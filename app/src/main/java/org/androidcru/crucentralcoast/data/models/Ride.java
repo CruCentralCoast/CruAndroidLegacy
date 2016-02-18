@@ -18,6 +18,7 @@ public class Ride
     @SerializedName("radius") public double radius;
     @SerializedName("direction") public Direction direction;
     @SerializedName("gcm_id") public String gcmID;
+    @SerializedName("_id") public String id;
     public int carCapacity;
 
     public Ride(String driverName, String driverNumber, String gender, String eventId,

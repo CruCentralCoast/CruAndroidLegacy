@@ -5,6 +5,7 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
+import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 
 import java.util.ArrayList;
@@ -43,6 +44,13 @@ public interface CruApiService
 
     @POST("/api/ride/create")
     Observable<Ride> postRide(@Body Ride ride);
+
+    @POST("/api/passenger/create")
+    Observable<Passenger> createPassenger(@Body Passenger passenger);
+
+    @FormUrlEncoded
+    @POST("/api/ride/addPassenger")
+    Observable<Void> addPassenger(@Field("ride_id") String rideId, @Field("passenger_id") String passengerId);
 
 //    @GET("api/event/:id")
 //    public CruEvent getEventByID(String id);

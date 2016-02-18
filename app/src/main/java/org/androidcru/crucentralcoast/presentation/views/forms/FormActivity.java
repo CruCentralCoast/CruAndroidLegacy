@@ -12,17 +12,21 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.databinding.ActivityFormBinding;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 
+import java.util.Stack;
+
 public class FormActivity extends AppCompatActivity implements FormHolder
 {
     private ActivityFormBinding binding;
 
     private FormContent currentFormContent;
+    private Stack<Object> dataObjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_form);
+        dataObjects = new Stack<>();
     }
 
     @Override
@@ -159,13 +163,45 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void next()
     {
-        binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
+        if(binding.viewPager.getCurrentItem() == binding.viewPager.getAdapter().getCount() - 1)
+        {
+            complete();
+        }
+        else
+        {
+            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
+        }
     }
 
     @Override
     public void prev()
     {
         binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() - 1);
+        if(!dataObjects.isEmpty())
+        {
+            dataObjects.pop();
+        }
+    }
+
+    @Override
+    public void setNavigationClickable(boolean isClickable)
+    {
+        binding.prev.setClickable(isClickable);
+        binding.next.setClickable(isClickable);
+    }
+
+    @Override
+    public void addDataObject(Object dataObject)
+    {
+        this.dataObjects.push(dataObject);
+    }
+
+    @Override
+    public Object getDataObject()
+    {
+        if(dataObjects.isEmpty())
+            return null;
+        return dataObjects.peek();
     }
 }
 

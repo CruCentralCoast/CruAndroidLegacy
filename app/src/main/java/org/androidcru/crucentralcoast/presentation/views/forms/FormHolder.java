@@ -12,4 +12,8 @@ public interface FormHolder
     void setNavigationVisibility(int visibility);
     void next();
     void prev();
+    void setNavigationClickable(boolean isClickable);
+
+    void addDataObject(Object dataObject);
+    Object getDataObject();
 }

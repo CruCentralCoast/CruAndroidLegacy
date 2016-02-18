@@ -59,7 +59,7 @@ public class DriverResultsFragment extends FormContentFragment
     @Override
     public void setupUI()
     {
-        filter = ((PassengerSignupActivity) getActivity()).filter;
+        filter = (RideFilter) formHolder.getDataObject();
 
         formHolder.setNavigationVisibility(View.VISIBLE);
         formHolder.setNextVisibility(View.GONE);
@@ -135,6 +135,6 @@ public class DriverResultsFragment extends FormContentFragment
     private void handleResults(List<Ride> results)
     {
         this.results = results;
-        driverResultsList.setAdapter(new DriverResultsAdapter(this, results));
+        driverResultsList.setAdapter(new DriverResultsAdapter(this, formHolder, results));
     }
 }

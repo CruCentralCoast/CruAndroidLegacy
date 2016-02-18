@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 public class PassengerSignupActivity extends FormActivity
 {
     public static final String EVENT_ID = "event_ID";
-
-    public RideFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
