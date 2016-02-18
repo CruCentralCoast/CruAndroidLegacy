@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ministryteams.MinistryTeamVM"/>
+        <variable name="ministryTeamVM" type="MinistryTeamVM"/>
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+                      android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ministry_info_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:src="@{ministryTeamVM.ministryTeam.cruImage.mURL}"
+                android:padding="16dp"/>
+
+            <TextView
+                android:id="@+id/ministry_team_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ministryTeamVM.ministryTeam.description}"
+                android:padding="16dp"
+                android:textSize="14dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

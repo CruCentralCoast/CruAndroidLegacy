@@ -62,6 +62,10 @@
             android:name=".presentation.views.ridesharing.passengersignup.PassengerSignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".presentation.views.ministryteams.JoinMinistryTeamActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- [START gcm_receiver] -->
         <receiver

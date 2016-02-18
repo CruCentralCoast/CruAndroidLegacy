@@ -41,7 +41,7 @@ public class MinistryTeamsFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        mMinistryTeamsAdapter = new MinistryTeamsAdapter(new ArrayList<>());
+        mMinistryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), new ArrayList<>());
         binding.subscriptionList.setHasFixedSize(true);
         binding.subscriptionList.setAdapter(mMinistryTeamsAdapter);
 
@@ -56,7 +56,7 @@ public class MinistryTeamsFragment extends Fragment
         MinistryTeamProvider.getInstance().requestMinistryTeams()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministryTeams -> {
-                    mMinistryTeamsAdapter = new MinistryTeamsAdapter(ministryTeams);
+                    mMinistryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), ministryTeams);
                     binding.subscriptionList.setAdapter(mMinistryTeamsAdapter);
                 });
     }

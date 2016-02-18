@@ -23,7 +23,7 @@
             android:gravity="center"
             android:id="@+id/ministry_image"
             android:adjustViewBounds="true"
-            app:src="@{team.ministryTeam.mCruImage.mURL}"
+            app:src="@{team.ministryTeam.cruImage.mURL}"
             app:tint="@{@color/cruDarkBlue}"/>
 
 
