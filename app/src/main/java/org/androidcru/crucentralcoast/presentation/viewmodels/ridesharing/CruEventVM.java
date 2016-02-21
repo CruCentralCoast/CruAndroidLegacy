@@ -6,7 +6,7 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.view.View;
 
-import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
@@ -40,14 +40,14 @@ public class CruEventVM extends BaseObservable
     public View.OnClickListener onPassengerClicked()
     {
         Intent intent = new Intent(parent, PassengerSignupActivity.class);
-        intent.putExtra(CruApplication.EVENT_ID, cruEvent.mId);
+        intent.putExtra(AppConstants.EVENT_ID, cruEvent.mId);
         return v -> parent.startActivity(intent);
     }
 
     public View.OnClickListener onDriverClicked()
     {
         Intent intent = new Intent(parent, DriverSignupActivity.class);
-        intent.putExtra(CruApplication.EVENT_ID, cruEvent.mId);
+        intent.putExtra(AppConstants.EVENT_ID, cruEvent.mId);
         return v -> parent.startActivity(intent);
     }
 }

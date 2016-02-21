@@ -1,5 +1,9 @@
 package org.androidcru.crucentralcoast;
 
+/**
+ * Used primarily when a final yet mutable object is required in anonymous inner classes or lambdas.
+ * @param <T>
+ */
 public class Holder<T> {
     private T held = null;
 

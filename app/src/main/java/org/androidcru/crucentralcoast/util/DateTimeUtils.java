@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.util;
+package org.androidcru.crucentralcoast.util;
 
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoUnit;

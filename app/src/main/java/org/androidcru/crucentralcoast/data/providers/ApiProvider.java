@@ -1,15 +1,12 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiProvider
 {
@@ -24,15 +21,9 @@ public final class ApiProvider
 
     private ApiProvider()
     {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient();
-        client.interceptors().add(logging);
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.CRU_SERVER)
-                .client(client)
+                .client(CruApplication.okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

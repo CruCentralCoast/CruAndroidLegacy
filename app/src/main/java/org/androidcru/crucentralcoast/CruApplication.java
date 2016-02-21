@@ -8,6 +8,8 @@ import android.support.multidex.MultiDexApplication;
 
 import com.anupcowkur.reservoir.Reservoir;
 import com.facebook.FacebookSdk;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
@@ -20,43 +22,31 @@ import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
+import okhttp3.OkHttpClient;
+
 public class CruApplication extends MultiDexApplication
 {
 
 
     public static Gson gson;
-
+    public static OkHttpClient okHttpClient;
     private static Context context;
-
-    private static String PACKAGE_NAME;
+    private static SharedPreferences sharedPreferences;
 
     public static Context getContext()
     {
         return context;
     }
-    public static String retrievePackageName()
-    {
-        return PACKAGE_NAME;
-    }
-    public static final String FB_TOKEN_KEY = "fb_token_key";
-    public static final String FIRST_LAUNCH = "first_launch";
-    public static final String EVENT_ID = "event_ID";
-
-
-    private static SharedPreferences sharedPreferences;
-    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String PLAY_SERVICES = "play_services";
-
 
     @Override
     public void onCreate()
     {
         super.onCreate();
+        context = this;
 
         Logger.init().setLogLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
 
-        context = this;
-        PACKAGE_NAME = getPackageName();
+        Stetho.initializeWithDefaults(this);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -64,6 +54,7 @@ public class CruApplication extends MultiDexApplication
 
         setupDiskCache();
         setupGson();
+        setupOkHttpClient();
 
         if (checkPlayServices())
         {
@@ -71,6 +62,13 @@ public class CruApplication extends MultiDexApplication
             Intent service = new Intent(this, RegistrationIntentService.class);
             startService(service);
         }
+    }
+
+    private void setupOkHttpClient()
+    {
+        okHttpClient = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
     }
 
     /**
@@ -93,7 +91,7 @@ public class CruApplication extends MultiDexApplication
     {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        sharedPreferences.edit().putInt(PLAY_SERVICES, resultCode).apply();
+        sharedPreferences.edit().putInt(AppConstants.PLAY_SERVICES, resultCode).apply();
         return resultCode == ConnectionResult.SUCCESS;
     }
 
@@ -121,6 +119,7 @@ public class CruApplication extends MultiDexApplication
         CruApplication.getSharedPreferences().edit().putString(context.getString(R.string.gcm_registration_id), key).apply();
     }
 
+    //TODO apparently these can change.
     public static String getGCMID()
     {
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");

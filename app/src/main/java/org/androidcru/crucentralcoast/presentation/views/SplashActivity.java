@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
@@ -36,7 +37,7 @@ public class SplashActivity extends AppCompatActivity
         final Intent intent = new Intent(this, MainActivity.class);
 
         // Determine if the app has launched before.
-        if (mSharedPreferences.getBoolean(CruApplication.FIRST_LAUNCH, false))
+        if (mSharedPreferences.getBoolean(AppConstants.FIRST_LAUNCH, false))
             intent.setClass(this, MainActivity.class);
         else
             intent.setClass(this, SubscriptionStartupActivity.class);

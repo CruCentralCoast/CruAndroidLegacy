@@ -22,8 +22,8 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.presentation.util.MathUtil;
-import org.androidcru.crucentralcoast.presentation.util.MetricsUtil;
+import org.androidcru.crucentralcoast.util.MathUtil;
+import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
@@ -313,7 +313,7 @@ public class RideVM extends BaseRideVM
             builder.include(new LatLng(MathUtil.addMetersToLatitude(center.latitude, -radiusMeters), center.longitude));
             LatLngBounds bounds = builder.build();
 
-            int padding = MetricsUtil.dpToPx(CruApplication.getContext(), 8);
+            int padding = DisplayMetricsUtil.dpToPx(CruApplication.getContext(), 8);
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             map.animateCamera(cu);
         }

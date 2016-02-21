@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
@@ -51,13 +52,13 @@ public class SubscriptionsFragment extends Fragment
 
         binding.fab.setOnClickListener(v -> {
 
-            if (!CruApplication.getSharedPreferences().getBoolean(CruApplication.FIRST_LAUNCH, false))
+            if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))
             {
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
-            CruApplication.getSharedPreferences().edit().putBoolean(CruApplication.FIRST_LAUNCH, true).apply();
+            CruApplication.getSharedPreferences().edit().putBoolean(AppConstants.FIRST_LAUNCH, true).apply();
             getActivity().finish();
         });
 

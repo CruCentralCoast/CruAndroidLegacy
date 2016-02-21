@@ -16,6 +16,7 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
@@ -63,13 +64,13 @@ public class MainActivity extends AppCompatActivity
 
     private void checkPlayServicesCode()
     {
-        int playServicesCode = CruApplication.getSharedPreferences().getInt(CruApplication.PLAY_SERVICES, ConnectionResult.SUCCESS);
+        int playServicesCode = CruApplication.getSharedPreferences().getInt(AppConstants.PLAY_SERVICES, ConnectionResult.SUCCESS);
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         if(playServicesCode != ConnectionResult.SUCCESS)
         {
             if(apiAvailability.isUserResolvableError(playServicesCode))
             {
-                apiAvailability.getErrorDialog(this, playServicesCode, CruApplication.PLAY_SERVICES_RESOLUTION_REQUEST)
+                apiAvailability.getErrorDialog(this, playServicesCode, AppConstants.PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             }
             else

@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.util;
+package org.androidcru.crucentralcoast.util;
 
 public class MathUtil
 {

@@ -12,18 +12,16 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.databinding.PassengerFormBasicInfoBinding;
 
 import java.util.List;
 
 public class BasicInfoValidator  implements Validator.ValidationListener
 {
-    //lol don't ask. SO is God. http://stackoverflow.com/a/124179/1822968
-    public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
-            "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
 
     @NotEmpty EditText nameField;
-    @NotEmpty @Pattern(regex = PHONE_REGEX) EditText phoneField;
+    @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
 
     private Validator validator;
     private boolean isValid;

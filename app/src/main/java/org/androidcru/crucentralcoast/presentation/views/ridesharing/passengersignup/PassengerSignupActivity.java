@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
@@ -17,7 +17,7 @@ public class PassengerSignupActivity extends FormActivity
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null || bundle.getString(CruApplication.EVENT_ID, "").isEmpty())
+        if(bundle == null || bundle.getString(AppConstants.EVENT_ID, "").isEmpty())
         {
             Logger.e("PassengerSignupActivity requires that you pass an event ID.");
             Logger.e("Finishing activity...");

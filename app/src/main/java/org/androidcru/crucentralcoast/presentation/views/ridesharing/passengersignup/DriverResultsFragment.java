@@ -19,7 +19,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
-import org.androidcru.crucentralcoast.presentation.util.DateTimeUtils;
+import org.androidcru.crucentralcoast.util.DateTimeUtils;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import java.util.List;

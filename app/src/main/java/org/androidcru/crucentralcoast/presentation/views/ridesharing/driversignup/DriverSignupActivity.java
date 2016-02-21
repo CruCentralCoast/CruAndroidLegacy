@@ -10,6 +10,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -41,7 +42,7 @@ public class DriverSignupActivity extends AppCompatActivity
         setContentView(R.layout.progress_layout);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null || bundle.getString(CruApplication.EVENT_ID, "").isEmpty())
+        if(bundle == null || bundle.getString(AppConstants.EVENT_ID, "").isEmpty())
         {
             Logger.e("PassengerSignupActivity requires that you pass an event ID.");
             Logger.e("Finishing activity...");
@@ -50,7 +51,7 @@ public class DriverSignupActivity extends AppCompatActivity
         }
         else
         {
-            eventID = bundle.getString(CruApplication.EVENT_ID, "");
+            eventID = bundle.getString(AppConstants.EVENT_ID, "");
         }
 
         if (getIntent().getExtras().containsKey(RIDE_KEY)) {

@@ -14,6 +14,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.databinding.ActivityDriverFormBinding;
 
 import java.util.List;
@@ -21,12 +22,8 @@ import java.util.List;
 public class DriverSignupValidator implements Validator.ValidationListener
 {
 
-    //lol don't ask. SO is God. http://stackoverflow.com/a/124179/1822968
-    public static final String PHONE_REGEX = "1?\\s*\\W?\\s*([2-9][0-8][0-9])\\s*\\W?" +
-            "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
-
     @NotEmpty private EditText name;
-    @NotEmpty @Pattern(regex = PHONE_REGEX) private EditText phoneNumber;
+    @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) private EditText phoneNumber;
     @Select private Spinner gender;
     @Select private Spinner carCapacity;
     @Select private Spinner tripType;
