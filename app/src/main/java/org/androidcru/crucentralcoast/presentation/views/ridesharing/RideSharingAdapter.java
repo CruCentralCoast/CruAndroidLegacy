@@ -1,5 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,15 +63,19 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
         holder.eventDate.setText(cruEventVM.getDateTime());
         holder.driverButton.setOnClickListener(cruEventVM.onDriverClicked());
         holder.passengerButton.setOnClickListener(cruEventVM.onPassengerClicked());
-
+        Context context = holder.eventBanner.getContext();
         if(cruEventVM.cruEvent.mImage != null)
         {
-            Picasso.with(holder.eventBanner.getContext())
+            Picasso.with(context)
                     .load(cruEventVM.cruEvent.mImage.mURL)
                     .fit()
                     .into(holder.eventBanner);
         }
-
+        holder.chevView.setImageDrawable(cruEventVM.isExpanded
+                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
+                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+        holder.eventDescription.setText(cruEventVM.cruEvent.mDescription);
+        holder.eventDescription.setVisibility(cruEventVM.isExpanded ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -93,6 +99,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
         @Bind(R.id.eventDescription) TextView eventDescription;
         @Bind(R.id.launchDriver) Button driverButton;
         @Bind(R.id.launchPassenger) Button passengerButton;
+        @Bind(R.id.chevView) ImageView chevView;
 
         public CruRideViewHolder(View itemView) {
             super(itemView);
