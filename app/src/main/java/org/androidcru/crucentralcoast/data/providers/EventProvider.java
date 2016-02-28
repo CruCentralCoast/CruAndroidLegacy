@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import android.databinding.ObservableField;
-
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 

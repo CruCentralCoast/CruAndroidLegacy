@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.BaseObservable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -19,7 +18,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.android.schedulers.AndroidSchedulers;
 
-public class MyRidesDriverVM extends BaseObservable {
+public class MyRidesDriverVM {
 
     public Ride ride;
     public boolean isExpanded;

@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.databinding.BaseObservable;
 import android.view.View;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -11,7 +10,7 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignu
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
 import org.threeten.bp.format.DateTimeFormatter;
 
-public class CruEventVM extends BaseObservable
+public class CruEventVM
 {
     public CruEvent cruEvent;
     public boolean isExpanded;
