@@ -49,6 +49,11 @@ public class Ride
         this.carCapacity = carCapacity;
     }
 
+    public boolean isEmpty()
+    {
+        return id.isEmpty();
+    }
+
     public enum Direction
     {
         TO("to", "To Event"),
@@ -73,46 +78,15 @@ public class Ride
             return directionDetailed;
         }
 
-        public String[] getAll()
+        public static String[] getAll()
         {
             Direction[] directions = Direction.values();
             String[] directionStr = new String[directions.length];
             for(int i = 0; i < directions.length; i++)
             {
-                directionStr[i] = directions[i].getValue();
+                directionStr[i] = directions[i].getValueDetailed();
             }
             return directionStr;
-        }
-    }
-
-    //can't decide if this should be used
-    public enum Gender
-    {
-        ANY("Any"),
-        MAN("Man"),
-        WOMAN("Woman");
-
-        private String gender;
-
-        Gender(String gender)
-        {
-            this.gender = gender;
-        }
-
-        public String getValue()
-        {
-            return gender;
-        }
-
-        public String[] getAll()
-        {
-            Gender[] genders = Gender.values();
-            String[] genderStr = new String[genders.length];
-            for(int i = 0; i < genders.length; i++)
-            {
-               genderStr[i] = genders[i].getValue();
-            }
-            return genderStr;
         }
     }
 }

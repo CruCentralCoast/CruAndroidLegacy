@@ -1,10 +1,11 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
+import android.app.Activity;
 import android.app.FragmentManager;
-import android.databinding.ObservableField;
+import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -15,8 +16,8 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
-import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -30,7 +31,7 @@ import java.util.Calendar;
 import rx.Observable;
 
 @SuppressWarnings("unused")
-public abstract class BaseRideVM
+public abstract class BaseRideVM extends BaseVM
 {
     protected static final int NUM_HOURS = 24;
     protected static final int NUM_MINUTES = 60;
@@ -41,22 +42,31 @@ public abstract class BaseRideVM
     protected static Timepoint[] timepoints = hours.flatMap((h) -> minutes.map((m) -> new Timepoint(h, m)))
             .toList().toBlocking().first().toArray(new Timepoint[NUM_TIMES]);
 
-    protected FragmentManager fm;
-    public ObservableField<Ride.Direction> direction;
+    protected LocalDate date;
+    protected LocalTime time;
+    private String[] genders;
 
-    public BaseRideVM(FragmentManager fm)
+    protected FragmentManager fm;
+
+    public BaseRideVM(Activity activity, FragmentManager fm)
     {
+        super(activity);
         this.fm = fm;
-        direction = new ObservableField<>(null);
     }
 
-    protected abstract void syncFromDate(LocalDate date);
-    protected abstract void syncFromTime(LocalTime time);
-    protected abstract void syncToDate(LocalDate date);
-    protected abstract void syncToTime(LocalTime time);
+    public BaseRideVM(Fragment fragment, FragmentManager fm)
+    {
+        super(fragment);
+        this.fm = fm;
+    }
+
+    public BaseRideVM(View rootView, FragmentManager fm)
+    {
+        super(rootView);
+        this.fm = fm;
+    }
+
     protected abstract void placeSelected(LatLng precisePlace, String placeAddress);
-    protected abstract void tripTypeSelected(Ride.Direction direction);
-    protected abstract void genderSelected(String gender);
 
 
     private TimePickerDialog getTimeDialog()
@@ -88,96 +98,26 @@ public abstract class BaseRideVM
         return dpd;
     }
 
-    public View.OnClickListener onToEventDateClicked()
+    protected void onEventDateClicked(View v)
     {
-        return v -> {
-            DatePickerDialog dpd = getDateDialog();
-            dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
-                LocalDate date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
-                ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
-                syncToDate(date);
-            });
-            dpd.show(fm, "whatever");
-        };
+        DatePickerDialog dpd = getDateDialog();
+        dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
+            date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
+            ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        });
+        dpd.show(fm, "whatever");
     }
 
-    public View.OnClickListener onToEventTimeClicked()
+    protected void onEventTimeClicked(View v)
     {
-
-        return v -> {
-            TimePickerDialog tpd = getTimeDialog();
-            tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-                LocalTime time = LocalTime.of(hourOfDay, minute, second);
-                ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
-                syncToTime(time);
-            });
-            tpd.show(fm, "whatever");
-        };
-
-
+        TimePickerDialog tpd = getTimeDialog();
+        tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
+            time = LocalTime.of(hourOfDay, minute, second);
+            ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+        });
+        tpd.show(fm, "whatever");
     }
 
-    public View.OnClickListener onFromEventDateClicked()
-    {
-        return v -> {
-            DatePickerDialog dpd = getDateDialog();
-            dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
-                LocalDate date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
-                ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
-                syncFromDate(date);
-            });
-            dpd.show(fm, "whatever");
-        };
-    }
-
-    public View.OnClickListener onFromEventTimeClicked()
-    {
-        return v -> {
-            TimePickerDialog tpd = getTimeDialog();
-            tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-                LocalTime time = LocalTime.of(hourOfDay, minute, second);
-                ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
-                syncFromTime(time);
-            });
-            tpd.show(fm, "whatever");
-        };
-    }
-
-
-    public AdapterView.OnItemSelectedListener onGenderSelected()
-    {
-        return new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                if(position > 0)
-                {
-                    genderSelected(view.getContext().getResources().getStringArray(R.array.genders)[position]);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        };
-    }
-
-    public AdapterView.OnItemSelectedListener onTripTypeSelected()
-    {
-        return new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                direction.set(position > 0 ? Ride.Direction.values()[position - 1] : null);
-                if(position > 0)
-                    tripTypeSelected(direction.get());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        };
-    }
 
     public PlaceSelectionListener onPlaceSelected()
     {
@@ -192,5 +132,74 @@ public abstract class BaseRideVM
                 Logger.i("ERROR:", "An error occurred: " + status);
             }
         };
+    }
+
+    protected String[] directionsForSpinner(Ride.Direction[] directions)
+    {
+        String[] directionsForSpinner = new String[directions.length + 1];
+        directionsForSpinner[0] = "Select Direction";
+        for(int i = 0; i < directions.length; i++)
+        {
+            directionsForSpinner[i] = directions[i].getValueDetailed();
+        }
+        return directionsForSpinner;
+    }
+
+    protected int getDirectionIndex(Ride.Direction d, Ride.Direction[] directions)
+    {
+        int index = 0;
+
+        if(d == null)
+            return index;
+
+        for(int i = 0; i < directions.length; i++)
+        {
+            if(d == directions[i])
+            {
+                index = i + 1;
+                break;
+            }
+        }
+        return index;
+    }
+
+    protected Ride.Direction retrieveDirection(Spinner tripTypeField, Ride.Direction[] directions)
+    {
+        return directions[tripTypeField.getSelectedItemPosition() - 1];
+    }
+
+    protected int getGenderIndex(String g)
+    {
+        int index = 0;
+
+        if(g == null)
+            return index;
+
+        for(int i = 1; i < genders.length; i++)
+        {
+            if(g.equals(genders[i]))
+            {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    protected String[] gendersForSpinner(String[] actualGenders)
+    {
+        genders = new String[actualGenders.length + 1];
+        genders[0] = "Select Genders";
+        System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
+        return genders;
+    }
+
+    protected String[] gendersForSpinner(int resourceId)
+    {
+        String[] actualGenders = context.getResources().getStringArray(resourceId);
+        genders = new String[actualGenders.length + 1];
+        genders[0] = "Select Genders";
+        System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
+        return genders;
     }
 }

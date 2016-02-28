@@ -19,11 +19,13 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
-import org.androidcru.crucentralcoast.util.DateTimeUtils;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.util.DateTimeUtils;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -31,9 +33,9 @@ import rx.schedulers.Schedulers;
 public class DriverResultsFragment extends FormContentFragment
 {
 
-    private RecyclerView driverResultsList;
-    private LinearLayout emptyList;
-    private ProgressBar progressBar;
+    @Bind(R.id.driver_results_list) RecyclerView driverResultsList;
+    @Bind(R.id.empty_list) LinearLayout emptyList;
+    @Bind(R.id.progress_bar) ProgressBar progressBar;
 
     private RideFilter filter;
     private List<Ride> results;
@@ -49,11 +51,8 @@ public class DriverResultsFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
-        driverResultsList = (RecyclerView) view.findViewById(R.id.driver_results_list);
+        ButterKnife.bind(this, view);
         driverResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        emptyList = (LinearLayout) view.findViewById(R.id.empty_list);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
     }
 
     @Override
@@ -99,16 +98,7 @@ public class DriverResultsFragment extends FormContentFragment
                 .filter(ride -> {
                     if (filter.direction == Ride.Direction.TO || filter.direction == Ride.Direction.ROUNDTRIP)
                     {
-                        return DateTimeUtils.within(ride.time, filter.toDateTime, 0, 3);
-                    }
-                    return true;
-                })
-                        //filter by fromEventDateTime
-                //TODO update properly, fromTime
-                .filter(ride -> {
-                    if (filter.direction == Ride.Direction.FROM || filter.direction == Ride.Direction.ROUNDTRIP)
-                    {
-                        return DateTimeUtils.within(ride.time, filter.toDateTime, 0, 3);
+                        return DateTimeUtils.within(ride.time, filter.dateTime, 0, 3);
                     }
                     return true;
                 })
