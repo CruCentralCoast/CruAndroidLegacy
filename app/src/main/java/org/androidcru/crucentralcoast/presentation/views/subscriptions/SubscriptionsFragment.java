@@ -16,6 +16,7 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 
 import java.util.HashMap;
@@ -52,6 +53,7 @@ public class SubscriptionsFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
         fab.setOnClickListener(v -> {
 
             if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))

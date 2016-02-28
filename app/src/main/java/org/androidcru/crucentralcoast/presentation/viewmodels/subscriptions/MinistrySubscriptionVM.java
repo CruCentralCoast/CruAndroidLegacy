@@ -36,6 +36,6 @@ public class MinistrySubscriptionVM
             RegistrationIntentService.subscribeToMinistry(ministry.mSubscriptionId);
         else
             RegistrationIntentService.unsubscribeToMinistry(ministry.mSubscriptionId);
-        sharedPreferences.edit().putBoolean(ministry.mSubscriptionId, isSubscribed).apply();
+        sharedPreferences.edit().putBoolean(ministry.mSubscriptionId, isSubscribed).commit();
     }
 }

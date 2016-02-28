@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
@@ -24,6 +23,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 
@@ -81,14 +81,14 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             {
                 MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
 
-                boolean isChecked = CruApplication.getSharedPreferences().contains(ministrySubscriptionVM.ministry.mSubscriptionId);
+                boolean isChecked = ministrySubscriptionVM.getIsSubscribed();
                 ministrySubscriptionHolder.checkBox.setChecked(isChecked);
                 if(ministrySubscriptionVM.ministry.mCruImage != null)
                 {
-                    Context c = ministrySubscriptionHolder.ministryImage.getContext();
-                    Picasso.with(c)
+                    Context context = ministrySubscriptionHolder.ministryImage.getContext();
+                    Picasso.with(context)
                             .load(ministrySubscriptionVM.ministry.mCruImage.mURL)
-                            .transform(new ColorFilterTransformation(ContextCompat.getColor(c, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
+                            .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
                             .into(ministrySubscriptionHolder.ministryImage);
                 }
 
@@ -117,8 +117,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.header)
-        TextView header;
+        @Bind(R.id.header) TextView header;
 
         public HeaderHolder(View itemView)
         {
@@ -128,7 +127,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     }
 
-    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
     {
         @Bind(R.id.ministry_image) ImageView ministryImage;
         @Bind(R.id.checkbox) CheckBox checkBox;
@@ -139,7 +138,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ButterKnife.bind(this, itemView);
         }
 
-        @Override
+        @OnClick(R.id.tile_subscription)
         public void onClick(View v)
         {
             MinistrySubscriptionVM ministrySubscriptionVM = mMinistries.get(getAdapterPosition());
