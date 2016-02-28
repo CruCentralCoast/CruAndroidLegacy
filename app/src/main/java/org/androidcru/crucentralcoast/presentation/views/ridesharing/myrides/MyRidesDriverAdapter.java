@@ -95,7 +95,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         public void onClick(View v)
         {
             Bundle b = new Bundle();
-            b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition())));
+            b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);
             context.startActivity(intent);

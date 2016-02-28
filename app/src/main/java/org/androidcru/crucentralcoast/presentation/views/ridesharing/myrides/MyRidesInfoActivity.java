@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
@@ -51,9 +53,12 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     @Bind(R.id.event_list) RecyclerView eventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.eventName) EditText eventName;
-    @Bind(R.id.ride_time) EditText rideTime;
-    @Bind(R.id.departureLoc) EditText departureLoc;
+    @Bind(R.id.eventName) TextView eventName;
+    @Bind(R.id.ride_time) TextView rideTime;
+    @Bind(R.id.departureLoc) TextView departureLoc;
+
+    @Bind(R.id.editOffering) Button editButton;
+    @Bind(R.id.cancelOffering) Button cancelButton;
 
     private void setupUI() {
         //TODO: query for event to access event name and image
@@ -63,38 +68,10 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         departureLoc.setText(ride.location.toString());
     }
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-//    {
-//        super.onCreateView(inflater, container, savedInstanceState);
-//        return inflater.inflate(R.layout.fragment_events, container, false);
-//    }
-
-//    @Override
-//    public void onCreate(View view, @Nullable Bundle savedInstanceState)
-//    {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        //Let ButterKnife find all injected views and bind them to member variables
-//        ButterKnife.bind(this, view);
-//
-//        //Enables actions in the Activity Toolbar (top-right buttons)
-//        //setHasOptionsMenu(true);
-//
-//        //LayoutManager for RecyclerView
-//        layoutManager = new LinearLayoutManager(getActivity());
-//        eventList.setLayoutManager(layoutManager);
-//
-//        //Adapter for RecyclerView
-//        MyRidesDriverAdapter rideSharingAdapter = new MyRidesDriverAdapter(new ArrayList<>(), layoutManager);
-//        eventList.setAdapter(rideSharingAdapter);
-//        eventList.setHasFixedSize(true);
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_rideinfo);
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this);
         ride = CruApplication.gson.fromJson(getIntent().getExtras().getString("ride"), Ride.class);
