@@ -25,7 +25,6 @@ import java.util.Set;
 
 import rx.Observer;
 
-@SuppressWarnings("unused")
 public class CruEventVM
 {
     public CruEvent cruEvent;
