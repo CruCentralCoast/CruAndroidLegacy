@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout>
-
-    <data>
-        <import type="android.view.View"/>
-        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.CruEventVM"/>
-        <variable name="event" type="CruEventVM"/>
-    </data>
-
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,7 +23,6 @@
             android:id="@+id/eventName"
             android:layout_marginLeft="12dp"
             tools:text="Fall Retreat"
-            android:text="@{event.cruEvent.mName}"
             android:textColor="@color/grey800"
             android:textSize="24dp"
             android:layout_marginTop="8dp"/>
@@ -42,7 +32,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/eventDate"
             tools:text="Tuesday, January 11 10:00am - 7:00pm"
-            android:text="@{event.dateTime}"
             android:layout_marginLeft="12dp"
             android:layout_marginBottom="4dp"
             android:textSize="16sp"/>
@@ -52,11 +41,7 @@
             android:layout_height="180dp"
             android:adjustViewBounds="true"
             android:id="@+id/event_banner"
-            android:layout_marginTop="8dp"
-            app:src="@{event.cruEvent.mImage != null ? event.cruEvent.mImage.mURL : ``}"
-            app:placeholder="@{@drawable/logo_grey}"
-            app:scaleType="@{`fit`}"
-            />
+            android:layout_marginTop="8dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -74,7 +59,6 @@
                 android:textColor="@color/cruDarkBlue"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="16dp"
-                android:onClick="@{event.onDriverClicked}"
                 android:foreground="?android:attr/selectableItemBackground"/>
 
             <Button
@@ -87,8 +71,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:textColor="@color/cruDarkBlue"
                 android:layout_marginRight="16dp"
-                android:layout_centerInParent="true"
-                android:onClick="@{event.onPassengerClicked}"/>
+                android:layout_centerInParent="true"/>
 
             <ImageView
                 android:layout_width="48dp"
@@ -98,7 +81,6 @@
                 android:layout_centerInParent="true"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@{event.isExpanded ? @drawable/ic_chevron_up_grey600_48dp : @drawable/ic_chevron_down_grey600_48dp}"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="8dp"/>
@@ -110,14 +92,6 @@
             android:id="@+id/eventDescription"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:layout_marginBottom="16dp"
-            android:text="@{event.cruEvent.mDescription}"
-            android:visibility="@{event.isExpanded ? View.VISIBLE : View.GONE}" />
-
+            android:layout_marginBottom="16dp"/>
     </LinearLayout>
-
-
-
 </android.support.v7.widget.CardView>
-
-</layout>

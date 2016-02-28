@@ -1,17 +1,23 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing;
 
-import android.databinding.DataBindingUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import org.androidcru.crucentralcoast.BR;
-import org.androidcru.crucentralcoast.databinding.CardRidesharingBinding;
+import com.squareup.picasso.Picasso;
+
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.CruEventVM;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * RideSharingAdapter is a RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -38,9 +44,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
     public CruRideViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CardRidesharingBinding binding = CardRidesharingBinding.inflate(inflater, parent, false);
-
-        return new CruRideViewHolder(binding.getRoot());
+        return new CruRideViewHolder(inflater.inflate(R.layout.card_ridesharing, parent, false));
     }
 
     //TODO support events spanning multiple days (fall retreat)
@@ -53,8 +57,19 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
         CruEventVM cruEventVM = mEvents.get(position);
-        holder.getBinding().setVariable(BR.event, cruEventVM);
-        holder.getBinding().executePendingBindings();
+        holder.eventName.setText(cruEventVM.cruEvent.mName);
+        holder.eventDate.setText(cruEventVM.getDateTime());
+        holder.driverButton.setOnClickListener(cruEventVM.onDriverClicked());
+        holder.passengerButton.setOnClickListener(cruEventVM.onPassengerClicked());
+
+        if(cruEventVM.cruEvent.mImage != null)
+        {
+            Picasso.with(holder.eventBanner.getContext())
+                    .load(cruEventVM.cruEvent.mImage.mURL)
+                    .fit()
+                    .into(holder.eventBanner);
+        }
+
     }
 
     /**
@@ -71,13 +86,18 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
      * CruRideViewHolder is a view representation of the model for the list
      */
     public class CruRideViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public CruRideViewHolder(View rootView) {
-            super(rootView);
-            rootView.setOnClickListener(this);
-        }
 
-        public CardRidesharingBinding getBinding() {
-            return DataBindingUtil.getBinding(itemView);
+        @Bind(R.id.eventName) TextView eventName;
+        @Bind(R.id.eventDate) TextView eventDate;
+        @Bind(R.id.event_banner) ImageView eventBanner;
+        @Bind(R.id.eventDescription) TextView eventDescription;
+        @Bind(R.id.launchDriver) Button driverButton;
+        @Bind(R.id.launchPassenger) Button passengerButton;
+
+        public CruRideViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         /**
@@ -92,7 +112,7 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
         public void onClick(View v)
         {
             int visibility;
-            if(getBinding().eventDescription.getVisibility() == View.VISIBLE)
+            if(eventDescription.getVisibility() == View.VISIBLE)
             {
                 visibility = View.GONE;
             }
@@ -100,9 +120,9 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
             {
                 visibility = View.VISIBLE;
             }
-            getBinding().eventDescription.setVisibility(visibility);
+            eventDescription.setVisibility(visibility);
 
-            mEvents.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
+            mEvents.get(getAdapterPosition()).isExpanded = (View.VISIBLE == visibility);
             notifyItemChanged(getAdapterPosition());
             mLayoutManager.scrollToPosition(getAdapterPosition());
         }
