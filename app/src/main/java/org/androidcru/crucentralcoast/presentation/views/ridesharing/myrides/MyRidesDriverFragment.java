@@ -99,7 +99,7 @@ public class MyRidesDriverFragment extends Fragment {
         eventList.setLayoutManager(layoutManager);
 
         //Adapter for RecyclerView
-        MyRidesDriverAdapter rideSharingAdapter = new MyRidesDriverAdapter(new ArrayList<>(), layoutManager);
+        MyRidesDriverAdapter rideSharingAdapter = new MyRidesDriverAdapter(new ArrayList<>(), getContext());
         eventList.setAdapter(rideSharingAdapter);
         eventList.setHasFixedSize(true);
 
@@ -132,7 +132,7 @@ public class MyRidesDriverFragment extends Fragment {
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
 
-        eventList.setAdapter(new MyRidesDriverAdapter(rideVMs, layoutManager));
+        eventList.setAdapter(new MyRidesDriverAdapter(rideVMs, getContext()));
         swipeRefreshLayout.setRefreshing(false);
     }
 }

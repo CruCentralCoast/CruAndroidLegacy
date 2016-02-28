@@ -1,13 +1,16 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.LinearLayoutManager;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.BR;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.databinding.CardMyridesdriverBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 
@@ -20,12 +23,12 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
 {
     private ArrayList<MyRidesDriverVM> rides;
 
-    private LinearLayoutManager layoutManager;
+    private Context context;
 
-    public MyRidesDriverAdapter(ArrayList<MyRidesDriverVM> rides, LinearLayoutManager layoutManager)
+    public MyRidesDriverAdapter(ArrayList<MyRidesDriverVM> rides, Context context)
     {
         this.rides = rides;
-        this.layoutManager = layoutManager;
+        this.context = context;
     }
 
     /**
@@ -91,19 +94,24 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         @Override
         public void onClick(View v)
         {
-            int visibility;
-            if(getBinding().passengerList.getVisibility() == View.VISIBLE)
-            {
-                visibility = View.GONE;
-            }
-            else
-            {
-                visibility = View.VISIBLE;
-            }
-            getBinding().passengerList.setVisibility(visibility);
-            rides.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
-            notifyItemChanged(getAdapterPosition());
-            layoutManager.scrollToPosition(getAdapterPosition());
+            Bundle b = new Bundle();
+            b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition())));
+            Intent intent = new Intent(context, MyRidesInfoActivity.class);
+            intent.putExtras(b);
+            context.startActivity(intent);
+//            int visibility;
+//            if(getBinding().passengerList.getVisibility() == View.VISIBLE)
+//            {
+//                visibility = View.GONE;
+//            }
+//            else
+//            {
+//                visibility = View.VISIBLE;
+//            }
+//            getBinding().passengerList.setVisibility(visibility);
+//            rides.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
+//            notifyItemChanged(getAdapterPosition());
+//            layoutManager.scrollToPosition(getAdapterPosition());
         }
     }
 }

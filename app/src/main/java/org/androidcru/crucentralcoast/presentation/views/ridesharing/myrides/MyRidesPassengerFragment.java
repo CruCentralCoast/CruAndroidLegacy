@@ -100,7 +100,7 @@ public class MyRidesPassengerFragment extends Fragment {
         eventList.setLayoutManager(layoutManager);
 
         //Adapter for RecyclerView
-        MyRidesDriverAdapter rideSharingAdapter = new MyRidesDriverAdapter(new ArrayList<>(), layoutManager);
+        MyRidesDriverAdapter rideSharingAdapter = new MyRidesDriverAdapter(new ArrayList<>(), getContext());
         eventList.setAdapter(rideSharingAdapter);
         eventList.setHasFixedSize(true);
 
