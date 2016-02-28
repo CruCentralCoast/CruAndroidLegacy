@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout>
-
-    <data>
-        <import type="android.view.View"/>
-        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM"/>
-        <variable name="ride" type="MyRidesDriverVM"/>
-    </data>
-
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/my_rides_driver_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardPreventCornerOverlap="true"
-    card_view:cardUseCompatPadding="true"
-    android:layout_margin="8dp">
+        android:id="@+id/my_rides_driver_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardPreventCornerOverlap="true"
+        card_view:cardUseCompatPadding="true"
+        android:layout_margin="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +23,6 @@
             android:id="@+id/eventName"
             android:layout_marginLeft="12dp"
             tools:text="Fall Retreat"
-            android:text="@{ride.eventName}"
             android:textColor="@color/grey800"
             android:textSize="24dp"
             android:layout_marginTop="8dp"/>
@@ -42,7 +32,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/departureTime"
             tools:text="Tuesday, January 11 10:00am - 7:00pm"
-            android:text="@{ride.dateTime}"
             android:layout_marginLeft="12dp"
             android:layout_marginBottom="4dp"
             android:textSize="16sp"/>
@@ -52,7 +41,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/departureLoc"
         tools:text="Performance Arts Center"
-            android:text="@{ride.location}"
         android:layout_marginLeft="12dp"
         android:layout_marginBottom="4dp"
         android:textSize="16sp"/>
@@ -74,7 +62,6 @@
                 android:textColor="@color/cruDarkBlue"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="16dp"
-                android:onClick="@{ride.onEditOfferingClicked}"
                 android:foreground="?android:attr/selectableItemBackground"/>
 
             <Button
@@ -87,8 +74,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:textColor="@color/cruDarkBlue"
                 android:layout_marginRight="16dp"
-                android:layout_centerInParent="true"
-                android:onClick="@{ride.onCancelOfferingClicked}"/>
+                android:layout_centerInParent="true"/>
 
 
             <ImageView
@@ -111,14 +97,6 @@
             android:id="@+id/passengerList"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:layout_marginBottom="16dp"
-            android:text="@{ride.passengerList.isEmpty ? `No passengers yet!` : ride.passengerList}"
-            android:visibility="@{ride.isExpanded ? View.VISIBLE : View.GONE}" />
-
+            android:layout_marginBottom="16dp"/>
     </LinearLayout>
-
-
-
 </android.support.v7.widget.CardView>
-
-</layout>

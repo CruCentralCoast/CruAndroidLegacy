@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -21,26 +19,21 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.android.schedulers.AndroidSchedulers;
 
-@SuppressWarnings("unused")
 public class MyRidesDriverVM extends BaseObservable {
 
     public Ride ride;
-    public final ObservableBoolean isExpanded = new ObservableBoolean();
+    public boolean isExpanded;
     private Activity parent;
 
-    public final static String DATE_FORMATTER = "EEEE MMMM ee,";
-    public final static String TIME_FORMATTER = "h:mm a";
-    public ObservableField<String> passengerList;
-    public ObservableField<String> eventName;
+    public String passengerList;
+    public String eventName;
     AlertDialog alertDialog;
 
     public MyRidesDriverVM(Ride ride, boolean isExpanded, Activity activity)
     {
         this.ride = ride;
-        this.isExpanded.set(isExpanded);
+        this.isExpanded = isExpanded;
         this.parent = activity;
-        passengerList = new ObservableField<>();
-        eventName = new ObservableField<>();
         initAlertDialog();
         updateEventName();
         updatePassengerList();
@@ -49,8 +42,8 @@ public class MyRidesDriverVM extends BaseObservable {
     //TODO: will eventually need to get a to and from time, not just 1
     public String getDateTime()
     {
-        return ride.time.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
-                + " " + ride.time.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
+        return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+                + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
     }
 
     public void updateEventName() {
@@ -59,7 +52,7 @@ public class MyRidesDriverVM extends BaseObservable {
         EventProvider.getInstance().requestCruEventByID(ride.eventId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(results -> {
-                eventName.set(results.mName);
+                eventName = results.mName;
             });
     }
 
@@ -73,40 +66,20 @@ public class MyRidesDriverVM extends BaseObservable {
     public void updatePassengerList() {
         StringBuilder list = new StringBuilder();
         for (Passenger p : ride.passengers) {
-            //TODO: this is ugly, Jon tried to help, better?
             if (list.toString().isEmpty())
                 list.append("Name: ").append(p.name).append("\nPhone: ").append(p.phone).append("\n\n");
             else
                 list.append("Name: ").append(p.name).append("\nPhone: ").append(p.phone).append("\n\n");
         }
-        passengerList.set(list.toString());
-        /*
-        PassengerProvider.getInstance().getPassengers(ride.passengerIds)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(pList -> {
-                    for (Passenger p : pList) {
-                        //TODO: this is ugly
-                        if (list.held() == null)
-                            list.hold("Name: " + p.name + "\nPhone: " + p.phone + "\n\n");
-                        else
-                            list.hold(list.held() + "Name: " + p.name + "\nPhone: " + p.phone + "\n\n");
-                    }
-                }, e -> {
-                }, () -> {
-                    passengerList.set(list.held());
-                });
-        */
+        passengerList = list.toString();
     }
-
-    //TODO:put this somewhere else, like in strings.xml
-    private static final String RIDE_KEY = "filled ride";
 
     //Sends the info about the ride to the DriverSignupActivity so that it can fill in the data
     public View.OnClickListener onEditOfferingClicked()
     {
         Intent intent = new Intent(parent, DriverSignupActivity.class);
         Bundle extras = new Bundle();
-        extras.putString(RIDE_KEY, ride.id);
+        extras.putString(AppConstants.RIDE_KEY, ride.id);
         extras.putString(AppConstants.EVENT_ID, ride.eventId);
         intent.putExtras(extras);
         return v -> parent.startActivity(intent);

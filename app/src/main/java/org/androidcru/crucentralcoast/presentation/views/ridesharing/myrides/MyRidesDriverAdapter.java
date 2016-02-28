@@ -1,17 +1,20 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
-import android.databinding.DataBindingUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-import org.androidcru.crucentralcoast.BR;
-import org.androidcru.crucentralcoast.databinding.CardMyridesdriverBinding;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * RideSharingAdapter is a RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -38,9 +41,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
     public CruRideViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CardMyridesdriverBinding binding = CardMyridesdriverBinding.inflate(inflater, parent, false);
-
-        return new CruRideViewHolder(binding.getRoot());
+        return new CruRideViewHolder(inflater.inflate(R.layout.card_myridesdriver, parent, false));
     }
 
     //TODO support events spanning multiple days (fall retreat)
@@ -53,8 +54,12 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
         MyRidesDriverVM rideVM = rides.get(position);
-        holder.getBinding().setVariable(BR.ride, rideVM);
-        holder.getBinding().executePendingBindings();
+        holder.eventName.setText(rideVM.eventName);
+        holder.departureTime.setText(rideVM.getDateTime());
+        holder.departureLoc.setText(rideVM.getLocation());
+        holder.editOffering.setOnClickListener(rideVM.onEditOfferingClicked());
+        holder.cancelOffering.setOnClickListener(rideVM.onCancelOfferingClicked());
+        holder.passengerList.setText(rideVM.passengerList);
     }
 
     /**
@@ -71,13 +76,19 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
      * CruRideViewHolder is a view representation of the model for the list
      */
     public class CruRideViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @Bind(R.id.eventName) TextView eventName;
+        @Bind(R.id.departureTime) TextView departureTime;
+        @Bind(R.id.departureLoc) TextView departureLoc;
+        @Bind(R.id.editOffering) Button editOffering;
+        @Bind(R.id.cancelOffering) Button cancelOffering;
+        @Bind(R.id.passengerList) TextView passengerList;
+
         public CruRideViewHolder(View rootView) {
             super(rootView);
+            ButterKnife.bind(this, rootView);
             rootView.setOnClickListener(this);
-        }
 
-        public CardMyridesdriverBinding getBinding() {
-            return DataBindingUtil.getBinding(itemView);
         }
 
         /**
@@ -92,7 +103,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         public void onClick(View v)
         {
             int visibility;
-            if(getBinding().passengerList.getVisibility() == View.VISIBLE)
+            if(passengerList.getVisibility() == View.VISIBLE)
             {
                 visibility = View.GONE;
             }
@@ -100,8 +111,8 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
             {
                 visibility = View.VISIBLE;
             }
-            getBinding().passengerList.setVisibility(visibility);
-            rides.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
+            passengerList.setVisibility(visibility);
+            rides.get(getAdapterPosition()).isExpanded = (View.VISIBLE == visibility);
             notifyItemChanged(getAdapterPosition());
             layoutManager.scrollToPosition(getAdapterPosition());
         }
