@@ -1,22 +1,30 @@
 package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 
-import android.databinding.DataBindingUtil;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.databinding.SubscriptionHeaderBinding;
-import org.androidcru.crucentralcoast.databinding.TileSubscriptionBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 
 public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -53,11 +61,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType)
         {
             case MINISTRY_VIEW:
-                TileSubscriptionBinding tileBinding = TileSubscriptionBinding.inflate(inflater, parent, false);
-                return new MinistrySubscriptionHolder(tileBinding.getRoot());
+                View tileView = inflater.inflate(R.layout.tile_subscription, parent, false);
+                return new MinistrySubscriptionHolder(tileView);
             case HEADER_VIEW:
-                SubscriptionHeaderBinding headerBinding = SubscriptionHeaderBinding.inflate(inflater, parent, false);
-                return new HeaderHolder(headerBinding.getRoot());
+                View headerView = inflater.inflate(R.layout.subscription_header, parent, false);
+                return new HeaderHolder(headerView);
             default:
                 return new FooterHolder(inflater.inflate(R.layout.blank_footer, parent, false));
         }
@@ -72,11 +80,23 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             if (holder instanceof MinistrySubscriptionHolder)
             {
                 MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
-                ministrySubscriptionHolder.getBinding().setVariable(BR.subscription, ministrySubscriptionVM);
+
+                boolean isChecked = CruApplication.getSharedPreferences().contains(ministrySubscriptionVM.ministry.mSubscriptionId);
+                ministrySubscriptionHolder.checkBox.setChecked(isChecked);
+                if(ministrySubscriptionVM.ministry.mCruImage != null)
+                {
+                    Context c = ministrySubscriptionHolder.ministryImage.getContext();
+                    Picasso.with(c)
+                            .load(ministrySubscriptionVM.ministry.mCruImage.mURL)
+                            .transform(new ColorFilterTransformation(ContextCompat.getColor(c, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
+                            .into(ministrySubscriptionHolder.ministryImage);
+                }
+
+
             } else if (holder instanceof HeaderHolder)
             {
                 HeaderHolder headerHolder = (HeaderHolder) holder;
-                headerHolder.getBinding().setVariable(BR.subscription, ministrySubscriptionVM);
+                headerHolder.header.setText(ministrySubscriptionVM.campusName);
             }
         }
     }
@@ -97,28 +117,34 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {
+        @Bind(R.id.header)
+        TextView header;
+
         public HeaderHolder(View itemView)
         {
             super(itemView);
-        }
-
-        public SubscriptionHeaderBinding getBinding() {
-            return DataBindingUtil.getBinding(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
     }
 
-    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
+    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
+        @Bind(R.id.ministry_image) ImageView ministryImage;
+        @Bind(R.id.checkbox) CheckBox checkBox;
 
         public MinistrySubscriptionHolder(View itemView)
         {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public TileSubscriptionBinding getBinding()
+        @Override
+        public void onClick(View v)
         {
-            return DataBindingUtil.getBinding(itemView);
+            MinistrySubscriptionVM ministrySubscriptionVM = mMinistries.get(getAdapterPosition());
+            ministrySubscriptionVM.setIsSubscribed(!ministrySubscriptionVM.getIsSubscribed());
+            notifyItemChanged(getAdapterPosition());
         }
     }
 

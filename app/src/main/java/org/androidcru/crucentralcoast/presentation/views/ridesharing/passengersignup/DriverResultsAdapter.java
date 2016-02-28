@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.databinding.ItemDriverResultBinding;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContent;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -36,9 +35,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
     public DriverResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemDriverResultBinding binding = ItemDriverResultBinding.inflate(inflater, parent, false);
-
-        return new DriverResultViewHolder(binding.getRoot());
+        return new DriverResultViewHolder(inflater.inflate(R.layout.item_driver_result, parent, false));
     }
 
     @Override

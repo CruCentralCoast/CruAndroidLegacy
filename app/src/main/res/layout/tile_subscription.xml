@@ -1,52 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginLeft="4dp">
 
-    <data>
-        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM" />
-        <variable name="subscription" type="MinistrySubscriptionVM"/>
-    </data>
-
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
-        android:onClick="@{subscription.onMinistryClick}">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:theme="@style/SubscriptionCheckBox"
-                    android:clickable="false"
-                    android:checked="@{subscription.isSubscribed}"
-                    android:id="@+id/checkbox"/>
-
-            </RelativeLayout>
-
-            <ImageView
-                android:layout_width="fill_parent"
+            <CheckBox
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:id="@+id/ministry_image"
-                android:adjustViewBounds="true"
-                app:src="@{subscription.ministry.mCruImage.mURL}"
-                app:tint="@{subscription.isSubscribed ? @color/cruDarkBlue : @color/cruGray}"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:theme="@style/SubscriptionCheckBox"
+                android:clickable="false"
+                android:id="@+id/checkbox"/>
 
-        </FrameLayout>
+        </RelativeLayout>
 
-    </RelativeLayout>
-</layout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/ministry_image"
+            android:adjustViewBounds="true"/>
+
+    </FrameLayout>
+</RelativeLayout>
