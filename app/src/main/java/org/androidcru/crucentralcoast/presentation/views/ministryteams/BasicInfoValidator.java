@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -15,43 +14,30 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.databinding.FragmentMinistryTeamFormBasicInfoBinding;
+import org.androidcru.crucentralcoast.R;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class BasicInfoValidator implements Validator.ValidationListener
 {
-
-
-    @NotEmpty EditText nameField;
-    @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    @Bind(R.id.name_field) @NotEmpty EditText nameField;
+    @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
 
     private Validator validator;
     private boolean isValid;
 
-    private FragmentMinistryTeamFormBasicInfoBinding binding;
     private Context context;
 
-    public BasicInfoValidator(FragmentMinistryTeamFormBasicInfoBinding binding)
+    public BasicInfoValidator(View rootView)
     {
-        this.binding = binding;
-        bindUI();
-
+        ButterKnife.bind(this, rootView);
+        context = rootView.getContext();
+        phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         validator = new Validator(this);
         validator.setValidationListener(this);
-    }
-
-    public static TextWatcher phoneNumberFormatter()
-    {
-        return new PhoneNumberFormattingTextWatcher();
-    }
-
-    private void bindUI()
-    {
-        nameField = binding.nameField;
-        phoneField = binding.phoneField;
-
-        context = nameField.getContext();
     }
 
     @Override
