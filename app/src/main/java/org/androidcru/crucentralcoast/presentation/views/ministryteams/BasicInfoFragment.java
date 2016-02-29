@@ -2,42 +2,40 @@ package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
-import org.androidcru.crucentralcoast.data.models.Passenger;
-import org.androidcru.crucentralcoast.databinding.FragmentMinistryTeamFormBasicInfoBinding;
-import org.androidcru.crucentralcoast.databinding.PassengerFormBasicInfoBinding;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.PassengerVM;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class BasicInfoFragment extends FormContentFragment
 {
-    private FragmentMinistryTeamFormBasicInfoBinding binding;
     private BasicInfoValidator validator;
-
+    @Bind(R.id.phone_field) EditText phoneField;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        binding = FragmentMinistryTeamFormBasicInfoBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return inflater.inflate(R.layout.fragment_ministry_team_form_basic_info, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        validator = new BasicInfoValidator(binding);
+        ButterKnife.bind(this, view);
+        validator = new BasicInfoValidator(view);
+        phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 
     @Override
-    public void setupUI()
-    {
-
-    }
+    public void setupUI() {}
 
     @Override
     public void onNext()

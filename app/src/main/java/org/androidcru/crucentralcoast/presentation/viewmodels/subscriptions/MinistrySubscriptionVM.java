@@ -1,16 +1,12 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions;
 
 import android.content.SharedPreferences;
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-import android.view.View;
 
-import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
-public class MinistrySubscriptionVM extends BaseObservable
+public class MinistrySubscriptionVM
 {
     public String campusName;
     public MinistrySubscription ministry;
@@ -23,17 +19,12 @@ public class MinistrySubscriptionVM extends BaseObservable
         this.ministry = ministry;
     }
 
-    public View.OnClickListener onMinistryClick()
-    {
-        return v -> setIsSubscribed(!getIsSubscribed());
-    }
 
-    @Bindable
     public boolean getIsSubscribed()
     {
         if(isSubscribed == null)
         {
-            isSubscribed = sharedPreferences.getBoolean(campusName, false);
+            isSubscribed = sharedPreferences.getBoolean(ministry.mSubscriptionId, false);
         }
         return isSubscribed;
     }
@@ -45,7 +36,6 @@ public class MinistrySubscriptionVM extends BaseObservable
             RegistrationIntentService.subscribeToMinistry(ministry.mSubscriptionId);
         else
             RegistrationIntentService.unsubscribeToMinistry(ministry.mSubscriptionId);
-        sharedPreferences.edit().putBoolean(ministry.mSubscriptionId, isSubscribed).apply();
-        notifyPropertyChanged(BR.isSubscribed);
+        sharedPreferences.edit().putBoolean(ministry.mSubscriptionId, isSubscribed).commit();
     }
 }

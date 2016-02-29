@@ -54,7 +54,6 @@
     <string name="YourDriver">Your Driver</string>
 
     <string-array name="genders">
-        <item>Select Gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>

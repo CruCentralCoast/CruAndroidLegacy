@@ -2,11 +2,12 @@ package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
-import org.androidcru.crucentralcoast.databinding.FragmentSubscriptionsBinding;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 
 import java.util.HashMap;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
 
@@ -30,27 +33,28 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class SubscriptionsFragment extends Fragment
 {
-    private FragmentSubscriptionsBinding binding;
 
     private GridLayoutManager mLayoutManager;
     private SubscriptionsAdapter mSubscriptionAdapter;
 
+    @Bind(R.id.subscription_list) RecyclerView subscriptionList;
+    @Bind(R.id.fab) FloatingActionButton fab;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreateView(inflater, container, savedInstanceState);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_subscriptions, container, false);
-        return binding.getRoot();
+        return inflater.inflate(R.layout.fragment_subscriptions, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
 
-        binding.fab.setOnClickListener(v -> {
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
+        fab.setOnClickListener(v -> {
 
             if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))
             {
@@ -63,8 +67,8 @@ public class SubscriptionsFragment extends Fragment
         });
 
         mSubscriptionAdapter = new SubscriptionsAdapter(new HashMap<>());
-        binding.subscriptionList.setHasFixedSize(true);
-        binding.subscriptionList.setAdapter(mSubscriptionAdapter);
+        subscriptionList.setHasFixedSize(true);
+        subscriptionList.setAdapter(mSubscriptionAdapter);
 
         // use a grid layout manager
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -76,7 +80,7 @@ public class SubscriptionsFragment extends Fragment
                 return mSubscriptionAdapter.isHeader(position) ? mLayoutManager.getSpanCount() : 1;
             }
         });
-        binding.subscriptionList.setLayoutManager(mLayoutManager);
+        subscriptionList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
 
@@ -92,7 +96,7 @@ public class SubscriptionsFragment extends Fragment
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministries -> {
                     mSubscriptionAdapter = new SubscriptionsAdapter(ministries);
-                    binding.subscriptionList.setAdapter(mSubscriptionAdapter);
+                    subscriptionList.setAdapter(mSubscriptionAdapter);
                 });
     }
 }

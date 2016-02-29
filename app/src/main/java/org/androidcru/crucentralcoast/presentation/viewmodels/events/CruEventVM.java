@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.events;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.databinding.BaseObservable;
-import android.databinding.ObservableBoolean;
 import android.net.Uri;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
@@ -27,12 +25,11 @@ import java.util.Set;
 
 import rx.Observer;
 
-@SuppressWarnings("unused")
-public class CruEventVM extends BaseObservable
+public class CruEventVM
 {
     public CruEvent cruEvent;
-    public final ObservableBoolean isExpanded = new ObservableBoolean();
-    public final ObservableBoolean addedToCalendar = new ObservableBoolean();
+    public boolean isExpanded;
+    public boolean addedToCalendar;
     public long localEventId;
 
     public final static String DATE_FORMATTER = "EEEE MMMM ee,";
@@ -41,8 +38,8 @@ public class CruEventVM extends BaseObservable
     public CruEventVM(CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
     {
         this.cruEvent = cruEvent;
-        this.isExpanded.set(isExpanded);
-        this.addedToCalendar.set(addedToCalendar);
+        this.isExpanded = isExpanded;
+        this.addedToCalendar = addedToCalendar;
         this.localEventId = localEventId;
     }
 
@@ -84,14 +81,14 @@ public class CruEventVM extends BaseObservable
                     sharedPreferences.edit().remove(cruEventId).commit();
                 }
 
-                addedToCalendar.set(sharedPreferences.contains(cruEvent.mId));
+                addedToCalendar = sharedPreferences.contains(cruEvent.mId);
                 localEventId = sharedPreferences.getLong(cruEvent.mId, -1);
             }
         };
 
         return v -> {
             CruEvent selectedEvent = cruEvent;
-            final boolean adding = !addedToCalendar.get();
+            final boolean adding = !addedToCalendar;
             String operation = adding ? "Add " : "Remove ";
             AlertDialog confirmDialog = new AlertDialog.Builder(v.getContext())
                     .setTitle(operation + selectedEvent.mName + " to your calendar?")

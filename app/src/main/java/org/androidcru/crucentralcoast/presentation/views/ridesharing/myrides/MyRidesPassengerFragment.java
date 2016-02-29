@@ -143,7 +143,7 @@ public class MyRidesPassengerFragment extends Fragment {
                 .map(ride -> new MyRidesPassengerVM(ride, false, getActivity()))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
-        eventList.setAdapter(new MyRidesPassengerAdapter(rideVMs, layoutManager));
+        eventList.setAdapter(new MyRidesPassengerAdapter(rideVMs));
         swipeRefreshLayout.setRefreshing(false);
     }
 }

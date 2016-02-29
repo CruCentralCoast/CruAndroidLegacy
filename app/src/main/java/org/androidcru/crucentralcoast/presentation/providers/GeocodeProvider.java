@@ -6,6 +6,8 @@ import android.location.Geocoder;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.util.RxLoggingUtil;
+
 import java.io.IOException;
 
 import rx.Observable;
@@ -20,7 +22,9 @@ public class GeocodeProvider
             Geocoder geocoder = new Geocoder(context);
             try
             {
-                return Observable.from(geocoder.getFromLocationName(location, 1)).subscribeOn(Schedulers.io());
+                return Observable.from(geocoder.getFromLocationName(location, 1))
+                        .compose(RxLoggingUtil.log("GEOCODER"))
+                        .subscribeOn(Schedulers.io());
             }
             catch (IOException e)
             {

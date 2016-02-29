@@ -1,25 +1,27 @@
 package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
-import org.androidcru.crucentralcoast.databinding.FragmentSubscriptionsBinding;
+import org.androidcru.crucentralcoast.util.RxLoggingUtil;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class MinistryTeamsFragment extends Fragment
 {
-    private FragmentSubscriptionsBinding binding;
+    @Bind(R.id.subscription_list) RecyclerView subscriptionList;
 
     private GridLayoutManager mLayoutManager;
     private MinistryTeamsAdapter mMinistryTeamsAdapter;
@@ -28,25 +30,20 @@ public class MinistryTeamsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreateView(inflater, container, savedInstanceState);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_subscriptions, container, false);
-
-        binding.fab.setVisibility(View.GONE);
-
-        return binding.getRoot();
+        return inflater.inflate(R.layout.fragment_ministry_teams, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
+        ButterKnife.bind(this, view);
         mMinistryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), new ArrayList<>());
-        binding.subscriptionList.setHasFixedSize(true);
-        binding.subscriptionList.setAdapter(mMinistryTeamsAdapter);
+        subscriptionList.setHasFixedSize(true);
+        subscriptionList.setAdapter(mMinistryTeamsAdapter);
 
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        binding.subscriptionList.setLayoutManager(mLayoutManager);
+        subscriptionList.setLayoutManager(mLayoutManager);
 
         getMinistryTeamsList();
     }
@@ -54,10 +51,11 @@ public class MinistryTeamsFragment extends Fragment
     public void getMinistryTeamsList()
     {
         MinistryTeamProvider.getInstance().requestMinistryTeams()
+                .compose(RxLoggingUtil.log("MINISTRY TEAMS"))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministryTeams -> {
                     mMinistryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), ministryTeams);
-                    binding.subscriptionList.setAdapter(mMinistryTeamsAdapter);
+                    subscriptionList.setAdapter(mMinistryTeamsAdapter);
                 });
     }
 
