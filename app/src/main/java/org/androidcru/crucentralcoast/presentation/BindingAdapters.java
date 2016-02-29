@@ -102,7 +102,8 @@ public class BindingAdapters
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setSelection(index);
-        spinner.setOnItemSelectedListener(onItemSelected);
+        if(onItemSelected != null)
+            spinner.setOnItemSelectedListener(onItemSelected);
     }
 
 

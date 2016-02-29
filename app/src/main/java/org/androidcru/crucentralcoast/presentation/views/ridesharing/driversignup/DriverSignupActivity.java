@@ -15,10 +15,12 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class DriverSignupActivity extends AppCompatActivity
@@ -30,8 +32,6 @@ public class DriverSignupActivity extends AppCompatActivity
     PlaceAutocompleteFragment autocompleteFragment;
     MapFragment mapFragment;
 
-    //TODO: put this somewhere else
-    private static final String RIDE_KEY = "filled ride";
     private String eventID;
 
     @Override
@@ -51,13 +51,14 @@ public class DriverSignupActivity extends AppCompatActivity
         {
             eventID = bundle.getString(AppConstants.EVENT_ID, "");
         }
+        ButterKnife.bind(this);
 
         setupFab();
 
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
 
-        String rideId = getIntent().getExtras().getString(RIDE_KEY);
+        String rideId = getIntent().getExtras().getString(AppConstants.RIDE_KEY);
 
         if (rideId != null)
             requestRides(rideId);
@@ -131,6 +132,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void setupFab()
     {
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600_48dp, android.R.color.white));
         fab.setOnClickListener(v -> {
             if(validator.validate())
             {

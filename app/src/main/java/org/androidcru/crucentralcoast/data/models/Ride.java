@@ -51,7 +51,7 @@ public class Ride
 
     public boolean isEmpty()
     {
-        return id.isEmpty();
+        return id == null;
     }
 
     public enum Direction

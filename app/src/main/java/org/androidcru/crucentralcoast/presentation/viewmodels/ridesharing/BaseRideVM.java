@@ -140,7 +140,7 @@ public abstract class BaseRideVM extends BaseVM
         directionsForSpinner[0] = "Select Direction";
         for(int i = 0; i < directions.length; i++)
         {
-            directionsForSpinner[i] = directions[i].getValueDetailed();
+            directionsForSpinner[i + 1] = directions[i].getValueDetailed();
         }
         return directionsForSpinner;
     }
@@ -189,7 +189,7 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] gendersForSpinner(String[] actualGenders)
     {
         genders = new String[actualGenders.length + 1];
-        genders[0] = "Select Genders";
+        genders[0] = "Select Gender";
         System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
         return genders;
     }
@@ -198,7 +198,7 @@ public abstract class BaseRideVM extends BaseVM
     {
         String[] actualGenders = context.getResources().getStringArray(resourceId);
         genders = new String[actualGenders.length + 1];
-        genders[0] = "Select Genders";
+        genders[0] = "Select Gender";
         System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
         return genders;
     }

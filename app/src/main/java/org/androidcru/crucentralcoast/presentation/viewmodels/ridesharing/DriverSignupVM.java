@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -76,9 +77,9 @@ public class DriverSignupVM extends BaseRideVM
         bindUI();
     }
 
-    //TODO ensure ride is not null
     private void bindUI()
     {
+        phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         BindingAdapters.setSpinner(tripTypeField, directionsForSpinner(directions), null, getDirectionIndex(ride.direction, directions));
         BindingAdapters.setSpinner(carCapacity, carCapacityForSpinner(), null, getCarCapacityIndex(ride.carCapacity));
         if(editing)
@@ -107,11 +108,11 @@ public class DriverSignupVM extends BaseRideVM
         {
             startCapacity = ride.carCapacity;
         }
-        String[] carCapacities = new String[12 - startCapacity + 1];
+        String[] carCapacities = new String[12 - startCapacity + 2];
         carCapacities[0] = "Select Car Capacity";
-        for(int i = 1; i < 12 - startCapacity + 1; i++)
+        for(int i = 1; i < carCapacities.length; i++)
         {
-            carCapacities[i] = String.valueOf(startCapacity + i);
+            carCapacities[i] = String.valueOf(startCapacity + i - 1);
         }
 
         return carCapacities;
