@@ -2,9 +2,12 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Select;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -20,8 +23,10 @@ public class RideFilterVM extends BaseRideVM
 {
     private RideFilter rideFilter;
 
-    @Bind(R.id.trip_type_field) Spinner tripTypeField;
-    @Bind(R.id.gender_field) Spinner genderField;
+    @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
+    @Bind(R.id.gender_field) @Select Spinner genderField;
+    @Bind(R.id.event_time_field) @NotEmpty EditText eventTime;
+    @Bind(R.id.event_date_field) @NotEmpty EditText eventDate;
 
     private Ride.Direction[] directions;
     private String[] genders;

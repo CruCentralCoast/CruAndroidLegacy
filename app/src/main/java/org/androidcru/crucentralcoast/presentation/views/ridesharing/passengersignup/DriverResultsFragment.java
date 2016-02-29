@@ -21,6 +21,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.util.DateTimeUtils;
+import org.androidcru.crucentralcoast.util.RxLoggingUtil;
 
 import java.util.List;
 
@@ -77,6 +78,8 @@ public class DriverResultsFragment extends FormContentFragment
                 .flatMap(rides -> Observable.from(rides).subscribeOn(Schedulers.computation()))
                 .map(ride -> {
                     GeocodeProvider.getLatLng(getContext(), ride.location.toString())
+                            .compose(RxLoggingUtil.log("RIDE"))
+                            .observeOn(Schedulers.immediate())
                             .toBlocking()
                             .subscribe(address -> {
                                 ride.location.preciseLocation = new LatLng(address.getLatitude(), address.getLongitude());
@@ -86,6 +89,8 @@ public class DriverResultsFragment extends FormContentFragment
                 //filter by gender
                 //TODO should be more complex than this
                 .filter(ride -> ride.gender.equals(filter.gender))
+                //TODO safety
+                .filter(ride -> ride.location.preciseLocation != null)
                 //filter by location
                 .filter(ride -> {
                     float[] results = new float[1];
@@ -102,12 +107,21 @@ public class DriverResultsFragment extends FormContentFragment
                     }
                     return true;
                 })
-                //TODO filter by roundtripEventDateTime
+                .filter(ride -> {
+                    if (filter.direction == Ride.Direction.FROM || filter.direction == Ride.Direction.ROUNDTRIP)
+                    {
+                        return DateTimeUtils.within(ride.time, filter.dateTime, 0, 3);
+                    }
+                    return true;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
                 .subscribe(results -> {
                     handleResults(results);
-                }, e -> {}, () -> {
+                }, e ->
+                {
+                    Logger.e(e, "Getting ride results failed!");
+                }, () -> {
                     progressBar.setVisibility(View.GONE);
                     if(results == null || results.isEmpty())
                     {

@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.PassengerProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
-import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import butterknife.Bind;
@@ -46,7 +46,8 @@ public class BasicInfoFragment extends FormContentFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        validator = new BaseValidator(new BaseVM(this));
+        validator = new BaseValidator(this);
+        phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 
     private Passenger getPassenger()

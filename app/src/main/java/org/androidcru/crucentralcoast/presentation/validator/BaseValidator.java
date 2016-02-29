@@ -1,6 +1,8 @@
 package org.androidcru.crucentralcoast.presentation.validator;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -8,6 +10,8 @@ import com.mobsandgeeks.saripaar.Validator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
 
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 public class BaseValidator implements Validator.ValidationListener
 {
@@ -20,10 +24,32 @@ public class BaseValidator implements Validator.ValidationListener
     {
         context = baseVM.context;
         validator = new Validator(baseVM);
+        baseVM.rebind(this);
+        postInit();
+    }
+
+    public BaseValidator(Activity activity)
+    {
+        context = activity;
+        validator = new Validator(activity);
+        ButterKnife.bind(this, activity);
+        postInit();
+    }
+
+    public BaseValidator(Fragment fragment)
+    {
+        context = fragment.getContext();
+        validator = new Validator(fragment);
+        ButterKnife.bind(this, fragment.getView());
+        postInit();
+    }
+
+    private void postInit()
+    {
         validator.setValidationListener(this);
         isValid = false;
-        baseVM.rebind(this);
     }
+
 
     @Override
     public final void onValidationFailed(List<ValidationError> errors)
