@@ -38,7 +38,6 @@ public class MyRidesDriverVM {
         updatePassengerList();
     }
 
-    //TODO: will eventually need to get a to and from time, not just 1
     public String getDateTime()
     {
         return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
@@ -59,9 +58,6 @@ public class MyRidesDriverVM {
         return ride.location.toString();
     }
 
-
-    //TODO: display actual info, but that'll wait for a passenger model implementation
-    //TODO: also, pick some way to display the passenger stuff
     public void updatePassengerList() {
         StringBuilder list = new StringBuilder();
         for (Passenger p : ride.passengers) {

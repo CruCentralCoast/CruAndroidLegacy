@@ -72,7 +72,7 @@ public class DriverResultsFragment extends FormContentFragment
         progressBar.setVisibility(View.VISIBLE);
         driverResultsList.setVisibility(View.GONE);
         emptyList.setVisibility(View.GONE);
-        //next block might be red, AS is confused but it compiles (I'm too complicated for it)
+        //TODO next block might be red, AS is confused but it compiles (I'm too complicated for it)
         RideProvider.getInstance().requestRides()
                 .subscribeOn(Schedulers.computation())
                 .flatMap(rides -> Observable.from(rides).subscribeOn(Schedulers.computation()))

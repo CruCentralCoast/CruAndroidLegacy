@@ -59,6 +59,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         holder.departureLoc.setText(rideVM.getLocation());
         holder.editOffering.setOnClickListener(rideVM.onEditOfferingClicked());
         holder.cancelOffering.setOnClickListener(rideVM.onCancelOfferingClicked());
+        holder.passengerList.setVisibility(rideVM.isExpanded ? View.VISIBLE : View.GONE);
         holder.passengerList.setText(rideVM.passengerList);
     }
 

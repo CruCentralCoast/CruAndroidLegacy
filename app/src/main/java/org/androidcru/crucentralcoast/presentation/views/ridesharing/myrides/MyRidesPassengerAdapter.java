@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +22,9 @@ public class MyRidesPassengerAdapter extends RecyclerView.Adapter<MyRidesPasseng
 {
     private ArrayList<MyRidesPassengerVM> rides;
 
-    private LinearLayoutManager layoutManager;
-
-    public MyRidesPassengerAdapter(ArrayList<MyRidesPassengerVM> rides, LinearLayoutManager layoutManager)
+    public MyRidesPassengerAdapter(ArrayList<MyRidesPassengerVM> rides)
     {
         this.rides = rides;
-        this.layoutManager = layoutManager;
     }
 
     /**
