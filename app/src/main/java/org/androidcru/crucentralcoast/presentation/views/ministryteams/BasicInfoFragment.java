@@ -30,7 +30,7 @@ public class BasicInfoFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        validator = new BasicInfoValidator(this);
+        validator = new BasicInfoValidator(view);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 

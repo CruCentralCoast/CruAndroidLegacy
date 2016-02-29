@@ -1,6 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 
-import android.support.v4.app.Fragment;
+import android.view.View;
 import android.widget.EditText;
 
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -11,6 +11,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 //TODO left as it's own class because we know we need email or phone validation
 public class BasicInfoValidator extends BaseValidator
@@ -18,8 +19,9 @@ public class BasicInfoValidator extends BaseValidator
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
 
-    public BasicInfoValidator(Fragment fragment)
+    public BasicInfoValidator(View view)
     {
-        super(fragment);
+        super(view.getContext());
+        ButterKnife.bind(this, view);
     }
 }

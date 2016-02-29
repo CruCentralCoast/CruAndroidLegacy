@@ -44,7 +44,14 @@ public class BaseValidator implements Validator.ValidationListener
         postInit();
     }
 
-    private void postInit()
+    public BaseValidator(Context context)
+    {
+        this.context = context;
+        validator = new Validator(this);
+        postInit();
+    }
+
+    protected void postInit()
     {
         validator.setValidationListener(this);
         isValid = false;
