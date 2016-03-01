@@ -75,7 +75,7 @@ public class DriverResultsFragment extends FormContentFragment
         //TODO next block might be red, AS is confused but it compiles (I'm too complicated for it)
         RideProvider.getInstance().requestRides()
                 .subscribeOn(Schedulers.computation())
-                .flatMap(rides -> Observable.from(rides).subscribeOn(Schedulers.computation()))
+                .flatMap(rides -> Observable.from(rides))
                 .map(ride -> {
                     GeocodeProvider.getLatLng(getContext(), ride.location.toString())
                             .compose(RxLoggingUtil.log("RIDE"))

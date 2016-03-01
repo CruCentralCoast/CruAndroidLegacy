@@ -27,7 +27,7 @@ import rx.android.schedulers.AndroidSchedulers;
 
 
 public class MyRidesInfoActivity extends AppCompatActivity {
-    
+
     private Ride ride;
 
     private  AlertDialog alertDialog;
