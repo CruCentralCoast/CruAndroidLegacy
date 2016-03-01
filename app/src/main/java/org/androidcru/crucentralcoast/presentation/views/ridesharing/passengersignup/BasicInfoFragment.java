@@ -33,7 +33,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.progress_bar) ProgressBar progressBar;
+    @Bind(R.id.progress) ProgressBar progressBar;
 
     @Nullable
     @Override

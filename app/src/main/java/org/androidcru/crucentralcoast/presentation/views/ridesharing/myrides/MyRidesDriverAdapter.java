@@ -18,6 +18,9 @@ import org.androidcru.crucentralcoast.CruApplication;
 
 import com.orhanobut.logger.Logger;
 
+import com.orhanobut.logger.Logger;
+
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 import org.parceler.Parcels;
@@ -36,8 +39,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
 
     private Context context;
 
-    public MyRidesDriverAdapter(ArrayList<MyRidesDriverVM> rides, Context context)
-    {
+    public MyRidesDriverAdapter(ArrayList<MyRidesDriverVM> rides, Context context) {
         this.rides = rides;
         this.context = context;
     }
@@ -116,7 +118,6 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         {
             Bundle b = new Bundle();
             b.putParcelable("ride", Parcels.wrap(rides.get(getAdapterPosition()).ride));
-            //b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Logger.json(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);

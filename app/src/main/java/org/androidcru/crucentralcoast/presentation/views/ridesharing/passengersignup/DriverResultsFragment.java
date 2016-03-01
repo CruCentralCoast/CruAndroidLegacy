@@ -36,7 +36,7 @@ public class DriverResultsFragment extends FormContentFragment
 
     @Bind(R.id.driver_results_list) RecyclerView driverResultsList;
     @Bind(R.id.empty_list) LinearLayout emptyList;
-    @Bind(R.id.progress_bar) ProgressBar progressBar;
+    @Bind(R.id.progress) ProgressBar progressBar;
 
     private RideFilter filter;
     private List<Ride> results;
