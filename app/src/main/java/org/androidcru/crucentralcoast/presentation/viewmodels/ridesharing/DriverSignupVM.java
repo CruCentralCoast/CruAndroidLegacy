@@ -89,8 +89,10 @@ public class DriverSignupVM extends BaseRideVM
             nameField.setText(ride.driverName);
             phoneField.setText(ride.driverNumber);
 
-            timeField.setText(ride.time.toLocalTime().format(DateTimeFormatter.RFC_1123_DATE_TIME));
-            dateField.setText(ride.time.toLocalDate().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+            timeField.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
+            dateField.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            //timeField.setText(ride.time.toLocalTime().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+            //dateField.setText(ride.time.toLocalDate().format(DateTimeFormatter.RFC_1123_DATE_TIME));
         }
         else
         {

@@ -5,7 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
+
+import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.Holder;
@@ -99,7 +102,6 @@ public class MyRidesDriverVM {
         });
     }
 
-    //TODO: actually delete it from the database and do something to notify passengerIds
     public View.OnClickListener onCancelOfferingClicked()
     {
         return new View.OnClickListener() {

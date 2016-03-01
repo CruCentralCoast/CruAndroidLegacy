@@ -43,6 +43,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/ride_type"
+                tools:text="Round Trip"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="4dp"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/ride_time"
                 tools:text="Tuesday, January 11 10:00am - 7:00pm"
                 android:layout_marginLeft="12dp"
@@ -69,7 +78,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/editOffering"
                     android:text="@string/edit"
-                    android:layout_alignParentBottom="true"
                     android:layout_toLeftOf="@+id/launchPassenger"
                     android:background="?android:attr/selectableItemBackground"
                     android:textColor="@color/cruDarkBlue"
@@ -77,12 +85,12 @@
                     android:layout_marginRight="16dp"
                     android:foreground="?android:attr/selectableItemBackground"/>
 
+                <!--android:layout_alignParentBottom="true"-->
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cancelOffering"
                     android:text="@string/cancel"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:textColor="@color/cruDarkBlue"
@@ -90,6 +98,15 @@
                     android:layout_centerInParent="true"/>
 
             </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/passenger_list_heading"
+                tools:text="Passenger List"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="4dp"
+                android:textSize="16sp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/event_list"

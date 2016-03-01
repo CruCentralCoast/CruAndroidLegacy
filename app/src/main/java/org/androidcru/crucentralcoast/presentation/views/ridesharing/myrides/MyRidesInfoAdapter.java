@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
@@ -34,7 +36,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public MyRidesInfoAdapter(Context context, List<Passenger> passengers)
     {
         this.context = context;
-        this.passengers = passengers;
+        this.passengers = (passengers == null) ? new ArrayList<Passenger>() : passengers;
         initAlertDialog();
     }
 
