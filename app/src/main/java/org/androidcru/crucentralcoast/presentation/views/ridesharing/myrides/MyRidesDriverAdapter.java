@@ -1,6 +1,12 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
+<<<<<<< Updated upstream
 import android.support.v7.widget.LinearLayoutManager;
+=======
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+>>>>>>> Stashed changes
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +14,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+<<<<<<< Updated upstream
+=======
+import com.orhanobut.logger.Logger;
+
+import org.androidcru.crucentralcoast.CruApplication;
+>>>>>>> Stashed changes
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -103,6 +116,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         @Override
         public void onClick(View v)
         {
+<<<<<<< Updated upstream
             int visibility;
             if(passengerList.getVisibility() == View.VISIBLE)
             {
@@ -116,6 +130,15 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
             rides.get(getAdapterPosition()).isExpanded = (View.VISIBLE == visibility);
             notifyItemChanged(getAdapterPosition());
             layoutManager.scrollToPosition(getAdapterPosition());
+=======
+            Bundle b = new Bundle();
+            b.putParcelable("ride", Parcels.wrap(rides.get(getAdapterPosition()).ride));
+            //b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
+            Logger.json(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
+            Intent intent = new Intent(context, MyRidesInfoActivity.class);
+            intent.putExtras(b);
+            context.startActivity(intent);
+>>>>>>> Stashed changes
         }
     }
 }

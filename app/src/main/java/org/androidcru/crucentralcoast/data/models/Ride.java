@@ -5,11 +5,13 @@ import android.location.Address;
 import com.google.gson.annotations.SerializedName;
 
 import org.androidcru.crucentralcoast.CruApplication;
+import org.parceler.Parcel;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Ride
 {
     @SerializedName("driverName") public String driverName;
@@ -25,7 +27,7 @@ public class Ride
     @SerializedName("_id") public String id;
     public int carCapacity;
     public Address address;
-    public transient List<Passenger> passengers;
+    public List<Passenger> passengers;
 
     public Ride() {}
 

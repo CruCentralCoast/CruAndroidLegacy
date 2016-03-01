@@ -3,6 +3,9 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Location
 {
     @SerializedName("postcode") String mPostcode;

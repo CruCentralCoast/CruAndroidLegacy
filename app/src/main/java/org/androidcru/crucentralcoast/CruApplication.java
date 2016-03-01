@@ -12,8 +12,11 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -111,6 +114,8 @@ public class CruApplication extends MultiDexApplication
         GsonBuilder builder = new GsonBuilder();
         builder = ThreeTenGsonAdapter.registerAll(builder);
         builder.registerTypeAdapter(Ride.Direction.class, new DirectionConverter());
+        builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
+        builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         gson = builder.create();
     }
 
@@ -123,6 +128,22 @@ public class CruApplication extends MultiDexApplication
     public static String getGCMID()
     {
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
+    }
+
+    private class SerializedNameExclusionStrategy implements ExclusionStrategy
+    {
+
+        @Override
+        public boolean shouldSkipField(FieldAttributes f)
+        {
+            return f.getAnnotation(SerializedName.class) == null;
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz)
+        {
+            return false;
+        }
     }
 
 }

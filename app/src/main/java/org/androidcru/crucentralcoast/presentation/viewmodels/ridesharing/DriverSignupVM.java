@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
+import com.mobsandgeeks.saripaar.annotation.Select;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -55,9 +56,9 @@ public class DriverSignupVM extends BaseRideVM
 
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.gender_field) Spinner genderField;
-    @Bind(R.id.trip_type_field) Spinner tripTypeField;
-    @Bind(R.id.car_capacity_field) Spinner carCapacity;
+    @Bind(R.id.gender_field) @Select Spinner genderField;
+    @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
+    @Bind(R.id.car_capacity_field) @Select Spinner carCapacity;
     @Bind(R.id.event_time_field) @NotEmpty EditText timeField;
     @Bind(R.id.event_date_field) @NotEmpty EditText dateField;
     @Bind(R.id.gender_view) TextView genderView;

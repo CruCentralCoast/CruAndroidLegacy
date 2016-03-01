@@ -2,6 +2,9 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class CruImage
 {
     @SerializedName("url") public String mURL;

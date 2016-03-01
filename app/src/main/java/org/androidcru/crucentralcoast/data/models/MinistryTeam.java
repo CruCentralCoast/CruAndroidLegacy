@@ -2,6 +2,9 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class MinistryTeam
 {
     @SerializedName("_id") public String mId;
