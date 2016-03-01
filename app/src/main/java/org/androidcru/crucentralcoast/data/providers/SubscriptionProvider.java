@@ -58,7 +58,7 @@ public final class SubscriptionProvider
                     Campus selectedCampus = null;
 
                     for(Campus c : campuses)
-                        if(m.mCampusId.get(0).equals(c.mId))
+                        if(m.campusId.get(0).equals(c.id))
                             selectedCampus = c;
 
                     if(campusMinistryMap.containsKey(selectedCampus))

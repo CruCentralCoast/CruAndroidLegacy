@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class MinistrySubscription
 {
-    @SerializedName("image") public CruImage mCruImage;
-    @SerializedName("_id") public String mSubscriptionId;
-    @SerializedName("campuses") public ArrayList<String> mCampusId;
+    @SerializedName("image") public CruImage cruImage;
+    @SerializedName("_id") public String subscriptionId;
+    @SerializedName("campuses") public ArrayList<String> campusId;
 
     /**
      * Required for Gson/RetroFit
@@ -17,8 +17,8 @@ public class MinistrySubscription
 
     public MinistrySubscription(CruImage cruImage, String subscriptionId, ArrayList<String> campusId)
     {
-        this.mCruImage = cruImage;
-        this.mSubscriptionId = subscriptionId;
-        this.mCampusId = campusId;
+        this.cruImage = cruImage;
+        this.subscriptionId = subscriptionId;
+        this.campusId = campusId;
     }
 }

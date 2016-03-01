@@ -24,7 +24,7 @@
                 <!--android:layout_height="180dp"-->
                 <!--android:adjustViewBounds="true"-->
                 <!--android:id="@+id/event_banner"-->
-                <!--app:src="@{event.cruEvent.mImage != null ? event.cruEvent.mImage.mURL : ``}"-->
+                <!--app:src="@{event.cruEvent.image != null ? event.cruEvent.image.url : ``}"-->
                 <!--app:placeholder="@{@drawable/logo_grey}"-->
                 <!--app:scaleType="@{`fit`}"-->
                 <!--android:layout_marginTop="8dp"-->

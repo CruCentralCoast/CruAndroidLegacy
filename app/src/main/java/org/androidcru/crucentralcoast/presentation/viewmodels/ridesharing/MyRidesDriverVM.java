@@ -5,10 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
-
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.Holder;
@@ -53,7 +50,7 @@ public class MyRidesDriverVM {
         EventProvider.getInstance().requestCruEventByID(ride.eventId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(results -> {
-                eventName = results.mName;
+                eventName = results.name;
             });
     }
 

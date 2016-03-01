@@ -48,7 +48,7 @@ public class MyRidesPassengerVM {
         EventProvider.getInstance().requestCruEventByID(ride.eventId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(results -> {
-                    eventName = results.mName;
+                    eventName = results.name;
                 });
     }
 

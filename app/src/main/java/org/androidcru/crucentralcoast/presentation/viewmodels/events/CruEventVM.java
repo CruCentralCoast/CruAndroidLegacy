@@ -45,9 +45,9 @@ public class CruEventVM
 
     public String getDateTime()
     {
-        return cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
-                + " " + cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
-                + " - " + cruEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
+        return cruEvent.startDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
+                + " " + cruEvent.startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
+                + " - " + cruEvent.endDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
     }
 
     public View.OnClickListener onCalendarClick()
@@ -81,8 +81,8 @@ public class CruEventVM
                     sharedPreferences.edit().remove(cruEventId).commit();
                 }
 
-                addedToCalendar = sharedPreferences.contains(cruEvent.mId);
-                localEventId = sharedPreferences.getLong(cruEvent.mId, -1);
+                addedToCalendar = sharedPreferences.contains(cruEvent.id);
+                localEventId = sharedPreferences.getLong(cruEvent.id, -1);
             }
         };
 
@@ -91,7 +91,7 @@ public class CruEventVM
             final boolean adding = !addedToCalendar;
             String operation = adding ? "Add " : "Remove ";
             AlertDialog confirmDialog = new AlertDialog.Builder(v.getContext())
-                    .setTitle(operation + selectedEvent.mName + " to your calendar?")
+                    .setTitle(operation + selectedEvent.name + " to your calendar?")
                     .setNegativeButton("NOPE", (dialog, which) -> {
                     })
                     .setPositiveButton("SURE", (dialog, which) -> {
@@ -109,7 +109,7 @@ public class CruEventVM
     {
         return v -> {
             CruEvent selectedEvent = cruEvent;
-            Location loc = selectedEvent.mLocation;
+            Location loc = selectedEvent.location;
             String uri = String.format("geo:0,0?q=%s", loc.getAsQuery());
             //Uri gmmIntentUri = Uri.parse(String.format("geo:0,0?q=%s"), loc.toString());
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -131,9 +131,9 @@ public class CruEventVM
     {
         return v -> {
             CruEvent selectedEvent = cruEvent;
-            Intent openInFacebook = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.mUrl));
+            Intent openInFacebook = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.url));
             openInFacebook.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            RsvpDialog rsvpDialog = new RsvpDialog(v.getContext(), selectedEvent.mUrl);
+            RsvpDialog rsvpDialog = new RsvpDialog(v.getContext(), selectedEvent.url);
 
             Observer<LoginResult> loginResultObserver = new Observer<LoginResult>()
             {
@@ -166,7 +166,7 @@ public class CruEventVM
                     .setMessage("If you log in with Facebook, you can set your RSVP directly from inside the Cru app.")
                     .create();
 
-            if(selectedEvent.mUrl != null)
+            if(selectedEvent.url != null)
             {
                 if(FacebookProvider.getInstance().isTokenValid())
                 {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.BindingAdapters;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 
@@ -61,13 +61,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     public void onBindViewHolder(CruEventViewHolder holder, int position)
     {
         CruEventVM cruEventVM = mEvents.get(position);
-        holder.eventName.setText(cruEventVM.cruEvent.mName);
+        holder.eventName.setText(cruEventVM.cruEvent.name);
         holder.eventDate.setText(cruEventVM.getDateTime());
         Context context = holder.eventBanner.getContext();
-        if(cruEventVM.cruEvent.mImage != null)
+        if(cruEventVM.cruEvent.image != null)
         {
             Picasso.with(context)
-                    .load(cruEventVM.cruEvent.mImage.mURL)
+                    .load(cruEventVM.cruEvent.image.url)
                     .fit()
                     .into(holder.eventBanner);
         }
@@ -76,7 +76,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         holder.mapButton.setOnClickListener(cruEventVM.onMapClick());
         holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
         holder.calButton.setOnClickListener(cruEventVM.onCalendarClick());
-        BindingAdapters.setSelected(holder.calButton,
+        ViewUtil.setSelected(holder.calButton,
                 cruEventVM.addedToCalendar,
                 ContextCompat.getDrawable(context, R.drawable.ic_calendar_check_grey600_48dp),
                 ContextCompat.getDrawable(context, R.drawable.ic_calendar_plus_grey600_48dp),
@@ -84,7 +84,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         holder.chevronView.setImageDrawable(cruEventVM.isExpanded
                 ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
-        holder.eventDescription.setText(cruEventVM.cruEvent.mDescription);
+        holder.eventDescription.setText(cruEventVM.cruEvent.description);
         holder.eventDescription.setVisibility(cruEventVM.isExpanded ? View.VISIBLE : View.GONE);
     }
 

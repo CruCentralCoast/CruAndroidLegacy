@@ -71,7 +71,7 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         if(summerMission.image != null)
         {
             Picasso.with(context)
-                    .load(summerMission.image.mURL)
+                    .load(summerMission.image.url)
                     .placeholder(R.drawable.logo_grey)
                     .fit()
                     .into(holder.missionBanner);
