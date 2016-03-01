@@ -29,6 +29,9 @@ public class AppConstants
     //RideSharing intent keys
     public static final String RIDE_KEY = "filled ride";
 
+    //Ministry Team
+    public static final String MINISTRY_TEAM_KEY = "MINISTRY_TEAM";
+
 
     /**
      * REGEX EXPRESSIONS & FORMATTERS

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
@@ -29,7 +30,7 @@ public class JoinMinistryTeamActivity extends FormActivity
         }
         else
         {
-            ministryTeam = Parcels.unwrap(bundle.getParcelable("MINISTRY_TEAM"));
+            ministryTeam = Parcels.unwrap(bundle.getParcelable(AppConstants.MINISTRY_TEAM_KEY));
             addDataObject(ministryTeam);
         }
 

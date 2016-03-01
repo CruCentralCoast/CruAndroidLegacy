@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.BindingAdapters;
@@ -46,7 +47,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
         BindingAdapters.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.mURL, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
 
         Intent intent = new Intent(parent, JoinMinistryTeamActivity.class);
-        intent.putExtra("MINISTRY_TEAM", Parcels.wrap(ministryTeams.get(position)));
+        intent.putExtra(AppConstants.MINISTRY_TEAM_KEY, Parcels.wrap(ministryTeams.get(position)));
         ministryTeamHolder.ministryImage.setOnClickListener(v -> parent.startActivity(intent));
     }
 
