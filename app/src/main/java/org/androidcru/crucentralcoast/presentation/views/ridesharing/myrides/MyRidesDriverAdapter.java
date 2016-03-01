@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +15,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.CruApplication;
+
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -108,7 +115,9 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         public void onClick(View v)
         {
             Bundle b = new Bundle();
-            b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
+            b.putParcelable("ride", Parcels.wrap(rides.get(getAdapterPosition()).ride));
+            //b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
+            Logger.json(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);
             context.startActivity(intent);
