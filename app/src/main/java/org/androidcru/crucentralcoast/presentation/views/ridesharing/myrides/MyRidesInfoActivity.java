@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -55,7 +57,8 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         rideTime.setText(ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
         departureLoc.setText(ride.location.toString());
-        passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
+        Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
+                passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
         editButton.setOnClickListener(onEditOfferingClicked());
         initAlertDialog();
         cancelButton.setOnClickListener(onCancelOfferingClicked());
@@ -77,7 +80,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         eventList.setLayoutManager(new LinearLayoutManager(this));
 
         //Adapter for RecyclerView
-        MyRidesInfoAdapter rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers);
+        MyRidesInfoAdapter rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers, ride.id);
         eventList.setAdapter(rideSharingAdapter);
         eventList.setHasFixedSize(true);
     }

@@ -85,7 +85,6 @@
                     android:layout_marginRight="16dp"
                     android:foreground="?android:attr/selectableItemBackground"/>
 
-                <!--android:layout_alignParentBottom="true"-->
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,7 +105,9 @@
                 tools:text="Passenger List"
                 android:layout_marginLeft="12dp"
                 android:layout_marginBottom="4dp"
-                android:textSize="16sp"/>
+                android:textSize="24sp"
+                android:paddingTop="0dp"
+                android:layout_marginTop="16dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/event_list"

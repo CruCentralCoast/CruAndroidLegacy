@@ -32,11 +32,15 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     List<Passenger> passengers;
     private Context context;
     private AlertDialog alertDialog;
+    private String rideID;
+    private String selectedPassengerID;
 
-    public MyRidesInfoAdapter(Context context, List<Passenger> passengers)
+    public MyRidesInfoAdapter(Context context, List<Passenger> passengers, String rideID)
     {
         this.context = context;
+        this.rideID = rideID;
         this.passengers = (passengers == null) ? new ArrayList<Passenger>() : passengers;
+        selectedPassengerID = null;
         initAlertDialog();
     }
 
@@ -44,7 +48,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new PassengerInfoHolder(inflater.inflate(R.layout.tile_team, parent, false));
+        return new PassengerInfoHolder(inflater.inflate(R.layout.card_rideinfopassenger, parent, false));
     }
 
     @Override
@@ -79,6 +83,15 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View v) {
                     alertDialog.setMessage("Are you sure you want to kick " + passengerName.getText().toString() + "?");
+
+                    //this tempororary until a better way is found
+                    boolean found = false;
+                    String temp = passengerPhone.getText().toString();
+                    for (int iter = 0; iter < passengers.size(); iter++) {
+                        if (temp.equals(passengers.get(iter).phone.toString()))
+                            selectedPassengerID = passengers.get(iter).id;
+                    }
+
                     alertDialog.show();
                 }
             };
@@ -90,10 +103,10 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         alertDialog.setTitle("Kick Passenger");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-//                RideProvider.getInstance().dropRide(ride.id)
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe();
-
+                Logger.d("chose " + selectedPassengerID);
+                RideProvider.getInstance().dropPassengerFromRide(selectedPassengerID, rideID)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe();
             }
         });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
