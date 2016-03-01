@@ -47,4 +47,6 @@ public class AppConstants
 
     public static final double CALPOLY_LAT = 35.30021;
     public static final double CALPOLY_LNG = -120.66310;
+
+    public static final String CRU_YOUTUBE_CHANNEL_ID = "UCe-RJ-3Q3tUqJciItiZmjdg";
 }

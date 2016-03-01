@@ -7,9 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.androidcru.crucentralcoast.R;
+import com.orhanobut.logger.Logger;
 
-import butterknife.ButterKnife;
+import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
+import org.androidcru.crucentralcoast.util.RxLoggingUtil;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class ConstructionFragment extends Fragment
 {
@@ -24,6 +29,19 @@ public class ConstructionFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        YouTubeVideoProvider.getInstance().requestChannelVideos()
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(searchResultList -> Observable.from(searchResultList))
+                .compose(RxLoggingUtil.log("YOUTUBE VIDEO"))
+                .subscribe(searchResult -> {
+                            Logger.t("INSPECT").d("id: " + searchResult.getId() + "snippet: " + searchResult.getSnippet());
+                        },
+                        e -> {
+                            //some IO error got thrown
+                        },
+                        () -> {
+                            //onCompleted
+                        });
     }
 
 }
