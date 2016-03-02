@@ -31,7 +31,7 @@ public final class MinistryTeamProvider
         ArrayList<String> ministryTeamIdList = new ArrayList<>();
         ministryTeamIdList.add(ministryTeamId);
 
-        return mCruService.getMinistryTeamLeaders(ministryTeamIdList);
+        return mCruService.getMinistryTeamLeaders(ministryTeamIdList).subscribeOn(Schedulers.io());
     }
 
 }

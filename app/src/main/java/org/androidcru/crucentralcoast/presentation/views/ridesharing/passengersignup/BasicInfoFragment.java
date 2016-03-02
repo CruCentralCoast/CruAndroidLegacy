@@ -68,7 +68,7 @@ public class BasicInfoFragment extends FormContentFragment {
             formHolder.setNavigationClickable(false);
             passenger.direction = ride.direction;
             passenger.gcm_id = CruApplication.getGCMID();
-            PassengerProvider.getInstance().addPassenger(passenger)
+            PassengerProvider.addPassenger(passenger)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(passenger1 -> {
                     RideProvider.addPassengerToRide(passenger1.id, ride.id)

@@ -23,14 +23,13 @@ public final class RideProvider
                     return Observable.from(rides);
                 })
                 .map(ride -> {
-                    PassengerProvider.getInstance().getPassengers(ride.passengerIds)
+                    PassengerProvider.getPassengers(ride.passengerIds)
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
                     return ride;
                 })
-                .toList()
-                .subscribeOn(Schedulers.io());
+                .toList();
     }
 
     public static Observable<Ride> createRide(Ride ride)
@@ -72,7 +71,8 @@ public final class RideProvider
                     return Observable.from(rides);
                 })
                 .map(ride -> {
-                    PassengerProvider.getInstance().getPassengers(ride.passengerIds)
+                    PassengerProvider.getPassengers(ride.passengerIds)
+                            .subscribeOn(Schedulers.io())
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
