@@ -21,9 +21,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by mitch on 3/2/16.
- */
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoViewHolder>
 {
     private List<SearchResult> videos;
@@ -55,7 +52,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         Context context = holder.videoThumb.getContext();
 
         Picasso.with(context)
-                .load(searchResult.getSnippet().getThumbnails().getStandard().getUrl())
+                .load(searchResult.getSnippet().getThumbnails().getDefault().getUrl())
                 .fit()
                 .into(holder.videoThumb);
     }

@@ -43,7 +43,8 @@ public class VideosFragment extends Fragment
     public VideosFragment()
     {
         videos = new ArrayList<>();
-        videoSubscriber = new Observer<List<SearchResult>>() {
+        videoSubscriber = new Observer<List<SearchResult>>()
+        {
             @Override
             public void onCompleted() {
                 if(videos.isEmpty())
@@ -67,14 +68,15 @@ public class VideosFragment extends Fragment
             @Override
             public void onNext(List<SearchResult> searchResults)
             {
-                setVideos(videos);
+                setVideos(searchResults);
             }
         };
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_videos, container, false);
     }
@@ -106,11 +108,14 @@ public class VideosFragment extends Fragment
     {
         videos.clear();
         rx.Observable.from(cruVideos)
+
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(videos::add);
 
         videoList.setAdapter(new VideosAdapter(videos, layoutManager));
         swipeRefreshLayout.setRefreshing(false);
+
+        Logger.d("****Got to set videos. Size is " + cruVideos.size() + " ****");
     }
 
     private void forceUpdate()

@@ -29,10 +29,11 @@ public class ConstructionFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        /*
         YouTubeVideoProvider.getInstance().requestChannelVideos()
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(searchResultList -> Observable.from(searchResultList))
-                .compose(RxLoggingUtil.log("YOUTUBE VIDEO"))
+                .compose(RxLoggingUtil.log("YOUTUBE VIDEO Construction"))
                 .subscribe(searchResult -> {
                             Logger.t("INSPECT").d("id: " + searchResult.getId() + "snippet: " + searchResult.getSnippet());
                         },
@@ -42,6 +43,6 @@ public class ConstructionFragment extends Fragment
                         () -> {
                             //onCompleted
                         });
+        */
     }
-
 }
