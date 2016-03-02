@@ -27,6 +27,7 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharing
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
+import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
 
 import java.util.Collections;
 
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new ArticlesFragment()).commit();
                 break;
             case R.id.nav_videos:
-                spawnConstructionFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
                 break;
         }
 
