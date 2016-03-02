@@ -71,7 +71,7 @@ public class BasicInfoFragment extends FormContentFragment {
             PassengerProvider.getInstance().addPassenger(passenger)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(passenger1 -> {
-                    RideProvider.getInstance().addPassengerToRide(passenger1.id, ride.id)
+                    RideProvider.addPassengerToRide(passenger1.id, ride.id)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(v -> {}, e -> {}, () -> super.onNext());
                 });

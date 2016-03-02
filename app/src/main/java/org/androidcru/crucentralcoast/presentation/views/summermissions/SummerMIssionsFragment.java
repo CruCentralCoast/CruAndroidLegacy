@@ -53,7 +53,7 @@ public class SummerMissionsFragment extends Fragment
     {
         progressBar.setVisibility(View.VISIBLE);
         summerMissionsList.setVisibility(View.GONE);
-        SummerMissionProvider.getInstance().getSummerMissions()
+        SummerMissionProvider.getSummerMissions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(summerMissions -> {
                     progressBar.setVisibility(View.GONE);

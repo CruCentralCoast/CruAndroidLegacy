@@ -45,7 +45,7 @@ public class MyRidesPassengerVM {
     public void updateEventName() {
         final Holder<String> evName = new Holder<String>();
 
-        EventProvider.getInstance().requestCruEventByID(ride.eventId)
+        EventProvider.requestCruEventByID(ride.eventId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(results -> {
                     eventName = results.name;
@@ -75,7 +75,7 @@ public class MyRidesPassengerVM {
                 {
                     if (p.gcm_id.equals(CruApplication.getGCMID()))
                     {
-                        RideProvider.getInstance().dropPassengerFromRide(p.id, ride.id)
+                        RideProvider.dropPassengerFromRide(p.id, ride.id)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe();
                     }

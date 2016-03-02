@@ -10,17 +10,9 @@ import rx.schedulers.Schedulers;
 
 public final class SummerMissionProvider
 {
-    private static CruApiService mCruService = ApiProvider.getInstance().getService();
-    private static SummerMissionProvider mInstance;
+    private static CruApiService mCruService = ApiProvider.getService();
 
-    public static SummerMissionProvider getInstance()
-    {
-        if(mInstance == null)
-            mInstance = new SummerMissionProvider();
-        return mInstance;
-    }
-
-    public Observable<ArrayList<SummerMission>> getSummerMissions()
+    public static Observable<ArrayList<SummerMission>> getSummerMissions()
     {
         return mCruService.getSummerMissions()
                 .subscribeOn(Schedulers.io());

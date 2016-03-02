@@ -73,7 +73,7 @@ public class DriverResultsFragment extends FormContentFragment
         driverResultsList.setVisibility(View.GONE);
         emptyList.setVisibility(View.GONE);
         //TODO next block might be red, AS is confused but it compiles (I'm too complicated for it)
-        RideProvider.getInstance().requestRides()
+        RideProvider.requestRides()
                 .subscribeOn(Schedulers.computation())
                 .flatMap(rides -> Observable.from(rides))
                 .map(ride -> {

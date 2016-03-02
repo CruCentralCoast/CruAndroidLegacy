@@ -145,14 +145,14 @@ public class EventsFragment extends Fragment
 
     private void forceUpdate()
     {
-        EventProvider.getInstance().requestEvents()
+        EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
-        EventProvider.getInstance().requestEvents()
+        EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }

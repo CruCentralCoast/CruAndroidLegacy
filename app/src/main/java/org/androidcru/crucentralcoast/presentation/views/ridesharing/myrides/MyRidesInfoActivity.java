@@ -102,7 +102,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         alertDialog.setMessage("Are you sure you want to cancel this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.getInstance().dropRide(ride.id)
+                RideProvider.dropRide(ride.id)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe();
 

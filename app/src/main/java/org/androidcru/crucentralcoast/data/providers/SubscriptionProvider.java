@@ -13,22 +13,13 @@ import rx.schedulers.Schedulers;
 
 public final class SubscriptionProvider
 {
-    private static CruApiService mCruService = ApiProvider.getInstance().getService();
-    private static SubscriptionProvider mInstance;
+    private static CruApiService mCruService = ApiProvider.getService();
 
-    private SubscriptionProvider() {}
-
-    public static SubscriptionProvider getInstance()
-    {
-        if(mInstance == null)
-            mInstance = new SubscriptionProvider();
-        return mInstance;
-    }
     /**
      * Gets the list of available ministries from the server.
      * @return list of ministries
      */
-    public Observable<ArrayList<MinistrySubscription>> requestMinistries()
+    public static Observable<ArrayList<MinistrySubscription>> requestMinistries()
     {
         return mCruService.getMinistries().subscribeOn(Schedulers.io());
     }
@@ -36,12 +27,12 @@ public final class SubscriptionProvider
     /**
      * Gets the list of campuses from the server.
      */
-    public Observable<ArrayList<Campus>> requestCampuses()
+    public static Observable<ArrayList<Campus>> requestCampuses()
     {
         return mCruService.getCampuses().subscribeOn(Schedulers.io());
     }
 
-    public Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
+    public static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
     {
         return Observable.create(new Observable.OnSubscribe<HashMap<Campus, ArrayList<MinistrySubscription>>>()
         {

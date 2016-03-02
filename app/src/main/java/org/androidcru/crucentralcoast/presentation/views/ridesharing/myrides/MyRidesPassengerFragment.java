@@ -115,7 +115,7 @@ public class MyRidesPassengerFragment extends Fragment {
 
     private void forceUpdate()
     {
-        RideProvider.getInstance().requestRides()
+        RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> {
                     for (Passenger p : ride.passengers)

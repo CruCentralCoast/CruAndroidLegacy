@@ -11,7 +11,7 @@ import rx.schedulers.Schedulers;
 public final class PassengerProvider
 {
 
-    private static CruApiService mCruService = ApiProvider.getInstance().getService();
+    private static CruApiService mCruService = ApiProvider.getService();
     private static PassengerProvider mInstance;
 
     private PassengerProvider() {}

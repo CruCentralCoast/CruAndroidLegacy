@@ -75,7 +75,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void createDriver()
     {
-        RideProvider.getInstance().createRide(completeRide(driverSignupVM.getRide()))
+        RideProvider.createRide(completeRide(driverSignupVM.getRide()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
                     Logger.d("Output is", current.toString());
@@ -86,7 +86,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void updateDriver()
     {
-        RideProvider.getInstance().updateRide(completeRide(driverSignupVM.getRide()))
+        RideProvider.updateRide(completeRide(driverSignupVM.getRide()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
                     Logger.d("Output is", current.toString());
@@ -106,7 +106,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void requestRides(String rideId)
     {
-        RideProvider.getInstance().requestRideByID(rideId)
+        RideProvider.requestRideByID(rideId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ride -> {
                     GeocodeProvider.getLatLng(this, ride.location.toString())
