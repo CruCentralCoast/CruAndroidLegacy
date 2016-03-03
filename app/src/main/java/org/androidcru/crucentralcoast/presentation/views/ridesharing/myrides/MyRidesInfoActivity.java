@@ -66,10 +66,9 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 //                    .into(eventBanner);
 //        }
         rideType.setText("You are driving: " + ride.direction.getValueDetailed());
-        rideTime.setText(ride.time.toString());
-        rideTime.setText(ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+        rideTime.setText("Departure Time: " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
-        departureLoc.setText(ride.location.toString());
+        departureLoc.setText("Pickup Location: " + ride.location.toString());
         spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
         //Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
         passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
