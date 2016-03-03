@@ -75,6 +75,11 @@ public class DriverSignupVM extends BaseRideVM
         this.editing = ride != null && !ride.isEmpty();
         this.ride = ride != null ? ride : new Ride();
 
+        if (editing) {
+            date = ride.time.toLocalDate();
+            time = ride.time.toLocalTime();
+        }
+
         generateDirections();
         bindUI();
     }

@@ -42,7 +42,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     @Bind(R.id.event_list) RecyclerView eventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.event_banner) ImageView eventBanner;
+//    @Bind(R.id.event_banner) ImageView eventBanner; //TODO: change ui so we can have this and a scrollable passenger list
     @Bind(R.id.eventName) TextView eventName;
     @Bind(R.id.ride_type) TextView rideType;
     @Bind(R.id.ride_time) TextView rideTime;
@@ -57,14 +57,14 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     private void setupUI(String theEventName, CruImage theImage) {
         //TODO: query for event to access event name and image
         eventName.setText(theEventName);
-        Context context = eventBanner.getContext();
-        if(theImage != null)
-        {
-            Picasso.with(context)
-                    .load(theImage.url)
-                    .fit()
-                    .into(eventBanner);
-        }
+//        Context context = eventBanner.getContext();
+//        if(theImage != null)
+//        {
+//            Picasso.with(context)
+//                    .load(theImage.url)
+//                    .fit()
+//                    .into(eventBanner);
+//        }
         rideType.setText("You are driving: " + ride.direction.getValueDetailed());
         rideTime.setText(ride.time.toString());
         rideTime.setText(ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))

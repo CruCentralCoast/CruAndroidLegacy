@@ -110,6 +110,12 @@ public class MyRidesDriverFragment extends Fragment {
         forceUpdate();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        forceUpdate();
+    }
+
     private void forceUpdate()
     {
         RideProvider.requestRides()

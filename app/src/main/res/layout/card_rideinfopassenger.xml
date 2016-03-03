@@ -24,7 +24,8 @@
             tools:text="Fall Retreat"
             android:textColor="@color/grey800"
             android:textSize="16dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:textIsSelectable="true" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,7 +39,8 @@
                 tools:text="Tuesday, January 11 10:00am - 7:00pm"
                 android:layout_marginLeft="12dp"
                 android:layout_marginBottom="4dp"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textIsSelectable="true" />
 
             <Button
                 android:layout_width="wrap_content"

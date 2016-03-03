@@ -7,6 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        layout="@layout/app_bar_main"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/event_swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -19,13 +22,12 @@
             android:orientation="vertical"
             android:animateLayoutChanges="true">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:adjustViewBounds="true"
-                android:id="@+id/event_banner"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="180dp"-->
+                <!--android:adjustViewBounds="true"-->
+                <!--android:id="@+id/event_banner"-->
+                <!--android:layout_marginBottom="8dp"/>-->
 
             <TextView
                 android:layout_width="wrap_content"
