@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.events;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.databinding.BaseObservable;
-import android.databinding.ObservableBoolean;
 import android.net.Uri;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
@@ -27,12 +25,11 @@ import java.util.Set;
 
 import rx.Observer;
 
-@SuppressWarnings("unused")
-public class CruEventVM extends BaseObservable
+public class CruEventVM
 {
     public CruEvent cruEvent;
-    public final ObservableBoolean isExpanded = new ObservableBoolean();
-    public final ObservableBoolean addedToCalendar = new ObservableBoolean();
+    public boolean isExpanded;
+    public boolean addedToCalendar;
     public long localEventId;
 
     public final static String DATE_FORMATTER = "EEEE MMMM ee,";
@@ -41,16 +38,16 @@ public class CruEventVM extends BaseObservable
     public CruEventVM(CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
     {
         this.cruEvent = cruEvent;
-        this.isExpanded.set(isExpanded);
-        this.addedToCalendar.set(addedToCalendar);
+        this.isExpanded = isExpanded;
+        this.addedToCalendar = addedToCalendar;
         this.localEventId = localEventId;
     }
 
     public String getDateTime()
     {
-        return cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
-                + " " + cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
-                + " - " + cruEvent.mEndDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
+        return cruEvent.startDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
+                + " " + cruEvent.startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
+                + " - " + cruEvent.endDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
     }
 
     public View.OnClickListener onCalendarClick()
@@ -84,17 +81,17 @@ public class CruEventVM extends BaseObservable
                     sharedPreferences.edit().remove(cruEventId).commit();
                 }
 
-                addedToCalendar.set(sharedPreferences.contains(cruEvent.mId));
-                localEventId = sharedPreferences.getLong(cruEvent.mId, -1);
+                addedToCalendar = sharedPreferences.contains(cruEvent.id);
+                localEventId = sharedPreferences.getLong(cruEvent.id, -1);
             }
         };
 
         return v -> {
             CruEvent selectedEvent = cruEvent;
-            final boolean adding = !addedToCalendar.get();
+            final boolean adding = !addedToCalendar;
             String operation = adding ? "Add " : "Remove ";
             AlertDialog confirmDialog = new AlertDialog.Builder(v.getContext())
-                    .setTitle(operation + selectedEvent.mName + " to your calendar?")
+                    .setTitle(operation + selectedEvent.name + " to your calendar?")
                     .setNegativeButton("NOPE", (dialog, which) -> {
                     })
                     .setPositiveButton("SURE", (dialog, which) -> {
@@ -112,7 +109,7 @@ public class CruEventVM extends BaseObservable
     {
         return v -> {
             CruEvent selectedEvent = cruEvent;
-            Location loc = selectedEvent.mLocation;
+            Location loc = selectedEvent.location;
             String uri = String.format("geo:0,0?q=%s", loc.getAsQuery());
             //Uri gmmIntentUri = Uri.parse(String.format("geo:0,0?q=%s"), loc.toString());
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
@@ -134,9 +131,9 @@ public class CruEventVM extends BaseObservable
     {
         return v -> {
             CruEvent selectedEvent = cruEvent;
-            Intent openInFacebook = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.mUrl));
+            Intent openInFacebook = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedEvent.url));
             openInFacebook.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            RsvpDialog rsvpDialog = new RsvpDialog(v.getContext(), selectedEvent.mUrl);
+            RsvpDialog rsvpDialog = new RsvpDialog(v.getContext(), selectedEvent.url);
 
             Observer<LoginResult> loginResultObserver = new Observer<LoginResult>()
             {
@@ -169,7 +166,7 @@ public class CruEventVM extends BaseObservable
                     .setMessage("If you log in with Facebook, you can set your RSVP directly from inside the Cru app.")
                     .create();
 
-            if(selectedEvent.mUrl != null)
+            if(selectedEvent.url != null)
             {
                 if(FacebookProvider.getInstance().isTokenValid())
                 {

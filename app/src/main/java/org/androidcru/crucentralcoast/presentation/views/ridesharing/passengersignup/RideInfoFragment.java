@@ -12,15 +12,14 @@ import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragmen
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
-import org.androidcru.crucentralcoast.databinding.PassengerFormRideInfoBinding;
+import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 public class RideInfoFragment extends FormContentFragment {
 
-    private PassengerFormRideInfoBinding binding;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
-    private RideInfoValidator validator;
+    private BaseValidator validator;
 
     private RideFilterVM rideFilterVM;
 
@@ -28,8 +27,7 @@ public class RideInfoFragment extends FormContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        binding = PassengerFormRideInfoBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return inflater.inflate(R.layout.passenger_form_ride_info, container, false);
     }
 
     @Override
@@ -37,10 +35,9 @@ public class RideInfoFragment extends FormContentFragment {
     {
         super.onViewCreated(view, savedInstanceState);
 
-        rideFilterVM = new RideFilterVM(getActivity().getFragmentManager(), new RideFilter());
-        binding.setRideFilterVM(rideFilterVM);
+        rideFilterVM = new RideFilterVM(view, getActivity().getFragmentManager(), new RideFilter());
 
-        validator = new RideInfoValidator(binding);
+        validator = new BaseValidator(rideFilterVM);
 
         autocompleteFragment = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         setupPlacesAutocomplete();
@@ -73,7 +70,7 @@ public class RideInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            formHolder.addDataObject(rideFilterVM.rideFilter);
+            formHolder.addDataObject(rideFilterVM.getRideFilter());
             super.onNext();
         }
     }

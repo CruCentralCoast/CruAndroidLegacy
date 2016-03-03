@@ -10,16 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiProvider
 {
-    private CruApiService service;
-    private static ApiProvider instance;
+    private static CruApiService service;
 
-    public static ApiProvider getInstance() {
-        if(instance == null)
-            instance = new ApiProvider();
-        return instance;
-    }
-
-    private ApiProvider()
+    static
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.CRU_SERVER)
@@ -31,8 +24,8 @@ public final class ApiProvider
         service = retrofit.create(CruApiService.class);
     }
 
-    public CruApiService getService() {
+    public static CruApiService getService()
+    {
         return service;
     }
-
 }

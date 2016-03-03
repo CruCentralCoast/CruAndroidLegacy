@@ -19,11 +19,14 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
-import org.androidcru.crucentralcoast.util.DateTimeUtils;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.util.DateTimeUtils;
+import org.androidcru.crucentralcoast.util.RxLoggingUtil;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -31,9 +34,9 @@ import rx.schedulers.Schedulers;
 public class DriverResultsFragment extends FormContentFragment
 {
 
-    private RecyclerView driverResultsList;
-    private LinearLayout emptyList;
-    private ProgressBar progressBar;
+    @Bind(R.id.driver_results_list) RecyclerView driverResultsList;
+    @Bind(R.id.empty_list) LinearLayout emptyList;
+    @Bind(R.id.progress) ProgressBar progressBar;
 
     private RideFilter filter;
     private List<Ride> results;
@@ -49,11 +52,8 @@ public class DriverResultsFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
-        driverResultsList = (RecyclerView) view.findViewById(R.id.driver_results_list);
+        ButterKnife.bind(this, view);
         driverResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        emptyList = (LinearLayout) view.findViewById(R.id.empty_list);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
     }
 
     @Override
@@ -72,12 +72,14 @@ public class DriverResultsFragment extends FormContentFragment
         progressBar.setVisibility(View.VISIBLE);
         driverResultsList.setVisibility(View.GONE);
         emptyList.setVisibility(View.GONE);
-        //next block might be red, AS is confused but it compiles (I'm too complicated for it)
-        RideProvider.getInstance().requestRides()
+        //TODO next block might be red, AS is confused but it compiles (I'm too complicated for it)
+        RideProvider.requestRides()
                 .subscribeOn(Schedulers.computation())
-                .flatMap(rides -> Observable.from(rides).subscribeOn(Schedulers.computation()))
+                .flatMap(rides -> Observable.from(rides))
                 .map(ride -> {
                     GeocodeProvider.getLatLng(getContext(), ride.location.toString())
+                            .compose(RxLoggingUtil.log("RIDE"))
+                            .observeOn(Schedulers.immediate())
                             .toBlocking()
                             .subscribe(address -> {
                                 ride.location.preciseLocation = new LatLng(address.getLatitude(), address.getLongitude());
@@ -87,6 +89,8 @@ public class DriverResultsFragment extends FormContentFragment
                 //filter by gender
                 //TODO should be more complex than this
                 .filter(ride -> ride.gender.equals(filter.gender))
+                //TODO safety
+                .filter(ride -> ride.location.preciseLocation != null)
                 //filter by location
                 .filter(ride -> {
                     float[] results = new float[1];
@@ -99,25 +103,25 @@ public class DriverResultsFragment extends FormContentFragment
                 .filter(ride -> {
                     if (filter.direction == Ride.Direction.TO || filter.direction == Ride.Direction.ROUNDTRIP)
                     {
-                        return DateTimeUtils.within(ride.time, filter.toDateTime, 0, 3);
+                        return DateTimeUtils.within(ride.time, filter.dateTime, 0, 3);
                     }
                     return true;
                 })
-                        //filter by fromEventDateTime
-                //TODO update properly, fromTime
                 .filter(ride -> {
                     if (filter.direction == Ride.Direction.FROM || filter.direction == Ride.Direction.ROUNDTRIP)
                     {
-                        return DateTimeUtils.within(ride.time, filter.toDateTime, 0, 3);
+                        return DateTimeUtils.within(ride.time, filter.dateTime, 0, 3);
                     }
                     return true;
                 })
-                //TODO filter by roundtripEventDateTime
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
                 .subscribe(results -> {
                     handleResults(results);
-                }, e -> {}, () -> {
+                }, e ->
+                {
+                    Logger.e(e, "Getting ride results failed!");
+                }, () -> {
                     progressBar.setVisibility(View.GONE);
                     if(results == null || results.isEmpty())
                     {

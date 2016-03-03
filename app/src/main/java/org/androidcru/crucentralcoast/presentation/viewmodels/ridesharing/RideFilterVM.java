@@ -1,90 +1,81 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Select;
 
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
+import butterknife.Bind;
+import butterknife.OnClick;
+
 public class RideFilterVM extends BaseRideVM
 {
+    private RideFilter rideFilter;
 
-    public RideFilter rideFilter;
-    private LocalDate toDate;
-    private LocalDate fromDate;
-    private LocalTime toTime;
-    private LocalTime fromTime;
+    @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
+    @Bind(R.id.gender_field) @Select Spinner genderField;
+    @Bind(R.id.event_time_field) @NotEmpty EditText eventTime;
+    @Bind(R.id.event_date_field) @NotEmpty EditText eventDate;
 
-    public RideFilterVM(FragmentManager fm, RideFilter rideFilter)
+    private Ride.Direction[] directions;
+    private String[] genders;
+
+    public RideFilterVM(View rootView, FragmentManager fm, RideFilter rideFilter)
     {
-        super(fm);
+        super(rootView, fm);
         this.rideFilter = rideFilter;
+        generateDirections();
+        bindUI();
     }
 
-    private void updateFromDateTime()
+    private void generateDirections()
     {
-        if(fromDate != null && fromTime != null)
-        {
-            rideFilter.fromDateTime = ZonedDateTime.of(fromDate, fromTime, ZoneId.systemDefault());
-        }
-    }
-
-    private void updateToDateTime()
-    {
-        if(toDate != null && toTime != null)
-        {
-            rideFilter.toDateTime = ZonedDateTime.of(toDate, toTime, ZoneId.systemDefault());
-        }
+        directions = Ride.Direction.values();
     }
 
     @Override
-    protected void syncFromDate(LocalDate date)
-    {
-        fromDate = date;
-        updateFromDateTime();
-    }
-
-    @Override
-    protected void syncFromTime(LocalTime time)
-    {
-        fromTime = time;
-        updateFromDateTime();
-    }
-
-    @Override
-    protected void syncToDate(LocalDate date)
-    {
-        toDate = date;
-        updateToDateTime();
-    }
-
-    @Override
-    protected void syncToTime(LocalTime time)
-    {
-        toTime = time;
-        updateToDateTime();
-    }
-
-    @Override
-    protected void placeSelected(LatLng precisePlace, String placeAdress)
+    protected void placeSelected(LatLng precisePlace, String placeAddress)
     {
         rideFilter.location = precisePlace;
     }
 
-    @Override
-    protected void tripTypeSelected(Ride.Direction direction)
+    public RideFilter getRideFilter()
     {
-        rideFilter.direction = direction;
+        rideFilter.direction = retrieveDirection(tripTypeField, directions);
+        rideFilter.gender = (String) genderField.getSelectedItem();
+        rideFilter.dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault());
+        return rideFilter;
     }
 
-    @Override
-    protected void genderSelected(String gender)
+    private void bindUI()
     {
-        rideFilter.gender = gender;
+        ViewUtil.setSpinner(tripTypeField, directionsForSpinner(directions), null, 0);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, 0);
+
     }
+
+    @OnClick(R.id.event_time_field)
+    public void onTimeClicked(View v)
+    {
+        onEventTimeClicked(v);
+    }
+
+    @OnClick(R.id.event_date_field)
+    public void onDateClicked(View v)
+    {
+        onEventDateClicked(v);
+    }
+
+
 }

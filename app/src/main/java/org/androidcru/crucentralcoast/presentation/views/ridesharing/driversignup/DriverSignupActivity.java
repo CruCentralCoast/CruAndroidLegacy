@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,31 +14,30 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.databinding.ActivityDriverFormBinding;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideVM;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
+import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class DriverSignupActivity extends AppCompatActivity
 {
-    private ActivityDriverFormBinding binding;
-    private RideVM rideVM;
-    private DriverSignupValidator validator;
+    private DriverSignupVM driverSignupVM;
+    private BaseValidator validator;
 
-    private FloatingActionButton fab;
+    @Bind(R.id.fab) FloatingActionButton fab;
+    PlaceAutocompleteFragment autocompleteFragment;
+    MapFragment mapFragment;
 
-    private PlaceAutocompleteFragment autocompleteFragment;
-    private MapFragment mapFragment;
-
-    //TODO: put this somewhere else
-    private static final String RIDE_KEY = "filled ride";
     private String eventID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.progress_layout);
+        setContentView(R.layout.activity_driver_form);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle == null || bundle.getString(AppConstants.EVENT_ID, "").isEmpty())
@@ -53,24 +51,31 @@ public class DriverSignupActivity extends AppCompatActivity
         {
             eventID = bundle.getString(AppConstants.EVENT_ID, "");
         }
+        ButterKnife.bind(this);
 
-        if (getIntent().getExtras().containsKey(RIDE_KEY)) {
-            requestRides();
-        }
+        setupFab();
+
+        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
+
+        String rideId = getIntent().getExtras().getString(AppConstants.RIDE_KEY);
+
+        if (rideId != null)
+            requestRides(rideId);
         else
             bindNewRideVM(null);
+    }
 
-        //TODO ride may not always be invoked by constructor
+    private Ride completeRide(Ride r)
+    {
+        r.gcmID = CruApplication.getGCMID();
+        r.eventId = eventID;
+        return r;
     }
 
     private void createDriver()
     {
-//        Ride ride = new Ride("Test", "4444444444", "Man", "563b11135e926d03001ac15c", ZonedDateTime.now(),
-//                new Location("93405", "CA", "San Luis Obispo", "1 Grand Ave", "USA"), new ArrayList<>(), 1.0, Ride.Direction.TO,
-//                CruApplication.getGCMID(), 4);
-        // TODO: change this to use rideVM.ride.
-        //Logger.d(rideVM.ride.eventId);
-        RideProvider.getInstance().createRide(rideVM.ride)
+        RideProvider.createRide(completeRide(driverSignupVM.getRide()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
                     Logger.d("Output is", current.toString());
@@ -81,7 +86,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void updateDriver()
     {
-        RideProvider.getInstance().updateRide(rideVM.ride)
+        RideProvider.updateRide(completeRide(driverSignupVM.getRide()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(current -> {
                     Logger.d("Output is", current.toString());
@@ -96,13 +101,12 @@ public class DriverSignupActivity extends AppCompatActivity
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         autocompleteFragment.setFilter(typeFilter);
-        autocompleteFragment.setOnPlaceSelectedListener(rideVM.onPlaceSelected());
+        autocompleteFragment.setOnPlaceSelectedListener(driverSignupVM.onPlaceSelected());
     }
 
-    private void requestRides()
+    private void requestRides(String rideId)
     {
-        String rideId = getIntent().getExtras().getString(RIDE_KEY);
-        RideProvider.getInstance().requestRideByID(rideId)
+        RideProvider.requestRideByID(rideId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ride -> {
                     GeocodeProvider.getLatLng(this, ride.location.toString())
@@ -116,39 +120,23 @@ public class DriverSignupActivity extends AppCompatActivity
                 });
     }
 
-    //binds a ride to the view
     private void bindNewRideVM(Ride r) {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_driver_form);
-        validator = new DriverSignupValidator(binding);
-
-        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
-
-        setupFab();
-        if (r == null) {
-            rideVM = new RideVM(getFragmentManager(), new Ride());
-        }
-        else {
-            rideVM = new RideVM(getFragmentManager(), r, true);
-        }
-        rideVM.ride.eventId = eventID;
-        rideVM.ride.gcmID = CruApplication.getGCMID();
-        mapFragment.getMapAsync(rideVM.onMapReady());
+        if (r == null)
+            driverSignupVM = new DriverSignupVM(this, getFragmentManager());
+        else
+            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), r);
+        mapFragment.getMapAsync(driverSignupVM.onMapReady());
         setupPlacesAutocomplete();
-
-        binding.setRideVM(rideVM);
-        /*if (r != null) {
-            fillForm(r);
-        }*/
+        validator = new BaseValidator(driverSignupVM);
     }
 
     private void setupFab()
     {
-        fab = binding.fab;
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600_48dp, android.R.color.white));
         fab.setOnClickListener(v -> {
             if(validator.validate())
             {
-                if(rideVM.editing)
+                if(driverSignupVM.editing)
                 {
                     updateDriver();
                 }
@@ -159,17 +147,4 @@ public class DriverSignupActivity extends AppCompatActivity
 
         });
     }
-
-    /*private void fillForm(Ride r) {
-        Logger.d("car capacity is " + r.carCapacity);
-        binding.carCapacityField.setSelection(r.carCapacity + 1, true);
-        //TODO: find better way to do this
-        binding.genderField.setSelection(r.gender.equals("Male") ? 1 : 2);
-
-        binding.radiusField.setText("" + r.radius);
-
-//        GeocodeProvider.getLatLng(getApplicationContext(), r.location.toString())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(result -> rideVM.setMap(result));
-    }*/
 }

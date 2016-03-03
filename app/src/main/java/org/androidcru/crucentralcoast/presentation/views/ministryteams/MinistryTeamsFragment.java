@@ -50,7 +50,7 @@ public class MinistryTeamsFragment extends Fragment
 
     public void getMinistryTeamsList()
     {
-        MinistryTeamProvider.getInstance().requestMinistryTeams()
+        MinistryTeamProvider.requestMinistryTeams()
                 .compose(RxLoggingUtil.log("MINISTRY TEAMS"))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministryTeams -> {

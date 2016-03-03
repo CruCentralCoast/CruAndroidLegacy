@@ -15,8 +15,7 @@ import butterknife.ButterKnife;
 public class WebViewActivity extends AppCompatActivity
 {
 
-    @Bind(R.id.web_view)
-    WebView mWebView;
+    @Bind(R.id.web_view) WebView webView;
 
     public static final String EXTRA_URL =
             "com.hitherejoe.tabby.ui.activity.WebViewActivity.EXTRA_URL";
@@ -27,10 +26,10 @@ public class WebViewActivity extends AppCompatActivity
         setContentView(R.layout.activity_webview);
         ButterKnife.bind(this);
         String url = getIntent().getStringExtra(EXTRA_URL);
-        mWebView.setWebViewClient(new WebViewClient());
-        WebSettings webSettings = mWebView.getSettings();
+        webView.setWebViewClient(new WebViewClient());
+        WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        mWebView.loadUrl(url);
+        webView.loadUrl(url);
         setupActionBar(url);
     }
 

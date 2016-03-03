@@ -6,14 +6,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ProgressBar
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_marginTop="8dp"
-        android:indeterminate="true"
-        android:visibility="gone"
-        android:id="@+id/progress_bar"/>
+    <include
+        layout="@layout/progress_layout"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/driver_results_list"

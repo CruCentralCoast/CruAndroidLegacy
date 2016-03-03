@@ -27,6 +27,7 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharing
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
+import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
 
 import java.util.Collections;
 
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new MyRidesFragment()).commit();
                 break;
             case R.id.nav_summer_missions:
-                spawnConstructionFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new SummerMissionsFragment()).commit();
                 break;
             case R.id.nav_community_groups:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();

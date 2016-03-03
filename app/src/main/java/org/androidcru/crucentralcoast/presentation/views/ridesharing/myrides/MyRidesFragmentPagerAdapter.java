@@ -2,10 +2,11 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 
-public class MyRidesFragmentPagerAdapter extends FragmentPagerAdapter {
+public class MyRidesFragmentPagerAdapter extends FragmentStatePagerAdapter
+{
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Driver", "Passenger" };
 
@@ -26,10 +27,10 @@ public class MyRidesFragmentPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 frag = new MyRidesDriverFragment();
-            break;
+                break;
             case 1:
                 frag = new MyRidesPassengerFragment();
-            break;
+                break;
         }
 
         return frag;

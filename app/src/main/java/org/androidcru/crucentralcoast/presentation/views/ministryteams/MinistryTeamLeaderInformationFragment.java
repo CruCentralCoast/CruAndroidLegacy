@@ -13,7 +13,6 @@ import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.providers.ApiProvider;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
-import org.androidcru.crucentralcoast.presentation.BindingAdapters;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import rx.schedulers.Schedulers;
 
 public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 {
-    private static CruApiService cruService = ApiProvider.getInstance().getService();
+    private static CruApiService cruService = ApiProvider.getService();
     private MinistryTeam ministryTeam;
 
     @Bind(R.id.ministry_leader_info_text_view) TextView ministryTeamLeaderInfo;
@@ -50,7 +49,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 
         ministryTeam = (MinistryTeam) formHolder.getDataObject();
         ArrayList<String> ministryIdList = new ArrayList<>();
-        ministryIdList.add(ministryTeam.mId);
+        ministryIdList.add(ministryTeam.id);
         // ask jon what the toBlocking single stuff does
         ArrayList<CruUser> ministryTeamLeaders = cruService.getMinistryTeamLeaders(ministryIdList).subscribeOn(Schedulers.io()).toBlocking().single();
 
@@ -61,9 +60,9 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
         {
             ministryTeamLeaderInfo.setText(
                     ministryTeamLeaderInfo.getText().toString() +
-                    user.mName.mFirstName + " " + user.mName.mLastName + "\n    " +
-                    user.mEmail + "\n    " +
-                    user.phoneNumber + "\n\n");
+                    user.name.firstName + " " + user.name.lastName + "\n    " +
+                    (user.email != null ? user.email + "\n    " : "")  +
+                    (user.phoneNumber != null ? user.phoneNumber + "\n" : "") + "\n");
         }
     }
 

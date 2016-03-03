@@ -1,59 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <import type="org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideResultVM"/>
-        <variable name="rideResultVM" type="RideResultVM"/>
-    </data>
+    <ImageView
+        android:id="@+id/driverIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_car_grey600_48dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:id="@+id/rideInfo"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/driverIcon"
+        android:layout_centerVertical="true">
 
-        <ImageView
-            android:id="@+id/driverIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_car_grey600_48dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
-
-        <LinearLayout
-            android:id="@+id/rideInfo"
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/driverName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/driverIcon"
-            android:layout_centerVertical="true">
+            tools:text="Jane Doe"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"/>
 
-            <TextView
-                android:id="@+id/driverName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Jane Doe"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:text="@{rideResultVM.ride.driverName}"/>
+        <TextView
+            android:id="@+id/rideDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Monday, Febuary 29th, 2016"
+            android:layout_marginBottom="4dp"/>
 
-            <TextView
-                android:id="@+id/rideDateTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Monday, Febuary 29th, 2016"
-                android:layout_marginBottom="4dp"
-                android:text="@{rideResultVM.dateTime}"/>
-
-            <!-- TODO Needs MVVM -->
-            <TextView
-                android:id="@+id/pickupStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Pickup Available"
-                android:layout_marginBottom="4dp"
-                android:text="Pickup Available"/>
-        </LinearLayout>
-    </RelativeLayout>
-</layout>
+        <TextView
+            android:id="@+id/pickupStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Pickup Available"
+            android:layout_marginBottom="4dp"
+            android:text="Pickup Available"/>
+    </LinearLayout>
+</RelativeLayout>

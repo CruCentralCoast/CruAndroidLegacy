@@ -145,14 +145,14 @@ public class EventsFragment extends Fragment
 
     private void forceUpdate()
     {
-        EventProvider.getInstance().requestEvents()
+        EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
-        EventProvider.getInstance().requestEvents()
+        EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
@@ -168,15 +168,15 @@ public class EventsFragment extends Fragment
         mCruEventVMs.clear();
         rx.Observable.from(cruEvents)
                 .filter(cruEvent -> {
-                    for (String s : cruEvent.mParentMinistrySubscriptions)
+                    for (String s : cruEvent.parentMinistrySubscriptions)
                         if (mSharedPreferences.getBoolean(s, false))
                             return true;
                     return false;
                 })
                 .map(cruEvent -> {
                     return new CruEventVM(cruEvent, false,
-                            mSharedPreferences.contains(cruEvent.mId),
-                            mSharedPreferences.getLong(cruEvent.mId, -1));
+                            mSharedPreferences.contains(cruEvent.id),
+                            mSharedPreferences.getLong(cruEvent.id, -1));
                 })
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(mCruEventVMs::add);

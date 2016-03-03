@@ -12,19 +12,9 @@ import rx.schedulers.Schedulers;
 
 public final class RideProvider
 {
-    private static CruApiService mCruService = ApiProvider.getInstance().getService();
-    private static RideProvider mInstance;
+    private static CruApiService mCruService = ApiProvider.getService();
 
-    private RideProvider() {}
-
-    public static RideProvider getInstance()
-    {
-        if(mInstance == null)
-            mInstance = new RideProvider();
-        return mInstance;
-    }
-
-    public Observable<List<Ride>> requestRides()
+    public static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
                 .subscribeOn(Schedulers.io())
@@ -33,47 +23,55 @@ public final class RideProvider
                     return Observable.from(rides);
                 })
                 .map(ride -> {
-                    PassengerProvider.getInstance().getPassengers(ride.passengerIds)
+                    PassengerProvider.getPassengers(ride.passengerIds)
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
                     return ride;
                 })
-                .toList()
-                .subscribeOn(Schedulers.io());
+                .map(ride -> {
+                    EventProvider.requestCruEventByID(ride.eventId)
+                            .map(theEvent -> ride.event = theEvent)
+                            .toBlocking()
+                            .subscribe();
+                    ;
+                    return ride;
+                })
+                .subscribeOn(Schedulers.io())
+                .toList();
     }
 
-    public Observable<Ride> createRide(Ride ride)
+    public static Observable<Ride> createRide(Ride ride)
     {
         return mCruService.postRide(ride)
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Ride> updateRide(Ride ride)
+    public static Observable<Ride> updateRide(Ride ride)
     {
         return mCruService.updateRide(ride)
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Void> addPassengerToRide(String passengerId, String rideId)
+    public static Observable<Void> addPassengerToRide(String passengerId, String rideId)
     {
         return mCruService.addPassenger(rideId, passengerId)
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Void> dropPassengerFromRide(String passengerId, String rideId)
+    public static Observable<Void> dropPassengerFromRide(String passengerId, String rideId)
     {
         return mCruService.dropPassenger(rideId, passengerId)
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Void> dropRide(String rideId)
+    public static Observable<Void> dropRide(String rideId)
     {
         return mCruService.dropRide(rideId)
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<Ride> requestRideByID(String id)
+    public static Observable<Ride> requestRideByID(String id)
     {
         return mCruService.findSingleRide(id)
                 .subscribeOn(Schedulers.io())
@@ -82,7 +80,8 @@ public final class RideProvider
                     return Observable.from(rides);
                 })
                 .map(ride -> {
-                    PassengerProvider.getInstance().getPassengers(ride.passengerIds)
+                    PassengerProvider.getPassengers(ride.passengerIds)
+                            .subscribeOn(Schedulers.io())
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();

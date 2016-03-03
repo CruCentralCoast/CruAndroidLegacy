@@ -4,11 +4,11 @@ import android.os.Bundle;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -21,16 +21,16 @@ public class JoinMinistryTeamActivity extends FormActivity
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null || bundle.getString("MINISTRY_TEAM", "").isEmpty())
+        if(bundle == null || !bundle.containsKey(AppConstants.MINISTRY_TEAM_KEY))
         {
-            Logger.e("JoinMinistryTeamActivity requires that you pass an event ID.");
+            Logger.e("JoinMinistryTeamActivity requires that you pass an ministry team ID.");
             Logger.e("Finishing activity...");
             finish();
             return;
         }
         else
         {
-            ministryTeam = CruApplication.gson.fromJson(bundle.getString("MINISTRY_TEAM", ""), MinistryTeam.class);
+            ministryTeam = Parcels.unwrap(bundle.getParcelable(AppConstants.MINISTRY_TEAM_KEY));
             addDataObject(ministryTeam);
         }
 

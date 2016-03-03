@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import android.databinding.ObservableField;
-
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
@@ -12,32 +10,21 @@ import rx.schedulers.Schedulers;
 
 public class EventProvider
 {
-    private static CruApiService mCruService = ApiProvider.getInstance().getService();
-    private static EventProvider mInstance;
+    private static CruApiService mCruService = ApiProvider.getService();
 
-    private EventProvider() {}
-
-    public static EventProvider getInstance()
-    {
-        if(mInstance == null)
-            mInstance = new EventProvider();
-        return mInstance;
-    }
-
-    public Observable<ArrayList<CruEvent>> requestEvents()
+    public static Observable<ArrayList<CruEvent>> requestEvents()
     {
 
         return mCruService.getEvents()
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<CruEvent> requestCruEventByID(String id)
+    public static Observable<CruEvent> requestCruEventByID(String id)
     {
         return mCruService.findSingleCruEvent(id)
                 .subscribeOn(Schedulers.io())
                 .flatMap(cruevents -> {
                     return Observable.from(cruevents);
                 });
-
     }
 }

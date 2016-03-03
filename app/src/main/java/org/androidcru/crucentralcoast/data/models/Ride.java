@@ -5,11 +5,13 @@ import android.location.Address;
 import com.google.gson.annotations.SerializedName;
 
 import org.androidcru.crucentralcoast.CruApplication;
+import org.parceler.Parcel;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Ride
 {
     @SerializedName("driverName") public String driverName;
@@ -23,9 +25,10 @@ public class Ride
     @SerializedName("direction") public Direction direction;
     @SerializedName("gcm_id") public String gcmID;
     @SerializedName("_id") public String id;
-    public int carCapacity;
+    @SerializedName("seats") public int carCapacity;
     public Address address;
-    public transient List<Passenger> passengers;
+    public List<Passenger> passengers;
+    public CruEvent event;
 
     public Ride() {}
 
@@ -47,6 +50,11 @@ public class Ride
         this.direction = direction;
         this.gcmID = CruApplication.getGCMID();//gcmID;
         this.carCapacity = carCapacity;
+    }
+
+    public boolean isEmpty()
+    {
+        return id == null;
     }
 
     public enum Direction
@@ -73,46 +81,15 @@ public class Ride
             return directionDetailed;
         }
 
-        public String[] getAll()
+        public static String[] getAll()
         {
             Direction[] directions = Direction.values();
             String[] directionStr = new String[directions.length];
             for(int i = 0; i < directions.length; i++)
             {
-                directionStr[i] = directions[i].getValue();
+                directionStr[i] = directions[i].getValueDetailed();
             }
             return directionStr;
-        }
-    }
-
-    //can't decide if this should be used
-    public enum Gender
-    {
-        ANY("Any"),
-        MAN("Man"),
-        WOMAN("Woman");
-
-        private String gender;
-
-        Gender(String gender)
-        {
-            this.gender = gender;
-        }
-
-        public String getValue()
-        {
-            return gender;
-        }
-
-        public String[] getAll()
-        {
-            Gender[] genders = Gender.values();
-            String[] genderStr = new String[genders.length];
-            for(int i = 0; i < genders.length; i++)
-            {
-               genderStr[i] = genders[i].getValue();
-            }
-            return genderStr;
         }
     }
 }

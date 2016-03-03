@@ -1,18 +1,21 @@
 package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 
-import android.databinding.DataBindingUtil;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.BR;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.databinding.SubscriptionHeaderBinding;
-import org.androidcru.crucentralcoast.databinding.TileSubscriptionBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 
 import java.util.ArrayList;
@@ -20,6 +23,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 
 public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -42,6 +50,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         ArrayList<Pair<Campus, Integer>> sortableList = new ArrayList<>();
         for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinistryMap.entrySet())
         {
+
             sortableList.add(new Pair(entry.getKey(), entry.getValue().size()));
         }
 
@@ -57,7 +66,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         for (Pair<Campus, Integer> campusPair : sortableList)
         {
-            mMinistries.add(new MinistrySubscriptionVM(campusPair.first.mCampusName, null));
+            mMinistries.add(new MinistrySubscriptionVM(campusPair.first.campusName, null));
             for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
             {
                 mMinistries.add(new MinistrySubscriptionVM(null, m));
@@ -73,11 +82,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType)
         {
             case MINISTRY_VIEW:
-                TileSubscriptionBinding tileBinding = TileSubscriptionBinding.inflate(inflater, parent, false);
-                return new MinistrySubscriptionHolder(tileBinding.getRoot());
+                View tileView = inflater.inflate(R.layout.tile_subscription, parent, false);
+                return new MinistrySubscriptionHolder(tileView);
             case HEADER_VIEW:
-                SubscriptionHeaderBinding headerBinding = SubscriptionHeaderBinding.inflate(inflater, parent, false);
-                return new HeaderHolder(headerBinding.getRoot());
+                View headerView = inflater.inflate(R.layout.subscription_header, parent, false);
+                return new HeaderHolder(headerView);
             default:
                 return new FooterHolder(inflater.inflate(R.layout.blank_footer, parent, false));
         }
@@ -92,11 +101,23 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             if (holder instanceof MinistrySubscriptionHolder)
             {
                 MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
-                ministrySubscriptionHolder.getBinding().setVariable(BR.subscription, ministrySubscriptionVM);
+
+                boolean isChecked = ministrySubscriptionVM.getIsSubscribed();
+                ministrySubscriptionHolder.checkBox.setChecked(isChecked);
+                if(ministrySubscriptionVM.ministry.cruImage != null)
+                {
+                    Context context = ministrySubscriptionHolder.ministryImage.getContext();
+                    Picasso.with(context)
+                            .load(ministrySubscriptionVM.ministry.cruImage.url)
+                            .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
+                            .into(ministrySubscriptionHolder.ministryImage);
+                }
+
+
             } else if (holder instanceof HeaderHolder)
             {
                 HeaderHolder headerHolder = (HeaderHolder) holder;
-                headerHolder.getBinding().setVariable(BR.subscription, ministrySubscriptionVM);
+                headerHolder.header.setText(ministrySubscriptionVM.campusName);
             }
         }
     }
@@ -117,28 +138,33 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {
+        @Bind(R.id.header) TextView header;
+
         public HeaderHolder(View itemView)
         {
             super(itemView);
-        }
-
-        public SubscriptionHeaderBinding getBinding() {
-            return DataBindingUtil.getBinding(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
     }
 
     public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
     {
+        @Bind(R.id.ministry_image) ImageView ministryImage;
+        @Bind(R.id.checkbox) CheckBox checkBox;
 
         public MinistrySubscriptionHolder(View itemView)
         {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public TileSubscriptionBinding getBinding()
+        @OnClick(R.id.tile_subscription)
+        public void onClick(View v)
         {
-            return DataBindingUtil.getBinding(itemView);
+            MinistrySubscriptionVM ministrySubscriptionVM = mMinistries.get(getAdapterPosition());
+            ministrySubscriptionVM.setIsSubscribed(!ministrySubscriptionVM.getIsSubscribed());
+            notifyItemChanged(getAdapterPosition());
         }
     }
 

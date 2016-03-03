@@ -7,8 +7,7 @@ import org.threeten.bp.ZonedDateTime;
 public class RideFilter
 {
     public Ride.Direction direction;
-    public ZonedDateTime fromDateTime;
-    public ZonedDateTime toDateTime;
+    public ZonedDateTime dateTime;
     public LatLng location;
     public String gender;
 }

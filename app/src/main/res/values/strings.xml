@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Cru Central Coast</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -50,11 +50,16 @@
     <string name="driver_signup">Driver Signup</string>
     <string name="passenger_signup">Passenger Signup</string>
     <string name="cancel">Cancel</string>
+    <string name="kick">Kick</string>
     <string name="nav_my_rides">My Rides</string>
     <string name="YourDriver">Your Driver</string>
+    <string name="learn_more">Learn More</string>
+
+    <string name="mission_leaders">Leaders: <xliff:g name="names">%s</xliff:g></string>
+    <string name="begins">Begins: <xliff:g name="date">%s</xliff:g></string>
+    <string name="ends">Ends: <xliff:g name="date">%s</xliff:g></string>
 
     <string-array name="genders">
-        <item>Select Gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>

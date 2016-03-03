@@ -1,18 +1,27 @@
 package org.androidcru.crucentralcoast.presentation.views.events;
 
-import android.databinding.DataBindingUtil;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-//sometimes this import will be red but it will still compile
-import org.androidcru.crucentralcoast.BR;
-import org.androidcru.crucentralcoast.databinding.CardEventBinding;
+import com.squareup.picasso.Picasso;
+
+import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * EventsAdapter is an RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -39,9 +48,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CardEventBinding binding = CardEventBinding.inflate(inflater, parent, false);
-
-        return new CruEventViewHolder(binding.getRoot());
+        return new CruEventViewHolder(inflater.inflate(R.layout.card_event, parent, false));
     }
 
     //TODO support events spanning multiple days (fall retreat)
@@ -54,8 +61,31 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     public void onBindViewHolder(CruEventViewHolder holder, int position)
     {
         CruEventVM cruEventVM = mEvents.get(position);
-        holder.getBinding().setVariable(BR.event, cruEventVM);
-        holder.getBinding().executePendingBindings();
+        holder.eventName.setText(cruEventVM.cruEvent.name);
+        holder.eventDate.setText(cruEventVM.getDateTime());
+        Context context = holder.eventBanner.getContext();
+        if(cruEventVM.cruEvent.image != null)
+        {
+            Picasso.with(context)
+                    .load(cruEventVM.cruEvent.image.url)
+                    .fit()
+                    .into(holder.eventBanner);
+        }
+        holder.fbButton.setOnClickListener(cruEventVM.onFacebookClick());
+        holder.fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_facebook_box_grey600_48dp, R.color.fbBlue));
+        holder.mapButton.setOnClickListener(cruEventVM.onMapClick());
+        holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
+        holder.calButton.setOnClickListener(cruEventVM.onCalendarClick());
+        ViewUtil.setSelected(holder.calButton,
+                cruEventVM.addedToCalendar,
+                ContextCompat.getDrawable(context, R.drawable.ic_calendar_check_grey600_48dp),
+                ContextCompat.getDrawable(context, R.drawable.ic_calendar_plus_grey600_48dp),
+                ContextCompat.getColorStateList(context, R.color.cal_action));
+        holder.chevronView.setImageDrawable(cruEventVM.isExpanded
+                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
+                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+        holder.eventDescription.setText(cruEventVM.cruEvent.description);
+        holder.eventDescription.setVisibility(cruEventVM.isExpanded ? View.VISIBLE : View.GONE);
     }
 
 
@@ -75,13 +105,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
      */
     public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        @Bind(R.id.eventName) TextView eventName;
+        @Bind(R.id.eventDate) TextView eventDate;
+        @Bind(R.id.event_banner) ImageView eventBanner;
+        @Bind(R.id.chevView) ImageView chevronView;
+        @Bind(R.id.fbButton) ImageButton fbButton;
+        @Bind(R.id.mapButton) ImageButton mapButton;
+        @Bind(R.id.calButton) ImageButton calButton;
+        @Bind(R.id.eventDescription) TextView eventDescription;
+
         public CruEventViewHolder(View rootView) {
             super(rootView);
+            ButterKnife.bind(this, rootView);
             rootView.setOnClickListener(this);
-        }
-
-        public CardEventBinding getBinding() {
-            return DataBindingUtil.getBinding(itemView);
         }
 
         /**
@@ -96,7 +132,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         public void onClick(View v)
         {
             int visibility;
-            if(getBinding().eventDescription.getVisibility() == View.VISIBLE)
+            if(eventDescription.getVisibility() == View.VISIBLE)
             {
                 visibility = View.GONE;
             }
@@ -104,9 +140,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
             {
                 visibility = View.VISIBLE;
             }
-            getBinding().eventDescription.setVisibility(visibility);
+            eventDescription.setVisibility(visibility);
 
-            mEvents.get(getAdapterPosition()).isExpanded.set((View.VISIBLE == visibility));
+            mEvents.get(getAdapterPosition()).isExpanded = (View.VISIBLE == visibility);
             notifyItemChanged(getAdapterPosition());
             mLayoutManager.scrollToPosition(getAdapterPosition());
         }

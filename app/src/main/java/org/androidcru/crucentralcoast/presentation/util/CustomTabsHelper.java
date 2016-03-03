@@ -38,12 +38,12 @@ public class CustomTabsHelper {
     /**
      * Goes through all apps that handle VIEW intents and have a warmup service. Picks
      * the one chosen by the user if there is one, otherwise makes a best effort to return a
-     * valid package mName.
+     * valid package name.
      *
      * This is <strong>not</strong> threadsafe.
      *
      * @param context {@link Context} to use for accessing {@link PackageManager}.
-     * @return The package mName recommended to use for connecting to custom tabs related components.
+     * @return The package name recommended to use for connecting to custom tabs related components.
      */
     public static String getPackageNameToUse(Context context) {
         if (sPackageNameToUse != null) return sPackageNameToUse;

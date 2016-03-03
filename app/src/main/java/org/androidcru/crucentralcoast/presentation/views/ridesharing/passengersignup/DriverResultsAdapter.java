@@ -1,19 +1,21 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup;
 
-import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import org.androidcru.crucentralcoast.BR;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.databinding.ItemDriverResultBinding;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideResultVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContent;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder>
 {
@@ -33,17 +35,15 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
     public DriverResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemDriverResultBinding binding = ItemDriverResultBinding.inflate(inflater, parent, false);
-
-        return new DriverResultViewHolder(binding.getRoot());
+        return new DriverResultViewHolder(inflater.inflate(R.layout.item_driver_result, parent, false));
     }
 
     @Override
     public void onBindViewHolder(DriverResultViewHolder holder, int position)
     {
-        RideResultVM rideResultVM = new RideResultVM(rides.get(position));
-        holder.getBinding().setVariable(BR.rideResultVM, rideResultVM);
-        holder.getBinding().executePendingBindings();
+        Ride currentRide = rides.get(position);
+        holder.driverName.setText(currentRide.driverName);
+        holder.rideDateTime.setText(currentRide.time.format(DateTimeFormatter.RFC_1123_DATE_TIME));
     }
 
     @Override
@@ -55,21 +55,20 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
     public class DriverResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
+        @Bind(R.id.driverName) TextView driverName;
+        @Bind(R.id.rideDateTime) TextView rideDateTime;
+
         public DriverResultViewHolder(View itemView)
         {
             super(itemView);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-        }
-
-        public ItemDriverResultBinding getBinding() {
-            return DataBindingUtil.getBinding(itemView);
         }
 
         @Override
         public void onClick(View v)
         {
-            formHolder.addDataObject(getBinding().getRideResultVM().ride);
+            formHolder.addDataObject(rides.get(getAdapterPosition()));
             formContent.onNext();
         }
     }
