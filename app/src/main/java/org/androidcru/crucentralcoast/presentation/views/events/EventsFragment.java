@@ -21,7 +21,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
 
@@ -140,7 +140,7 @@ public class EventsFragment extends Fragment
     @SuppressWarnings("unused")
     public void onManageSubscriptionsClicked()
     {
-        startActivity(new Intent(getContext(), SubscriptionStartupActivity.class));
+        startActivity(new Intent(getContext(), SubscriptionActivity.class));
     }
 
     private void forceUpdate()

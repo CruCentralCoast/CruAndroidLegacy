@@ -5,14 +5,17 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+
+import butterknife.Bind;
 
 public class BasicInfoFragment extends FormContentFragment
 {
     private BasicInfoValidator validator;
-
 
     @Nullable
     @Override
@@ -29,7 +32,10 @@ public class BasicInfoFragment extends FormContentFragment
     }
 
     @Override
-    public void setupUI() {}
+    public void setupUI()
+    {
+        formHolder.setTitle("Contact Information");
+    }
 
     @Override
     public void onNext()

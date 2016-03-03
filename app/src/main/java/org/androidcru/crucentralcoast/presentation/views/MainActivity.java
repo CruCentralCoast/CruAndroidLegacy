@@ -25,7 +25,7 @@ import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryT
 import org.androidcru.crucentralcoast.presentation.views.resources.articles.ArticlesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharingFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
 
 import java.util.Collections;
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
-            startActivity(new Intent(this, SubscriptionStartupActivity.class));
+            startActivity(new Intent(this, SubscriptionActivity.class));
             return true;
         }
 

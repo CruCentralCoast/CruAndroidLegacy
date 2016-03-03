@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
@@ -31,6 +32,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Bind(R.id.bottom_bar) RelativeLayout bottomBar;
     @Bind(R.id.prev) RelativeLayout prev;
     @Bind(R.id.next) RelativeLayout next;
+    @Bind(R.id.nextText) TextView nextText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -134,6 +136,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         setNavigationVisibility(View.VISIBLE);
         setPreviousVisibility(View.VISIBLE);
         setNextVisibility(View.VISIBLE);
+        setNextText("NEXT");
         setToolbarExpansion(false);
     }
 
@@ -184,6 +187,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         }
+    }
+
+    @Override
+    public void setNextText(String text)
+    {
+        nextText.setText(text);
     }
 
     @Override

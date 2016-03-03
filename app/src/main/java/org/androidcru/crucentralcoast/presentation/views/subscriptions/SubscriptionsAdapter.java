@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import org.androidcru.crucentralcoast.databinding.TileSubscriptionBinding;
 import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,16 +37,33 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         convertSubscriptions(campusMinistryMap);
     }
 
-    private void convertSubscriptions(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinisryMap)
+    private void convertSubscriptions(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
     {
-        for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinisryMap.entrySet())
+        ArrayList<Pair<Campus, Integer>> sortableList = new ArrayList<>();
+        for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinistryMap.entrySet())
         {
-            mMinistries.add(new MinistrySubscriptionVM(entry.getKey().mCampusName, null));
-            for(MinistrySubscription m : entry.getValue())
+            sortableList.add(new Pair(entry.getKey(), entry.getValue().size()));
+        }
+
+        // This sorts the subscription page so it shows the campus with the most to least ministries
+        Collections.sort(sortableList, new Comparator<Pair<Campus, Integer>>()
+        {
+            @Override
+            public int compare(Pair<Campus, Integer> lhs, Pair<Campus, Integer> rhs)
+            {
+                return rhs.second - lhs.second;
+            }
+        });
+
+        for (Pair<Campus, Integer> campusPair : sortableList)
+        {
+            mMinistries.add(new MinistrySubscriptionVM(campusPair.first.mCampusName, null));
+            for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
             {
                 mMinistries.add(new MinistrySubscriptionVM(null, m));
             }
         }
+
     }
 
     @Override

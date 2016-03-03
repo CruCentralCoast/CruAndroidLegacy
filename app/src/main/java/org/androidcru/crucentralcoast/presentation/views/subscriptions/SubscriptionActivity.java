@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.androidcru.crucentralcoast.R;
 
-public class SubscriptionStartupActivity extends AppCompatActivity
+public class SubscriptionActivity extends AppCompatActivity
 {
 
     @Override

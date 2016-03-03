@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +40,7 @@ public class SplashActivity extends AppCompatActivity
         if (mSharedPreferences.getBoolean(AppConstants.FIRST_LAUNCH, false))
             intent.setClass(this, MainActivity.class);
         else
-            intent.setClass(this, SubscriptionStartupActivity.class);
+            intent.setClass(this, SubscriptionActivity.class);
 
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

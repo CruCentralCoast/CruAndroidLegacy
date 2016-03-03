@@ -44,7 +44,7 @@ public class MinistryTeamInformationFragment extends FormContentFragment
         ministryTeam = (MinistryTeam) formHolder.getDataObject();
 
         //TODO temporary for now
-        BindingAdapters.setSource(ministryInfoImage, ministryTeam.cruImage.mURL, 0, null, null);
+        BindingAdapters.setSource(ministryInfoImage, ministryTeam.teamImage != null ? ministryTeam.teamImage.mURL : null, 0, null, null);
         ministryTeamDescription.setText(ministryTeam.description);
 
     }

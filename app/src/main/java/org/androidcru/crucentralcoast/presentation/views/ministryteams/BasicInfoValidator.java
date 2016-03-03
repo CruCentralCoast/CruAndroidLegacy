@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Optional;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -24,7 +26,8 @@ import butterknife.ButterKnife;
 public class BasicInfoValidator implements Validator.ValidationListener
 {
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
-    @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    @Bind(R.id.phone_field) @Optional @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    @Bind(R.id.email_field) @Optional @Email EditText emailField;
 
     private Validator validator;
     private boolean isValid;
@@ -75,6 +78,12 @@ public class BasicInfoValidator implements Validator.ValidationListener
     public boolean validate()
     {
         validator.validate(false);
-        return isValid;
+        boolean optionalCheck = !phoneField.getText().equals("") || !emailField.getText().equals("");
+        if (!optionalCheck)
+        {
+            phoneField.setError("Must fill in one of these fields.");
+            emailField.setError("Must fill in one of these fields.");
+        }
+        return isValid && optionalCheck;
     }
 }
