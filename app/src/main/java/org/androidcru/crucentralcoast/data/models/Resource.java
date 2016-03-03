@@ -11,7 +11,7 @@ public class Resource
     @SerializedName("title") public String title;
     @SerializedName("url") public String url;
     @SerializedName("type") public ResourceType resourceType;
-    @SerializedName("tags") public ArrayList<String> tags;
+    public ArrayList<String> tags = new ArrayList<>();
 
     private final String delimiter = ", ";
 

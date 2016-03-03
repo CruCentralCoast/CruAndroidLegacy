@@ -7,6 +7,7 @@ import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Resource;
+import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
 
@@ -46,6 +47,10 @@ public interface CruApiService
 
     @GET("api/resource/list")
     public Observable<ArrayList<Resource>> getResources();
+
+    @FormUrlEncoded
+    @POST("/api/resourcetag/find")
+    Observable<ArrayList<ResourceTag>> findSingleResourceTag(@Field("resources") String id);
 
     @FormUrlEncoded
     @POST("/api/ride/find")

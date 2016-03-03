@@ -2,13 +2,12 @@ package org.androidcru.crucentralcoast.data.providers;
 
 
 import org.androidcru.crucentralcoast.data.models.Resource;
+import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.schedulers.Schedulers;
 
 public final class ResourceProvider
@@ -21,6 +20,23 @@ public final class ResourceProvider
                 .subscribeOn(Schedulers.io())
                 .flatMap(resources -> Observable.from(resources))
                 .filter(resource -> resource.resourceType == type)
+                .observeOn(Schedulers.io())
+                .map(resource1 -> {
+                    getResourceTagByResourceId(resource1.id)
+                            .subscribeOn(Schedulers.io())
+                            .toBlocking()
+                            .subscribe(tag -> {
+                                resource1.tags.add(tag.title);
+                            });
+                    return resource1;
+                })
                 .toList();
+    }
+
+    public static Observable<ResourceTag> getResourceTagByResourceId(String resourceId)
+    {
+        return cruApiService.findSingleResourceTag(resourceId)
+                .flatMap(resourceTags -> Observable.from(resourceTags))
+                .subscribeOn(Schedulers.io());
     }
 }
