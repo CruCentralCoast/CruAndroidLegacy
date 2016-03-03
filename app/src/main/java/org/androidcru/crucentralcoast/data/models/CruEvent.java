@@ -2,11 +2,13 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+@Parcel
 public class CruEvent
 {
     @SerializedName("name") public String mName;

@@ -28,6 +28,7 @@ public class Ride
     public int carCapacity;
     public Address address;
     public List<Passenger> passengers;
+    public CruEvent event;
 
     public Ride() {}
 

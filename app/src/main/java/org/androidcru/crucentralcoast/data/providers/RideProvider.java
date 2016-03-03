@@ -90,4 +90,24 @@ public final class RideProvider
                 });
 
     }
+
+    public Observable<List<Ride>> requestRidesAndEvents()
+    {
+        return mCruService.getRides()
+                .subscribeOn(Schedulers.io())
+                .flatMap(rides -> {
+                    Logger.d("Rides before events found");
+                    return Observable.from(rides);
+                })
+                .map(ride -> {
+                    EventProvider.getInstance().requestCruEventByID(ride.eventId)
+                            .map(theEvent -> ride.event = theEvent)
+                            .toBlocking()
+                            .subscribe();
+                    ;
+                    return ride;
+                })
+                .toList()
+                .subscribeOn(Schedulers.io());
+    }
 }

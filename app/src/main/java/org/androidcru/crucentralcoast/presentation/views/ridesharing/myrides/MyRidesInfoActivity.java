@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +12,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruImage;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.parceler.Parcels;
@@ -34,31 +39,41 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 
     private  AlertDialog alertDialog;
 
-
     //Injected Views
     @Bind(R.id.event_list) RecyclerView eventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
+    @Bind(R.id.event_banner) ImageView eventBanner;
     @Bind(R.id.eventName) TextView eventName;
     @Bind(R.id.ride_type) TextView rideType;
     @Bind(R.id.ride_time) TextView rideTime;
     @Bind(R.id.departureLoc) TextView departureLoc;
+//    @Bind(R.id.spots_remaining) TextView spotsRemaining;
     @Bind(R.id.passenger_list_heading) TextView passengerListHeading;
 
 
     @Bind(R.id.editOffering) Button editButton;
     @Bind(R.id.cancelOffering) Button cancelButton;
 
-    private void setupUI() {
+    private void setupUI(String theEventName, CruImage theImage) {
         //TODO: query for event to access event name and image
-        eventName.setText(ride.eventId);
-        rideType.setText("Direction: " + ride.direction.getValueDetailed());
+        eventName.setText(theEventName);
+        Context context = eventBanner.getContext();
+        if(theImage != null)
+        {
+            Picasso.with(context)
+                    .load(theImage.mURL)
+                    .fit()
+                    .into(eventBanner);
+        }
+        rideType.setText("You are driving: " + ride.direction.getValueDetailed());
         rideTime.setText(ride.time.toString());
         rideTime.setText(ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
         departureLoc.setText(ride.location.toString());
-        Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
-                passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
+//        spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
+        //Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
+        passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
         editButton.setOnClickListener(onEditOfferingClicked());
         initAlertDialog();
         cancelButton.setOnClickListener(onCancelOfferingClicked());
@@ -71,7 +86,8 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this);
         ride = Parcels.unwrap(getIntent().getExtras().getParcelable("ride"));
-        setupUI();
+
+        getEventData();
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         //setHasOptionsMenu(true);
@@ -123,6 +139,15 @@ public class MyRidesInfoActivity extends AppCompatActivity {
                 alertDialog.show();
             }
         };
+    }
+
+    private void getEventData()
+    {
+        EventProvider.getInstance().requestCruEventByID(ride.eventId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                   setupUI(result.mName, result.mImage);
+                });
     }
 
 //    public void setPassengers(List<Passenger> passengerList)

@@ -65,7 +65,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
         MyRidesDriverVM rideVM = rides.get(position);
-        holder.eventName.setText(rideVM.eventName);
+        holder.eventName.setText(rideVM.ride.event == null ? rideVM.ride.eventId : rideVM.ride.event.mName);
         holder.departureTime.setText(rideVM.getDateTime());
         holder.departureLoc.setText(rideVM.getLocation());
         holder.editOffering.setOnClickListener(rideVM.onEditOfferingClicked());

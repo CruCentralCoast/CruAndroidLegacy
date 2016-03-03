@@ -112,6 +112,7 @@ public class MyRidesDriverFragment extends Fragment {
 
     private void forceUpdate()
     {
+//        RideProvider.getInstance().requestRidesAndEvents()
         RideProvider.getInstance().requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> ride.gcmID.equals(CruApplication.getGCMID()))

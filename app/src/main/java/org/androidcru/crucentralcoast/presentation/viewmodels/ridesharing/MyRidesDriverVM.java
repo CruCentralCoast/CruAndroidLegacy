@@ -37,7 +37,7 @@ public class MyRidesDriverVM {
         this.isExpanded = isExpanded;
         this.parent = activity;
         initAlertDialog();
-        updateEventName();
+//        updateEventName();
         updatePassengerList();
     }
 
