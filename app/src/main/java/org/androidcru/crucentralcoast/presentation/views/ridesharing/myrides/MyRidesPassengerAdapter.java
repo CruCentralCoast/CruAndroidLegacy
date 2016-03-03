@@ -53,7 +53,7 @@ public class MyRidesPassengerAdapter extends RecyclerView.Adapter<MyRidesPasseng
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
         MyRidesPassengerVM rideVM = rides.get(position);
-        holder.eventName.setText(rideVM.eventName);
+        holder.eventName.setText(rideVM.ride.event == null ? rideVM.ride.eventId : rideVM.ride.event.name);
         holder.departureTime.setText(rideVM.getDateTime());
         holder.departureLoc.setText(rideVM.getLocation());
         holder.driverInfo.setText(rideVM.getDriverInfo());

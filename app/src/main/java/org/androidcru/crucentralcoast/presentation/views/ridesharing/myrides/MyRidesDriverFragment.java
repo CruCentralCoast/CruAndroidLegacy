@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.orhanobut.logger.Logger;
 
@@ -33,7 +35,8 @@ public class MyRidesDriverFragment extends Fragment {
     //Injected Views
     @Bind(R.id.event_list) RecyclerView eventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-
+    @Bind(R.id.progress) ProgressBar progressBar;
+    @Bind(R.id.empty_events_view) RelativeLayout emptyEventsView;
 
     private ArrayList<MyRidesDriverVM> rideVMs;
     private LinearLayoutManager layoutManager;
@@ -46,7 +49,12 @@ public class MyRidesDriverFragment extends Fragment {
         rideSubscriber = new Observer<List<Ride>>()
         {
             @Override
-            public void onCompleted() {}
+            public void onCompleted()
+            {
+                eventList.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            }
 
             @Override
             public void onError(Throwable e)
@@ -90,6 +98,12 @@ public class MyRidesDriverFragment extends Fragment {
 
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
+
+        //Show progress screen while waiting to load
+        emptyEventsView.setVisibility(View.GONE);
+        eventList.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);
