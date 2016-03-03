@@ -63,24 +63,45 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
 
         holder.videoThumb.setOnClickListener((View v) -> {
             //TODO not sure what to do if player cant resolve video
-            if(YouTubeIntents.canResolvePlayVideoIntentWithOptions(context))
-            {
+            if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context)) {
                 context.startActivity(YouTubeIntents.createPlayVideoIntentWithOptions(context, holder.vID, true, true));
             }
+        });
+
+        holder.videoDescription.setText(searchResult.getSnippet().getDescription());
+        holder.videoDescription.setVisibility(holder.isExpanded ? View.VISIBLE : View.GONE);
+
+        holder.toggleVideoDescription.setOnClickListener((View v) -> {
+            int visibility;
+            if (holder.videoDescription.getVisibility() == View.VISIBLE) {
+                visibility = View.GONE;
+                holder.toggleVideoDescription.setText("Show Description");
+            } else {
+                visibility = View.VISIBLE;
+                holder.toggleVideoDescription.setText("Hide Description");
+            }
+            holder.videoDescription.setVisibility(visibility);
+
+            holder.isExpanded = visibility == View.VISIBLE;
+           // notifyItemChanged(holder.getAdapterPosition());
+           // layoutManager.scrollToPosition(holder.getAdapterPosition());
         });
     }
 
     public class CruVideoViewHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.videoTitle) TextView videoTitle;
-        @Bind(R.id.videoThumb) ImageView videoThumb;
+        @Bind(R.id.video_title) TextView videoTitle;
+        @Bind(R.id.video_thumb) ImageView videoThumb;
+        @Bind(R.id.video_description) TextView videoDescription;
+        @Bind(R.id.toggle_description) TextView toggleVideoDescription;
         String vID;
+        boolean isExpanded;
 
         public CruVideoViewHolder(View rootView)
         {
             super(rootView);
             ButterKnife.bind(this, rootView);
-
+            isExpanded = false;
         }
     }
 }

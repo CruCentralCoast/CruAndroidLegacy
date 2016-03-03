@@ -22,9 +22,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/videoTitle"
+            android:id="@+id/video_title"
             android:layout_marginLeft="12dp"
-            tools:text="video? dont think I need this"
+            tools:text="Default Title"
             android:textColor="@color/grey800"
             android:textSize="24dp"
             android:layout_marginTop="8dp"/>
@@ -33,14 +33,23 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:adjustViewBounds="true"
-            android:id="@+id/videoThumb"
+            android:id="@+id/video_thumb"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/videoDescription"
+            android:id="@+id/toggle_description"
+            android:text="@string/show_description"
+            android:layout_gravity="center"
+            android:singleLine="false"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/video_description"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="24dp"
             android:layout_marginLeft="24dp"/>
