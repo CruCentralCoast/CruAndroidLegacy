@@ -55,7 +55,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         holder.vID = searchResult.getId().getVideoId();
 
         Picasso.with(context)
-                .load(searchResult.getSnippet().getThumbnails().getDefault().getUrl())
+                .load(searchResult.getSnippet().getThumbnails().getHigh().getUrl())
                 .fit()
                 .into(holder.videoThumb);
 
