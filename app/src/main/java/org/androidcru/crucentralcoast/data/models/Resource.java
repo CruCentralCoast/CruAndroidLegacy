@@ -36,7 +36,7 @@ public class Resource
             result += str + delimiter;
 
         if (!tags.isEmpty())
-            result = result.substring(0, result.length() - delimiter.length() - 1);
+            result = result.substring(0, result.length() - delimiter.length());
 
         return result;
     }
