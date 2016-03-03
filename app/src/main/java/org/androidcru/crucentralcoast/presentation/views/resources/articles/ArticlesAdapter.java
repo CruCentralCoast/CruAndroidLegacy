@@ -48,7 +48,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     {
         Resource curResource = resources.get(position);
         holder.title.setText(curResource.title);
-        holder.tags.setText(curResource.tags.toString());
+        holder.tags.setText(curResource.formatTags());
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,6 +13,8 @@ public class Resource
     @SerializedName("type") public ResourceType resourceType;
     @SerializedName("tags") public ArrayList<String> tags;
 
+    private final String delimiter = ", ";
+
     /**
      * Required for Gson/RetroFit
      */
@@ -24,6 +26,19 @@ public class Resource
         this.url = url;
         this.resourceType = resourceType;
         this.tags = tags;
+    }
+
+    public String formatTags()
+    {
+        String result = "";
+
+        for (String str : tags)
+            result += str + delimiter;
+
+        if (!tags.isEmpty())
+            result = result.substring(0, result.length() - delimiter.length() - 1);
+
+        return result;
     }
 
     //TODO inquire about migrating resource type to individual article, videos, audio  objects
