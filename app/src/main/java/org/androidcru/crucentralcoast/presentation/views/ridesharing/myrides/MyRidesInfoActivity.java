@@ -48,7 +48,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     @Bind(R.id.ride_type) TextView rideType;
     @Bind(R.id.ride_time) TextView rideTime;
     @Bind(R.id.departureLoc) TextView departureLoc;
-//    @Bind(R.id.spots_remaining) TextView spotsRemaining;
+    @Bind(R.id.spots_remaining) TextView spotsRemaining;
     @Bind(R.id.passenger_list_heading) TextView passengerListHeading;
 
 
@@ -71,7 +71,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         rideTime.setText(ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
         departureLoc.setText(ride.location.toString());
-//        spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
+        spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
         //Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
         passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
         editButton.setOnClickListener(onEditOfferingClicked());

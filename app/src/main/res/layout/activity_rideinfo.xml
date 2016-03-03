@@ -66,14 +66,14 @@
                 android:textStyle="bold"
                 android:layout_marginTop="6dp" />
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/spots_remaining"-->
-                <!--tools:text="0"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginBottom="4dp"-->
-                <!--android:textSize="16sp"/>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spots_remaining"
+                tools:text="0"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="4dp"
+                android:textSize="16sp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
