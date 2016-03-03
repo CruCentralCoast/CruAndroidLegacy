@@ -25,7 +25,7 @@ public class Ride
     @SerializedName("direction") public Direction direction;
     @SerializedName("gcm_id") public String gcmID;
     @SerializedName("_id") public String id;
-    public int carCapacity;
+    @SerializedName("seats") public int carCapacity;
     public Address address;
     public List<Passenger> passengers;
     public CruEvent event;

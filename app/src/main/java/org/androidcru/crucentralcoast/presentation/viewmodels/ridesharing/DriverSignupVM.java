@@ -62,6 +62,7 @@ public class DriverSignupVM extends BaseRideVM
     @Bind(R.id.event_time_field) @NotEmpty EditText timeField;
     @Bind(R.id.event_date_field) @NotEmpty EditText dateField;
     @Bind(R.id.gender_view) TextView genderView;
+    @Bind(R.id.radius_field) TextView radiusField;
 
     public DriverSignupVM(Activity activity, FragmentManager fm)
     {
@@ -87,6 +88,9 @@ public class DriverSignupVM extends BaseRideVM
         {
             genderField.setVisibility(View.GONE);
             genderView.setVisibility(View.VISIBLE);
+            genderView.setText(ride.gender);
+//            BindingAdapters.setSpinner(genderField, genderFieldForSpinner(), null, getGenderFieldIndex(ride.gender));
+
             nameField.setText(ride.driverName);
             phoneField.setText(ride.driverNumber);
 
@@ -94,6 +98,8 @@ public class DriverSignupVM extends BaseRideVM
             dateField.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
             //timeField.setText(ride.time.toLocalTime().format(DateTimeFormatter.RFC_1123_DATE_TIME));
             //dateField.setText(ride.time.toLocalDate().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+
+            radiusField.setText(Double.toString(ride.radius));
         }
         else
         {
