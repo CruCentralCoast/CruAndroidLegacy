@@ -51,12 +51,28 @@
             android:layout_marginBottom="8dp">
 
             <RelativeLayout
+                android:id="@+id/chevParent"
+                android:layout_width="0dp"
+                app:layout_widthPercent="25%"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:id="@+id/chevView"
+                    android:layout_centerInParent="true"
+                    android:background="@null"
+                    android:scaleType="fitCenter" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/fbParent"
                 android:layout_width="0dp"
                 app:layout_widthPercent="25%"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_alignParentStart="false">
+                android:layout_alignParentStart="false"
+                android:layout_toRightOf="@+id/chevParent">
 
                 <ImageButton
                     android:layout_width="48dp"
@@ -97,22 +113,6 @@
                     android:layout_height="48dp"
                     android:padding="8dp"
                     android:id="@+id/calButton"
-                    android:layout_centerInParent="true"
-                    android:background="@null"
-                    android:scaleType="fitCenter" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/chevParent"
-                android:layout_width="0dp"
-                app:layout_widthPercent="25%"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/calParent">
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:id="@+id/chevView"
                     android:layout_centerInParent="true"
                     android:background="@null"
                     android:scaleType="fitCenter" />
