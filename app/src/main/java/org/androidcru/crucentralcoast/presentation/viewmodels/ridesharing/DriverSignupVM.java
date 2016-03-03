@@ -28,7 +28,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.presentation.BindingAdapters;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
 import org.threeten.bp.ZoneId;
@@ -81,8 +81,8 @@ public class DriverSignupVM extends BaseRideVM
     private void bindUI()
     {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        BindingAdapters.setSpinner(tripTypeField, directionsForSpinner(directions), null, getDirectionIndex(ride.direction, directions));
-        BindingAdapters.setSpinner(carCapacity, carCapacityForSpinner(), null, getCarCapacityIndex(ride.carCapacity));
+        ViewUtil.setSpinner(tripTypeField, directionsForSpinner(directions), null, getDirectionIndex(ride.direction, directions));
+        ViewUtil.setSpinner(carCapacity, carCapacityForSpinner(), null, getCarCapacityIndex(ride.carCapacity));
         if(editing)
         {
             genderField.setVisibility(View.GONE);
@@ -97,7 +97,7 @@ public class DriverSignupVM extends BaseRideVM
         }
         else
         {
-            BindingAdapters.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
+            ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
             timeField.setOnKeyListener(null);
             dateField.setOnKeyListener(null);
         }

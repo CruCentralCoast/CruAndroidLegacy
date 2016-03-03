@@ -5,10 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
-
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.Holder;
@@ -50,10 +47,10 @@ public class MyRidesDriverVM {
     public void updateEventName() {
         final Holder<String> evName = new Holder<String>();
 
-        EventProvider.getInstance().requestCruEventByID(ride.eventId)
+        EventProvider.requestCruEventByID(ride.eventId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(results -> {
-                eventName = results.mName;
+                eventName = results.name;
             });
     }
 
@@ -89,7 +86,7 @@ public class MyRidesDriverVM {
         alertDialog.setMessage("Are you sure you want to cancel this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.getInstance().dropRide(ride.id)
+                RideProvider.dropRide(ride.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe();
 

@@ -46,7 +46,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
     {
         for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinisryMap.entrySet())
         {
-            mMinistries.add(new MinistrySubscriptionVM(entry.getKey().mCampusName, null));
+            mMinistries.add(new MinistrySubscriptionVM(entry.getKey().campusName, null));
             for(MinistrySubscription m : entry.getValue())
             {
                 mMinistries.add(new MinistrySubscriptionVM(null, m));
@@ -83,11 +83,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 boolean isChecked = ministrySubscriptionVM.getIsSubscribed();
                 ministrySubscriptionHolder.checkBox.setChecked(isChecked);
-                if(ministrySubscriptionVM.ministry.mCruImage != null)
+                if(ministrySubscriptionVM.ministry.cruImage != null)
                 {
                     Context context = ministrySubscriptionHolder.ministryImage.getContext();
                     Picasso.with(context)
-                            .load(ministrySubscriptionVM.ministry.mCruImage.mURL)
+                            .load(ministrySubscriptionVM.ministry.cruImage.url)
                             .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
                             .into(ministrySubscriptionHolder.ministryImage);
                 }

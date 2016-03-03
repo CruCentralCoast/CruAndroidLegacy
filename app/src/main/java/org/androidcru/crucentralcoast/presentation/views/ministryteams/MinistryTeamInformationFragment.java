@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
-import org.androidcru.crucentralcoast.presentation.BindingAdapters;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import butterknife.Bind;
@@ -44,7 +44,7 @@ public class MinistryTeamInformationFragment extends FormContentFragment
         ministryTeam = (MinistryTeam) formHolder.getDataObject();
 
         //TODO temporary for now
-        BindingAdapters.setSource(ministryInfoImage, ministryTeam.cruImage.mURL, 0, null, null);
+        ViewUtil.setSource(ministryInfoImage, ministryTeam.cruImage.url, 0, null, null);
         ministryTeamDescription.setText(ministryTeam.description);
 
     }

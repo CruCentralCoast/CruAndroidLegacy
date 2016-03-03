@@ -7,9 +7,9 @@ import org.parceler.Parcel;
 @Parcel
 public class CruImage
 {
-    @SerializedName("url") public String mURL;
-    @SerializedName("width") public int mWidth;
-    @SerializedName("height") public int mHeight;
+    @SerializedName("url") public String url;
+    @SerializedName("width") public int width;
+    @SerializedName("height") public int height;
 
     /**
      * Required for Gson/RetroFit
@@ -17,8 +17,8 @@ public class CruImage
     public CruImage() {}
 
     public CruImage(String URL, int width, int height) {
-        this.mURL = URL;
-        this.mWidth = width;
-        this.mHeight = height;
+        this.url = URL;
+        this.width = width;
+        this.height = height;
     }
 }

@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -62,7 +61,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         if(theImage != null)
         {
             Picasso.with(context)
-                    .load(theImage.mURL)
+                    .load(theImage.url)
                     .fit()
                     .into(eventBanner);
         }
@@ -118,7 +117,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         alertDialog.setMessage("Are you sure you want to cancel this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.getInstance().dropRide(ride.id)
+                RideProvider.dropRide(ride.id)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe();
 
@@ -143,10 +142,10 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 
     private void getEventData()
     {
-        EventProvider.getInstance().requestCruEventByID(ride.eventId)
+        EventProvider.requestCruEventByID(ride.eventId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                   setupUI(result.mName, result.mImage);
+                   setupUI(result.name, result.image);
                 });
     }
 

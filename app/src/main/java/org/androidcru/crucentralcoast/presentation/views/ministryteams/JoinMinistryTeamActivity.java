@@ -21,9 +21,9 @@ public class JoinMinistryTeamActivity extends FormActivity
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null || bundle.getString("MINISTRY_TEAM", "").isEmpty())
+        if(bundle == null || !bundle.containsKey(AppConstants.MINISTRY_TEAM_KEY))
         {
-            Logger.e("JoinMinistryTeamActivity requires that you pass an event ID.");
+            Logger.e("JoinMinistryTeamActivity requires that you pass an ministry team ID.");
             Logger.e("Finishing activity...");
             finish();
             return;

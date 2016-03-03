@@ -7,18 +7,18 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Campus
 {
-    @SerializedName("_id") public String mId;
-    @SerializedName("name") public String mCampusName;
+    @SerializedName("_id") public String id;
+    @SerializedName("name") public String campusName;
 
     /**
      * Required for Gson/RetroFit
      */
     public Campus() {}
 
-    public Campus(String mId, String mCampusName)
+    public Campus(String id, String campusName)
     {
-        this.mId = mId;
-        this.mCampusName = mCampusName;
+        this.id = id;
+        this.campusName = campusName;
     }
 
     @Override
@@ -29,13 +29,13 @@ public class Campus
 
         Campus campus = (Campus) o;
 
-        return mId.equals(campus.mId);
+        return id.equals(campus.id);
 
     }
 
     @Override
     public int hashCode()
     {
-        return mId.hashCode();
+        return id.hashCode();
     }
 }

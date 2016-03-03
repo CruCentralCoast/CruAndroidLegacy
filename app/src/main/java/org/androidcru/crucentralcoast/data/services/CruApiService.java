@@ -7,6 +7,7 @@ import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.SummerMission;
 
 import java.util.ArrayList;
 
@@ -74,6 +75,9 @@ public interface CruApiService
     @FormUrlEncoded
     @POST("/api/ride/dropRide")
     Observable<Void> dropRide(@Field("ride_id") String rideId);
+
+    @GET("/api/summermission/list")
+    Observable<ArrayList<SummerMission>> getSummerMissions();
 
 //    @GET("api/event/:id")
 //    public CruEvent getEventByID(String id);

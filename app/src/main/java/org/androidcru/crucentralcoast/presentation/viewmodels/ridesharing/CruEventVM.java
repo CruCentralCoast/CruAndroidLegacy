@@ -26,22 +26,22 @@ public class CruEventVM
 
     public String getDateTime()
     {
-        return cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
-                + " " + cruEvent.mStartDate.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER))
-                + " - " + cruEvent.mEndDate.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
+        return cruEvent.startDate.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+                + " " + cruEvent.startDate.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER))
+                + " - " + cruEvent.endDate.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
     }
 
     public View.OnClickListener onPassengerClicked()
     {
         Intent intent = new Intent(parent, PassengerSignupActivity.class);
-        intent.putExtra(AppConstants.EVENT_ID, cruEvent.mId);
+        intent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
         return v -> parent.startActivity(intent);
     }
 
     public View.OnClickListener onDriverClicked()
     {
         Intent intent = new Intent(parent, DriverSignupActivity.class);
-        intent.putExtra(AppConstants.EVENT_ID, cruEvent.mId);
+        intent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
         return v -> parent.startActivity(intent);
     }
 }

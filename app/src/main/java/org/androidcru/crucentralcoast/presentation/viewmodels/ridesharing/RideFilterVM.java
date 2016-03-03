@@ -12,7 +12,7 @@ import com.mobsandgeeks.saripaar.annotation.Select;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
-import org.androidcru.crucentralcoast.presentation.BindingAdapters;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
@@ -60,8 +60,8 @@ public class RideFilterVM extends BaseRideVM
 
     private void bindUI()
     {
-        BindingAdapters.setSpinner(tripTypeField, directionsForSpinner(directions), null, 0);
-        BindingAdapters.setSpinner(genderField, gendersForSpinner(R.array.genders), null, 0);
+        ViewUtil.setSpinner(tripTypeField, directionsForSpinner(directions), null, 0);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, 0);
 
     }
 

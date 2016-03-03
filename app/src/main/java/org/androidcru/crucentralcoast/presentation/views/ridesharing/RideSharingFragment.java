@@ -108,14 +108,14 @@ public class RideSharingFragment extends Fragment
 
     private void forceUpdate()
     {
-        EventProvider.getInstance().requestEvents()
+        EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
     {
-        EventProvider.getInstance().requestEvents()
+        EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mEventSubscriber);
     }
@@ -129,7 +129,7 @@ public class RideSharingFragment extends Fragment
     {
         mCruEventVMs.clear();
         rx.Observable.from(cruEvents)
-                .filter(cruEvent1 -> cruEvent1.mRideSharingEnabled)
+                .filter(cruEvent1 -> cruEvent1.rideSharingEnabled)
                 .map(cruEvent -> new CruEventVM(cruEvent, false, getActivity()))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(mCruEventVMs::add);

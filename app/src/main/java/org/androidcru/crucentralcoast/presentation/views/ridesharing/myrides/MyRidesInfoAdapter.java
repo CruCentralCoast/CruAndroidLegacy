@@ -104,7 +104,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Logger.d("chose " + selectedPassengerID);
-                RideProvider.getInstance().dropPassengerFromRide(selectedPassengerID, rideID)
+                RideProvider.dropPassengerFromRide(selectedPassengerID, rideID)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe();
             }

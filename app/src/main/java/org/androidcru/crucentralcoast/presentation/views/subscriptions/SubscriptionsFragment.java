@@ -92,7 +92,7 @@ public class SubscriptionsFragment extends Fragment
 
     public void getCampusMinistryMap()
     {
-        SubscriptionProvider.getInstance().requestCampusMinistryMap()
+        SubscriptionProvider.requestCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministries -> {
                     mSubscriptionAdapter = new SubscriptionsAdapter(ministries);

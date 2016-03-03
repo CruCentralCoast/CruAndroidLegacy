@@ -9,7 +9,7 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.BindingAdapters;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionStartupActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
-        BindingAdapters.setFont(centralCoast, "FreigSanProLig.otf");
+        ViewUtil.setFont(centralCoast, "FreigSanProLig.otf");
 
         this.mSharedPreferences = CruApplication.getSharedPreferences();
         switchToApp();

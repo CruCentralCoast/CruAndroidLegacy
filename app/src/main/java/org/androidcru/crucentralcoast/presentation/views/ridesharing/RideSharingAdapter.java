@@ -59,22 +59,22 @@ public class RideSharingAdapter extends RecyclerView.Adapter<RideSharingAdapter.
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
         CruEventVM cruEventVM = mEvents.get(position);
-        holder.eventName.setText(cruEventVM.cruEvent.mName);
+        holder.eventName.setText(cruEventVM.cruEvent.name);
         holder.eventDate.setText(cruEventVM.getDateTime());
         holder.driverButton.setOnClickListener(cruEventVM.onDriverClicked());
         holder.passengerButton.setOnClickListener(cruEventVM.onPassengerClicked());
         Context context = holder.eventBanner.getContext();
-        if(cruEventVM.cruEvent.mImage != null)
+        if(cruEventVM.cruEvent.image != null)
         {
             Picasso.with(context)
-                    .load(cruEventVM.cruEvent.mImage.mURL)
+                    .load(cruEventVM.cruEvent.image.url)
                     .fit()
                     .into(holder.eventBanner);
         }
         holder.chevView.setImageDrawable(cruEventVM.isExpanded
                 ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
-        holder.eventDescription.setText(cruEventVM.cruEvent.mDescription);
+        holder.eventDescription.setText(cruEventVM.cruEvent.description);
         holder.eventDescription.setVisibility(cruEventVM.isExpanded ? View.VISIBLE : View.GONE);
     }
 

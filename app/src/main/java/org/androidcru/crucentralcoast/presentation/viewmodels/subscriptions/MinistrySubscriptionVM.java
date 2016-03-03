@@ -24,7 +24,7 @@ public class MinistrySubscriptionVM
     {
         if(isSubscribed == null)
         {
-            isSubscribed = sharedPreferences.getBoolean(ministry.mSubscriptionId, false);
+            isSubscribed = sharedPreferences.getBoolean(ministry.subscriptionId, false);
         }
         return isSubscribed;
     }
@@ -33,9 +33,9 @@ public class MinistrySubscriptionVM
     {
         this.isSubscribed = isSubscribed;
         if(isSubscribed)
-            RegistrationIntentService.subscribeToMinistry(ministry.mSubscriptionId);
+            RegistrationIntentService.subscribeToMinistry(ministry.subscriptionId);
         else
-            RegistrationIntentService.unsubscribeToMinistry(ministry.mSubscriptionId);
-        sharedPreferences.edit().putBoolean(ministry.mSubscriptionId, isSubscribed).commit();
+            RegistrationIntentService.unsubscribeToMinistry(ministry.subscriptionId);
+        sharedPreferences.edit().putBoolean(ministry.subscriptionId, isSubscribed).commit();
     }
 }

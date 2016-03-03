@@ -33,7 +33,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.progress_bar) ProgressBar progressBar;
+    @Bind(R.id.progress) ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -68,10 +68,10 @@ public class BasicInfoFragment extends FormContentFragment {
             formHolder.setNavigationClickable(false);
             passenger.direction = ride.direction;
             passenger.gcm_id = CruApplication.getGCMID();
-            PassengerProvider.getInstance().addPassenger(passenger)
+            PassengerProvider.addPassenger(passenger)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(passenger1 -> {
-                    RideProvider.getInstance().addPassengerToRide(passenger1.id, ride.id)
+                    RideProvider.addPassengerToRide(passenger1.id, ride.id)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(v -> {}, e -> {}, () -> super.onNext());
                 });

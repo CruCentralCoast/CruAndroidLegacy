@@ -20,7 +20,7 @@ public class ArticlesFragment extends Fragment
 {
     private static final String URL = "http://www.slocru.com/";
 
-    private CustomTabActivityHelper mCustomTabActivityHelper;
+    private CustomTabActivityHelper customTabActivityHelper;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
@@ -32,8 +32,8 @@ public class ArticlesFragment extends Fragment
     }
 
     private void setupCustomTabHelper() {
-        mCustomTabActivityHelper = new CustomTabActivityHelper();
-        mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(URL), null, null);
+        customTabActivityHelper = new CustomTabActivityHelper();
+        customTabActivityHelper.mayLaunchUrl(Uri.parse(URL), null, null);
     }
 
     @Nullable

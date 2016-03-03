@@ -4,14 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class CruUser
 {
-    @SerializedName("name") public CruName mName;
-    @SerializedName("email") public String mEmail;
+    @SerializedName("name") public CruName name;
+    @SerializedName("email") public String email;
 
     public CruUser() {}
 
     public CruUser(CruName name, String email)
     {
-        this.mName = name;
-        this.mEmail = email;
+        this.name = name;
+        this.email = email;
     }
 }

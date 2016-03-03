@@ -3,10 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.androidcru.crucentralcoast.CruApplication;
-
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 import org.parceler.Parcels;
@@ -36,8 +31,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
 
     private Context context;
 
-    public MyRidesDriverAdapter(ArrayList<MyRidesDriverVM> rides, Context context)
-    {
+    public MyRidesDriverAdapter(ArrayList<MyRidesDriverVM> rides, Context context) {
         this.rides = rides;
         this.context = context;
     }
@@ -65,7 +59,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
     public void onBindViewHolder(CruRideViewHolder holder, int position)
     {
         MyRidesDriverVM rideVM = rides.get(position);
-        holder.eventName.setText(rideVM.ride.event == null ? rideVM.ride.eventId : rideVM.ride.event.mName);
+        holder.eventName.setText(rideVM.ride.event == null ? rideVM.ride.eventId : rideVM.ride.event.name);
         holder.departureTime.setText(rideVM.getDateTime());
         holder.departureLoc.setText(rideVM.getLocation());
         holder.editOffering.setOnClickListener(rideVM.onEditOfferingClicked());
@@ -116,7 +110,6 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         {
             Bundle b = new Bundle();
             b.putParcelable("ride", Parcels.wrap(rides.get(getAdapterPosition()).ride));
-            //b.putString("ride", CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Logger.json(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);

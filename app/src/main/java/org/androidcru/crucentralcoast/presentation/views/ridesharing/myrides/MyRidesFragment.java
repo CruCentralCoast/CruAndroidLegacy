@@ -38,8 +38,16 @@ public class MyRidesFragment extends Fragment
 
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);
+    }
 
-        viewPager.setAdapter(new MyRidesFragmentPagerAdapter(getFragmentManager()));
-        tabLayout.setupWithViewPager(viewPager);
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(viewPager.getAdapter() == null)
+        {
+            viewPager.setAdapter(new MyRidesFragmentPagerAdapter(getFragmentManager()));
+            tabLayout.setupWithViewPager(viewPager);
+        }
     }
 }
