@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.orhanobut.logger.Logger;
 
@@ -28,6 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class ArticlesFragment extends Fragment
 {
@@ -35,7 +37,7 @@ public class ArticlesFragment extends Fragment
     @Bind(R.id.article_list) RecyclerView articleList;
     @Bind(R.id.article_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.progress) ProgressBar progressBar;
-    @Bind(R.id.empty_articles_view) LinearLayout emptyView;
+    @Bind(R.id.empty_articles_view) RelativeLayout emptyView;
 
     private CustomTabsIntent.Builder customTabsIntentBuilder;
 
@@ -90,7 +92,7 @@ public class ArticlesFragment extends Fragment
                     emptyView.setVisibility(View.GONE);
                     swipeRefreshLayout.setVisibility(View.VISIBLE);
                 }
-
+                swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -113,7 +115,9 @@ public class ArticlesFragment extends Fragment
     {
         //Start listening for stream data from network call
         this.resources.clear();
-        ResourceProvider.getResourceByType(Resource.ResourceType.ARTICLE).subscribe(resourceSubscriber);
+        ResourceProvider.getResourceByType(Resource.ResourceType.ARTICLE)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resourceSubscriber);
     }
 
     private void setResources(List<Resource> resources)

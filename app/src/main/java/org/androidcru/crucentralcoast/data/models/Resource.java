@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class Resource
 {
     @SerializedName("_id") public String id;
-    @SerializedName("name") public String title;
+    @SerializedName("title") public String title;
     @SerializedName("url") public String url;
-    @SerializedName("resourceType") public ResourceType resourceType;
+    @SerializedName("type") public ResourceType resourceType;
     @SerializedName("tags") public ArrayList<String> tags;
 
     /**
