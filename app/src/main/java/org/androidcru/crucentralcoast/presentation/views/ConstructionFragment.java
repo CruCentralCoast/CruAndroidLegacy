@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 
-import butterknife.ButterKnife;
-
 public class ConstructionFragment extends Fragment
 {
     @Nullable @Override
@@ -25,5 +23,4 @@ public class ConstructionFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
     }
-
 }

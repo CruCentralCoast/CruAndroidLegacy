@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -20,14 +19,12 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.providers.ResourceProvider;
-import org.androidcru.crucentralcoast.presentation.util.CustomTabActivityHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -61,7 +58,7 @@ public class ArticlesFragment extends Fragment
         forceUpdate();
 
         //LayoutManager for RecyclerView
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         articleList.setLayoutManager(layoutManager);
 
         setupCustomTab();

@@ -27,7 +27,11 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.RideSharing
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
+
 import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
+
+import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
+
 
 import java.util.Collections;
 
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -58,10 +62,15 @@ public class MainActivity extends AppCompatActivity
         self = this;
 
         constructionFragment = new ConstructionFragment();
-        spawnConstructionFragment();
+        if(savedInstanceState == null)
+        {
+            spawnConstructionFragment();
+        }
 
         checkPlayServicesCode();
     }
+
+
 
     private void checkPlayServicesCode()
     {
@@ -167,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new ArticlesFragment()).commit();
                 break;
             case R.id.nav_videos:
-                spawnConstructionFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
                 break;
         }
 
