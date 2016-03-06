@@ -155,8 +155,8 @@ public class CruEventVM
 
 
             AlertDialog loginDialog = new AlertDialog.Builder(v.getContext())
-                    .setTitle("Log in with Facebook")
-                    .setNegativeButton("JUST OPEN IN FACEBOOK", (dialog, which) -> {
+                    .setTitle("Log in with Facebook?")
+                    .setNegativeButton("NO, OPEN IN FACEBOOK APP", (dialog, which) -> {
                         v.getContext().startActivity(openInFacebook);
                     })
                     .setPositiveButton("SURE", (dialog, which) -> {

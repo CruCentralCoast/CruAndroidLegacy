@@ -145,6 +145,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     }
 
     @Override
+    public void setSubtitle(String subtitle)
+    {
+        toolbar.setSubtitle(subtitle);
+    }
+
+    @Override
     public void setPreviousVisibility(int visibility)
     {
         prev.setVisibility(visibility);
