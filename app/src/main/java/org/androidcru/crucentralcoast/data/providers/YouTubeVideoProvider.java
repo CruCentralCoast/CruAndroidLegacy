@@ -76,6 +76,7 @@ public final class YouTubeVideoProvider
                 }
             }
         })
+        .retry()
         .compose(RxLoggingUtil.log("YOUTUBE VIDEOS LIST"))
         .subscribeOn(Schedulers.io());
     }

@@ -35,49 +35,14 @@ import rx.schedulers.Schedulers;
 public class EventsFragment extends Fragment
 {
     //Injected Views
-    @Bind(R.id.event_list) RecyclerView mEventList;
-    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.empty_events_view) RelativeLayout mEmptyEventsLayout;
+    @Bind(R.id.event_list) RecyclerView eventList;
+    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.empty_events_view) RelativeLayout emptyEventsLayout;
 
-    private ArrayList<CruEventVM> mCruEventVMs;
-    private LinearLayoutManager mLayoutManager;
-
-    private Observer<ArrayList<CruEvent>> mEventSubscriber;
-
-    private SharedPreferences mSharedPreferences;
-
-    public EventsFragment()
-    {
-        mCruEventVMs = new ArrayList<>();
-        mEventSubscriber = new Observer<ArrayList<CruEvent>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                if (mCruEventVMs.isEmpty())
-                {
-                    mSwipeRefreshLayout.setVisibility(View.GONE);
-                    mEmptyEventsLayout.setVisibility(View.VISIBLE);
-                } else
-                {
-                    mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-                    mEmptyEventsLayout.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Logger.e(e, "CruEvents failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(ArrayList<CruEvent> cruEvents)
-            {
-                setEvents(cruEvents);
-            }
-        };
-    }
+    private ArrayList<CruEventVM> cruEventVMs;
+    private LinearLayoutManager layoutManager;
+    private Observer<ArrayList<CruEvent>> eventSubscriber;
+    private SharedPreferences sharedPreferences;
 
     /**
      * Invoked early on from the Android framework during rendering.
@@ -110,23 +75,65 @@ public class EventsFragment extends Fragment
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
 
-        mSharedPreferences = CruApplication.getSharedPreferences();
+        cruEventVMs = new ArrayList<>();
+        setupObserver();
 
-        //Enables actions in the Activity Toolbar (top-right buttons)
-        setHasOptionsMenu(true);
+        sharedPreferences = CruApplication.getSharedPreferences();
 
         //LayoutManager for RecyclerView
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mEventList.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(getActivity());
+        eventList.setLayoutManager(layoutManager);
 
         //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), mLayoutManager);
-        mEventList.setAdapter(mEventAdapter);
-        mEventList.setHasFixedSize(true);
+        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), layoutManager);
+        eventList.setAdapter(mEventAdapter);
+        eventList.setHasFixedSize(true);
 
-        //Set up SwipeRefreshLayout
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        mSwipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        setupSwipeRefreshLayout();
+    }
+
+    private void setupSwipeRefreshLayout()
+    {
+        //issue 77712, workaround until Google fixes it
+        swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK,View.MEASURED_HEIGHT_STATE_SHIFT);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
+    }
+
+    private void setupObserver()
+    {
+        eventSubscriber = new Observer<ArrayList<CruEvent>>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                swipeRefreshLayout.setRefreshing(false);
+                if (cruEventVMs.isEmpty())
+                {
+                    emptyEventsLayout.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setVisibility(View.GONE);
+
+                }
+                else
+                {
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
+                    emptyEventsLayout.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Logger.e(e, "CruEvents failed to retrieve.");
+            }
+
+            @Override
+            public void onNext(ArrayList<CruEvent> cruEvents)
+            {
+                setEvents(cruEvents);
+            }
+        };
     }
 
     @Override
@@ -143,18 +150,13 @@ public class EventsFragment extends Fragment
         startActivity(new Intent(getContext(), SubscriptionActivity.class));
     }
 
-    private void forceUpdate()
-    {
-        EventProvider.requestEvents()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mEventSubscriber);
-    }
-
     private void getCruEvents()
     {
+        swipeRefreshLayout.setRefreshing(true);
+
         EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mEventSubscriber);
+                .subscribe(eventSubscriber);
     }
 
 
@@ -165,23 +167,22 @@ public class EventsFragment extends Fragment
      */
     public void setEvents(ArrayList<CruEvent> cruEvents)
     {
-        mCruEventVMs.clear();
+        cruEventVMs.clear();
         rx.Observable.from(cruEvents)
                 .filter(cruEvent -> {
                     for (String s : cruEvent.parentMinistrySubscriptions)
-                        if (mSharedPreferences.getBoolean(s, false))
+                        if (sharedPreferences.getBoolean(s, false))
                             return true;
                     return false;
                 })
                 .map(cruEvent -> {
                     return new CruEventVM(cruEvent, false,
-                            mSharedPreferences.contains(cruEvent.id),
-                            mSharedPreferences.getLong(cruEvent.id, -1));
+                            sharedPreferences.contains(cruEvent.id),
+                            sharedPreferences.getLong(cruEvent.id, -1));
                 })
                 .subscribeOn(Schedulers.immediate())
-                .subscribe(mCruEventVMs::add);
+                .subscribe(cruEventVMs::add);
 
-        mEventList.setAdapter(new EventsAdapter(mCruEventVMs, mLayoutManager));
-        mSwipeRefreshLayout.setRefreshing(false);
+        eventList.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
     }
 }

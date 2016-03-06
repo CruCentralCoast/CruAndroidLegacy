@@ -17,6 +17,7 @@ public final class RideProvider
     public static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
+                .retry()
                 .subscribeOn(Schedulers.io())
                 .flatMap(rides -> {
                     Logger.d("Rides found");
@@ -44,36 +45,42 @@ public final class RideProvider
     public static Observable<Ride> createRide(Ride ride)
     {
         return mCruService.postRide(ride)
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 
     public static Observable<Ride> updateRide(Ride ride)
     {
         return mCruService.updateRide(ride)
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 
     public static Observable<Void> addPassengerToRide(String passengerId, String rideId)
     {
         return mCruService.addPassenger(rideId, passengerId)
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 
     public static Observable<Void> dropPassengerFromRide(String passengerId, String rideId)
     {
         return mCruService.dropPassenger(rideId, passengerId)
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 
     public static Observable<Void> dropRide(String rideId)
     {
         return mCruService.dropRide(rideId)
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 
     public static Observable<Ride> requestRideByID(String id)
     {
         return mCruService.findSingleRide(id)
+                .retry()
                 .subscribeOn(Schedulers.io())
                 .flatMap(rides -> {
                     Logger.d("Rides found");

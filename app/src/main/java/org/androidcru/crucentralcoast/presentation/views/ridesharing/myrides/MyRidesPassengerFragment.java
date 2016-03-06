@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +19,7 @@ import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesPassengerVM;
+import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,8 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MyRidesPassengerFragment extends Fragment {
+public class MyRidesPassengerFragment extends EventsFragment
+{
 
     //Injected Views
     @Bind(R.id.event_list) RecyclerView eventList;

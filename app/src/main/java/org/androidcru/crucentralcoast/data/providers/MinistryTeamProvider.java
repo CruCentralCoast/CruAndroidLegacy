@@ -19,7 +19,9 @@ public final class MinistryTeamProvider
      */
     public static Observable<ArrayList<MinistryTeam>> requestMinistryTeams()
     {
-        return mCruService.getMinistryTeams().subscribeOn(Schedulers.io());
+        return mCruService.getMinistryTeams()
+                .retry()
+                .subscribeOn(Schedulers.io());
     }
 
     /**

@@ -15,6 +15,7 @@ public final class SummerMissionProvider
     public static Observable<ArrayList<SummerMission>> getSummerMissions()
     {
         return mCruService.getSummerMissions()
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 }

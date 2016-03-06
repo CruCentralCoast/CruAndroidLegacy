@@ -17,6 +17,7 @@ public final class ResourceProvider
     public static Observable<List<Resource>> getResourceByType(Resource.ResourceType type)
     {
         return cruApiService.getResources()
+                .retry()
                 .subscribeOn(Schedulers.io())
                 .flatMap(resources -> Observable.from(resources))
                 .filter(resource -> resource.resourceType == type)
@@ -36,6 +37,7 @@ public final class ResourceProvider
     public static Observable<ResourceTag> getResourceTagByResourceId(String resourceId)
     {
         return cruApiService.findSingleResourceTag(resourceId)
+                .retry()
                 .flatMap(resourceTags -> Observable.from(resourceTags))
                 .subscribeOn(Schedulers.io());
     }

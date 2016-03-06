@@ -16,12 +16,14 @@ public class EventProvider
     {
 
         return mCruService.getEvents()
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 
     public static Observable<CruEvent> requestCruEventByID(String id)
     {
         return mCruService.findSingleCruEvent(id)
+                .retry()
                 .subscribeOn(Schedulers.io())
                 .flatMap(cruevents -> {
                     return Observable.from(cruevents);

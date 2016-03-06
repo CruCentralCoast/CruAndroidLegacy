@@ -29,7 +29,9 @@ public final class SubscriptionProvider
      */
     public static Observable<ArrayList<Campus>> requestCampuses()
     {
-        return mCruService.getCampuses().subscribeOn(Schedulers.io());
+        return mCruService.getCampuses()
+                .retry()
+                .subscribeOn(Schedulers.io());
     }
 
     public static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
@@ -69,6 +71,7 @@ public final class SubscriptionProvider
                 subscriber.onNext(campusMinistryMap);
             }
         })
+                .retry()
                 .subscribeOn(Schedulers.io());
     }
 }
