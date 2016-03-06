@@ -105,6 +105,8 @@ public class MyRidesPassengerFragment extends ListFragment
     private void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
+        if(subscription != null)
+            subscription.unsubscribe();
         subscription = RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> {

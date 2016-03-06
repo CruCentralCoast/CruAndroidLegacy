@@ -101,6 +101,8 @@ public class SubscriptionsFragment extends Fragment
 
     public void getCampusMinistryMap()
     {
+        if(subscription != null)
+            subscription.unsubscribe();
         subscription = SubscriptionProvider.requestCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministries -> {

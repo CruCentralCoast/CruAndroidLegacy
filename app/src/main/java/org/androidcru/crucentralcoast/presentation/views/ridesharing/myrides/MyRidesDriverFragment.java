@@ -91,8 +91,6 @@ public class MyRidesDriverFragment extends ListFragment
         recyclerView.setLayoutManager(layoutManager);
 
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
-
-        forceUpdate();
     }
 
     @Override
@@ -112,6 +110,8 @@ public class MyRidesDriverFragment extends ListFragment
     private void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
+        if(subscription != null)
+            subscription.unsubscribe();
         subscription = RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> ride.gcmID.equals(CruApplication.getGCMID()))

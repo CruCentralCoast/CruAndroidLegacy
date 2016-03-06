@@ -115,6 +115,8 @@ public class VideosFragment extends Fragment
 
     private void getCruVideos()
     {
+        if(subscription != null)
+            subscription.unsubscribe();
         subscription = YouTubeVideoProvider.getInstance().requestChannelVideos()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);

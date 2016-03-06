@@ -4,6 +4,7 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.util.RxLoggingUtil;
 
 import java.util.List;
 
@@ -18,13 +19,13 @@ public final class RideProvider
     {
         return mCruService.getRides()
                 .retry()
-                .subscribeOn(Schedulers.io())
                 .flatMap(rides -> {
                     Logger.d("Rides found");
                     return Observable.from(rides);
                 })
                 .map(ride -> {
                     PassengerProvider.getPassengers(ride.passengerIds)
+                            .compose(RxLoggingUtil.log("PASSENGERS"))
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
@@ -32,12 +33,14 @@ public final class RideProvider
                 })
                 .map(ride -> {
                     EventProvider.requestCruEventByID(ride.eventId)
+                            .compose(RxLoggingUtil.log("EVENTS"))
                             .map(theEvent -> ride.event = theEvent)
                             .toBlocking()
                             .subscribe();
                     ;
                     return ride;
                 })
+                .compose(RxLoggingUtil.log("RIDES"))
                 .subscribeOn(Schedulers.io())
                 .toList();
     }

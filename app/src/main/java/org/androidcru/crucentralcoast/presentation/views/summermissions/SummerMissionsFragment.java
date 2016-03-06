@@ -59,6 +59,8 @@ public class SummerMissionsFragment extends ListFragment
     {
         swipeRefreshLayout.setRefreshing(true);
 
+        if(subscription != null)
+            subscription.unsubscribe();
         subscription = SummerMissionProvider.getSummerMissions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(summerMissions -> {

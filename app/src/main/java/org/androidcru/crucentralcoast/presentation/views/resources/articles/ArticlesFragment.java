@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class ArticlesFragment extends ListFragment
@@ -28,6 +29,7 @@ public class ArticlesFragment extends ListFragment
 
     private ArrayList<Resource> resources;
     private Observer<List<Resource>> resourceSubscriber;
+    private Subscription subscription;
 
     public ArticlesFragment()
     {
@@ -79,12 +81,20 @@ public class ArticlesFragment extends ListFragment
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
+
     private void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        ResourceProvider.getResourceByType(Resource.ResourceType.ARTICLE)
+        subscription = ResourceProvider.getResourceByType(Resource.ResourceType.ARTICLE)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resourceSubscriber);
     }

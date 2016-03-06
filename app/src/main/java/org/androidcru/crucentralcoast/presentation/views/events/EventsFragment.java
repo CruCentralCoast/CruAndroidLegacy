@@ -138,7 +138,8 @@ public class EventsFragment extends ListFragment
     private void getCruEvents()
     {
         swipeRefreshLayout.setRefreshing(true);
-
+        if(subscription != null)
+            subscription.unsubscribe();
         subscription = EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventSubscriber);
