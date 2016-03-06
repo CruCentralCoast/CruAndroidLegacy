@@ -122,7 +122,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void bindNewRideVM(Ride r) {
         if (r == null)
-            driverSignupVM = new DriverSignupVM(this, getFragmentManager());
+            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), eventID);
         else
             driverSignupVM = new DriverSignupVM(this, getFragmentManager(), r);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());

@@ -28,6 +28,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
@@ -36,10 +37,12 @@ import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class DriverSignupVM extends BaseRideVM
 {
@@ -53,6 +56,7 @@ public class DriverSignupVM extends BaseRideVM
 
     public boolean editing;
     protected Ride.Direction[] directions;
+    private GregorianCalendar eventStartDateTime, eventEndDateTime;
 
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
@@ -69,6 +73,17 @@ public class DriverSignupVM extends BaseRideVM
         this(activity, fm, new Ride());
     }
 
+    public DriverSignupVM(Activity activity, FragmentManager fm, String eventID)
+    {
+        super(activity, fm);
+        this.editing = false;
+        this.ride = new Ride();
+
+        setEventTime(eventID);
+        generateDirections();
+        bindUI();
+    }
+
     public DriverSignupVM(Activity activity, FragmentManager fm, Ride ride)
     {
         super(activity, fm);
@@ -78,6 +93,7 @@ public class DriverSignupVM extends BaseRideVM
         if (editing) {
             date = ride.time.toLocalDate();
             time = ride.time.toLocalTime();
+            setEventTime(ride.eventId);
         }
 
         generateDirections();
@@ -189,16 +205,36 @@ public class DriverSignupVM extends BaseRideVM
         }
     }
 
+    private GregorianCalendar getDefaultEventTime()
+    {
+        int pos = tripTypeField.getSelectedItemPosition();
+        return pos != 0 && retrieveDirection(tripTypeField, directions).getValue().equals("from") ?
+                eventEndDateTime : eventStartDateTime;
+    }
+
     @OnClick(R.id.event_time_field)
     public void onTimeClicked(View v)
     {
-        onEventTimeClicked(v);
+        GregorianCalendar gc;
+        if (editing)
+            gc = new GregorianCalendar(ride.time.getYear(), ride.time.getMonthValue(), ride.time.getDayOfMonth(),
+                    ride.time.getHour(), ride.time.getMinute());
+        else {
+            gc = getDefaultEventTime();
+        }
+        onEventTimeClicked(v, gc);
     }
 
     @OnClick(R.id.event_date_field)
     public void onDateClicked(View v)
     {
-        onEventDateClicked(v);
+        GregorianCalendar gc;
+        if (editing)
+            gc = new GregorianCalendar(ride.time.getYear(), ride.time.getMonthValue(), ride.time.getDayOfMonth());
+        else {
+            gc = getDefaultEventTime();
+        }
+        onEventDateClicked(v, gc);
     }
 
     @Override
@@ -275,7 +311,9 @@ public class DriverSignupVM extends BaseRideVM
             double radiusMeters = MathUtil.convertMilesToMeters(radius);
             circle = map.addCircle(new CircleOptions()
                     .center(center)
-                    .radius(radiusMeters));
+                    .radius(radiusMeters)
+                    .strokeWidth(AppConstants.RADIUS_STROKE_WID)
+                    .strokeColor(R.color.cruGray));
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(center);
@@ -287,5 +325,20 @@ public class DriverSignupVM extends BaseRideVM
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             map.animateCamera(cu);
         }
+    }
+
+    //sets the event time start and end which should only happen if not editing
+    private void setEventTime(String eventID)
+    {
+        EventProvider.requestCruEventByID(eventID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    eventStartDateTime = new GregorianCalendar(event.startDate.getYear(),
+                            event.startDate.getMonthValue(), event.startDate.getDayOfMonth(),
+                            event.startDate.getHour(), event.startDate.getMinute());
+                    eventEndDateTime = new GregorianCalendar(event.endDate.getYear(),
+                            event.endDate.getMonthValue(), event.endDate.getDayOfMonth(),
+                            event.endDate.getHour(), event.endDate.getMinute());
+                });
     }
 }
