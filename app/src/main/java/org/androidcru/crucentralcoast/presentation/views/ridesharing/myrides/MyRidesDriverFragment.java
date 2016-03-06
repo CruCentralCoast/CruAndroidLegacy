@@ -21,6 +21,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -28,6 +29,7 @@ public class MyRidesDriverFragment extends ListFragment
 {
     private ArrayList<MyRidesDriverVM> rideVMs;
     private Observer<List<Ride>> rideSubscriber;
+    private Subscription subscription;
 
     public MyRidesDriverFragment()
     {
@@ -99,10 +101,18 @@ public class MyRidesDriverFragment extends ListFragment
         forceUpdate();
     }
 
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
+
     private void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
-        RideProvider.requestRides()
+        subscription = RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> ride.gcmID.equals(CruApplication.getGCMID()))
                 .observeOn(AndroidSchedulers.mainThread())

@@ -12,11 +12,14 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.SummerMissionProvider;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class SummerMissionsFragment extends ListFragment
 {
     private RecyclerView.LayoutManager layoutManager;
+
+    private Subscription subscription;
 
     @Nullable
     @Override
@@ -44,11 +47,19 @@ public class SummerMissionsFragment extends ListFragment
         getSummerMissions();
     }
 
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
+
     private void getSummerMissions()
     {
         swipeRefreshLayout.setRefreshing(true);
 
-        SummerMissionProvider.getSummerMissions()
+        subscription = SummerMissionProvider.getSummerMissions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(summerMissions -> {
                     recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));

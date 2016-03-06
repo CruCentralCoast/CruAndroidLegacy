@@ -61,6 +61,10 @@
     <string name="ends">Ends: <xliff:g name="date">%s</xliff:g></string>
 
     <string name="show_description">Show Description</string>
+    <string name="facebook_reasoning">If you log in with Facebook, you can set your RSVP directly from inside the Cru app.</string>
+    <string name="facebook_no">NO, OPEN IN FACEBOOK APP</string>
+    <string name="facebook_title">Log in with Facebook?</string>
+    <string name="facebook_yes">SURE</string>
 
 
     <string-array name="genders">

@@ -23,6 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -38,6 +39,7 @@ public class VideosFragment extends Fragment
     private SharedPreferences sharedPreferences;
     private LinearLayoutManager layoutManager;
     private Observer<List<SearchResult>> videoSubscriber;
+    private Subscription subscription;
     private List<SearchResult> videos;
 
     public VideosFragment()
@@ -94,12 +96,26 @@ public class VideosFragment extends Fragment
         videoList.setAdapter(videosAdapter);
         // does this need the fixed size?
         swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        swipeRefreshLayout.setOnRefreshListener(this::getCruVideos);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getCruVideos();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        subscription.unsubscribe();
     }
 
     private void getCruVideos()
     {
-        YouTubeVideoProvider.getInstance().requestChannelVideos()
+        subscription = YouTubeVideoProvider.getInstance().requestChannelVideos()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
@@ -115,18 +131,5 @@ public class VideosFragment extends Fragment
         swipeRefreshLayout.setRefreshing(false);
 
         Logger.d("****Got to set videos. Size is " + cruVideos.size() + " ****");
-    }
-
-    private void forceUpdate()
-    {
-        YouTubeVideoProvider.getInstance().requestChannelVideos()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(videoSubscriber);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getCruVideos();
     }
 }

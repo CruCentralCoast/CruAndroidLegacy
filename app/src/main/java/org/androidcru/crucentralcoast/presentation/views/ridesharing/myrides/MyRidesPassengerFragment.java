@@ -22,6 +22,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -29,6 +30,7 @@ public class MyRidesPassengerFragment extends ListFragment
 {
     private ArrayList<MyRidesPassengerVM> rideVMs;
     private Observer<List<Ride>> rideSubscriber;
+    private Subscription subscription;
 
     public MyRidesPassengerFragment()
     {
@@ -92,12 +94,18 @@ public class MyRidesPassengerFragment extends ListFragment
         forceUpdate();
     }
 
-
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
 
     private void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
-        RideProvider.requestRides()
+        subscription = RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> {
                     for (Passenger p : ride.passengers)

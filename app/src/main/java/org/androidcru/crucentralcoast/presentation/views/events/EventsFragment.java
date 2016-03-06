@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import butterknife.OnClick;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -32,6 +33,7 @@ public class EventsFragment extends ListFragment
     private ArrayList<CruEventVM> cruEventVMs;
     private LinearLayoutManager layoutManager;
     private Observer<ArrayList<CruEvent>> eventSubscriber;
+    private Subscription subscription;
     private SharedPreferences sharedPreferences;
 
     /**
@@ -86,6 +88,14 @@ public class EventsFragment extends ListFragment
         getCruEvents();
     }
 
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
+
     private void setupObserver()
     {
         eventSubscriber = new Observer<ArrayList<CruEvent>>()
@@ -129,7 +139,7 @@ public class EventsFragment extends ListFragment
     {
         swipeRefreshLayout.setRefreshing(true);
 
-        EventProvider.requestEvents()
+        subscription = EventProvider.requestEvents()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventSubscriber);
     }
