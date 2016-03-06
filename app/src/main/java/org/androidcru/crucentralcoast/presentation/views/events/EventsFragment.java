@@ -61,7 +61,7 @@ public class EventsFragment extends ListFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
-        inflateEmptyView(R.layout.events_empty_view);
+        inflateEmptyView(R.layout.empty_events_view);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 

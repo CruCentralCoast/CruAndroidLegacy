@@ -36,7 +36,10 @@ public class MyRidesPassengerFragment extends ListFragment
         rideSubscriber = new Observer<List<Ride>>()
         {
             @Override
-            public void onCompleted() {}
+            public void onCompleted()
+            {
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
             @Override
             public void onError(Throwable e)
@@ -76,8 +79,8 @@ public class MyRidesPassengerFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        super.onViewCreated(view, savedInstanceState);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
+        super.onViewCreated(view, savedInstanceState);
 
         //LayoutManager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -93,6 +96,7 @@ public class MyRidesPassengerFragment extends ListFragment
 
     private void forceUpdate()
     {
+        swipeRefreshLayout.setRefreshing(true);
         RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> {
@@ -122,6 +126,5 @@ public class MyRidesPassengerFragment extends ListFragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
         recyclerView.setAdapter(new MyRidesPassengerAdapter(rideVMs));
-        swipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -27,8 +27,6 @@ import rx.schedulers.Schedulers;
 public class MyRidesDriverFragment extends ListFragment
 {
     private ArrayList<MyRidesDriverVM> rideVMs;
-    private LinearLayoutManager layoutManager;
-
     private Observer<List<Ride>> rideSubscriber;
 
     public MyRidesDriverFragment()
@@ -37,7 +35,10 @@ public class MyRidesDriverFragment extends ListFragment
         rideSubscriber = new Observer<List<Ride>>()
         {
             @Override
-            public void onCompleted() {}
+            public void onCompleted()
+            {
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
             @Override
             public void onError(Throwable e)
@@ -84,7 +85,7 @@ public class MyRidesDriverFragment extends ListFragment
         setHasOptionsMenu(true);
 
         //LayoutManager for RecyclerView
-        layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
@@ -100,6 +101,7 @@ public class MyRidesDriverFragment extends ListFragment
 
     private void forceUpdate()
     {
+        swipeRefreshLayout.setRefreshing(true);
         RideProvider.requestRides()
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> ride.gcmID.equals(CruApplication.getGCMID()))

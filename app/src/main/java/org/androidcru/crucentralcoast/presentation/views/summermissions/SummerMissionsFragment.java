@@ -46,10 +46,14 @@ public class SummerMissionsFragment extends ListFragment
 
     private void getSummerMissions()
     {
+        swipeRefreshLayout.setRefreshing(true);
+
         SummerMissionProvider.getSummerMissions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(summerMissions -> {
                     recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
+                }, e -> {}, () -> {
+                    swipeRefreshLayout.setRefreshing(false);
                 });
     }
 }
