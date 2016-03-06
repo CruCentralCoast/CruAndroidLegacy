@@ -13,6 +13,12 @@ import org.androidcru.crucentralcoast.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * Reuseable class for Fragments with just a RecyclerView and emptyView for when that RecyclerView
+ * is empty.
+ *
+ * Takes care of inflating a ViewStub when the time is right as well as a SwipeRefreshLayout workaround (see below)
+ */
 public class ListFragment extends Fragment
 {
     //Inject views
