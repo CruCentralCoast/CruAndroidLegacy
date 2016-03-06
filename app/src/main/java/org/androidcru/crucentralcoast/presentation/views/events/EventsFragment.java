@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.orhanobut.logger.Logger;
 
@@ -21,24 +17,18 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
+import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class EventsFragment extends Fragment
+public class EventsFragment extends ListFragment
 {
-    //Injected Views
-    @Bind(R.id.event_list) RecyclerView eventList;
-    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.empty_events_view) RelativeLayout emptyEventsLayout;
-
     private ArrayList<CruEventVM> cruEventVMs;
     private LinearLayoutManager layoutManager;
     private Observer<ArrayList<CruEvent>> eventSubscriber;
@@ -57,7 +47,7 @@ public class EventsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     /**
@@ -70,35 +60,30 @@ public class EventsFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
+        //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
+        inflateEmptyView(R.layout.events_empty_view);
+        //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
-        //Let ButterKnife find all injected views and bind them to member variables
-        ButterKnife.bind(this, view);
 
         cruEventVMs = new ArrayList<>();
+
         setupObserver();
 
         sharedPreferences = CruApplication.getSharedPreferences();
 
-        //LayoutManager for RecyclerView
-        layoutManager = new LinearLayoutManager(getActivity());
-        eventList.setLayoutManager(layoutManager);
+        //setup RecyclerView
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
 
-        //Adapter for RecyclerView
-        EventsAdapter mEventAdapter = new EventsAdapter(new ArrayList<>(), layoutManager);
-        eventList.setAdapter(mEventAdapter);
-        eventList.setHasFixedSize(true);
-
-        setupSwipeRefreshLayout();
+        swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
     }
 
-    private void setupSwipeRefreshLayout()
+    @Override
+    public void onResume()
     {
-        //issue 77712, workaround until Google fixes it
-        swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK,View.MEASURED_HEIGHT_STATE_SHIFT);
-
-        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
+        super.onResume();
+        getCruEvents();
     }
 
     private void setupObserver()
@@ -111,14 +96,11 @@ public class EventsFragment extends Fragment
                 swipeRefreshLayout.setRefreshing(false);
                 if (cruEventVMs.isEmpty())
                 {
-                    emptyEventsLayout.setVisibility(View.VISIBLE);
-                    swipeRefreshLayout.setVisibility(View.GONE);
-
+                    emptyView.setVisibility(View.VISIBLE);
                 }
                 else
                 {
-                    swipeRefreshLayout.setVisibility(View.VISIBLE);
-                    emptyEventsLayout.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.GONE);
                 }
             }
 
@@ -134,13 +116,6 @@ public class EventsFragment extends Fragment
                 setEvents(cruEvents);
             }
         };
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        getCruEvents();
     }
 
     @OnClick(R.id.subscription_button)
@@ -183,6 +158,6 @@ public class EventsFragment extends Fragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(cruEventVMs::add);
 
-        eventList.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
+        recyclerView.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
     }
 }

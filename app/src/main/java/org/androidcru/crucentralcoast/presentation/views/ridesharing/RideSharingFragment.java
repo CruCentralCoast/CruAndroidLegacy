@@ -3,15 +3,10 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.orhanobut.logger.Logger;
 
@@ -19,23 +14,16 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.CruEventVM;
+import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class RideSharingFragment extends Fragment
+public class RideSharingFragment extends ListFragment
 {
-    //Injected Views
-    @Bind(R.id.event_list) RecyclerView eventList;
-    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.progress) ProgressBar progressBar;
-    @Bind(R.id.empty_events_view) RelativeLayout emptyEventsView;
-
     private ArrayList<CruEventVM> mCruEventVMs;
     private LinearLayoutManager mLayoutManager;
 
@@ -47,12 +35,7 @@ public class RideSharingFragment extends Fragment
         mEventSubscriber = new Observer<ArrayList<CruEvent>>()
         {
             @Override
-            public void onCompleted()
-            {
-                eventList.setVisibility(View.VISIBLE);
-                swipeRefreshLayout.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-            }
+            public void onCompleted() {}
 
             @Override
             public void onError(Throwable e)
@@ -79,7 +62,7 @@ public class RideSharingFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     /**
@@ -92,40 +75,15 @@ public class RideSharingFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
-        //Let ButterKnife find all injected views and bind them to member variables
-        ButterKnife.bind(this, view);
-
-        //Show progress screen while waiting to load
-        emptyEventsView.setVisibility(View.GONE);
-        eventList.setVisibility(View.GONE);
-        swipeRefreshLayout.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-
-        //Enables actions in the Activity Toolbar (top-right buttons)
-        setHasOptionsMenu(true);
+        //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
 
         //LayoutManager for RecyclerView
         mLayoutManager = new LinearLayoutManager(getActivity());
-        eventList.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(mLayoutManager);
 
-        //Adapter for RecyclerView
-        RideSharingAdapter mRideSharingAdapter = new RideSharingAdapter(new ArrayList<>(), mLayoutManager);
-        eventList.setAdapter(mRideSharingAdapter);
-        eventList.setHasFixedSize(true);
-
-        //Set up SwipeRefreshLayout
-        swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
 
         getCruEvents();
-    }
-
-    private void forceUpdate()
-    {
-        EventProvider.requestEvents()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mEventSubscriber);
     }
 
     private void getCruEvents()
@@ -149,7 +107,7 @@ public class RideSharingFragment extends Fragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(mCruEventVMs::add);
 
-        eventList.setAdapter(new RideSharingAdapter(mCruEventVMs, mLayoutManager));
+        recyclerView.setAdapter(new RideSharingAdapter(mCruEventVMs, mLayoutManager));
         swipeRefreshLayout.setRefreshing(false);
     }
 }
