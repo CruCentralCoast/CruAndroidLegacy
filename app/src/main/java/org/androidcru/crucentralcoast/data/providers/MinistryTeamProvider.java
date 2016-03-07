@@ -2,12 +2,12 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
+import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
 
 import rx.Observable;
-import rx.schedulers.Schedulers;
 
 public final class MinistryTeamProvider
 {
@@ -20,8 +20,7 @@ public final class MinistryTeamProvider
     public static Observable<ArrayList<MinistryTeam>> requestMinistryTeams()
     {
         return mCruService.getMinistryTeams()
-                .retry()
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     /**
@@ -33,7 +32,8 @@ public final class MinistryTeamProvider
         ArrayList<String> ministryTeamIdList = new ArrayList<>();
         ministryTeamIdList.add(ministryTeamId);
 
-        return mCruService.getMinistryTeamLeaders(ministryTeamIdList).subscribeOn(Schedulers.io());
+        return mCruService.getMinistryTeamLeaders(ministryTeamIdList)
+                .compose(RxComposeUtil.network());
     }
 
 }

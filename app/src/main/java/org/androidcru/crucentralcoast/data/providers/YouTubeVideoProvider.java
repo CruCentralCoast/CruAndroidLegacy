@@ -11,14 +11,13 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 
 import java.io.IOException;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 public final class YouTubeVideoProvider
 {
@@ -69,15 +68,12 @@ public final class YouTubeVideoProvider
                         subscriber.onNext(searchResults);
                     }
                     subscriber.onCompleted();
-                }
-                catch (IOException e)
+                } catch (IOException e)
                 {
                     subscriber.onError(e);
                 }
             }
         })
-        .retry()
-        .compose(RxLoggingUtil.log("YOUTUBE VIDEOS LIST"))
-        .subscribeOn(Schedulers.io());
+        .compose(RxComposeUtil.network());
     }
 }

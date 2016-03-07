@@ -6,7 +6,7 @@ import android.location.Geocoder;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 
 import java.io.IOException;
 

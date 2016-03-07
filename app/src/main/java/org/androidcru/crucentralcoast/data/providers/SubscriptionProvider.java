@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
+import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
@@ -30,8 +31,7 @@ public final class SubscriptionProvider
     public static Observable<ArrayList<Campus>> requestCampuses()
     {
         return mCruService.getCampuses()
-                .retry()
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
@@ -46,21 +46,20 @@ public final class SubscriptionProvider
 
                 HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap = new HashMap<>();
 
-                for(MinistrySubscription m : ministries)
+                for (MinistrySubscription m : ministries)
                 {
                     Campus selectedCampus = null;
 
-                    for(Campus c : campuses)
-                        if(m.campusId.get(0).equals(c.id))
+                    for (Campus c : campuses)
+                        if (m.campusId.get(0).equals(c.id))
                             selectedCampus = c;
 
-                    if(campusMinistryMap.containsKey(selectedCampus))
+                    if (campusMinistryMap.containsKey(selectedCampus))
                     {
                         ArrayList<MinistrySubscription> ministriesSoFar = campusMinistryMap.get(selectedCampus);
                         ministriesSoFar.add(m);
                         campusMinistryMap.put(selectedCampus, ministriesSoFar);
-                    }
-                    else
+                    } else
                     {
                         ArrayList<MinistrySubscription> newMinistries = new ArrayList<>();
                         newMinistries.add(m);
@@ -71,7 +70,6 @@ public final class SubscriptionProvider
                 subscriber.onNext(campusMinistryMap);
             }
         })
-                .retry()
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 }

@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.Passenger;
+import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.List;
@@ -16,14 +17,13 @@ public final class PassengerProvider
     public static Observable<Passenger> addPassenger(Passenger passenger)
     {
         return mCruService.createPassenger(passenger)
-                .retry()
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<List<Passenger>> getPassengers(List<String> passengers)
     {
         return Observable.from(passengers)
-                .retry()
+                .compose(RxComposeUtil.network())
                 .flatMap(passengerId -> {
                     return mCruService.findSinglePassenger(passengerId)
                             .flatMap(passengers1 -> {
@@ -31,8 +31,7 @@ public final class PassengerProvider
                             })
                             .subscribeOn(Schedulers.io());
                 })
-                .toList()
-                .subscribeOn(Schedulers.io());
+                .toList();
     }
 
 }
