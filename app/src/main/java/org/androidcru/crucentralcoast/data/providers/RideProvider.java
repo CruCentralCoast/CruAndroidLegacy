@@ -3,7 +3,9 @@ package org.androidcru.crucentralcoast.data.providers;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 
 import java.util.List;
 
@@ -17,13 +19,14 @@ public final class RideProvider
     public static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
-                .subscribeOn(Schedulers.io())
+                .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
                     Logger.d("Rides found");
                     return Observable.from(rides);
                 })
                 .map(ride -> {
                     PassengerProvider.getPassengers(ride.passengerIds)
+                            .compose(RxLoggingUtil.log("PASSENGERS"))
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
@@ -31,50 +34,50 @@ public final class RideProvider
                 })
                 .map(ride -> {
                     EventProvider.requestCruEventByID(ride.eventId)
+                            .compose(RxLoggingUtil.log("EVENTS"))
                             .map(theEvent -> ride.event = theEvent)
                             .toBlocking()
                             .subscribe();
                     ;
                     return ride;
                 })
-                .subscribeOn(Schedulers.io())
                 .toList();
     }
 
     public static Observable<Ride> createRide(Ride ride)
     {
         return mCruService.postRide(ride)
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<Ride> updateRide(Ride ride)
     {
         return mCruService.updateRide(ride)
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<Void> addPassengerToRide(String passengerId, String rideId)
     {
         return mCruService.addPassenger(rideId, passengerId)
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<Void> dropPassengerFromRide(String passengerId, String rideId)
     {
         return mCruService.dropPassenger(rideId, passengerId)
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<Void> dropRide(String rideId)
     {
         return mCruService.dropRide(rideId)
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<Ride> requestRideByID(String id)
     {
         return mCruService.findSingleRide(id)
-                .subscribeOn(Schedulers.io())
+                .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
                     Logger.d("Rides found");
                     return Observable.from(rides);

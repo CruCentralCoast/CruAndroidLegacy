@@ -46,8 +46,14 @@ public class MyRidesFragment extends Fragment
         super.onResume();
         if(viewPager.getAdapter() == null)
         {
-            viewPager.setAdapter(new MyRidesFragmentPagerAdapter(getFragmentManager()));
+            viewPager.setAdapter(new MyRidesFragmentPagerAdapter(getChildFragmentManager()));
             tabLayout.setupWithViewPager(viewPager);
         }
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
     }
 }

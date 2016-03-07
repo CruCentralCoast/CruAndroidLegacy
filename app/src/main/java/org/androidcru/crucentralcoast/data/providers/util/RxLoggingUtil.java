@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.util;
+package org.androidcru.crucentralcoast.data.providers.util;
 
 import com.orhanobut.logger.Logger;
 

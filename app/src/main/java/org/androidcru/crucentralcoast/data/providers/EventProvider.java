@@ -1,12 +1,12 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
 
 import rx.Observable;
-import rx.schedulers.Schedulers;
 
 public class EventProvider
 {
@@ -16,13 +16,13 @@ public class EventProvider
     {
 
         return mCruService.getEvents()
-                .subscribeOn(Schedulers.io());
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<CruEvent> requestCruEventByID(String id)
     {
         return mCruService.findSingleCruEvent(id)
-                .subscribeOn(Schedulers.io())
+                .compose(RxComposeUtil.network())
                 .flatMap(cruevents -> {
                     return Observable.from(cruevents);
                 });

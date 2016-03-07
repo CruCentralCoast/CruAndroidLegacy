@@ -5,6 +5,7 @@ public interface FormHolder
     void setAdapter(FormAdapter adapter);
     void clearUI();
     void setTitle(String title);
+    void setSubtitle(String title);
     void setPreviousVisibility(int visibility);
     void setNextVisibility(int visibility);
     void setToolbarExpansion(boolean expanded);

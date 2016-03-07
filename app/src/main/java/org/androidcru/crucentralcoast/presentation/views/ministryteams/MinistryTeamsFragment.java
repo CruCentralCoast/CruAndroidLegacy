@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
-import org.androidcru.crucentralcoast.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 
 import java.util.ArrayList;
 

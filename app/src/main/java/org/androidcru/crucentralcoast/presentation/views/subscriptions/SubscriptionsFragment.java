@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 
@@ -39,6 +40,8 @@ public class SubscriptionsFragment extends Fragment
 
     @Bind(R.id.subscription_list) RecyclerView subscriptionList;
     @Bind(R.id.fab) FloatingActionButton fab;
+
+    private Subscription subscription;
 
     @Nullable
     @Override
@@ -88,11 +91,19 @@ public class SubscriptionsFragment extends Fragment
         getCampusMinistryMap();
     }
 
-
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
 
     public void getCampusMinistryMap()
     {
-        SubscriptionProvider.requestCampusMinistryMap()
+        if(subscription != null)
+            subscription.unsubscribe();
+        subscription = SubscriptionProvider.requestCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ministries -> {
                     mSubscriptionAdapter = new SubscriptionsAdapter(ministries);

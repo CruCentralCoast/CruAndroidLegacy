@@ -24,6 +24,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -36,6 +37,7 @@ public class VideosFragment extends Fragment
     private SharedPreferences sharedPreferences;
     private LinearLayoutManager layoutManager;
     private Observer<List<SearchResult>> videoSubscriber;
+    private Subscription subscription;
     private List<SearchResult> videos;
     private int lastVisibleItemPosition;
 
@@ -113,15 +115,24 @@ public class VideosFragment extends Fragment
             }
         });
 
-
         // does this need the fixed size?
         swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        //swipeRefreshLayout.setOnRefreshListener(this::getCruVideos);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        subscription.unsubscribe();
     }
 
     private void getCruVideos(int offset)
     {
-        YouTubeVideoProvider.getInstance().requestChannelVideos(offset)
+        if(subscription != null)
+            subscription.unsubscribe();
+        subscription = YouTubeVideoProvider.getInstance().requestChannelVideos(offset)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }

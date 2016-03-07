@@ -54,4 +54,7 @@ public class AppConstants
     public static final String CRU_YOUTUBE_CHANNEL_ID = "UCe-RJ-3Q3tUqJciItiZmjdg";
 
     public static final long YOUTUBE_QUERY_NUM = 20l;
+
+    public static final int RETRY_ATTEMPTS = 5;
+
 }

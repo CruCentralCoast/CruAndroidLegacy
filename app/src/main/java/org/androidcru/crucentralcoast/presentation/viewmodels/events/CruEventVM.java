@@ -13,6 +13,7 @@ import com.facebook.login.LoginResult;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
@@ -155,15 +156,15 @@ public class CruEventVM
 
 
             AlertDialog loginDialog = new AlertDialog.Builder(v.getContext())
-                    .setTitle("Log in with Facebook")
-                    .setNegativeButton("JUST OPEN IN FACEBOOK", (dialog, which) -> {
+                    .setTitle(R.string.facebook_title)
+                    .setNegativeButton(R.string.facebook_no, (dialog, which) -> {
                         v.getContext().startActivity(openInFacebook);
                     })
-                    .setPositiveButton("SURE", (dialog, which) -> {
+                    .setPositiveButton(R.string.facebook_yes, (dialog, which) -> {
                         MainActivity.loginWithFacebook();
                         FacebookProvider.getInstance().setupTokenCallback(loginResultObserver);
                     })
-                    .setMessage("If you log in with Facebook, you can set your RSVP directly from inside the Cru app.")
+                    .setMessage(R.string.facebook_reasoning)
                     .create();
 
             if(selectedEvent.url != null)

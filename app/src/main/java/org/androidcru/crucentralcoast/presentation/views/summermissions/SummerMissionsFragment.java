@@ -2,44 +2,42 @@ package org.androidcru.crucentralcoast.presentation.views.summermissions;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.SummerMissionProvider;
+import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class SummerMissionsFragment extends Fragment
+public class SummerMissionsFragment extends ListFragment
 {
-    @Bind(R.id.summer_missions_list) RecyclerView summerMissionsList;
-    @Bind(R.id.progress) ProgressBar progressBar;
-
     private RecyclerView.LayoutManager layoutManager;
+
+    private Subscription subscription;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_summer_missions, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
 
         layoutManager = new LinearLayoutManager(getContext());
-        summerMissionsList.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
+
+        swipeRefreshLayout.setOnRefreshListener(this::getSummerMissions);
     }
 
     @Override
@@ -49,16 +47,26 @@ public class SummerMissionsFragment extends Fragment
         getSummerMissions();
     }
 
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
+    }
+
     private void getSummerMissions()
     {
-        progressBar.setVisibility(View.VISIBLE);
-        summerMissionsList.setVisibility(View.GONE);
-        SummerMissionProvider.getSummerMissions()
+        swipeRefreshLayout.setRefreshing(true);
+
+        if(subscription != null)
+            subscription.unsubscribe();
+        subscription = SummerMissionProvider.getSummerMissions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(summerMissions -> {
-                    progressBar.setVisibility(View.GONE);
-                    summerMissionsList.setVisibility(View.VISIBLE);
-                    summerMissionsList.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
+                    recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
+                }, e -> {}, () -> {
+                    swipeRefreshLayout.setRefreshing(false);
                 });
     }
 }

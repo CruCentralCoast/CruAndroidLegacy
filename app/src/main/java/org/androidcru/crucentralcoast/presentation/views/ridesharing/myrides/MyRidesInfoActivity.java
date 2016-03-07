@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -39,7 +35,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     private  AlertDialog alertDialog;
 
     //Injected Views
-    @Bind(R.id.event_list) RecyclerView eventList;
+    @Bind(R.id.recyclerview) RecyclerView eventList;
     @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
 //    @Bind(R.id.event_banner) ImageView eventBanner; //TODO: change ui so we can have this and a scrollable passenger list
@@ -156,7 +152,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 //                .subscribeOn(Schedulers.immediate())
 //                .subscribe(passengers::add);
 //
-//        eventList.setAdapter(new MyRidesInfoAdapter(getContext(), passengers));
+//        recyclerView.setAdapter(new MyRidesInfoAdapter(getContext(), passengers));
 //        swipeRefreshLayout.setRefreshing(false);
 //    }
 }

@@ -21,7 +21,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.util.DateTimeUtils;
-import org.androidcru.crucentralcoast.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 
 import java.util.List;
 
