@@ -134,93 +134,39 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:padding="8dp"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/input_layout_car"
                     android:orientation="vertical"
                     android:layout_toEndOf="@+id/car_capacity_icon"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_car_capacity"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="0"
-                            android:id="@+id/car_capacity_field"
-                            android:textSize="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="4dp" />
-                        <ImageButton
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:padding="8dp"
-                            android:id="@+id/car_capacity_increase"
-                            android:layout_toRightOf="@+id/car_capacity_field"
-                            android:layout_centerInParent="true"
-                            android:background="@null"
-                            android:scaleType="fitCenter" />
-                        <ImageButton
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:padding="8dp"
-                            android:id="@+id/car_capacity_decrease"
-                            android:layout_toRightOf="@+id/car_capacity_increase"
-                            android:layout_centerInParent="true"
-                            android:background="@null"
-                            android:scaleType="fitCenter" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="(0 Passengers)"
-                            android:id="@+id/num_passengers"
-                            android:layout_toRightOf="@+id/car_capacity_decrease"
-                            android:textSize="16dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="72dp"-->
-                <!--android:id="@+id/car_capacity_layout"-->
-                <!--android:padding="8dp">-->
-                <!--<ImageView-->
-                    <!--android:layout_width="48dp"-->
-                    <!--android:layout_height="48dp"-->
-                    <!--android:id="@+id/car_capacity_icon"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:src="@drawable/ic_car_grey600_48dp"-->
-                    <!--android:layout_marginLeft="8dp"-->
-                    <!--android:layout_marginRight="8dp"-->
-                    <!--android:padding="8dp"/>-->
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/input_layout_car"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:layout_toEndOf="@+id/car_capacity_icon"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_marginStart="8dp">-->
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal">-->
-                        <!--<Spinner-->
+                            android:layout_marginLeft="8dp">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/car_capacity_field"
+                                android:layout_centerVertical="true"
+                                android:inputType="phone"
+                                android:hint="Seats Available"/>
+                        </android.support.design.widget.TextInputLayout>
+                        <!--<TextView-->
                             <!--android:layout_width="wrap_content"-->
                             <!--android:layout_height="wrap_content"-->
-                            <!--android:id="@+id/car_capacity_field"-->
-                            <!--android:layout_marginRight="8dp"/>-->
-                    <!--</LinearLayout>-->
-                <!--</LinearLayout>-->
-            <!--</RelativeLayout>-->
-
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="(0 Passengers)"-->
+                            <!--android:id="@+id/num_passengers"-->
+                            <!--android:textSize="16dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_marginRight="36dp" />-->
+                </RelativeLayout>
+            </RelativeLayout>
             <!-- trip type -->
             <RelativeLayout
                 android:layout_width="match_parent"

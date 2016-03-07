@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -65,11 +67,8 @@ public class DriverSignupVM extends BaseRideVM {
     @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
     @Bind(R.id.gender_field) @Select Spinner genderField;
     @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
-    //@Bind(R.id.car_capacity_field) @Select Spinner carCapacity;
-    @Bind(R.id.car_capacity_field) TextView carCapacity;
-    @Bind(R.id.car_capacity_increase) ImageButton increaseCarCapacity;
-    @Bind(R.id.car_capacity_decrease) ImageButton decreaseCarCapacity;
-    @Bind(R.id.num_passengers) TextView numPassengers;
+    @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
+//    @Bind(R.id.num_passengers) TextView numPassengers;
     @Bind(R.id.event_time_field) @NotEmpty EditText timeField;
     @Bind(R.id.event_date_field) @NotEmpty EditText dateField;
     @Bind(R.id.gender_view) TextView genderView;
@@ -107,12 +106,6 @@ public class DriverSignupVM extends BaseRideVM {
     private void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         ViewUtil.setSpinner(tripTypeField, directionsForSpinner(directions), null, getDirectionIndex(ride.direction, directions));
-        //ViewUtil.setSpinner(carCapacity, carCapacityForSpinner(), null, getCarCapacityIndex(ride.carCapacity));
-
-        increaseCarCapacity.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp));
-        increaseCarCapacity.setOnClickListener(createCarCapacityButton(1));
-        decreaseCarCapacity.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
-        decreaseCarCapacity.setOnClickListener(createCarCapacityButton(-1));
 
         if (editing) {
             genderField.setVisibility(View.GONE);
@@ -122,7 +115,9 @@ public class DriverSignupVM extends BaseRideVM {
 
             carCapacity.setText(Integer.toString(ride.carCapacity));
             minCapacity = ride.passengerIds.size();
-            numPassengers.setText(minCapacity + " Passengers");
+
+//            carCapacity.setHint("Seats Available (" + minCapacity + " Passengers)");
+//            numPassengers.setText(minCapacity + " Passengers");
 
             nameField.setText(ride.driverName);
             phoneField.setText(ride.driverNumber);
@@ -135,10 +130,11 @@ public class DriverSignupVM extends BaseRideVM {
             ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
             timeField.setOnKeyListener(null);
             dateField.setOnKeyListener(null);
-            carCapacity.setText("0");
             minCapacity = 0;
-            numPassengers.setVisibility(View.GONE);
+//            numPassengers.setVisibility(View.GONE);
         }
+
+        carCapacity.addTextChangedListener(createCarCapacityWatcher());
 
     }
 
@@ -169,9 +165,7 @@ public class DriverSignupVM extends BaseRideVM {
     }
 
     private int retrieveCarCapacity() {
-        String str = (String)carCapacity.getText();
-        return Integer.parseInt(str);
-        //return Integer.valueOf((String) carCapacity.getSelectedItem());
+        return Integer.parseInt(carCapacity.getText().toString());
     }
 
     public Ride getRide() {
@@ -325,25 +319,36 @@ public class DriverSignupVM extends BaseRideVM {
                 });
     }
 
-    private void updateCarCapacity(int amount)
+    private TextWatcher createCarCapacityWatcher()
     {
-        int curAmount = retrieveCarCapacity();
-
-        if ((amount < 0 && curAmount == minCapacity) ||
-            (amount > 0 && curAmount == AppConstants.MAX_CAR_CAPACITY)){
-            return;
-        }
-        carCapacity.setText(Integer.toString(curAmount + amount));
-    }
-
-    private View.OnClickListener createCarCapacityButton(int amount)
-    {
-        return new View.OnClickListener() {
+        return new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                updateCarCapacity(amount);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s == null || s.toString().equals("")) {
+                    return;
+                }
+                //make sure is within bounds
+                int setTo = Integer.parseInt(s.toString());
+                if (setTo < minCapacity)
+                {
+                    carCapacity.setText(Integer.toString(minCapacity));
+                }
+                else if (setTo > AppConstants.MAX_CAR_CAPACITY)
+                {
+                    carCapacity.setText(Integer.toString(AppConstants.MAX_CAR_CAPACITY));
+                }
             }
         };
     }
-
 }
