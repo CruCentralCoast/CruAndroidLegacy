@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
     private static MainActivity self;
-
+    private NavigationView navigationView;
     private ConstructionFragment constructionFragment;
 
     @Override
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         self = this;
@@ -185,6 +185,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void switchToMyRides(Bundle b)
+    {
+        navigationView.setCheckedItem(R.id.nav_my_rides);
+        MyRidesFragment fragment = new MyRidesFragment();
+        fragment.setArguments(b);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+    }
 
 
     @Override

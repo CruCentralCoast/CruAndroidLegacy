@@ -53,4 +53,11 @@ public class PassengerSignupActivity extends FormActivity
         fragments.add(new BasicInfoFragment());
         return fragments;
     }
+
+    @Override
+    public void complete()
+    {
+        setResult(RESULT_OK);
+        super.complete();
+    }
 }
