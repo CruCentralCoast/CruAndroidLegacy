@@ -48,7 +48,7 @@
     <string name="passenger">Passenger</string>
     <string name="edit">Edit</string>
     <string name="driver_signup">Driver Signup</string>
-    <string name="passenger_signup">Passenger Signup</string>
+    <string name="passenger_signup">Find a Ride</string>
     <string name="cancel">Cancel</string>
     <string name="kick">Kick</string>
     <string name="nav_my_rides">My Rides</string>
@@ -68,6 +68,12 @@
 
 
     <string-array name="genders">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="genders_filter">
+        <item>Any</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>

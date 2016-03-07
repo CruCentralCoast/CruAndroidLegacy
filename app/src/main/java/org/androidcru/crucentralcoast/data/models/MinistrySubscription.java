@@ -2,8 +2,11 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
+@Parcel
 public class MinistrySubscription
 {
     @SerializedName("image") public CruImage cruImage;

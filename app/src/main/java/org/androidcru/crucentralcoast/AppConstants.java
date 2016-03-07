@@ -28,6 +28,7 @@ public class AppConstants
 
     //RideSharing intent keys
     public static final String RIDE_KEY = "filled ride";
+    public static final String EVENT_KEY = "event";
 
     //Ministry Team
     public static final String MINISTRY_TEAM_KEY = "MINISTRY_TEAM";

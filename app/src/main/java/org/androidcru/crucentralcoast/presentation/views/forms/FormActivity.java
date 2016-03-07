@@ -135,7 +135,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         setPreviousVisibility(View.VISIBLE);
         setNextVisibility(View.VISIBLE);
         setNextText("NEXT");
-        setToolbarExpansion(false);
     }
 
     @Override
@@ -160,12 +159,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     public void setNextVisibility(int visibility)
     {
         next.setVisibility(visibility);
-    }
-
-    @Override
-    public void setToolbarExpansion(boolean expanded)
-    {
-        appBar.setExpanded(expanded);
     }
 
     @Override

@@ -15,7 +15,7 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
-import org.androidcru.crucentralcoast.presentation.viewmodels.facebook.FBGuestListVM;
+import org.androidcru.crucentralcoast.data.models.facebook.FBGuestList;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
 
 import java.util.Set;
@@ -120,7 +120,7 @@ public final class FacebookProvider
                             null,
                             HttpMethod.GET,
                             response -> {
-                                FBGuestListVM guestList = CruApplication.gson.fromJson(response.getRawResponse(), FBGuestListVM.class);
+                                FBGuestList guestList = CruApplication.gson.fromJson(response.getRawResponse(), FBGuestList.class);
                                 if(!guestList.data.isEmpty())
                                 {
                                     status.hold(RsvpDialog.RSVP_STATUS.ATTENDING);
@@ -136,7 +136,7 @@ public final class FacebookProvider
                                 null,
                                 HttpMethod.GET,
                                 response -> {
-                                    FBGuestListVM guestList = CruApplication.gson.fromJson(response.getRawResponse(), FBGuestListVM.class);
+                                    FBGuestList guestList = CruApplication.gson.fromJson(response.getRawResponse(), FBGuestList.class);
                                     if(!guestList.data.isEmpty())
                                     {
                                         status.hold(RsvpDialog.RSVP_STATUS.INTERESTED);
