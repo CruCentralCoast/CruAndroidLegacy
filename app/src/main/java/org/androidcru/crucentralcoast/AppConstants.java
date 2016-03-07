@@ -51,4 +51,5 @@ public class AppConstants
     public static final double CALPOLY_LAT = 35.30021;
     public static final double CALPOLY_LNG = -120.66310;
     public static final float RADIUS_STROKE_WID = 5;
+    public static final int MAX_CAR_CAPACITY = Integer.MAX_VALUE;
 }
