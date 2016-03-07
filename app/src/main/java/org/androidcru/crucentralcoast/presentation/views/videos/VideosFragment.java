@@ -21,7 +21,6 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.Bind;
@@ -42,11 +41,16 @@ public class VideosFragment extends Fragment
     private Observer<SearchListResponse> videoSubscriber;
     private Subscription subscription;
     private List<SearchResult> videos;
+    private String thisPageToken;
     private String nextPageToken;
+    private VideosAdapter videosAdapter;
+    private int curSize;
 
     public VideosFragment()
     {
+        curSize = 0;
         videos = new ArrayList<>();
+        thisPageToken = nextPageToken = "";
 
         videoSubscriber = new Observer<SearchListResponse>()
         {
@@ -96,23 +100,14 @@ public class VideosFragment extends Fragment
         layoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(layoutManager);
 
-        VideosAdapter videosAdapter = new VideosAdapter(new ArrayList<>(), layoutManager);
-        videoList.setAdapter(videosAdapter);
-
         videoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
-                getCruVideos(nextPageToken);
-            }
-
-            // Documentation says that I should override this because I can use
-            // 'findLastVisibleItemPosition,' but the example code doesn't override.
-            @Override
-            public void onScrolled(RecyclerView view, int dx, int dy)
-            {
-                super.onScrolled(view, dx, dy);
-                //lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                if(nextPageToken != null)
+                {
+                    getCruVideos(nextPageToken);
+                }
             }
         });
 
@@ -143,33 +138,44 @@ public class VideosFragment extends Fragment
 
     public void setVideos (SearchListResponse cruVideosResponse)
     {
-        // Don't think I want to clear the videos?
-        // videos.clear();
-
         List<SearchResult> cruVideos = cruVideosResponse.getItems();
         rx.Observable.from(cruVideos)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(videos::add);
 
+        if(videosAdapter == null)
+        {
+            videosAdapter = new VideosAdapter(videos, layoutManager);
+            videoList.setAdapter(videosAdapter);
+        }
+        else
+        {
+            videosAdapter.updateViewExpandedStates();
+            videosAdapter.notifyItemChanged(curSize, videosAdapter.getItemCount() - 1);
+        }
+        thisPageToken = nextPageToken;
         nextPageToken = cruVideosResponse.getNextPageToken();
-        videoList.setAdapter(new VideosAdapter(videos, layoutManager));
+        curSize += cruVideos.size();
         swipeRefreshLayout.setRefreshing(false);
     }
 
     private void forceUpdate()
     {
-        // not sure if this clear is going to break stuff. Put it here because
-        // I get at page 0.
+
         videos.clear();
+        curSize = 0;
+        videosAdapter = null;
+
         YouTubeVideoProvider.getInstance().requestChannelVideos(null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
-        //TODO how many should I grab here?
-        getCruVideos(null);
+        getCruVideos(thisPageToken);
+//        videosAdapter.notifyItemChanged(curSize, videos.size() - 1);
     }
 }

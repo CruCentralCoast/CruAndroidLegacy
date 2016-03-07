@@ -158,6 +158,14 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         });
     }
 
+    public void updateViewExpandedStates()
+    {
+        while (viewExpandedStates.size() < videos.size())
+        {
+            viewExpandedStates.add(false);
+        }
+    }
+
     public class CruVideoViewHolder extends RecyclerView.ViewHolder
     {
         @Bind(R.id.video_title) TextView videoTitle;

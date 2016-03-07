@@ -62,11 +62,7 @@ public final class YouTubeVideoProvider
                 try {
                     query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
                     query.setOrder("date");
-                    if(nextPageToken != null)
-                    {
-                        query.setPageToken(nextPageToken);
-                    }
-
+                    query.setPageToken(nextPageToken);
                     query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
                     SearchListResponse searchResponse = query.execute();
                     if (!searchResponse.isEmpty()) {
