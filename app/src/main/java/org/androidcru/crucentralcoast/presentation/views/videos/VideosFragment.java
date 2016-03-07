@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.orhanobut.logger.Logger;
 
@@ -19,6 +21,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.Bind;
@@ -36,17 +39,16 @@ public class VideosFragment extends Fragment
 
     private SharedPreferences sharedPreferences;
     private LinearLayoutManager layoutManager;
-    private Observer<List<SearchResult>> videoSubscriber;
+    private Observer<SearchListResponse> videoSubscriber;
     private Subscription subscription;
     private List<SearchResult> videos;
-    private int lastVisibleItemPosition;
+    private String nextPageToken;
 
     public VideosFragment()
     {
         videos = new ArrayList<>();
-        lastVisibleItemPosition = 0;
 
-        videoSubscriber = new Observer<List<SearchResult>>()
+        videoSubscriber = new Observer<SearchListResponse>()
         {
             @Override
             public void onCompleted() {
@@ -69,7 +71,7 @@ public class VideosFragment extends Fragment
             }
 
             @Override
-            public void onNext(List<SearchResult> searchResults)
+            public void onNext(SearchListResponse searchResults)
             {
                 setVideos(searchResults);
             }
@@ -101,7 +103,7 @@ public class VideosFragment extends Fragment
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
-                getCruVideos(videosAdapter.nextPageToken);
+                getCruVideos(nextPageToken);
             }
 
             // Documentation says that I should override this because I can use
@@ -130,19 +132,26 @@ public class VideosFragment extends Fragment
     private void getCruVideos(String nextPageToken)
     {
         if(subscription != null)
+        {
             subscription.unsubscribe();
+        }
+
         subscription = YouTubeVideoProvider.getInstance().requestChannelVideos(nextPageToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
 
-    public void setVideos (List<SearchResult> cruVideos)
+    public void setVideos (SearchListResponse cruVideosResponse)
     {
-        videos.clear();
+        // Don't think I want to clear the videos?
+        // videos.clear();
+
+        List<SearchResult> cruVideos = cruVideosResponse.getItems();
         rx.Observable.from(cruVideos)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(videos::add);
 
+        nextPageToken = cruVideosResponse.getNextPageToken();
         videoList.setAdapter(new VideosAdapter(videos, layoutManager));
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -150,7 +159,7 @@ public class VideosFragment extends Fragment
     private void forceUpdate()
     {
         // not sure if this clear is going to break stuff. Put it here because
-        // I get at offset 0.
+        // I get at page 0.
         videos.clear();
         YouTubeVideoProvider.getInstance().requestChannelVideos(null)
                 .observeOn(AndroidSchedulers.mainThread())

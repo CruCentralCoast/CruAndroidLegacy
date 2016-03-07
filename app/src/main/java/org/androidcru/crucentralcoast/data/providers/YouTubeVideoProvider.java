@@ -18,6 +18,8 @@ import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import java.io.IOException;
 import java.util.List;
 
+import javax.crypto.SealedObject;
+
 import rx.Observable;
 import rx.Subscriber;
 
@@ -52,11 +54,11 @@ public final class YouTubeVideoProvider
         return instance;
     }
 
-    public Observable<List<SearchResult>> requestChannelVideos(String nextPageToken)
+    public Observable<SearchListResponse> requestChannelVideos(String nextPageToken)
     {
-        return Observable.create(new Observable.OnSubscribe<List<SearchResult>>() {
+        return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
             @Override
-            public void call(Subscriber<? super List<SearchResult>> subscriber) {
+            public void call(Subscriber<? super SearchListResponse> subscriber) {
                 try {
                     query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
                     query.setOrder("date");
@@ -67,9 +69,8 @@ public final class YouTubeVideoProvider
 
                     query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
                     SearchListResponse searchResponse = query.execute();
-                    List<SearchResult> searchResults = searchResponse.getItems();
-                    if (!searchResults.isEmpty()) {
-                        subscriber.onNext(searchResults);
+                    if (!searchResponse.isEmpty()) {
+                        subscriber.onNext(searchResponse);
                     }
                     subscriber.onCompleted();
                 } catch (IOException e) {
