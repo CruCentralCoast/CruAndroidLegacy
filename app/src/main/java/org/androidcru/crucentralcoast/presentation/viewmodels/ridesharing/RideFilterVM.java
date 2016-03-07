@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.ZoneId;
@@ -78,20 +79,23 @@ public class RideFilterVM extends BaseRideVM
 
         Query query = new Query.Builder()
                 .setCondition(new ConditionsBuilder()
-                        .setOperator(ConditionsBuilder.OPERATOR.AND)
-                        .addOperand(Ride.serializedGender, rideFilter.gender)
-                        .addOperand(new ConditionsBuilder()
-                                .setOperator(ConditionsBuilder.OPERATOR.AND)
-                                .addOperand(new ConditionsBuilder()
-                                        .setOperator(ConditionsBuilder.OPERATOR.LTE)
-                                        .addOperand(Ride.serializedTime, CruApplication.gson.toJsonTree(threeHoursAfter))
-                                        .build())
-                                .addOperand(new ConditionsBuilder()
-                                        .setOperator(ConditionsBuilder.OPERATOR.GTE)
-                                        .addOperand(Ride.serializedTime, CruApplication.gson.toJsonTree(threeHoursBefore))
-                                        .build())
+                        .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
+                        .addRestriction(new ConditionsBuilder()
+                                .setField(Ride.serializedGender)
+                                .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, rideFilter.gender)
                                 .build())
-                        .addOperand(Ride.serializedDirection, rideFilter.direction.getValue())
+                        .addRestriction(new ConditionsBuilder()
+                                .setField(Ride.serializedTime)
+                                .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
+                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore))
+                                .build())
+                        .addRestriction(new ConditionsBuilder()
+                                .setField(Ride.serializedDirection)
+                                .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, rideFilter.direction.getValue())
+                                .build())
+                        .build())
+                .setOptions(new OptionsBuilder()
+                        .addOption(OptionsBuilder.OPTIONS.LIMIT, 5)
                         .build())
                 .build();
 

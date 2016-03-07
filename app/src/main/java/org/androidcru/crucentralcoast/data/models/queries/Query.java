@@ -36,23 +36,12 @@ public class Query
             query.projections.append(projection).append(" ");
             return this;
         }
-    }
 
-    public enum OPTIONS
-    {
-        SORT("sort"), LIMIT("limit");
-
-        private String serializedName;
-
-        OPTIONS(String serializedName)
+        public Builder setOptions(JsonObject options)
         {
-            this.serializedName = serializedName;
+            query.options = options;
+            return this;
         }
 
-        public String toString()
-        {
-            return serializedName;
-        }
     }
-
 }
