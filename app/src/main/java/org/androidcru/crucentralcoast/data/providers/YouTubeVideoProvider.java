@@ -44,13 +44,14 @@ public final class YouTubeVideoProvider
         query.setKey(BuildConfig.YOUTUBEBROWSERAPIKEY);
     }
 
-    public static YouTubeVideoProvider getInstance() {
+    public static YouTubeVideoProvider getInstance()
+    {
         if(instance == null)
             instance = new YouTubeVideoProvider();
         return instance;
     }
 
-    public Observable<List<SearchResult>> requestChannelVideos()
+    public Observable<List<SearchResult>> requestChannelVideos(int offset)
     {
         return Observable.create(new Observable.OnSubscribe<List<SearchResult>>()
         {
@@ -61,7 +62,7 @@ public final class YouTubeVideoProvider
                 {
                     query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
                     query.setOrder("date");
-                    query.setMaxResults(20l);
+                    query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
                     SearchListResponse searchResponse = query.execute();
                     List<SearchResult> searchResults = searchResponse.getItems();
                     if (!searchResults.isEmpty())

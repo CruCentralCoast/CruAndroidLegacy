@@ -76,6 +76,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         return videos.size();
     }
 
+
+
     @Override
     public void onBindViewHolder(CruVideoViewHolder holder, int position)
     {

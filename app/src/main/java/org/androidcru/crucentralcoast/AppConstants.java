@@ -53,21 +53,5 @@ public class AppConstants
 
     public static final String CRU_YOUTUBE_CHANNEL_ID = "UCe-RJ-3Q3tUqJciItiZmjdg";
 
-    public enum ViewState
-    {
-        RETRACTED ("Show Description"),
-        EXPANDED ("Hide Description");
-
-        private final String state;
-
-        private ViewState(String state)
-        {
-            this.state = state;
-        }
-
-        public String toString()
-        {
-            return this.state;
-        }
-    }
+    public static final long YOUTUBE_QUERY_NUM = 20l;
 }

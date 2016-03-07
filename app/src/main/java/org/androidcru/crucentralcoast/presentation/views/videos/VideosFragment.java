@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
+import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,6 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by mitch on 3/2/16.
- */
 public class VideosFragment extends Fragment
 {
     @Bind(R.id.video_list) RecyclerView videoList;
@@ -39,10 +37,13 @@ public class VideosFragment extends Fragment
     private LinearLayoutManager layoutManager;
     private Observer<List<SearchResult>> videoSubscriber;
     private List<SearchResult> videos;
+    private int lastVisibleItemPosition;
 
     public VideosFragment()
     {
         videos = new ArrayList<>();
+        lastVisibleItemPosition = 0;
+
         videoSubscriber = new Observer<List<SearchResult>>()
         {
             @Override
@@ -90,16 +91,37 @@ public class VideosFragment extends Fragment
         setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(layoutManager);
+
         VideosAdapter videosAdapter = new VideosAdapter(new ArrayList<>(), layoutManager);
         videoList.setAdapter(videosAdapter);
+
+        videoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount)
+            {
+                getCruVideos(page);
+            }
+
+            // Documentation says that I should override this because I can use
+            // 'findLastVisibleItemPosition,' but the example code doesn't override.
+            @Override
+            public void onScrolled(RecyclerView view, int dx, int dy)
+            {
+                super.onScrolled(view, dx, dy);
+//                        lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+  //              Logger.d("Last visible position is " + lastVisibleItemPosition);
+            }
+        });
+
+
         // does this need the fixed size?
         swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
-    private void getCruVideos()
+    private void getCruVideos(int offset)
     {
-        YouTubeVideoProvider.getInstance().requestChannelVideos()
+        YouTubeVideoProvider.getInstance().requestChannelVideos(offset)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
@@ -113,13 +135,14 @@ public class VideosFragment extends Fragment
 
         videoList.setAdapter(new VideosAdapter(videos, layoutManager));
         swipeRefreshLayout.setRefreshing(false);
-
-        Logger.d("****Got to set videos. Size is " + cruVideos.size() + " ****");
     }
 
     private void forceUpdate()
     {
-        YouTubeVideoProvider.getInstance().requestChannelVideos()
+        // not sure if this clear is going to break stuff. Put it here because
+        // I get at offset 0.
+        videos.clear();
+        YouTubeVideoProvider.getInstance().requestChannelVideos(0)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
@@ -127,6 +150,7 @@ public class VideosFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        getCruVideos();
+        //TODO how many should I grab here?
+        getCruVideos(0);
     }
 }
