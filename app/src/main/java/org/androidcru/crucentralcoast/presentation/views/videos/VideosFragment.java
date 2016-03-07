@@ -101,7 +101,7 @@ public class VideosFragment extends Fragment
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
-                getCruVideos(page);
+                getCruVideos(videosAdapter.nextPageToken);
             }
 
             // Documentation says that I should override this because I can use
@@ -110,8 +110,7 @@ public class VideosFragment extends Fragment
             public void onScrolled(RecyclerView view, int dx, int dy)
             {
                 super.onScrolled(view, dx, dy);
-//                        lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-  //              Logger.d("Last visible position is " + lastVisibleItemPosition);
+                //lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
             }
         });
 
@@ -128,11 +127,11 @@ public class VideosFragment extends Fragment
         subscription.unsubscribe();
     }
 
-    private void getCruVideos(int offset)
+    private void getCruVideos(String nextPageToken)
     {
         if(subscription != null)
             subscription.unsubscribe();
-        subscription = YouTubeVideoProvider.getInstance().requestChannelVideos(offset)
+        subscription = YouTubeVideoProvider.getInstance().requestChannelVideos(nextPageToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
@@ -153,7 +152,7 @@ public class VideosFragment extends Fragment
         // not sure if this clear is going to break stuff. Put it here because
         // I get at offset 0.
         videos.clear();
-        YouTubeVideoProvider.getInstance().requestChannelVideos(0)
+        YouTubeVideoProvider.getInstance().requestChannelVideos(null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
@@ -162,6 +161,6 @@ public class VideosFragment extends Fragment
     public void onResume() {
         super.onResume();
         //TODO how many should I grab here?
-        getCruVideos(0);
+        getCruVideos(null);
     }
 }

@@ -1,5 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
+import android.media.Image;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -50,27 +52,27 @@ public final class YouTubeVideoProvider
         return instance;
     }
 
-    public Observable<List<SearchResult>> requestChannelVideos(int offset)
+    public Observable<List<SearchResult>> requestChannelVideos(String nextPageToken)
     {
-        return Observable.create(new Observable.OnSubscribe<List<SearchResult>>()
-        {
+        return Observable.create(new Observable.OnSubscribe<List<SearchResult>>() {
             @Override
-            public void call(Subscriber<? super List<SearchResult>> subscriber)
-            {
-                try
-                {
+            public void call(Subscriber<? super List<SearchResult>> subscriber) {
+                try {
                     query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
                     query.setOrder("date");
+                    if(nextPageToken != null)
+                    {
+                        query.setPageToken(nextPageToken);
+                    }
+
                     query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
                     SearchListResponse searchResponse = query.execute();
                     List<SearchResult> searchResults = searchResponse.getItems();
-                    if (!searchResults.isEmpty())
-                    {
+                    if (!searchResults.isEmpty()) {
                         subscriber.onNext(searchResults);
                     }
                     subscriber.onCompleted();
-                } catch (IOException e)
-                {
+                } catch (IOException e) {
                     subscriber.onError(e);
                 }
             }
