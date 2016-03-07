@@ -18,7 +18,7 @@ public class OptionsBuilder
         return JsonUtil.flatten(operands);
     }
 
-    public OptionsBuilder addOption(JsonObject value)
+    private OptionsBuilder addOption(JsonObject value)
     {
         operands.add(value);
         return this;

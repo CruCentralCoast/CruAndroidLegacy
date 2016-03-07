@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.data.providers;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
@@ -42,6 +43,12 @@ public final class RideProvider
                     return ride;
                 })
                 .toList();
+    }
+
+    public static Observable<List<Ride>> searchRides(Query query)
+    {
+        return mCruService.searchRides(query)
+                .compose(RxComposeUtil.network());
     }
 
     public static Observable<Ride> createRide(Ride ride)

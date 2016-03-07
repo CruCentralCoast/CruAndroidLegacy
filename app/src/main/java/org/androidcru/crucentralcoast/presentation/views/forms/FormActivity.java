@@ -195,11 +195,11 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void prev()
     {
-        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         if(!dataObjects.isEmpty())
         {
             dataObjects.pop();
         }
+        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
     }
 
     @Override

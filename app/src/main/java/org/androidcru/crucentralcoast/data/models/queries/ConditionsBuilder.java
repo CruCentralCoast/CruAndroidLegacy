@@ -19,10 +19,22 @@ public final class ConditionsBuilder
     {
         JsonObject condition = new JsonObject();
         if(operator != null)
-            condition.add(operator.serializedName, operands);
+        {
+            JsonArray nonEmptyArray = new JsonArray();
+            for(JsonElement e : operands)
+            {
+                if(!JsonUtil.isEmpty(e.getAsJsonObject()))
+                {
+                    nonEmptyArray.add(e);
+                }
+            }
+            condition.add(operator.serializedName, nonEmptyArray);
+        }
         else
         {
-            condition.add(field, JsonUtil.flatten(operands));
+            JsonObject flattened = JsonUtil.flatten(operands);
+            if(!JsonUtil.isEmpty(flattened))
+                condition.add(field, flattened);
         }
         return condition;
     }
@@ -40,9 +52,15 @@ public final class ConditionsBuilder
     }
 
 
-    public ConditionsBuilder addRestriction(JsonObject value)
+    private ConditionsBuilder addRestriction(JsonObject value)
     {
         operands.add(value);
+        return this;
+    }
+
+    public ConditionsBuilder addRestriction(ConditionsBuilder value)
+    {
+        operands.add(value.build());
         return this;
     }
 

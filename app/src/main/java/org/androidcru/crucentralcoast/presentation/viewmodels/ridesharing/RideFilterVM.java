@@ -15,12 +15,12 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
 
 public class RideFilterVM extends BaseRideVM
 {
-    private RideFilter rideFilter;
+    private LatLng precisePlace;
 
     @Bind(R.id.round_trip) RadioButton roundTrip;
     @Bind(R.id.direction) RadioGroup directionGroup;
@@ -37,62 +37,53 @@ public class RideFilterVM extends BaseRideVM
     @Bind(R.id.date_field) @NotEmpty EditText rideDate;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-
-    private Ride.Direction[] directions;
-    private String[] genders;
-
     public RideFilterVM(View rootView, FragmentManager fm)
     {
         super(rootView, fm);
-        this.rideFilter = new RideFilter();
-        generateDirections();
         bindUI();
-    }
-
-    private void generateDirections()
-    {
-        directions = Ride.Direction.values();
     }
 
     @Override
     protected void placeSelected(LatLng precisePlace, String placeAddress)
     {
-        rideFilter.location = precisePlace;
+        this.precisePlace = precisePlace;
     }
 
-    public RideFilter getRideFilter()
+    public Query getQuery()
     {
         int selectedRadioIndex = directionGroup.indexOfChild(rootView.findViewById(directionGroup.getCheckedRadioButtonId()));
+        Ride.Direction direction = Ride.Direction.ROUNDTRIP;
         switch (selectedRadioIndex)
         {
             case 0:
-                rideFilter.direction = Ride.Direction.TO;
+                direction = Ride.Direction.TO;
                 break;
             case 1:
-                rideFilter.direction = Ride.Direction.ROUNDTRIP;
+                direction = Ride.Direction.ROUNDTRIP;
+                break;
         }
-        rideFilter.gender = (String) genderField.getSelectedItem();
-        rideFilter.dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault());
+        String gender = (String) genderField.getSelectedItem();
+        if(gender.equals("Any"))
+            gender = null;
 
-        ZonedDateTime threeHoursAfter = rideFilter.dateTime.plusHours(3l);
-        ZonedDateTime threeHoursBefore = rideFilter.dateTime.minusHours(3l);
+        ZonedDateTime dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
+
+        ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
+        ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
 
         Query query = new Query.Builder()
                 .setCondition(new ConditionsBuilder()
                         .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
                         .addRestriction(new ConditionsBuilder()
                                 .setField(Ride.serializedGender)
-                                .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, rideFilter.gender)
-                                .build())
+                                .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender))
                         .addRestriction(new ConditionsBuilder()
                                 .setField(Ride.serializedTime)
                                 .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
-                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore))
-                                .build())
+                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
                         .addRestriction(new ConditionsBuilder()
                                 .setField(Ride.serializedDirection)
-                                .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, rideFilter.direction.getValue())
-                                .build())
+                                .addRestriction(ConditionsBuilder.OPERATOR.REGEX, direction.getValue()))
                         .build())
                 .setOptions(new OptionsBuilder()
                         .addOption(OptionsBuilder.OPTIONS.LIMIT, 5)
@@ -101,7 +92,7 @@ public class RideFilterVM extends BaseRideVM
 
         Logger.json(CruApplication.gson.toJson(query));
 
-        return rideFilter;
+        return query;
     }
 
     private void bindUI()

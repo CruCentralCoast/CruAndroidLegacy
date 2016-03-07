@@ -16,9 +16,17 @@ public class JsonUtil
         {
             for (Map.Entry<String, JsonElement> entry : e.getAsJsonObject().entrySet())
             {
-                flattenedObject.add(entry.getKey(), entry.getValue());
+                if(!entry.getValue().isJsonNull())
+                {
+                    flattenedObject.add(entry.getKey(), entry.getValue());
+                }
             }
         }
         return flattenedObject;
+    }
+
+    public static boolean isEmpty(JsonObject object)
+    {
+        return object.entrySet().isEmpty();
     }
 }
