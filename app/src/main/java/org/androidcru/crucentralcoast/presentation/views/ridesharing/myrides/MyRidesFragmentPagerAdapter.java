@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class MyRidesFragmentPagerAdapter extends FragmentStatePagerAdapter
 {
-    final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Driver", "Passenger" };
+    final int PAGE_COUNT = tabTitles.length;
 
     public MyRidesFragmentPagerAdapter(FragmentManager fm) {
         super(fm);

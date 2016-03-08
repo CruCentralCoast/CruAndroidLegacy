@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.events;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,13 +13,16 @@ import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
+import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
+import org.mozilla.javascript.tools.debugger.Main;
 
 import java.util.ArrayList;
 
@@ -172,10 +176,27 @@ public class EventsFragment extends ListFragment
         recyclerView.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
     }
 
+    /**
+     * Launches the MyRidesFragment and switches to either the Driver or Passenger Tab
+     * depending on which sign-up just completed successfully.
+     * @param requestCode identifies which fragment was launched, Driver/Passenger Sign-up
+     * @param resultCode reports if the Sign-up was successful or cancelled
+     * @param data the intent from the launched fragment
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        //TODO Toby ACRU-151
+
+        Bundle bundle = new Bundle();
+
+        if (requestCode == AppConstants.DRIVER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.DRIVER_TAB);
+            ((MainActivity) getActivity()).switchToMyRides(bundle);
+        }
+        else if (requestCode == AppConstants.PASSENGER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.PASSENGER_TAB);
+            ((MainActivity) getActivity()).switchToMyRides(bundle);
+        }
     }
 }
