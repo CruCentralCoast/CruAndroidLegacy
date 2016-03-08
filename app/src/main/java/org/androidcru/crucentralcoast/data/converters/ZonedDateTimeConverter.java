@@ -29,12 +29,14 @@ public class ZonedDateTimeConverter implements JsonDeserializer<ZonedDateTime>, 
     @Override
     public JsonElement serialize(ZonedDateTime src, Type typeOfSrc, JsonSerializationContext context) {
 
-        return gson.toJsonTree(src.withZoneSameInstant(ZoneOffset.UTC));
+        //TODO if the server can ever handle timezones properly, change to withZoneSameInstant
+        return gson.toJsonTree(src.withZoneSameLocal(ZoneOffset.UTC));
     }
 
     @Override
     public ZonedDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
-        return gson.fromJson(json, ZonedDateTime.class).withZoneSameInstant(ZoneOffset.UTC);
+        //TODO if the server can ever handle timezones properly, change to withZoneSameInstant
+        return gson.fromJson(json, ZonedDateTime.class).withZoneSameLocal(ZoneOffset.UTC);
     }
 }
