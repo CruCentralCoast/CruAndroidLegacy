@@ -42,6 +42,10 @@ public final class YouTubeVideoProvider
             Logger.e(e, "YouTubeVideoProvider error");
         }
         query.setKey(BuildConfig.YOUTUBEBROWSERAPIKEY);
+        query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
+        query.setOrder("date");
+        query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
+        query.setType("video");
     }
 
     public static YouTubeVideoProvider getInstance()
@@ -59,10 +63,8 @@ public final class YouTubeVideoProvider
             @Override
             public void call(Subscriber<? super SearchListResponse> subscriber) {
                 try {
-                    query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
-                    query.setOrder("date");
+
                     query.setPageToken(nextPageToken);
-                    query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
                     SearchListResponse searchResponse = query.execute();
                     if (!searchResponse.isEmpty()) {
                         subscriber.onNext(searchResponse);
