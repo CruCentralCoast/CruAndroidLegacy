@@ -56,14 +56,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
                         activity, customTabsIntentBuilder.build(), Uri.parse(curResource.url), new WebviewFallback());
             }
         });
-//        holder.button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CustomTabActivityHelper.openCustomTab(
-//                        activity, customTabsIntentBuilder.build(), Uri.parse(curResource.url), new WebviewFallback());
-//            }
-//        });
-
     }
 
     @Override
@@ -78,16 +70,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         @Bind(R.id.card_view) CardView cardView;
         @Bind(R.id.title) TextView title;
         @Bind(R.id.tags) TextView tags;
-//        @Bind(R.id.button) Button button;
 
         public ArticleViewHolder(View rootView) {
             super(rootView);
             ButterKnife.bind(this, rootView);
-        }
-
-        public void onClick(View v)
-        {
-
         }
     }
 }

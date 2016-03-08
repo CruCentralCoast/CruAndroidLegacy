@@ -34,12 +34,22 @@ public class ArticlesFragment extends ListFragment
     public ArticlesFragment()
     {
         resources = new ArrayList<>();
+        setupObserver();
+    }
+
+    void setupObserver()
+    {
         resourceSubscriber = new Observer<List<Resource>>()
         {
             @Override
             public void onCompleted()
             {
                 swipeRefreshLayout.setRefreshing(false);
+
+                if (resources.isEmpty())
+                    emptyView.setVisibility(View.VISIBLE);
+                else
+                    emptyView.setVisibility(View.GONE);
             }
 
             @Override
@@ -51,8 +61,9 @@ public class ArticlesFragment extends ListFragment
             @Override
             public void onNext(List<Resource> resources)
             {
-                setResources(resources);
+                    setResources(resources);
             }
+
         };
     }
 
@@ -67,6 +78,8 @@ public class ArticlesFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
+        inflateEmptyView(R.layout.empty_articles_view);
+        //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
         //Update the list of resources by pulling from the server

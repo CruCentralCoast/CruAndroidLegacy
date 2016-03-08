@@ -186,6 +186,12 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
     }
 
+    public void switchToEvents()
+    {
+        navigationView.setCheckedItem(R.id.nav_events);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/informational_text"
-        android:text="There are no events available for your current subscriptions, check that you're subscribed to the ministries you're interested in!"
+        android:text="@string/no_events_available"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -21,7 +21,7 @@
 
     <Button
         android:id="@+id/subscription_button"
-        android:text="Manage Subscriptions"
+        android:text="@string/manage_subscriptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/informational_text"
