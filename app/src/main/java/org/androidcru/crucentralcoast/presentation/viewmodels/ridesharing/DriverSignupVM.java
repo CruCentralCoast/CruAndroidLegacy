@@ -34,8 +34,8 @@ import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -92,9 +92,9 @@ public class DriverSignupVM extends BaseRideVM {
         this.ride = ride != null ? ride : new Ride();
 
         if (editing) {
-            date = ride.time.toLocalDate();
-            time = ride.time.toLocalTime();
-            setEventTime(ride.eventId);
+            date = this.ride.time.toLocalDate();
+            time = this.ride.time.toLocalTime();
+            setEventTime(this.ride.eventId);
         }
 
         generateDirections();
@@ -109,13 +109,9 @@ public class DriverSignupVM extends BaseRideVM {
             genderField.setVisibility(View.GONE);
             genderView.setVisibility(View.VISIBLE);
             genderView.setText(ride.gender);
-//            BindingAdapters.setSpinner(genderField, genderFieldForSpinner(), null, getGenderFieldIndex(ride.gender));
 
             carCapacity.setText(Integer.toString(ride.carCapacity));
             minCapacity = ride.passengerIds.size();
-
-//            carCapacity.setHint("Seats Available (" + minCapacity + " Passengers)");
-//            numPassengers.setText(minCapacity + " Passengers");
 
             nameField.setText(ride.driverName);
             phoneField.setText(ride.driverNumber);
@@ -129,7 +125,6 @@ public class DriverSignupVM extends BaseRideVM {
             timeField.setOnKeyListener(null);
             dateField.setOnKeyListener(null);
             minCapacity = 0;
-//            numPassengers.setVisibility(View.GONE);
         }
 
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
@@ -172,7 +167,7 @@ public class DriverSignupVM extends BaseRideVM {
         ride.gender = (String) genderField.getSelectedItem();
         ride.carCapacity = retrieveCarCapacity();
         ride.direction = retrieveDirection(tripTypeField, directions);
-        ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
+        ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());
         return ride;
     }
 
@@ -207,8 +202,7 @@ public class DriverSignupVM extends BaseRideVM {
     public void onTimeClicked(View v) {
         GregorianCalendar gc;
         if (editing)
-            gc = new GregorianCalendar(ride.time.getYear(), ride.time.getMonthValue(), ride.time.getDayOfMonth(),
-                    ride.time.getHour(), ride.time.getMinute());
+            gc = DateTimeUtils.toGregorianCalendar(ride.time);
         else {
             gc = getDefaultEventTime();
         }
@@ -219,7 +213,7 @@ public class DriverSignupVM extends BaseRideVM {
     public void onDateClicked(View v) {
         GregorianCalendar gc;
         if (editing)
-            gc = new GregorianCalendar(ride.time.getYear(), ride.time.getMonthValue(), ride.time.getDayOfMonth());
+            gc = DateTimeUtils.toGregorianCalendar(ride.time);
         else {
             gc = getDefaultEventTime();
         }
@@ -308,12 +302,8 @@ public class DriverSignupVM extends BaseRideVM {
         EventProvider.requestCruEventByID(eventID)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
-                    eventStartDateTime = new GregorianCalendar(event.startDate.getYear(),
-                            event.startDate.getMonthValue(), event.startDate.getDayOfMonth(),
-                            event.startDate.getHour(), event.startDate.getMinute());
-                    eventEndDateTime = new GregorianCalendar(event.endDate.getYear(),
-                            event.endDate.getMonthValue(), event.endDate.getDayOfMonth(),
-                            event.endDate.getHour(), event.endDate.getMinute());
+                    eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate);
+                    eventEndDateTime = DateTimeUtils.toGregorianCalendar(event.endDate);
                 });
     }
 

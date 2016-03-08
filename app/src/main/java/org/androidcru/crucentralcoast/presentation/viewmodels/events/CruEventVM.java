@@ -41,7 +41,7 @@ public class CruEventVM
     public boolean addedToCalendar;
     public long localEventId;
 
-    public final static String DATE_FORMATTER = "EEEE MMMM ee,";
+    public final static String DATE_FORMATTER = "EEEE MMMM d,";
     public final static String TIME_FORMATTER = "h:mm a";
 
     public CruEventVM(Fragment eventFragment, CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
