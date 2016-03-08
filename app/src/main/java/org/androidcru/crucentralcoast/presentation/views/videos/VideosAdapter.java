@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.youtube.player.YouTubeIntents;
@@ -96,8 +97,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
                 ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
 
-        // Play the video corresponding with the selected thumbnail
-        holder.videoThumb.setOnClickListener((View v) ->
+        // Play the video when anything in the layout is clicked except for the chevron.
+        holder.videoLaunchLayout.setOnClickListener((View v) ->
         {
             // not sure what to do if player cant resolve video, so I make toast
             if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context))
@@ -164,6 +165,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         @Bind(R.id.video_chev) ImageView videoChev;
         @Bind(R.id.video_channel_name) TextView videoChannelName;
         @Bind(R.id.video_id_and_views) TextView videoIdAndViews;
+        @Bind(R.id.video_launch_layout) LinearLayout videoLaunchLayout;
         String vID;
 
         public CruVideoViewHolder(View rootView)

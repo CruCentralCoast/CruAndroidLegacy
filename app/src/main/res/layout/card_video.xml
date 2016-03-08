@@ -22,7 +22,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/video_launch_layout">
 
             <ImageView
                 android:layout_width="170dp"
