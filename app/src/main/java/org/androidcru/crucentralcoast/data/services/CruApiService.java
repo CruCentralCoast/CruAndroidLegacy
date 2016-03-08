@@ -57,6 +57,9 @@ public interface CruApiService
     @POST("/api/resourcetag/find")
     Observable<ArrayList<ResourceTag>> findResourceTag(@Body JsonObject query);
 
+    @GET("/api/resourcetag/list")
+    Observable<ArrayList<ResourceTag>> getResourceTag();
+
     @FormUrlEncoded
     @POST("/api/ride/find")
     Observable<ArrayList<Ride>> findSingleRide(@Field("_id") String id);

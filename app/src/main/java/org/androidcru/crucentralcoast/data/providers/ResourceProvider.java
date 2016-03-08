@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 
 import org.androidcru.crucentralcoast.data.models.Resource;
+import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
@@ -52,6 +53,12 @@ public final class ResourceProvider
                 })
                 .compose(RxLoggingUtil.log("RESOURCES"))
                 .toList()
+                .compose(RxComposeUtil.network());
+    }
+
+    public static Observable<List<ResourceTag>> getResourceTags()
+    {
+        return cruApiService.getResourceTag()
                 .compose(RxComposeUtil.network());
     }
 }
