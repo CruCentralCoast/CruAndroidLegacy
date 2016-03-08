@@ -10,7 +10,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import org.aaronhe.threetengson.ThreeTenGsonAdapter;
-import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
@@ -36,6 +35,6 @@ public class ZonedDateTimeConverter implements JsonDeserializer<ZonedDateTime>, 
     @Override
     public ZonedDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
-        return gson.fromJson(json, ZonedDateTime.class).withZoneSameInstant(ZoneId.systemDefault());
+        return gson.fromJson(json, ZonedDateTime.class).withZoneSameInstant(ZoneOffset.UTC);
     }
 }
