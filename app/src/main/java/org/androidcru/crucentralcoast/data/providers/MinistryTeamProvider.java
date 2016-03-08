@@ -6,6 +6,7 @@ import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 
@@ -17,10 +18,19 @@ public final class MinistryTeamProvider
      * Gets the list of ministry teams from the sever
      * @return list of ministry teams
      */
-    public static Observable<ArrayList<MinistryTeam>> requestMinistryTeams()
+    public static Observable<List<MinistryTeam>> requestMinistryTeams()
     {
         return mCruService.getMinistryTeams()
-                .compose(RxComposeUtil.network());
+                .compose(RxComposeUtil.network())
+                .flatMap(ministryTeams -> Observable.from(ministryTeams))
+                .map(ministryTeam -> {
+                    ministryTeam.ministryTeamLeaders = requestMinistryTeamLeaders(ministryTeam.id)
+                            .compose(RxComposeUtil.network())
+                            .toBlocking()
+                            .first();
+                    return ministryTeam;
+                })
+                .toList();
     }
 
     /**

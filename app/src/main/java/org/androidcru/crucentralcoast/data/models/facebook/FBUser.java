@@ -1,9 +1,9 @@
-package org.androidcru.crucentralcoast.presentation.viewmodels.facebook;
+package org.androidcru.crucentralcoast.data.models.facebook;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FBUserVM
+public class FBUser
 {
     @Expose @SerializedName("name") String mName;
     @Expose @SerializedName("id") String mId;

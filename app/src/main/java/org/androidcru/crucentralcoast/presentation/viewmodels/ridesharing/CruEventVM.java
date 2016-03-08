@@ -8,6 +8,7 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
+import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
 public class CruEventVM
@@ -34,7 +35,7 @@ public class CruEventVM
     public View.OnClickListener onPassengerClicked()
     {
         Intent intent = new Intent(parent, PassengerSignupActivity.class);
-        intent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
+        intent.putExtra(AppConstants.EVENT_KEY, Parcels.wrap(cruEvent));
         return v -> parent.startActivity(intent);
     }
 

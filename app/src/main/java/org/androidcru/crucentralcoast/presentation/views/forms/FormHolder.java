@@ -8,7 +8,6 @@ public interface FormHolder
     void setSubtitle(String title);
     void setPreviousVisibility(int visibility);
     void setNextVisibility(int visibility);
-    void setToolbarExpansion(boolean expanded);
     void complete();
     void setNavigationVisibility(int visibility);
     void next();

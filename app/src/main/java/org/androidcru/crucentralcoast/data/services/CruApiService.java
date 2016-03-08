@@ -10,6 +10,7 @@ import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,9 @@ public interface CruApiService
 
     @GET("/api/ride/list")
     Observable<ArrayList<Ride>> getRides();
+
+    @POST("/api/ride/search")
+    Observable<ArrayList<Ride>> searchRides(@Body Query query);
 
     @GET("api/resource/list")
     public Observable<ArrayList<Resource>> getResources();

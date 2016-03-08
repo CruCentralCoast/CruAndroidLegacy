@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+
 @Parcel
 public class MinistryTeam
 {
@@ -13,6 +15,7 @@ public class MinistryTeam
     @SerializedName("description") public String description;
     @SerializedName("name") public String name;
     @SerializedName("parentMinistry") public String parentMinistryId;
+    public ArrayList<CruUser> ministryTeamLeaders;
 
     public MinistryTeam() {}
 

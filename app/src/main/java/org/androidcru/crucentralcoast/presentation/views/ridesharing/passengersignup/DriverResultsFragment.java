@@ -1,65 +1,115 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.view.ViewStub;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.models.RideFilter;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
-import org.androidcru.crucentralcoast.util.DateTimeUtils;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class DriverResultsFragment extends FormContentFragment
 {
+    @Bind(R.id.recyclerview) protected RecyclerView recyclerView;
+    @Bind(R.id.event_swipe_refresh_layout) protected SwipeRefreshLayout swipeRefreshLayout;
+    private View emptyView;
 
-    @Bind(R.id.driver_results_list) RecyclerView driverResultsList;
-    @Bind(R.id.empty_list) LinearLayout emptyList;
-    @Bind(R.id.progress) ProgressBar progressBar;
-
-    private RideFilter filter;
+    private Query query;
     private List<Ride> results;
+
+    private Subscription subscription;
+    private Observer<List<Ride>> rideResultsObserver;
+
+    public DriverResultsFragment()
+    {
+        results = new ArrayList<>();
+        rideResultsObserver = new Observer<List<Ride>>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                swipeRefreshLayout.setRefreshing(false);
+                if (results.isEmpty())
+                {
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onNext(List<Ride> rides)
+            {
+                handleResults(rides);
+            }
+        };
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_driver_results, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        ViewStub emptyViewStub = (ViewStub) view.findViewById(R.id.empty_view_stub);
+        emptyViewStub.setLayoutResource(R.layout.empty_driver_results);
+        emptyView = emptyViewStub.inflate();
+
         ButterKnife.bind(this, view);
-        driverResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //issue 77712, workaround until Google fixes it
+        swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
+        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(subscription != null)
+            subscription.unsubscribe();
     }
 
     @Override
     public void setupUI()
     {
-        filter = (RideFilter) formHolder.getDataObject();
+        query = (Query) formHolder.getDataObject();
 
         formHolder.setNavigationVisibility(View.VISIBLE);
         formHolder.setNextVisibility(View.GONE);
@@ -69,12 +119,11 @@ public class DriverResultsFragment extends FormContentFragment
 
     private void getRides()
     {
-        progressBar.setVisibility(View.VISIBLE);
-        driverResultsList.setVisibility(View.GONE);
-        emptyList.setVisibility(View.GONE);
-        //TODO next block might be red, AS is confused but it compiles (I'm too complicated for it)
-        RideProvider.requestRides()
-                .subscribeOn(Schedulers.computation())
+        swipeRefreshLayout.setRefreshing(true);
+        results.clear();
+        if(subscription != null)
+            subscription.unsubscribe();
+        subscription = RideProvider.searchRides(query)
                 .flatMap(rides -> Observable.from(rides))
                 .map(ride -> {
                     GeocodeProvider.getLatLng(getContext(), ride.location.toString())
@@ -86,59 +135,14 @@ public class DriverResultsFragment extends FormContentFragment
                             });
                     return ride;
                 })
-                //filter by gender
-                //TODO should be more complex than this
-                .filter(ride -> ride.gender.equals(filter.gender))
-                //TODO safety
-                .filter(ride -> ride.location.preciseLocation != null)
-                //filter by location
-                .filter(ride -> {
-                    float[] results = new float[1];
-                    Logger.d(Boolean.toString(ride.location.preciseLocation != null));
-                    Location.distanceBetween(ride.location.preciseLocation.latitude, ride.location.preciseLocation.longitude,
-                            filter.location.latitude, filter.location.longitude, results);
-                    return results[0] <= ride.radius;
-                })
-                //filter by toEventDateTime
-                .filter(ride -> {
-                    if (filter.direction == Ride.Direction.TO || filter.direction == Ride.Direction.ROUNDTRIP)
-                    {
-                        return DateTimeUtils.within(ride.time, filter.dateTime, 0, 3);
-                    }
-                    return true;
-                })
-                .filter(ride -> {
-                    if (filter.direction == Ride.Direction.FROM || filter.direction == Ride.Direction.ROUNDTRIP)
-                    {
-                        return DateTimeUtils.within(ride.time, filter.dateTime, 0, 3);
-                    }
-                    return true;
-                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
-                .subscribe(results -> {
-                    handleResults(results);
-                }, e ->
-                {
-                    Logger.e(e, "Getting ride results failed!");
-                }, () -> {
-                    progressBar.setVisibility(View.GONE);
-                    if(results == null || results.isEmpty())
-                    {
-                        driverResultsList.setVisibility(View.GONE);
-                        emptyList.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        driverResultsList.setVisibility(View.VISIBLE);
-                        emptyList.setVisibility(View.GONE);
-                    }
-                });
+                .subscribe(rideResultsObserver);
     }
 
     private void handleResults(List<Ride> results)
     {
         this.results = results;
-        driverResultsList.setAdapter(new DriverResultsAdapter(this, formHolder, results));
+        recyclerView.setAdapter(new DriverResultsAdapter(this, formHolder, results));
     }
 }

@@ -2,9 +2,12 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Java representation of the model from the server
  */
+@Parcel
 public class Campus
 {
     @SerializedName("_id") public String id;

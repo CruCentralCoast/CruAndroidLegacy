@@ -15,17 +15,17 @@ import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    ArrayList<MinistryTeam> ministryTeams;
+    List<MinistryTeam> ministryTeams;
     private Activity parent;
 
-    public MinistryTeamsAdapter(Activity parent, ArrayList<MinistryTeam> ministryTeams)
+    public MinistryTeamsAdapter(Activity parent, List<MinistryTeam> ministryTeams)
     {
         this.parent = parent;
         this.ministryTeams = ministryTeams;

@@ -142,6 +142,8 @@ public class DriverSignupActivity extends AppCompatActivity
                 }
                 else
                     createDriver();
+
+                setResult(RESULT_OK);
                 finish();
             }
 

@@ -2,8 +2,10 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
 import org.threeten.bp.ZonedDateTime;
 
+@Parcel
 public class SummerMission
 {
     @SerializedName("description") public String description;

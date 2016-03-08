@@ -3,17 +3,24 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 import android.app.FragmentManager;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Select;
+import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.models.RideFilter;
+import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
@@ -21,57 +28,86 @@ import butterknife.OnClick;
 
 public class RideFilterVM extends BaseRideVM
 {
-    private RideFilter rideFilter;
+    private LatLng precisePlace;
 
-    @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
+    @Bind(R.id.round_trip) RadioButton roundTrip;
+    @Bind(R.id.direction) RadioGroup directionGroup;
     @Bind(R.id.gender_field) @Select Spinner genderField;
-    @Bind(R.id.event_time_field) @NotEmpty EditText eventTime;
-    @Bind(R.id.event_date_field) @NotEmpty EditText eventDate;
+    @Bind(R.id.time_field) @NotEmpty EditText rideTime;
+    @Bind(R.id.date_field) @NotEmpty EditText rideDate;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-    private Ride.Direction[] directions;
-    private String[] genders;
-
-    public RideFilterVM(View rootView, FragmentManager fm, RideFilter rideFilter)
+    public RideFilterVM(View rootView, FragmentManager fm)
     {
         super(rootView, fm);
-        this.rideFilter = rideFilter;
-        generateDirections();
         bindUI();
-    }
-
-    private void generateDirections()
-    {
-        directions = Ride.Direction.values();
     }
 
     @Override
     protected void placeSelected(LatLng precisePlace, String placeAddress)
     {
-        rideFilter.location = precisePlace;
+        this.precisePlace = precisePlace;
     }
 
-    public RideFilter getRideFilter()
+    public Query getQuery()
     {
-        rideFilter.direction = retrieveDirection(tripTypeField, directions);
-        rideFilter.gender = (String) genderField.getSelectedItem();
-        rideFilter.dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault());
-        return rideFilter;
+        int selectedRadioIndex = directionGroup.indexOfChild(rootView.findViewById(directionGroup.getCheckedRadioButtonId()));
+        Ride.Direction direction = Ride.Direction.ROUNDTRIP;
+        switch (selectedRadioIndex)
+        {
+            case 0:
+                direction = Ride.Direction.TO;
+                break;
+            case 1:
+                direction = Ride.Direction.ROUNDTRIP;
+                break;
+        }
+        String gender = (String) genderField.getSelectedItem();
+        if(gender.equals("Any"))
+            gender = null;
+
+        ZonedDateTime dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
+
+        ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
+        ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
+
+        Query query = new Query.Builder()
+                .setCondition(new ConditionsBuilder()
+                        .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
+                        .addRestriction(new ConditionsBuilder()
+                                .setField(Ride.serializedGender)
+                                .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender))
+                        .addRestriction(new ConditionsBuilder()
+                                .setField(Ride.serializedTime)
+                                .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
+                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
+                        .addRestriction(new ConditionsBuilder()
+                                .setField(Ride.serializedDirection)
+                                .addRestriction(ConditionsBuilder.OPERATOR.REGEX, direction.getValue()))
+                        .build())
+                .setOptions(new OptionsBuilder()
+                        .addOption(OptionsBuilder.OPTIONS.LIMIT, 5)
+                        .build())
+                .build();
+
+        Logger.json(CruApplication.gson.toJson(query));
+
+        return query;
     }
 
     private void bindUI()
     {
-        ViewUtil.setSpinner(tripTypeField, directionsForSpinner(directions), null, 0);
-        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, 0);
-
+        roundTrip.setChecked(true);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders_filter), null, 0);
     }
 
-    @OnClick(R.id.event_time_field)
+    @OnClick(R.id.time_field)
     public void onTimeClicked(View v)
     {
         onEventTimeClicked(v);
     }
 
-    @OnClick(R.id.event_date_field)
+    @OnClick(R.id.date_field)
     public void onDateClicked(View v)
     {
         onEventDateClicked(v);

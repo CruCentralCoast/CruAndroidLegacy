@@ -14,18 +14,32 @@ import java.util.List;
 @Parcel
 public class Ride
 {
-    @SerializedName("driverName") public String driverName;
-    @SerializedName("driverNumber") public String driverNumber;
-    @SerializedName("gender") public String gender;
-    @SerializedName("event") public String eventId;
-    @SerializedName("time") public ZonedDateTime time;
-    @SerializedName("location") public Location location;
-    @SerializedName("passengers") public ArrayList<String> passengerIds;
-    @SerializedName("radius") public double radius;
-    @SerializedName("direction") public Direction direction;
-    @SerializedName("gcm_id") public String gcmID;
-    @SerializedName("_id") public String id;
-    @SerializedName("seats") public int carCapacity;
+    public static final String serializedDriverName = "driverName";
+    public static final String serializedDriverNumber = "driverNumber";
+    public static final String serializedGender = "gender";
+    public static final String serializedEvent = "event";
+    public static final String serializedTime = "time";
+    public static final String serializedLocation = "location";
+    public static final String serializedPassengers = "passengers";
+    public static final String serializedRadius = "radius";
+    public static final String serializedDirection = "direction";
+    public static final String serializedGcmId = "gcm_id";
+    public static final String serializedId = "_id";
+    public static final String serializedSeats = "seats";
+
+    @SerializedName(serializedDriverName) public String driverName;
+    @SerializedName(serializedDriverNumber) public String driverNumber;
+    @SerializedName(serializedGender) public String gender;
+    @SerializedName(serializedEvent) public String eventId;
+    @SerializedName(serializedTime) public ZonedDateTime time;
+    @SerializedName(serializedLocation) public Location location;
+    @SerializedName(serializedPassengers) public ArrayList<String> passengerIds;
+    @SerializedName(serializedRadius) public double radius;
+    @SerializedName(serializedDirection) public Direction direction;
+    @SerializedName(serializedGcmId) public String gcmID;
+    @SerializedName(serializedId) public String id;
+    @SerializedName(serializedSeats) public int carCapacity;
+
     public Address address;
     public List<Passenger> passengers;
     public CruEvent event;

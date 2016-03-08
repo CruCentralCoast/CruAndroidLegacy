@@ -11,7 +11,6 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.RideFilter;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
@@ -35,7 +34,7 @@ public class RideInfoFragment extends FormContentFragment {
     {
         super.onViewCreated(view, savedInstanceState);
 
-        rideFilterVM = new RideFilterVM(view, getActivity().getFragmentManager(), new RideFilter());
+        rideFilterVM = new RideFilterVM(view, getActivity().getFragmentManager());
 
         validator = new BaseValidator(rideFilterVM);
 
@@ -44,13 +43,17 @@ public class RideInfoFragment extends FormContentFragment {
     }
 
     @Override
-    public void setupUI() {}
+    public void setupUI()
+    {
+        formHolder.setTitle(getString(R.string.passenger_signup));
+    }
 
     private void setupPlacesAutocomplete()
     {
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
+        autocompleteFragment.setHint("Find drivers near...");
         autocompleteFragment.setFilter(typeFilter);
         autocompleteFragment.setOnPlaceSelectedListener(rideFilterVM.onPlaceSelected());
     }
@@ -70,7 +73,7 @@ public class RideInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            formHolder.addDataObject(rideFilterVM.getRideFilter());
+            formHolder.addDataObject(rideFilterVM.getQuery());
             super.onNext();
         }
     }
