@@ -1,12 +1,9 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import android.media.Image;
-
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.SearchResult;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -16,13 +13,11 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.crypto.SealedObject;
 
 import rx.Observable;
 import rx.Subscriber;
 
+// Used to query the SLOCru YouTube channel for its videos
 public final class YouTubeVideoProvider
 {
 
@@ -38,6 +33,8 @@ public final class YouTubeVideoProvider
                 .build();
         try
         {
+            // Gets the video ids and the snippet.
+            // A snippit contains the details of a search result. E.g. description, length, title
             query = youtube.search().list("id,snippet");
         }
         catch (IOException e)
@@ -54,6 +51,8 @@ public final class YouTubeVideoProvider
         return instance;
     }
 
+    // Returns a video response to its observer. The response contains a list of 20 videos,
+    // including the videos' ids and snippets.
     public Observable<SearchListResponse> requestChannelVideos(String nextPageToken)
     {
         return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {

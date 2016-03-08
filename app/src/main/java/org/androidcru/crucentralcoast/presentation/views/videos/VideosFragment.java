@@ -41,7 +41,6 @@ public class VideosFragment extends Fragment
     private Observer<SearchListResponse> videoSubscriber;
     private Subscription subscription;
     private List<SearchResult> videos;
-    private String thisPageToken;
     private String nextPageToken;
     private VideosAdapter videosAdapter;
     private int curSize;
@@ -50,8 +49,8 @@ public class VideosFragment extends Fragment
     {
         curSize = 0;
         videos = new ArrayList<>();
-        thisPageToken = nextPageToken = "";
 
+        // Display text notifying the user if there are no videos to load, else show the videos
         videoSubscriber = new Observer<SearchListResponse>()
         {
             @Override
@@ -100,10 +99,13 @@ public class VideosFragment extends Fragment
         layoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(layoutManager);
 
+        // Set the Recycler View to scroll so long as there are more videos that
+        // can be returned by the provider.
         videoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
+                // Only query for more videos if I have more videos
                 if(nextPageToken != null)
                 {
                     getCruVideos(nextPageToken);
@@ -111,9 +113,7 @@ public class VideosFragment extends Fragment
             }
         });
 
-        // does this need the fixed size?
         swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        //swipeRefreshLayout.setOnRefreshListener(this::getCruVideos);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
@@ -136,6 +136,7 @@ public class VideosFragment extends Fragment
                 .subscribe(videoSubscriber);
     }
 
+    // Places the videos in the returned response into the Adapter's list of videos
     public void setVideos (SearchListResponse cruVideosResponse)
     {
         List<SearchResult> cruVideos = cruVideosResponse.getItems();
@@ -143,6 +144,8 @@ public class VideosFragment extends Fragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(videos::add);
 
+        // Only set the Adapter once - on the first video request
+        // Otherwise, the Adapter resets the scroll progression to the top of the list
         if(videosAdapter == null)
         {
             videosAdapter = new VideosAdapter(videos, layoutManager);
@@ -151,22 +154,28 @@ public class VideosFragment extends Fragment
         else
         {
             videosAdapter.updateViewExpandedStates();
+
+            // Let the Adapter know that more videos have been added to its list.
             videosAdapter.notifyItemChanged(curSize, videosAdapter.getItemCount() - 1);
         }
-        thisPageToken = nextPageToken;
+
+        // Save the token of the next page of the query. This will be used to get the
+        // next set of 20 items.
         nextPageToken = cruVideosResponse.getNextPageToken();
+
+        // Used for keeping track of the user's scroll progression through the list of videos.
         curSize += cruVideos.size();
         swipeRefreshLayout.setRefreshing(false);
     }
 
     private void forceUpdate()
     {
-
+        // Reset the Adapter and video-related state
         videos.clear();
         curSize = 0;
         videosAdapter = null;
 
-        YouTubeVideoProvider.getInstance().requestChannelVideos(null)
+        YouTubeVideoProvider.getInstance().requestChannelVideos("")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(videoSubscriber);
     }
@@ -174,8 +183,8 @@ public class VideosFragment extends Fragment
     @Override
     public void onResume()
     {
+        // TODO this sets the user back at the top of the list. Should resume at the position of where the user left the activity.
         super.onResume();
-        getCruVideos(thisPageToken);
-//        videosAdapter.notifyItemChanged(curSize, videos.size() - 1);
+        getCruVideos("");
     }
 }

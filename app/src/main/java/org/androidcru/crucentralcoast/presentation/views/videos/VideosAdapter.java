@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.google.android.youtube.player.YouTubeIntents;
 import com.google.api.services.youtube.model.SearchResult;
 import com.squareup.picasso.Picasso;
+
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,28 +22,6 @@ import butterknife.ButterKnife;
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoViewHolder>
 {
-    // Constants to represent the state of expansion of a view.
-    public enum ViewState
-    {
-        // Retracted state
-        RETRACTED ("Show Description"),
-
-        // Expanded state
-        EXPANDED ("Hide Description");
-
-        private final String state;
-
-        private ViewState(String state)
-        {
-            this.state = state;
-        }
-
-        public String toString()
-        {
-            return this.state;
-        }
-    }
-
     // Search results from Cru's YouTube channel
     private ArrayList<SearchResult> videos;
 
@@ -94,8 +74,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         // Set the text of the TextView that is selected to toggle the
         // expansion state of a view
         holder.toggleVideoDescription
-                .setText(isExpanded ?
-                        ViewState.EXPANDED.toString() : ViewState.RETRACTED.toString());
+                .setText(isExpanded ? AppConstants.EXPANDED : AppConstants.RETRACTED);
 
         // Set the video thumbnail with the thumbnail URL
         Picasso.with(context)
@@ -106,7 +85,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         // Play the video corresponding with the selected thumbnail
         holder.videoThumb.setOnClickListener((View v) ->
         {
-            //TODO not sure what to do if player cant resolve video, so I make toast
+            // not sure what to do if player cant resolve video, so I make toast
             if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context))
             {
                 context.startActivity(YouTubeIntents
@@ -114,7 +93,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
             }
             else
             {
-                Toast.makeText(context, "Unable to play video.", Toast.LENGTH_SHORT)
+                Toast.makeText(context, AppConstants.VIDEO_PLAY_FAILED_MESSAGE, Toast.LENGTH_SHORT)
                     .show();
             }
         });
@@ -131,7 +110,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
             notifyItemChanged(holder.getAdapterPosition());
             layoutManager.scrollToPosition(holder.getAdapterPosition());
 
-            holder.toggleVideoDescription.setText(ViewState.EXPANDED.toString());
+            holder.toggleVideoDescription.setText(AppConstants.EXPANDED);
         });
 
         // Toggle the expansion of a view on the selection of the video
@@ -151,7 +130,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
 
             holder.toggleVideoDescription
                     .setText(visibility == View.VISIBLE ?
-                            ViewState.RETRACTED.toString() : ViewState.EXPANDED.toString());
+                            AppConstants.RETRACTED : AppConstants.EXPANDED);
             viewExpandedStates.set(position, visibility == View.VISIBLE);
             notifyItemChanged(holder.getAdapterPosition());
             layoutManager.scrollToPosition(holder.getAdapterPosition());
