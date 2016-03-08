@@ -19,7 +19,13 @@ public class AppConstants
     public static final String PLAY_SERVICES = "play_services";
 
     //Events
-    public static final int EVENTS_REQUEST_CODE = 7;
+    public static final int DRIVER_REQUEST_CODE = 7;
+    public static final int PASSENGER_REQUEST_CODE = 9;
+
+    //MyRides Tabs
+    public static final String MY_RIDES_TAB = "MY_RIDES_TAB";
+    public static final int DRIVER_TAB = 0;
+    public static final int PASSENGER_TAB = 1;
 
     //Notifications
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";

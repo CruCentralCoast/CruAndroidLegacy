@@ -214,7 +214,7 @@ public class CruEventVM
 
                             passengerIntent.putExtra(AppConstants.EVENT_KEY, Parcels.wrap(cruEvent));
 
-                            eventFragment.startActivityForResult(passengerIntent, AppConstants.EVENTS_REQUEST_CODE);
+                            eventFragment.startActivityForResult(passengerIntent, AppConstants.PASSENGER_REQUEST_CODE);
                         })
                         .setNegativeButton("DRIVER", (dialog1, which) -> {
 
@@ -223,7 +223,7 @@ public class CruEventVM
 
                             driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
 
-                            eventFragment.startActivityForResult(driverIntent, AppConstants.EVENTS_REQUEST_CODE);
+                            eventFragment.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
                         })
                         .create();
                 dialog.show();
