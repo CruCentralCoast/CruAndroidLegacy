@@ -2,14 +2,11 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
-import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,6 +35,7 @@ import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -174,7 +172,7 @@ public class DriverSignupVM extends BaseRideVM {
         ride.gender = (String) genderField.getSelectedItem();
         ride.carCapacity = retrieveCarCapacity();
         ride.direction = retrieveDirection(tripTypeField, directions);
-        ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());
+        ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
         return ride;
     }
 
