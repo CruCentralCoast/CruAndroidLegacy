@@ -36,7 +36,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 
     //Injected Views
     @Bind(R.id.recyclerview) RecyclerView eventList;
-    @Bind(R.id.event_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
 //    @Bind(R.id.event_banner) ImageView eventBanner; //TODO: change ui so we can have this and a scrollable passenger list
     @Bind(R.id.eventName) TextView eventName;
