@@ -27,6 +27,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import rx.Observable;
 
@@ -85,9 +86,31 @@ public abstract class BaseRideVM extends BaseVM
     }
 
     private DatePickerDialog getDateDialog()
+{
+    ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+    Calendar c = DateTimeUtils.toGregorianCalendar(now);
+    DatePickerDialog dpd = DatePickerDialog.newInstance(
+            null,
+            c.get(Calendar.YEAR),
+            c.get(Calendar.MONTH),
+            c.get(Calendar.DAY_OF_MONTH)
+    );
+    dpd.vibrate(false);
+    return dpd;
+}
+
+    protected void onEventDateClicked(View v)
     {
-        ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-        Calendar c = DateTimeUtils.toGregorianCalendar(now);
+        DatePickerDialog dpd = getDateDialog();
+        dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
+            date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
+            ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        });
+        dpd.show(fm, "whatever");
+    }
+
+    private DatePickerDialog getDateDialog(GregorianCalendar c)
+    {
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 null,
                 c.get(Calendar.YEAR),
@@ -98,14 +121,41 @@ public abstract class BaseRideVM extends BaseVM
         return dpd;
     }
 
-    protected void onEventDateClicked(View v)
+    private TimePickerDialog getTimeDialog(GregorianCalendar c)
     {
-        DatePickerDialog dpd = getDateDialog();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                null,
+                c.get(Calendar.HOUR_OF_DAY),
+                c.get(Calendar.MINUTE),
+                false
+        );
+        tpd.vibrate(false);
+        tpd.setSelectableTimes(timepoints);
+        return tpd;
+    }
+
+    protected void onEventDateClicked(View v, GregorianCalendar gc)
+    {
+        DatePickerDialog dpd = date == null ?
+                getDateDialog(gc) :
+                getDateDialog(new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth()));
         dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
             date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
             ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
         });
         dpd.show(fm, "whatever");
+    }
+
+    protected void onEventTimeClicked(View v, GregorianCalendar gc)
+    {
+        TimePickerDialog tpd = time == null ?
+                getTimeDialog(gc) :
+                getTimeDialog(new GregorianCalendar(0, 0, 0, time.getHour(), time.getMinute()));
+        tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
+            time = LocalTime.of(hourOfDay, minute, second);
+            ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+        });
+        tpd.show(fm, "whatever");
     }
 
     protected void onEventTimeClicked(View v)

@@ -162,7 +162,7 @@ public class EventsFragment extends ListFragment
                     return false;
                 })
                 .map(cruEvent -> {
-                    return new CruEventVM(cruEvent, false,
+                    return new CruEventVM(this, cruEvent, false,
                             sharedPreferences.contains(cruEvent.id),
                             sharedPreferences.getLong(cruEvent.id, -1));
                 })
@@ -170,5 +170,12 @@ public class EventsFragment extends ListFragment
                 .subscribe(cruEventVMs::add);
 
         recyclerView.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        //TODO Toby ACRU-151
     }
 }

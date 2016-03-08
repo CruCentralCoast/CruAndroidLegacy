@@ -16,10 +16,12 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesPassengerVM;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
+import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -41,6 +43,15 @@ public class MyRidesPassengerFragment extends ListFragment
             public void onCompleted()
             {
                 swipeRefreshLayout.setRefreshing(false);
+
+                if (rideVMs.isEmpty())
+                {
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    emptyView.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -81,6 +92,8 @@ public class MyRidesPassengerFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
+        inflateEmptyView(R.layout.empty_my_rides_passenger_view);
+
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
@@ -136,5 +149,12 @@ public class MyRidesPassengerFragment extends ListFragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
         recyclerView.setAdapter(new MyRidesPassengerAdapter(rideVMs));
+    }
+
+    @OnClick(R.id.events_button)
+    @SuppressWarnings("unused")
+    public void onViewUpcomingEventsClicked()
+    {
+        ((MainActivity)getActivity()).switchToEvents();
     }
 }

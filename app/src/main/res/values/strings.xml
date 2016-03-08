@@ -65,6 +65,12 @@
     <string name="facebook_no">NO, OPEN IN FACEBOOK APP</string>
     <string name="facebook_title">Log in with Facebook?</string>
     <string name="facebook_yes">SURE</string>
+    <string name="no_articles_available">There are currently no articles available. Please check back later!</string>
+    <string name="no_events_available">There are no events available for your current subscriptions, check that you\'re subscribed to the ministries you\'re interested in!</string>
+    <string name="manage_subscriptions">Manage Subscriptions</string>
+    <string name="view_upcoming_events">View Upcoming Events</string>
+    <string name="not_driving">You are not currently signed up to drive to an event.</string>
+    <string name="not_getting_a_ride">You are not currently signed up to get a ride to an event.</string>
 
 
     <string-array name="genders">

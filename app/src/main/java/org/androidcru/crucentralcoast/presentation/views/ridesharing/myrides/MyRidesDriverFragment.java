@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,10 +16,14 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
+import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -40,6 +45,11 @@ public class MyRidesDriverFragment extends ListFragment
             public void onCompleted()
             {
                 swipeRefreshLayout.setRefreshing(false);
+
+                if (rideVMs.isEmpty())
+                    emptyView.setVisibility(View.VISIBLE);
+                else
+                    emptyView.setVisibility(View.GONE);
             }
 
             @Override
@@ -80,6 +90,9 @@ public class MyRidesDriverFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
+        //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
+        inflateEmptyView(R.layout.empty_my_rides_driver_view);
+
         super.onViewCreated(view, savedInstanceState);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
 
@@ -134,5 +147,12 @@ public class MyRidesDriverFragment extends ListFragment
 
         recyclerView.setAdapter(new MyRidesDriverAdapter(rideVMs, getContext()));
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @OnClick(R.id.events_button)
+    @SuppressWarnings("unused")
+    public void onViewUpcomingEventsClicked()
+    {
+        ((MainActivity)getActivity()).switchToEvents();
     }
 }
