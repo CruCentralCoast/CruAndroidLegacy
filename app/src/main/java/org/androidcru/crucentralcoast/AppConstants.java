@@ -62,5 +62,7 @@ public class AppConstants
     public static final long YOUTUBE_QUERY_NUM = 20l;
 
     public static final int RETRY_ATTEMPTS = 5;
-
+    
+    public static final float RADIUS_STROKE_WID = 5;
+    public static final int MAX_CAR_CAPACITY = Integer.MAX_VALUE;
 }
