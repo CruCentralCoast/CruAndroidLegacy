@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.facebook.login.LoginResult;
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
@@ -20,6 +22,9 @@ import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
+import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.Set;
@@ -28,6 +33,7 @@ import rx.Observer;
 
 public class CruEventVM
 {
+    private Fragment eventFragment;
     public CruEvent cruEvent;
     public boolean isExpanded;
     public boolean addedToCalendar;
@@ -36,12 +42,13 @@ public class CruEventVM
     public final static String DATE_FORMATTER = "EEEE MMMM ee,";
     public final static String TIME_FORMATTER = "h:mm a";
 
-    public CruEventVM(CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
+    public CruEventVM(Fragment eventFragment, CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
     {
         this.cruEvent = cruEvent;
         this.isExpanded = isExpanded;
         this.addedToCalendar = addedToCalendar;
         this.localEventId = localEventId;
+        this.eventFragment = eventFragment;
     }
 
     public String getDateTime()
@@ -187,4 +194,36 @@ public class CruEventVM
 
         };
     }
+
+    public View.OnClickListener onRideShareSharing()
+    {
+        //TODO Passenger and Driver Activities should have a unified set of Extras
+        return v -> {
+            AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                    .setTitle("Passenger or Driver?")
+                    .setMessage(String.format("For %s, would you like to provide a ride as a Driver " +
+                            "or request a ride as a Passenger?", cruEvent.name))
+                    .setPositiveButton("REQUEST RIDE", (dialog1, which) -> {
+
+                        Intent passengerIntent = new Intent(eventFragment.getContext(),
+                                PassengerSignupActivity.class);
+
+                        passengerIntent.putExtra(AppConstants.EVENT_KEY, Parcels.wrap(cruEvent));
+
+                        eventFragment.startActivityForResult(passengerIntent, AppConstants.EVENTS_REQUEST_CODE);
+                    })
+                    .setNegativeButton("PROVIDE RIDE", (dialog1, which) -> {
+
+                        Intent driverIntent = new Intent(eventFragment.getContext(),
+                                DriverSignupActivity.class);
+
+                        driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
+
+                        eventFragment.startActivityForResult(driverIntent, AppConstants.EVENTS_REQUEST_CODE);
+                    })
+                    .create();
+            dialog.show();
+        };
+    }
+
 }

@@ -18,6 +18,9 @@ public class AppConstants
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String PLAY_SERVICES = "play_services";
 
+    //Events
+    public static final int EVENTS_REQUEST_CODE = 7;
+
     //Notifications
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

@@ -76,6 +76,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         holder.mapButton.setOnClickListener(cruEventVM.onMapClick());
         holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
         holder.calButton.setOnClickListener(cruEventVM.onCalendarClick());
+        holder.rideSharingButton.setOnClickListener(cruEventVM.onRideShareSharing());
         ViewUtil.setSelected(holder.calButton,
                 cruEventVM.addedToCalendar,
                 ContextCompat.getDrawable(context, R.drawable.ic_calendar_check_grey600_48dp),
@@ -112,6 +113,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         @Bind(R.id.fbButton) ImageButton fbButton;
         @Bind(R.id.mapButton) ImageButton mapButton;
         @Bind(R.id.calButton) ImageButton calButton;
+        @Bind(R.id.rideSharingButton) ImageButton rideSharingButton;
         @Bind(R.id.eventDescription) TextView eventDescription;
 
         public CruEventViewHolder(View rootView) {
