@@ -1,5 +1,7 @@
 package org.androidcru.crucentralcoast.data.services;
 
+import com.google.gson.JsonObject;
+
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
@@ -49,12 +51,11 @@ public interface CruApiService
     @POST("/api/ride/search")
     Observable<ArrayList<Ride>> searchRides(@Body Query query);
 
-    @GET("api/resource/list")
-    public Observable<ArrayList<Resource>> getResources();
+    @POST("api/resource/find")
+    Observable<ArrayList<Resource>> findResources(@Body JsonObject query);
 
-    @FormUrlEncoded
     @POST("/api/resourcetag/find")
-    Observable<ArrayList<ResourceTag>> findSingleResourceTag(@Field("resources") String id);
+    Observable<ArrayList<ResourceTag>> findResourceTag(@Body JsonObject query);
 
     @FormUrlEncoded
     @POST("/api/ride/find")

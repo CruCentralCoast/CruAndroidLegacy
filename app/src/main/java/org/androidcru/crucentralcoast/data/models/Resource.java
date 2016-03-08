@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Parcel
 public class Resource
@@ -14,7 +15,8 @@ public class Resource
     @SerializedName("title") public String title;
     @SerializedName("url") public String url;
     @SerializedName("type") public ResourceType resourceType;
-    public ArrayList<String> tags = new ArrayList<>();
+    @SerializedName("tags") public List<String> tagIds;
+    public ArrayList<ResourceTag> tags;
 
     private final String delimiter = ", ";
 
@@ -23,7 +25,7 @@ public class Resource
      */
     public Resource() {}
 
-    public Resource(String title, String url, ResourceType resourceType, ArrayList<String> tags)
+    public Resource(String title, String url, ResourceType resourceType, ArrayList<ResourceTag> tags)
     {
         this.title = title;
         this.url = url;
@@ -35,8 +37,8 @@ public class Resource
     {
         String result = "";
 
-        for (String str : tags)
-            result += str + delimiter;
+        for (ResourceTag str : tags)
+            result += str.title + delimiter;
 
         if (!tags.isEmpty())
             result = result.substring(0, result.length() - delimiter.length());

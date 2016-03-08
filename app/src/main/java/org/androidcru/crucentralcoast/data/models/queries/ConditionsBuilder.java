@@ -71,6 +71,23 @@ public final class ConditionsBuilder
         return addRestriction(object);
     }
 
+    public ConditionsBuilder addRestriction(OPERATOR operator, String[] value)
+    {
+        if(value != null && value.length > 0)
+        {
+            JsonObject object = new JsonObject();
+            JsonArray array = new JsonArray();
+            for (String aValue : value)
+            {
+                array.add(aValue);
+            }
+            object.add(operator.serializedName, array);
+            return addRestriction(object);
+        }
+        else
+            return this;
+    }
+
     public ConditionsBuilder addRestriction(OPERATOR operator, Boolean value)
     {
         JsonObject object = new JsonObject();

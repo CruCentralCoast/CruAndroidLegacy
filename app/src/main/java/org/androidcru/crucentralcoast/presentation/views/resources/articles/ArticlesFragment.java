@@ -94,7 +94,7 @@ public class ArticlesFragment extends ListFragment
         swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        subscription = ResourceProvider.getResourceByType(Resource.ResourceType.ARTICLE)
+        subscription = ResourceProvider.findResourceByType(Resource.ResourceType.ARTICLE)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resourceSubscriber);
     }

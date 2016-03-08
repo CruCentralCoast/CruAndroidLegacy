@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Query
 {
-    @SerializedName("conditions") JsonObject conditions;
-    @SerializedName("projection") StringBuilder projections;
-    @SerializedName("options") JsonObject options;
+    @SerializedName("conditions") public JsonObject conditions;
+    @SerializedName("projection") public StringBuilder projections;
+    @SerializedName("options") public JsonObject options;
 
     public static class Builder
     {
