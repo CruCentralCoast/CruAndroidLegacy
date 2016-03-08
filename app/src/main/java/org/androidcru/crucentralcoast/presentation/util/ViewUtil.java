@@ -80,6 +80,20 @@ public class ViewUtil
         view.setImageDrawable(DrawableUtil.getTintListedDrawable(view.getContext(), selected ? selectedDrawable : unselectedDrawable, selectionTint));
     }
 
+    public static void setSelected(ImageView view, boolean selected, int selectedDrawableId, int unselectedDrawableId, int selectionTintId)
+    {
+        Drawable selectedDrawable = ContextCompat.getDrawable(view.getContext(), selectedDrawableId);
+        Drawable unselectedDrawable = ContextCompat.getDrawable(view.getContext(), unselectedDrawableId);
+        ColorStateList colorStateList = ContextCompat.getColorStateList(view.getContext(), selectionTintId);
+
+        setSelected(view, selected, selectedDrawable, unselectedDrawable, colorStateList);
+    }
+
+    public static void setSelected(ImageView view, boolean selected, int drawableId, int selectionTintId)
+    {
+        setSelected(view, selected, drawableId, drawableId, selectionTintId);
+    }
+
 
     public static void setSpinner(Spinner spinner, String[] resources, AdapterView.OnItemSelectedListener onItemSelected, int index)
     {

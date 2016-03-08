@@ -76,12 +76,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         holder.mapButton.setOnClickListener(cruEventVM.onMapClick());
         holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
         holder.calButton.setOnClickListener(cruEventVM.onCalendarClick());
-        holder.rideSharingButton.setOnClickListener(cruEventVM.onRideShareSharing());
+
         ViewUtil.setSelected(holder.calButton,
                 cruEventVM.addedToCalendar,
-                ContextCompat.getDrawable(context, R.drawable.ic_calendar_check_grey600_48dp),
-                ContextCompat.getDrawable(context, R.drawable.ic_calendar_plus_grey600_48dp),
-                ContextCompat.getColorStateList(context, R.color.cal_action));
+                R.drawable.ic_calendar_check_grey600_48dp,
+                R.drawable.ic_calendar_plus_grey600_48dp,
+                R.color.cal_action);
+
+        holder.rideSharingButton.setOnClickListener(cruEventVM.onRideShareSharing());
+        ViewUtil.setSelected(holder.rideSharingButton, cruEventVM.cruEvent.rideSharingEnabled,
+                R.drawable.ic_car_grey600_48dp,
+                R.color.ride_sharing_state);
+
         holder.chevronView.setImageDrawable(cruEventVM.isExpanded
                 ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));

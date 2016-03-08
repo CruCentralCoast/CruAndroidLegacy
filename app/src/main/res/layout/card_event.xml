@@ -130,7 +130,6 @@
                     android:layout_height="48dp"
                     android:padding="8dp"
                     android:id="@+id/rideSharingButton"
-                    android:src="@drawable/ic_car_grey600_48dp"
                     android:layout_centerInParent="true"
                     android:background="@null"
                     android:scaleType="fitCenter" />
