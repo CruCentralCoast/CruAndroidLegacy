@@ -22,8 +22,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/video_launch_layout">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="170dp"
@@ -37,7 +36,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:id="@+id/video_expand_description_layout">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,22 +53,11 @@
                     tools:text="Default Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/video_channel_name"
-                    android:layout_marginLeft="12dp"
-                    android:textColor="#787878"
-                    android:textSize="12dp"
-                    android:layout_marginTop="8dp"
-                    android:text="SLO Cru" />
-
-                <TextView
-                    tools:text="Default Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/video_id_and_views"
                     android:layout_marginLeft="12dp"
                     android:textColor="#787878"
                     android:textSize="12dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="8dp"
                     android:text="5 years ago - 24 views" />
 
                 <ImageView

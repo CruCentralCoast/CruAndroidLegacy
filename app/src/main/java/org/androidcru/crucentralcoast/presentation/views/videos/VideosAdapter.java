@@ -74,9 +74,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         // Set the card title to the video title
         holder.videoTitle.setText(snippet.getTitle());
 
-        // Set the name of the channel
-        holder.videoChannelName.setText(snippet.getChannelTitle());
-
         // Set this video's date and number of views
         holder.videoIdAndViews.setText(
                 DateUtils.getRelativeTimeSpanString(snippet.getPublishedAt().getValue()));
@@ -97,8 +94,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
                 ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
 
-        // Play the video when anything in the layout is clicked except for the chevron.
-        holder.videoLaunchLayout.setOnClickListener((View v) ->
+        // Play the video when the video thumbnail is clicked.
+        holder.videoThumb.setOnClickListener((View v) ->
         {
             // not sure what to do if player cant resolve video, so I make toast
             if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context))
@@ -129,7 +126,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
 
         // Toggle the expansion of a view on the selection of the video
         // description toggle button
-        holder.videoChev.setOnClickListener((View v) ->
+        holder.videoExpandDescriptionLayout.setOnClickListener((View v) ->
         {
             int visibility;
             if (holder.videoDescription.getVisibility() == View.VISIBLE) {
@@ -163,9 +160,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         @Bind(R.id.video_thumb) ImageView videoThumb;
         @Bind(R.id.video_description) TextView videoDescription;
         @Bind(R.id.video_chev) ImageView videoChev;
-        @Bind(R.id.video_channel_name) TextView videoChannelName;
         @Bind(R.id.video_id_and_views) TextView videoIdAndViews;
-        @Bind(R.id.video_launch_layout) LinearLayout videoLaunchLayout;
+        @Bind(R.id.video_expand_description_layout) LinearLayout videoExpandDescriptionLayout;
         String vID;
 
         public CruVideoViewHolder(View rootView)
