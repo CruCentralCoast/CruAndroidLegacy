@@ -20,12 +20,13 @@ import com.google.gson.annotations.SerializedName;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
-import org.aaronhe.threetengson.ThreeTenGsonAdapter;
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.converters.ResourceTypeConverter;
+import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
+import org.threeten.bp.ZonedDateTime;
 
 import okhttp3.OkHttpClient;
 
@@ -114,7 +115,7 @@ public class CruApplication extends MultiDexApplication
     private void setupGson()
     {
         GsonBuilder builder = new GsonBuilder();
-        builder = ThreeTenGsonAdapter.registerAll(builder);
+        builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeConverter());
         builder.registerTypeAdapter(Ride.Direction.class, new DirectionConverter());
         builder.registerTypeAdapter(Resource.ResourceType.class, new ResourceTypeConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());

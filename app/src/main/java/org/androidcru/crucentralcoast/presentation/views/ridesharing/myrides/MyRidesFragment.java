@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 
 import butterknife.Bind;
@@ -35,9 +36,13 @@ public class MyRidesFragment extends Fragment
 
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this, view);
+    }
 
-        //Enables actions in the Activity Toolbar (top-right buttons)
-        setHasOptionsMenu(true);
+    public void switchToTab()
+    {
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            tabLayout.getTabAt(bundle.getInt(AppConstants.MY_RIDES_TAB)).select();
     }
 
     @Override
@@ -48,12 +53,7 @@ public class MyRidesFragment extends Fragment
         {
             viewPager.setAdapter(new MyRidesFragmentPagerAdapter(getChildFragmentManager()));
             tabLayout.setupWithViewPager(viewPager);
+            switchToTab();
         }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
     }
 }

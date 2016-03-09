@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
 public class DriverResultsFragment extends FormContentFragment
 {
     @Bind(R.id.recyclerview) protected RecyclerView recyclerView;
-    @Bind(R.id.event_swipe_refresh_layout) protected SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.swipe_refresh_layout) protected SwipeRefreshLayout swipeRefreshLayout;
     private View emptyView;
 
     private Query query;

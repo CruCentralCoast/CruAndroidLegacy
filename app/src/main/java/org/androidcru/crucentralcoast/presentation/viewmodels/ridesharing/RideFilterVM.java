@@ -20,7 +20,6 @@ import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
@@ -66,7 +65,7 @@ public class RideFilterVM extends BaseRideVM
         if(gender.equals("Any"))
             gender = null;
 
-        ZonedDateTime dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault());
 
         ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
         ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);

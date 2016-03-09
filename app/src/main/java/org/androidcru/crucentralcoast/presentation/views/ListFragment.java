@@ -9,7 +9,6 @@ import android.view.ViewStub;
 
 import org.androidcru.crucentralcoast.R;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -21,8 +20,8 @@ import butterknife.ButterKnife;
 public class ListFragment extends Fragment
 {
     //Inject views
-    @Bind(R.id.recyclerview) protected RecyclerView recyclerView;
-    @Bind(R.id.event_swipe_refresh_layout) protected SwipeRefreshLayout swipeRefreshLayout;
+    protected RecyclerView recyclerView;
+    protected SwipeRefreshLayout swipeRefreshLayout;
     private ViewStub emptyViewStub;
     protected View emptyView;
 
@@ -30,7 +29,8 @@ public class ListFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
         recyclerView.setHasFixedSize(true);
 

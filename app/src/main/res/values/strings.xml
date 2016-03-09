@@ -59,6 +59,7 @@
     <string name="mission_leaders">Leaders: <xliff:g name="names">%s</xliff:g></string>
     <string name="begins">Begins: <xliff:g name="date">%s</xliff:g></string>
     <string name="ends">Ends: <xliff:g name="date">%s</xliff:g></string>
+    <string name="tags">Tags: <xliff:g name="tags">%s</xliff:g></string>
 
     <string name="show_description">Show Description</string>
     <string name="facebook_reasoning">If you log in with Facebook, you can set your RSVP directly from inside the Cru app.</string>
