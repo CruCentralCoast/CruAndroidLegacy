@@ -5,14 +5,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 
 import java.util.Stack;
 
@@ -40,34 +37,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         dataObjects = new Stack<>();
 
         ButterKnife.bind(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.form, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        menu.getItem(0).setIcon(DrawableUtil.getTintedDrawable(this, R.drawable.ic_close_grey600_48dp, android.R.color.white));
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-
-        switch (item.getItemId())
-        {
-            case R.id.action_close:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     protected void setCurrentFormContent(FormContent content)
@@ -141,12 +110,16 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     public void setTitle(String title)
     {
         toolbar.setTitle(title);
+        toolbar.requestLayout();
+        toolbar.invalidate();
     }
 
     @Override
     public void setSubtitle(String subtitle)
     {
         toolbar.setSubtitle(subtitle);
+        toolbar.requestLayout();
+        toolbar.invalidate();
     }
 
     @Override
