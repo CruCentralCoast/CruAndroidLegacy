@@ -33,8 +33,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"/>
 
-            <LinearLayout
-                android:orientation="vertical"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/video_expand_description_layout">
@@ -46,7 +45,7 @@
                     android:layout_marginLeft="12dp"
                     tools:text="Default Title"
                     android:textColor="@color/grey800"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:layout_marginTop="8dp"/>
 
                 <TextView
@@ -56,9 +55,11 @@
                     android:id="@+id/video_id_and_views"
                     android:layout_marginLeft="12dp"
                     android:textColor="#787878"
-                    android:textSize="12dp"
+                    android:textSize="14sp"
                     android:layout_marginTop="8dp"
-                    android:text="5 years ago - 24 views" />
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentEnd="false"
+                    android:layout_below="@+id/video_title" />
 
                 <ImageView
                     android:layout_width="40dp"
@@ -68,8 +69,9 @@
                     android:id="@+id/video_chev"
                     android:background="@null"
                     android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|right" />
-            </LinearLayout>
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
 
         </LinearLayout>
 

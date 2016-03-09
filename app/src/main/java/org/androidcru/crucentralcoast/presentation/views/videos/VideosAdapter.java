@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.youtube.player.YouTubeIntents;
@@ -161,7 +162,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         @Bind(R.id.video_description) TextView videoDescription;
         @Bind(R.id.video_chev) ImageView videoChev;
         @Bind(R.id.video_id_and_views) TextView videoIdAndViews;
-        @Bind(R.id.video_expand_description_layout) LinearLayout videoExpandDescriptionLayout;
+        @Bind(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
         String vID;
 
         public CruVideoViewHolder(View rootView)
