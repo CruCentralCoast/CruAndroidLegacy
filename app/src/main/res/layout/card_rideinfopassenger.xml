@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:animateLayoutChanges="true">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/person_icon"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_account_grey600_48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,35 +25,39 @@
         android:textColor="@color/grey800"
         android:textSize="16dp"
         android:layout_marginTop="8dp"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:layout_toRightOf="@+id/person_icon"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/secondRowLayout">
+        android:id="@+id/secondRowLayout"
+        android:layout_below="@+id/passengerName"
+        android:layout_toRightOf="@+id/person_icon">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/passengerPhoneNum"
-            tools:text="Tuesday, January 11 10:00am - 7:00pm"
+            tools:text="(111) 222-3333"
             android:layout_marginLeft="12dp"
             android:layout_marginBottom="4dp"
             android:textSize="16dp"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="true"
+            android:layout_centerVertical="true"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:id="@+id/kickPassenger"
             android:text="@string/kick"
             android:layout_toLeftOf="@+id/passengerPhoneNum"
             android:background="?android:attr/selectableItemBackground"
             android:textColor="@color/cruDarkBlue"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:layout_marginRight="16dp"
             android:foreground="?android:attr/selectableItemBackground"/>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
