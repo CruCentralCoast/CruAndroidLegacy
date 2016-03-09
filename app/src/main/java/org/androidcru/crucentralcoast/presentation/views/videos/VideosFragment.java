@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.videos;
 
 import android.support.v4.app.Fragment;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,16 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.orhanobut.logger.Logger;
-
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.Bind;
@@ -36,11 +31,12 @@ public class VideosFragment extends Fragment
     @Bind(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
 
-    private SharedPreferences sharedPreferences;
     private LinearLayoutManager layoutManager;
     private Observer<SearchListResponse> videoSubscriber;
     private Subscription subscription;
     private List<SearchResult> videos;
+    // used for filtering duplicate videos before being passed to the adapter
+    private List<SearchResult> tempVideos;
     private String nextPageToken;
     private VideosAdapter videosAdapter;
     private int curSize;
@@ -49,6 +45,7 @@ public class VideosFragment extends Fragment
     {
         curSize = 0;
         videos = new ArrayList<>();
+        tempVideos = new ArrayList<>();
 
         // Display text notifying the user if there are no videos to load, else show the videos
         videoSubscriber = new Observer<SearchListResponse>()
@@ -94,7 +91,6 @@ public class VideosFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
-        sharedPreferences = CruApplication.getSharedPreferences();
         setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(layoutManager);
@@ -142,7 +138,7 @@ public class VideosFragment extends Fragment
         List<SearchResult> cruVideos = cruVideosResponse.getItems();
         rx.Observable.from(cruVideos)
                 .subscribeOn(Schedulers.immediate())
-                .subscribe(videos::add);
+                .subscribe(tempVideos::add);
 
         // Only set the Adapter once - on the first video request
         // Otherwise, the Adapter resets the scroll progression to the top of the list
@@ -150,14 +146,25 @@ public class VideosFragment extends Fragment
         {
             videosAdapter = new VideosAdapter(videos, layoutManager);
             videoList.setAdapter(videosAdapter);
+            videos.addAll(tempVideos);
+            curSize += tempVideos.size();
         }
         else
         {
-            videosAdapter.updateViewExpandedStates();
+            // Don't add the video if it is already in the videos list
+            for(SearchResult sr : tempVideos)
+            {
+                if(!videos.contains(sr))
+                {
+                    videos.add(sr);
+                    ++curSize;
+                }
+            }
 
             // Let the Adapter know that more videos have been added to its list.
             videosAdapter.notifyItemChanged(curSize, videosAdapter.getItemCount() - 1);
         }
+        videosAdapter.updateViewExpandedStates();
 
         // Save the token of the next page of the query. This will be used to get the
         // next set of 20 items.
@@ -166,6 +173,7 @@ public class VideosFragment extends Fragment
         // Used for keeping track of the user's scroll progression through the list of videos.
         curSize += cruVideos.size();
         swipeRefreshLayout.setRefreshing(false);
+        tempVideos.clear();
     }
 
     private void forceUpdate()
