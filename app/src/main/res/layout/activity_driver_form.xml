@@ -5,8 +5,7 @@
     android:orientation="vertical"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <include
         layout="@layout/app_bar_main"/>
@@ -20,22 +19,21 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="8dp">
 
             <!-- name -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:id="@+id/name_layout"
-                android:padding="8dp">
+                >
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:id="@+id/name_icon"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_account_grey600_48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:padding="8dp"/>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_name"
@@ -50,7 +48,8 @@
                         android:id="@+id/name_field"
                         android:layout_centerVertical="true"
                         android:hint="Full Name"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        />
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
             <!-- phone -->
@@ -58,7 +57,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:id="@+id/phone_layout"
-                android:padding="8dp"
                 android:layout_below="@+id/name_layout">
                 <ImageView
                     android:layout_width="48dp"
@@ -66,8 +64,6 @@
                     android:id="@+id/phone_icon"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_phone_grey600_48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:padding="8dp"/>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_phone"
@@ -88,16 +84,13 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:id="@+id/gender_layout"
-                android:padding="8dp">
+                android:id="@+id/gender_layout">
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:id="@+id/gender_icon"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_account_multiple_outline_grey600_48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:padding="8dp"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -115,23 +108,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/gender_view"/>
+                        android:id="@+id/gender_view"
+                        android:visibility="gone"/>
                 </LinearLayout>
             </RelativeLayout>
             <!-- car capacity -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:id="@+id/car_capacity_layout"
-                android:padding="8dp">
+                android:id="@+id/car_capacity_layout">
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:id="@+id/car_capacity_icon"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_car_grey600_48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:padding="8dp"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -139,8 +130,7 @@
                     android:id="@+id/input_layout_car"
                     android:orientation="vertical"
                     android:layout_toEndOf="@+id/car_capacity_icon"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp">
+                    android:layout_centerVertical="true">
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/input_layout_car_capacity"
                             android:layout_width="match_parent"
@@ -166,107 +156,42 @@
                             <!--android:layout_marginRight="36dp" />-->
                 </RelativeLayout>
             </RelativeLayout>
-            <!-- trip type -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:id="@+id/trip_type_layout"
-                android:padding="8dp">
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:id="@+id/trip_type_icon"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_car_grey600_48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:padding="8dp"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/trip_type_group"
-                    android:orientation="vertical"
-                    android:layout_toRightOf="@+id/trip_type_icon"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/trip_type_field"
-                            android:prompt="@string/select_trip_type"
-                            android:layout_marginEnd="8dp"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
+
+            <include layout="@layout/ride_direction"/>
+
+            <include layout="@layout/ride_datetime"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:id="@+id/event_layout"
-                android:padding="8dp">
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:id="@+id/event_icon"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_account_grey600_48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:padding="8dp"/>
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/event_date_field"
-                    android:hint="Event Date"
-                    android:inputType="date"
-                    android:focusable="false"
-                    android:layout_toEndOf="@+id/event_icon"/>
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/event_time_field"
-                    android:hint="Event Time"
-                    android:inputType="time"
-                    android:layout_alignParentEnd="false"
-                    android:focusable="false"
-                    android:layout_toEndOf="@+id/event_date_field"/>
-            </RelativeLayout>
+                android:id="@+id/autocomplete_layout">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:id="@+id/autocomplete_layout"
-                android:padding="8dp">
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:id="@+id/autocomplete_icon"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:padding="8dp"/>
                 <fragment
                     android:id="@+id/place_autocomplete_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    class="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
+                    android:layout_marginLeft="-8dp"
+                    class="org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment"
+                    android:layout_centerVertical="true"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:id="@+id/radius_layout"
-                android:padding="8dp"
-                android:layout_below="@+id/autocomplete_layout">
+                android:id="@+id/radius_layout">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/radius_icon"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_map_marker_radius_grey600_48dp"
+                    android:padding="8dp"/>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_radius"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp">
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/radius_icon">
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -282,10 +207,6 @@
                 class="com.google.android.gms.maps.MapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="256dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="64dp"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

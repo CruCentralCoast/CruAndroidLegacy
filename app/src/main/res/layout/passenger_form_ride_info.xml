@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_height="match_parent" android:layout_width="match_parent">
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -18,119 +19,21 @@
             android:layout_height="wrap_content"
             class="org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:id="@+id/date_layout"
-            android:padding="8dp">
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:id="@+id/date_icon"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_calendar_grey600_48dp"
-                android:layout_marginRight="8dp"
-                android:padding="8dp"/>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/date_icon"
-                android:layout_marginLeft="8dp">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/date_field"
-                    android:hint="Ride Date"
-                    android:inputType="date"
-                    android:focusable="false"
-                    android:layout_centerVertical="true"/>
-            </android.support.design.widget.TextInputLayout>
-        </RelativeLayout>
+        <include layout="@layout/ride_datetime"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:id="@+id/time_layout"
-            android:padding="8dp">
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:id="@+id/time_icon"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_clock_grey600_48dp"
-                android:layout_marginRight="8dp"
-                android:padding="8dp"/>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/time_icon"
-                android:layout_marginLeft="8dp">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/time_field"
-                    android:hint="Ride Time"
-                    android:inputType="date"
-                    android:layout_centerVertical="true"
-                    android:focusable="false"/>
-            </android.support.design.widget.TextInputLayout>
-        </RelativeLayout>
-
-        <!-- trip type -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:id="@+id/trip_type_layout"
-            android:padding="8dp">
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:id="@+id/trip_type_icon"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_car_grey600_48dp"
-                android:layout_marginRight="8dp"
-                android:padding="8dp"/>
-
-            <RadioGroup
-                android:id="@+id/direction"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_toRightOf="@+id/trip_type_icon"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp">
-                <RadioButton android:id="@+id/to_event"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:text="To Event"
-                             android:textSize="14sp"/>
-                <RadioButton android:id="@+id/round_trip"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:text="Round-Trip"
-                             android:layout_marginLeft="32dp"
-                             android:textSize="14sp"/>
-            </RadioGroup>
-
-        </RelativeLayout>
+        <include layout="@layout/ride_direction"/>
 
         <!-- gender -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:id="@+id/gender_layout"
-            android:padding="8dp">
+            android:id="@+id/gender_layout">
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:id="@+id/gender_icon"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_account_multiple_outline_grey600_48dp"
-                android:layout_marginRight="8dp"
                 android:padding="8dp"/>
 
             <Spinner

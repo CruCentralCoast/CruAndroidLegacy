@@ -5,7 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
 import com.orhanobut.logger.Logger;
 
@@ -29,7 +29,7 @@ public class DriverSignupActivity extends AppCompatActivity
     private BaseValidator validator;
 
     @Bind(R.id.fab) FloatingActionButton fab;
-    PlaceAutocompleteFragment autocompleteFragment;
+    SupportPlaceAutocompleteFragment autocompleteFragment;
     MapFragment mapFragment;
 
     private String eventID;
@@ -42,7 +42,7 @@ public class DriverSignupActivity extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         if(bundle == null || bundle.getString(AppConstants.EVENT_ID, "").isEmpty())
         {
-            Logger.e("PassengerSignupActivity requires that you pass an event ID.");
+            Logger.e("DriverSignupActivity requires that you pass an event");
             Logger.e("Finishing activity...");
             finish();
             return;
@@ -55,7 +55,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
         setupFab();
 
-        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
 
         String rideId = getIntent().getExtras().getString(AppConstants.RIDE_KEY);
@@ -101,6 +101,7 @@ public class DriverSignupActivity extends AppCompatActivity
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         autocompleteFragment.setFilter(typeFilter);
+        autocompleteFragment.setHint("Pickup Location");
         autocompleteFragment.setOnPlaceSelectedListener(driverSignupVM.onPlaceSelected());
     }
 
