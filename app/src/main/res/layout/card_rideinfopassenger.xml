@@ -16,25 +16,29 @@
         android:layout_marginRight="8dp"
         android:padding="8dp"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/passengerName"
-        android:layout_marginLeft="12dp"
-        tools:text="Fall Retreat"
-        android:textColor="@color/grey800"
-        android:textSize="16dp"
-        android:layout_marginTop="8dp"
-        android:textIsSelectable="true"
-        android:layout_toRightOf="@+id/person_icon"/>
+        android:layout_toRightOf="@+id/person_icon"
+        android:id="@+id/name_layout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/passengerName"
+            android:layout_marginLeft="12dp"
+            tools:text="Fall Retreat"
+            android:textColor="@color/grey800"
+            android:textSize="16dp"
+            android:layout_marginTop="8dp"
+            android:textIsSelectable="true"/>
+    </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/secondRowLayout"
-        android:layout_below="@+id/passengerName"
-        android:layout_toRightOf="@+id/person_icon">
-
+        android:layout_below="@+id/name_layout"
+        android:layout_toRightOf="@+id/person_icon"
+        android:id="@+id/phone_layout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,19 +49,18 @@
             android:textSize="16dp"
             android:textIsSelectable="true"
             android:layout_centerVertical="true"/>
+    </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:id="@+id/kickPassenger"
-            android:text="@string/kick"
-            android:layout_toLeftOf="@+id/passengerPhoneNum"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="@color/cruDarkBlue"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_marginRight="16dp"
-            android:foreground="?android:attr/selectableItemBackground"/>
-    </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:id="@+id/kickPassenger"
+        android:text="@string/kick"
+        android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/cruDarkBlue"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="16dp"
+        android:foreground="?android:attr/selectableItemBackground"/>
 </RelativeLayout>
