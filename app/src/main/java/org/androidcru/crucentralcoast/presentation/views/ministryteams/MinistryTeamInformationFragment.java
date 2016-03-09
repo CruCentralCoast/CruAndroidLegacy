@@ -43,9 +43,8 @@ public class MinistryTeamInformationFragment extends FormContentFragment
 
         ministryTeam = (MinistryTeam) formHolder.getDataObject();
 
-        ViewUtil.setSource(ministryInfoImage, ministryTeam.teamImage.url, 0, null, null);
+        ViewUtil.setSource(ministryInfoImage, ministryTeam.teamImage != null ? ministryTeam.teamImage.url : null, 0, null, null);
         ministryTeamDescription.setText(ministryTeam.description);
-
     }
 
     @Override

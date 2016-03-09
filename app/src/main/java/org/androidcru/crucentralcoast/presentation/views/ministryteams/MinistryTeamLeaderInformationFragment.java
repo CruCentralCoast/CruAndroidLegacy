@@ -13,6 +13,7 @@ import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.providers.ApiProvider;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormState;
 
 import java.util.ArrayList;
 
@@ -52,15 +53,8 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
         ministryTeam = (MinistryTeam) formHolder.getDataObject();
 
         formHolder.setTitle(ministryTeam.name);
-        formHolder.setPreviousVisibility(View.GONE);
 
-        ArrayList<String> ministryIdList = new ArrayList<>();
-        ministryIdList.add(ministryTeam.id);
-        // ask jon what the toBlocking single stuff does
-        ArrayList<CruUser> ministryTeamLeaders = cruService.getMinistryTeamLeaders(ministryIdList).subscribeOn(Schedulers.io()).toBlocking().single();
-
-
-        for (CruUser user : ministryTeamLeaders)
+        for (CruUser user : ministryTeam.ministryTeamLeaders)
         {
             ministryTeamLeaderInfo.setText(
                     ministryTeamLeaderInfo.getText().toString() +
@@ -69,6 +63,6 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
                             (user.phoneNumber != null ? user.phoneNumber + "\n" : "") + "\n");
         }
 
-        formHolder.setNextText("FINISH");
+        formHolder.setFormState(FormState.FINISH);
     }
 }

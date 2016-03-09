@@ -23,6 +23,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
     private Stack<Object> dataObjects;
+    public FormState formState;
 
     @Bind(R.id.appbar) AppBarLayout appBar;
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -40,6 +41,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         dataObjects = new Stack<>();
 
         ButterKnife.bind(this);
+        formState = FormState.PROGRESS;
     }
 
     @Override
@@ -92,14 +94,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void onBackPressed()
     {
-        if(viewPager.getCurrentItem() != 0)
-        {
+        if (formState == FormState.FINISH)
+            complete();
+        else if(viewPager.getCurrentItem() != 0)
             currentFormContent.onPrevious();
-        }
         else
-        {
             super.onBackPressed();
-        }
     }
 
     @Override
@@ -183,6 +183,21 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         else
         {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+        }
+    }
+
+    @Override
+    public void setFormState(FormState state)
+    {
+        switch(state)
+        {
+            case PROGRESS:
+                setNextText("NEXT");
+                break;
+            case FINISH:
+                setNextText(FormState.FINISH.toString());
+                setPreviousVisibility(View.GONE);
+                break;
         }
     }
 

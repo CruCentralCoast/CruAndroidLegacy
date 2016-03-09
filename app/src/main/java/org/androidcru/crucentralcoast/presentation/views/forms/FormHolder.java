@@ -11,6 +11,7 @@ public interface FormHolder
     void complete();
     void setNavigationVisibility(int visibility);
     void next();
+    void setFormState(FormState state);
     void setNextText(String text);
     void prev();
     void setNavigationClickable(boolean isClickable);

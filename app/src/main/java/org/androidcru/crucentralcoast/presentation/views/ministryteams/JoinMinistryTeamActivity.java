@@ -42,7 +42,6 @@ public class JoinMinistryTeamActivity extends FormActivity
         fragments.add(ministryTeamInformationFragment);
         fragments.add(new BasicInfoFragment());
         fragments.add(new MinistryTeamLeaderInformationFragment());
-        // TODO add in ministry team leader info screen
 
         setAdapter(new MinistryTeamPagerAdapter(getSupportFragmentManager(), this, fragments));
     }
