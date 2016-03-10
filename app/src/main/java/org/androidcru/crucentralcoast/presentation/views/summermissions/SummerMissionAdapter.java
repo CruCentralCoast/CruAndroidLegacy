@@ -61,10 +61,9 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
     {
         SummerMission summerMission = summerMissions.get(position);
         holder.missionName.setText(summerMission.name);
-        holder.missionStartDate.setText(context.getResources().getString(R.string.begins,
-                summerMission.startDate.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))));
-        holder.missionEndDate.setText(context.getResources().getString(R.string.ends,
-                summerMission.endDate.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))));
+        holder.missionStartDate.setText(context.getResources().getString(R.string.until,
+                summerMission.startDate.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER_NO_DAY)),
+                summerMission.endDate.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER_NO_DAY))));
         holder.missionLeaders.setText(context.getResources().getString(R.string.mission_leaders,
                 summerMission.leaders));
         holder.missionLeaders.setVisibility(isExpanded.get(position) && summerMission.leaders != null ? View.VISIBLE : View.GONE);
@@ -76,6 +75,14 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
                     .fit()
                     .into(holder.missionBanner);
         }
+        else
+        {
+            Picasso.with(context)
+                    .load(R.drawable.logo_grey)
+                    .fit()
+                    .into(holder.missionBanner);
+        }
+
         holder.chevView.setImageDrawable(isExpanded.get(position)
                 ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
