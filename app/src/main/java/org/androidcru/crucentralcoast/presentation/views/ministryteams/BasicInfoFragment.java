@@ -49,6 +49,9 @@ public class BasicInfoFragment extends FormContentFragment
     {
         formHolder.setTitle("Contact Information");
 
+        //TODO @jon make this automatic?
+        formHolder.addDataObject(formHolder.getDataObject());
+
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
         emailField.setText(sharedPreferences.getString(AppConstants.USER_EMAIL, null));

@@ -11,6 +11,7 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
@@ -34,18 +35,16 @@ public class RideInfoFragment extends FormContentFragment {
     {
         super.onViewCreated(view, savedInstanceState);
 
-        rideFilterVM = new RideFilterVM(view, getActivity().getFragmentManager());
-
-        validator = new BaseValidator(rideFilterVM);
-
         autocompleteFragment = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        setupPlacesAutocomplete();
     }
 
     @Override
     public void setupUI()
     {
         formHolder.setTitle(getString(R.string.passenger_signup));
+        rideFilterVM = new RideFilterVM(getView(), getActivity().getFragmentManager(), (CruEvent)formHolder.getDataObject());
+        validator = new BaseValidator(rideFilterVM);
+        setupPlacesAutocomplete();
     }
 
     private void setupPlacesAutocomplete()

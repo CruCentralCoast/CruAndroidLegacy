@@ -14,13 +14,17 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
+import org.androidcru.crucentralcoast.util.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
+
+import java.util.GregorianCalendar;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -28,6 +32,7 @@ import butterknife.OnClick;
 public class RideFilterVM extends BaseRideVM
 {
     private LatLng precisePlace;
+    private CruEvent event;
 
     @Bind(R.id.round_trip) RadioButton roundTrip;
     @Bind(R.id.direction) RadioGroup directionGroup;
@@ -36,9 +41,10 @@ public class RideFilterVM extends BaseRideVM
     @Bind(R.id.date_field) @NotEmpty EditText rideDate;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-    public RideFilterVM(View rootView, FragmentManager fm)
+    public RideFilterVM(View rootView, FragmentManager fm, CruEvent event)
     {
         super(rootView, fm);
+        this.event = event;
         bindUI();
     }
 
@@ -103,13 +109,13 @@ public class RideFilterVM extends BaseRideVM
     @OnClick(R.id.time_field)
     public void onTimeClicked(View v)
     {
-        onEventTimeClicked(v);
+        onEventTimeClicked(v, org.threeten.bp.DateTimeUtils.toGregorianCalendar(event.startDate));
     }
 
     @OnClick(R.id.date_field)
     public void onDateClicked(View v)
     {
-        onEventDateClicked(v);
+        onEventDateClicked(v, org.threeten.bp.DateTimeUtils.toGregorianCalendar(event.startDate));
     }
 
 

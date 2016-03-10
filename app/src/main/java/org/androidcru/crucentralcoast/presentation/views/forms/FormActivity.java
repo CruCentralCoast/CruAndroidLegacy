@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import butterknife.Bind;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
 public class FormActivity extends AppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
-    private Stack<Object> dataObjects;
+    private ArrayList<Object> dataObjects;
     public FormState formState;
 
     @Bind(R.id.appbar) AppBarLayout appBar;
@@ -35,7 +36,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
-        dataObjects = new Stack<>();
 
         ButterKnife.bind(this);
         formState = FormState.PROGRESS;
@@ -74,6 +74,11 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void setAdapter(FormAdapter adapter)
     {
+        dataObjects = new ArrayList<>();
+        for(int i = 0; i < adapter.getCount(); i++)
+        {
+            dataObjects.add(null);
+        }
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
         {
@@ -162,6 +167,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void setFormState(FormState state)
     {
+        formState = state;
         switch(state)
         {
             case PROGRESS:
@@ -183,10 +189,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void prev()
     {
-        if(!dataObjects.isEmpty())
-        {
-            dataObjects.pop();
-        }
         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
     }
 
@@ -200,15 +202,26 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void addDataObject(Object dataObject)
     {
-        this.dataObjects.push(dataObject);
+        if(viewPager.getCurrentItem() + 1 >= dataObjects.size())
+        {
+            this.dataObjects.add(dataObject);
+            return;
+        }
+        this.dataObjects.set(viewPager.getCurrentItem() + 1, dataObject);
+    }
+
+    protected void setFirstDataObject(Object dataObject) {
+        if (dataObjects != null && !dataObjects.isEmpty()) {
+            dataObjects.set(0, dataObject);
+        }
     }
 
     @Override
     public Object getDataObject()
     {
-        if(dataObjects.isEmpty())
+        if(dataObjects.size() < viewPager.getCurrentItem())
             return null;
-        return dataObjects.peek();
+        return dataObjects.get(viewPager.getCurrentItem());
     }
 }
 
