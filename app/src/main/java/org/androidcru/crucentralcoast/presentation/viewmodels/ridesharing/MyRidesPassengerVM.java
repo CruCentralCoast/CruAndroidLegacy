@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -12,6 +11,7 @@ import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesPassengerFragment;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -20,16 +20,16 @@ public class MyRidesPassengerVM {
 
     public Ride ride;
     public boolean isExpanded;
-    private Activity parent;
+    private MyRidesPassengerFragment parent;
 
     public String eventName;
     AlertDialog alertDialog;
 
-    public MyRidesPassengerVM(Ride ride, boolean isExpanded, Activity activity)
+    public MyRidesPassengerVM(MyRidesPassengerFragment parent, Ride ride, boolean isExpanded)
     {
         this.ride = ride;
         this.isExpanded = isExpanded;
-        this.parent = activity;
+        this.parent = parent;
         initAlertDialog();
         updateEventName();
     }
@@ -64,7 +64,7 @@ public class MyRidesPassengerVM {
 
     private void initAlertDialog()
     {
-        alertDialog = new AlertDialog.Builder(parent).create();
+        alertDialog = new AlertDialog.Builder(parent.getContext()).create();
         alertDialog.setTitle("Cancel Ride");
         alertDialog.setMessage("Are you sure that you want to drop yourself from this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
@@ -77,7 +77,7 @@ public class MyRidesPassengerVM {
                     {
                         RideProvider.dropPassengerFromRide(p.id, ride.id)
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe();
+                                .subscribe(v -> parent.forceUpdate());
                     }
                 }
             }

@@ -11,18 +11,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.Campus;
+import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -35,13 +40,40 @@ import rx.android.schedulers.AndroidSchedulers;
 public class SubscriptionsFragment extends Fragment
 {
 
-    private GridLayoutManager mLayoutManager;
-    private SubscriptionsAdapter mSubscriptionAdapter;
+    private GridLayoutManager layoutManager;
+    private SubscriptionsAdapter subscriptionAdapter;
 
     @Bind(R.id.subscription_list) RecyclerView subscriptionList;
     @Bind(R.id.fab) FloatingActionButton fab;
+    @Bind(R.id.progress) ProgressBar progressBar;
 
     private Subscription subscription;
+    private Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer;
+
+    public SubscriptionsFragment()
+    {
+        observer = new Observer<HashMap<Campus, ArrayList<MinistrySubscription>>>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                toggleProgessBar(false);
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+
+            }
+
+            @Override
+            public void onNext(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
+            {
+                subscriptionAdapter = new SubscriptionsAdapter(campusMinistryMap);
+                subscriptionList.setAdapter(subscriptionAdapter);
+            }
+        };
+    }
 
     @Nullable
     @Override
@@ -69,25 +101,27 @@ public class SubscriptionsFragment extends Fragment
             getActivity().finish();
         });
 
-        mSubscriptionAdapter = new SubscriptionsAdapter(new HashMap<>());
+        subscriptionAdapter = new SubscriptionsAdapter(new HashMap<>());
         subscriptionList.setHasFixedSize(true);
-        subscriptionList.setAdapter(mSubscriptionAdapter);
+        subscriptionList.setAdapter(subscriptionAdapter);
 
         // use a grid layout manager
-        mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        layoutManager = new GridLayoutManager(getActivity(), 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
         {
             @Override
             public int getSpanSize(int position)
             {
-                return mSubscriptionAdapter.isHeader(position) ? mLayoutManager.getSpanCount() : 1;
+                return subscriptionAdapter.isHeader(position) ? layoutManager.getSpanCount() : 1;
             }
         });
-        subscriptionList.setLayoutManager(mLayoutManager);
+        subscriptionList.setLayoutManager(layoutManager);
+    }
 
-        // specify an adapter (see also next example)
-
-
+    @Override
+    public void onResume()
+    {
+        super.onResume();
         getCampusMinistryMap();
     }
 
@@ -99,15 +133,20 @@ public class SubscriptionsFragment extends Fragment
             subscription.unsubscribe();
     }
 
+    private void toggleProgessBar(boolean isShown)
+    {
+        progressBar.setVisibility(isShown ? View.VISIBLE : View.GONE);
+        subscriptionList.setVisibility(isShown ? View.GONE : View.VISIBLE);
+        fab.setVisibility(isShown ? View.GONE : View.VISIBLE);
+    }
+
     public void getCampusMinistryMap()
     {
         if(subscription != null)
             subscription.unsubscribe();
+        toggleProgessBar(true);
         subscription = SubscriptionProvider.requestCampusMinistryMap()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ministries -> {
-                    mSubscriptionAdapter = new SubscriptionsAdapter(ministries);
-                    subscriptionList.setAdapter(mSubscriptionAdapter);
-                });
+                .subscribe(observer);
     }
 }

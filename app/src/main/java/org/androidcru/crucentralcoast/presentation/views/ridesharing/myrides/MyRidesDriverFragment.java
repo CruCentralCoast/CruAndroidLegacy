@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +16,6 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
-import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +117,8 @@ public class MyRidesDriverFragment extends ListFragment
             subscription.unsubscribe();
     }
 
-    private void forceUpdate()
+    //TODO better security than this
+    public void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
         if(subscription != null)
@@ -141,7 +139,7 @@ public class MyRidesDriverFragment extends ListFragment
     {
         rideVMs.clear();
         rx.Observable.from(rides)
-                .map(ride -> new MyRidesDriverVM(ride, false, getActivity()))
+                .map(ride -> new MyRidesDriverVM(this, ride, false))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
 

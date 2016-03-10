@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -22,17 +22,17 @@ public class MyRidesDriverVM {
 
     public Ride ride;
     public boolean isExpanded;
-    private Activity parent;
+    private MyRidesDriverFragment parent;
 
     public String passengerList;
     public String eventName;
     AlertDialog alertDialog;
 
-    public MyRidesDriverVM(Ride ride, boolean isExpanded, Activity activity)
+    public MyRidesDriverVM(MyRidesDriverFragment fragment, Ride ride, boolean isExpanded)
     {
         this.ride = ride;
         this.isExpanded = isExpanded;
-        this.parent = activity;
+        this.parent = fragment;
         initAlertDialog();
 //        updateEventName();
         updatePassengerList();
@@ -72,7 +72,7 @@ public class MyRidesDriverVM {
     //Sends the info about the ride to the DriverSignupActivity so that it can fill in the data
     public View.OnClickListener onEditOfferingClicked()
     {
-        Intent intent = new Intent(parent, DriverSignupActivity.class);
+        Intent intent = new Intent(parent.getContext(), DriverSignupActivity.class);
         Bundle extras = new Bundle();
         extras.putString(AppConstants.RIDE_KEY, ride.id);
         extras.putString(AppConstants.EVENT_ID, ride.eventId);
@@ -81,14 +81,14 @@ public class MyRidesDriverVM {
     }
 
     private void initAlertDialog() {
-        alertDialog = new AlertDialog.Builder(parent).create();
+        alertDialog = new AlertDialog.Builder(parent.getContext()).create();
         alertDialog.setTitle("Cancel Ride");
         alertDialog.setMessage("Are you sure you want to cancel this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 RideProvider.dropRide(ride.id)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe();
+                    .subscribe(v -> parent.forceUpdate());
 
             }
         });

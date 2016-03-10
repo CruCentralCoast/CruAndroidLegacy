@@ -68,6 +68,7 @@ public final class SubscriptionProvider
                 }
 
                 subscriber.onNext(campusMinistryMap);
+                subscriber.onCompleted();
             }
         })
                 .compose(RxComposeUtil.network());

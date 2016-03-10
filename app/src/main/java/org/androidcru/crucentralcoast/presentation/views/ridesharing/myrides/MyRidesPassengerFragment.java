@@ -115,7 +115,7 @@ public class MyRidesPassengerFragment extends ListFragment
             subscription.unsubscribe();
     }
 
-    private void forceUpdate()
+    public void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
         if(subscription != null)
@@ -145,7 +145,7 @@ public class MyRidesPassengerFragment extends ListFragment
     {
         rideVMs.clear();
         rx.Observable.from(rides)
-                .map(ride -> new MyRidesPassengerVM(ride, false, getActivity()))
+                .map(ride -> new MyRidesPassengerVM(this, ride, false))
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(rideVMs::add);
         recyclerView.setAdapter(new MyRidesPassengerAdapter(rideVMs));
