@@ -210,6 +210,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         this.dataObjects.set(viewPager.getCurrentItem() + 1, dataObject);
     }
 
+    protected void setFirstDataObject(Object dataObject) {
+        if (dataObjects != null && !dataObjects.isEmpty()) {
+            dataObjects.set(0, dataObject);
+        }
+    }
+
     @Override
     public Object getDataObject()
     {

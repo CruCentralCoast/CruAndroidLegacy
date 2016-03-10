@@ -43,6 +43,6 @@ public class JoinMinistryTeamActivity extends FormActivity
         fragments.add(new MinistryTeamLeaderInformationFragment());
 
         setAdapter(new MinistryTeamPagerAdapter(getSupportFragmentManager(), this, fragments));
-        addDataObject(ministryTeam);
+        setFirstDataObject(ministryTeam);
     }
 }

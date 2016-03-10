@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class PassengerSignupActivity extends FormActivity
 {
+    CruEvent event;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,14 +30,14 @@ public class PassengerSignupActivity extends FormActivity
         }
         else
         {
-            CruEvent event = Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
+            event = Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
             setSubtitle(event.name);
         }
 
         ArrayList<FormContentFragment> fragments = setupForm(bundle);
 
         setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), this, fragments));
-
+        setFirstDataObject(event);
 
     }
 
