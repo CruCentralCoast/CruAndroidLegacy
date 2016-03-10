@@ -110,12 +110,12 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         .subscribe(new Observer<Void>() {
                             @Override
                             public void onCompleted() {
-
+                                Logger.d("Completed the drop");
                             }
 
                             @Override
                             public void onError(Throwable e) {
-
+                                Logger.d("Error on the drop");
                             }
 
                             @Override
@@ -123,6 +123,9 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 //TODO: mitch told me to do it
                                 if (context instanceof MyRidesInfoActivity) {
                                     ((MyRidesInfoActivity)context).updateRide();
+                                }
+                                else {
+                                    Logger.d("wasn't right");
                                 }
                             }
                         });

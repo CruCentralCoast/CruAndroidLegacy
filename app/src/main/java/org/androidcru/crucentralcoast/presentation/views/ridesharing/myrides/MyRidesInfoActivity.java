@@ -202,11 +202,13 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 
     public void updateRide()
     {
+        Logger.d("resetting ride");
         RideProvider.requestRideByID(ride.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     ride = result;
                     setAdapter();
+                    spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
                 });
     }
 }
