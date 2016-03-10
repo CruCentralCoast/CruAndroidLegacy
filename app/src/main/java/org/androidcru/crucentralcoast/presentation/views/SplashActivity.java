@@ -55,19 +55,26 @@ public class SplashActivity extends AppCompatActivity
             intent.setClass(this, MainActivity.class);
         else
         {
+            // Gets the phone number of the device
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String userPhoneNumber = telephonyManager.getLine1Number();
-            userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
+            
+            if (userPhoneNumber != null && userPhoneNumber.length() > 2)
+            {
+                userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
 
-            sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
+                // Sets the autofill form data in shared preferences for the user's phone number
+                sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
-            UserProvider.requestCruUser(userPhoneNumber)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(cruUser -> {
-                        SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
-                        userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
-                        userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
-                    });
+                UserProvider.requestCruUser(userPhoneNumber)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(cruUser -> {
+                            // this is run if the user was retrieved from the Cru DB. commit to shared preferences the name and email for autofill purposes
+                            SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
+                            userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
+                            userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+                        });
+            }
 
             intent.setClass(this, SubscriptionActivity.class);
         }

@@ -1,8 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -25,6 +27,8 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class DriverSignupActivity extends AppCompatActivity
 {
+    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
+
     private DriverSignupVM driverSignupVM;
     private BaseValidator validator;
 
@@ -136,6 +140,9 @@ public class DriverSignupActivity extends AppCompatActivity
         fab.setOnClickListener(v -> {
             if(validator.validate())
             {
+                sharedPreferences.edit().putString(AppConstants.USER_NAME, driverSignupVM.nameField.getText().toString()).apply();
+                sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, driverSignupVM.phoneField.getText().toString()).apply();
+
                 if(driverSignupVM.editing)
                 {
                     updateDriver();

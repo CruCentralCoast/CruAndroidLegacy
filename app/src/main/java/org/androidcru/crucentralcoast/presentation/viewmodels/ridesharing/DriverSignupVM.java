@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,6 +49,8 @@ import butterknife.OnTextChanged;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class DriverSignupVM extends BaseRideVM {
+    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
+
     private Ride ride;
 
     public Double radius;
@@ -61,8 +64,8 @@ public class DriverSignupVM extends BaseRideVM {
     private GregorianCalendar eventStartDateTime, eventEndDateTime;
     private int minCapacity;
 
-    @Bind(R.id.name_field) @NotEmpty EditText nameField;
-    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    public @Bind(R.id.name_field) @NotEmpty EditText nameField;
+    public @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
     @Bind(R.id.gender_field) @Select Spinner genderField;
     @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
     @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
@@ -125,6 +128,9 @@ public class DriverSignupVM extends BaseRideVM {
             timeField.setOnKeyListener(null);
             dateField.setOnKeyListener(null);
             minCapacity = 0;
+
+            nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
+            phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
         }
 
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
