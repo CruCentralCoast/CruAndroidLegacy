@@ -12,7 +12,6 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.R;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,6 +43,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     protected void setCurrentFormContent(FormContent content)
     {
         currentFormContent = content;
+        clearUI();
+        if (viewPager.getCurrentItem() == 0)
+        {
+            setPreviousVisibility(View.GONE);
+        }
+        currentFormContent.setupUI();
         setupButtonListeners();
     }
 
@@ -80,25 +85,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
             dataObjects.add(null);
         }
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-            {
-            }
-
-            @Override
-            public void onPageSelected(int position)
-            {
-                adapter.getFormPage(position).formHolder.clearUI();
-                adapter.getFormPage(position).setupUI();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state)
-            {
-            }
-        });
     }
 
     @Override

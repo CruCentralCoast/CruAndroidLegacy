@@ -4,12 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class FormAdapter extends FragmentStatePagerAdapter
 {
     private FormActivity parent;
+    private int lastPosition = -1;
     public FormAdapter(FragmentManager fm, FormActivity parent)
     {
         super(fm);
@@ -28,12 +28,11 @@ public abstract class FormAdapter extends FragmentStatePagerAdapter
     public void finishUpdate(ViewGroup container)
     {
         super.finishUpdate(container);
-        if (((ViewPager) container).getCurrentItem() == 0)
+        int currentPage = ((ViewPager) container).getCurrentItem();
+        if (currentPage != lastPosition)
         {
-            getFormPage(0).formHolder.clearUI();
-            getFormPage(0).formHolder.setPreviousVisibility(View.GONE);
-            getFormPage(0).setupUI();
+            parent.setCurrentFormContent(getFormPage(currentPage));
         }
-        parent.setCurrentFormContent(getFormPage(((ViewPager) container).getCurrentItem()));
+        lastPosition = currentPage;
     }
 }
