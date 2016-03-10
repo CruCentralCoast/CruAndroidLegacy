@@ -18,6 +18,10 @@
             android:id="@+id/nav_summer_missions"
             android:icon="@drawable/ic_place"
             android:title="@string/nav_summer_missions"/>
+        <item
+            android:id="@+id/nav_videos"
+            android:icon="@drawable/ic_youtube_play_grey600_24dp"
+            android:title="@string/nav_videos"/>
     </group>
     <item android:title="@string/nav_get_involved">
         <menu>
@@ -41,10 +45,6 @@
                 android:id="@+id/nav_resources"
                 android:icon="@drawable/ic_assignment"
                 android:title="@string/resources"/>
-            <item
-                android:id="@+id/nav_videos"
-                android:icon="@drawable/ic_youtube_play_grey600_24dp"
-                android:title="@string/nav_videos"/>
             <item
                 android:id="@+id/nav_tools"
                 android:icon="@android:drawable/ic_menu_compass"

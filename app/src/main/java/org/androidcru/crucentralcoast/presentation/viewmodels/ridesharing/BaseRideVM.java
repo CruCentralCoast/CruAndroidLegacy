@@ -2,7 +2,9 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.media.Image;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -11,6 +13,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.api.client.util.DateTime;
 import com.orhanobut.logger.Logger;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -22,11 +25,16 @@ import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.Month;
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import rx.Observable;
@@ -141,8 +149,15 @@ public abstract class BaseRideVM extends BaseVM
                 getDateDialog(new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth()));
         dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
             date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
-            ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            String yyyymmdd = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+
+            //((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            ((EditText) v).setText(convertToddMMyyyy(yyyymmdd));
+
+            // ((EditText) v).setText(DateUtils.getRelativeTimeSpanString(date
+            //       .atStartOfDay(ZoneId.systemDefault()).toEpochSecond()));
         });
+
         dpd.show(fm, "whatever");
     }
 
@@ -153,9 +168,45 @@ public abstract class BaseRideVM extends BaseVM
                 getTimeDialog(new GregorianCalendar(0, 0, 0, time.getHour(), time.getMinute()));
         tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
             time = LocalTime.of(hourOfDay, minute, second);
-            ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+
+            String milTime = time.format(DateTimeFormatter.ISO_LOCAL_TIME);
+            ((EditText) v).setText(convertTo12Hour(milTime));
         });
         tpd.show(fm, "whatever");
+    }
+
+    private String convertToddMMyyyy(String s)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = null;
+
+        try
+        {
+            d = sdf.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        sdf.applyPattern("MMM dd, yyyy");
+        return sdf.format(d);
+    }
+
+    private String convertTo12Hour(String t)
+    {
+        DateFormat f1 = new SimpleDateFormat("HH:mm:ss");
+        DateFormat f2 = new SimpleDateFormat("h:mm a");
+        Date d = null;
+
+        try
+        {
+            d = f1.parse(t);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        return f2.format(d);
     }
 
     protected void onEventTimeClicked(View v)
@@ -163,7 +214,7 @@ public abstract class BaseRideVM extends BaseVM
         TimePickerDialog tpd = getTimeDialog();
         tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
             time = LocalTime.of(hourOfDay, minute, second);
-            ((EditText) v).setText(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+            ((EditText) v).setText(convertTo12Hour(time.format(DateTimeFormatter.ISO_LOCAL_TIME)));
         });
         tpd.show(fm, "whatever");
     }
