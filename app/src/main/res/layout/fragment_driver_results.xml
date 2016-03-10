@@ -4,10 +4,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <include
-        layout="@layout/progress_layout"/>
+              android:layout_height="match_parent"
+                android:padding="8dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/driver_results_list"
@@ -16,7 +14,7 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="8dp"/>
+        tools:listitem="@layout/item_driver_result"/>
 
 
 </RelativeLayout>

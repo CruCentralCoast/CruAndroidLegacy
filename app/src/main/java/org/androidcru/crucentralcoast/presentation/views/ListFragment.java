@@ -34,14 +34,13 @@ public class ListFragment extends Fragment
 
         recyclerView.setHasFixedSize(true);
 
-        setupSwipeRefreshLayout();
+        setupSwipeRefreshLayout(swipeRefreshLayout);
     }
 
-    protected void setupSwipeRefreshLayout()
+    public static void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout)
     {
         //issue 77712, workaround until Google fixes it
         swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
-
         swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
     }
 
