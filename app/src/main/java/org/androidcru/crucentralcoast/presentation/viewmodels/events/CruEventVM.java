@@ -56,8 +56,7 @@ public class CruEventVM
     public String getDateTime()
     {
         return cruEvent.startDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER))
-                + " " + cruEvent.startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER))
-                + " - " + cruEvent.endDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
+                + " " + cruEvent.startDate.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
     }
 
     public View.OnClickListener onCalendarClick()

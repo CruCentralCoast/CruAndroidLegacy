@@ -25,7 +25,6 @@ import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryT
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
 
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_community_groups:
                 toolbar.setTitle(R.string.community_groups);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
+                spawnConstructionFragment();
                 break;
             case R.id.nav_ministry_teams:
                 toolbar.setTitle(R.string.ministry_teams);
@@ -191,6 +190,7 @@ public class MainActivity extends AppCompatActivity
     public void switchToMyRides(Bundle b)
     {
         navigationView.setCheckedItem(R.id.nav_my_rides);
+        toolbar.setTitle(R.string.nav_my_rides);
         MyRidesFragment fragment = new MyRidesFragment();
         fragment.setArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity
     public void switchToEvents()
     {
         navigationView.setCheckedItem(R.id.nav_events);
+        toolbar.setTitle(R.string.nav_events);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
     }
 
