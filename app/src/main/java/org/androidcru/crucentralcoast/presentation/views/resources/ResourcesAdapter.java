@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
@@ -37,7 +38,7 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
+        return new ArticleViewHolder(inflater.inflate(R.layout.item_resource, parent, false));
     }
 
     public void onBindViewHolder(ArticleViewHolder holder, int position)
@@ -45,6 +46,7 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
         Resource curResource = resources.get(position);
         holder.title.setText(curResource.title);
         holder.tags.setText(activity.getString(R.string.tags, curResource.formatTags()));
+        holder.typeIcon.setImageResource(getResourceIconFromType(curResource.resourceType));
         holder.rootView.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -54,6 +56,21 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
                         activity, customTabsIntentBuilder.build(), Uri.parse(curResource.url), new WebviewFallback());
             }
         });
+    }
+
+    private int getResourceIconFromType(Resource.ResourceType type)
+    {
+        switch(type)
+        {
+            case ARTICLE:
+                return R.drawable.ic_note_outline_grey600_48dp;
+            case AUDIO:
+                return R.drawable.ic_headphones_grey600_48dp;
+            case VIDEO:
+                return R.drawable.ic_video_collection;
+        }
+
+        return -1;
     }
 
     @Override
@@ -67,6 +84,7 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
     {
         @Bind(R.id.title) TextView title;
         @Bind(R.id.tags) TextView tags;
+        @Bind(R.id.resource_icon) ImageView typeIcon;
         View rootView;
 
         public ArticleViewHolder(View rootView) {

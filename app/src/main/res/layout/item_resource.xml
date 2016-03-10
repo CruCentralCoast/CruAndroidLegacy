@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:id="@+id/resource_icon"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        android:padding="8dp"
+        android:layout_toRightOf="@id/resource_icon"
+        android:layout_alignParentLeft="false"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            tools:text="Prayer 101"
+            android:textColor="@color/grey800"
+            android:textSize="20dp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tags"
+            tools:text="hip, cool, prayer, intro"
+            android:textColor="@color/grey600"
+            android:textSize="16dp"
+            android:paddingBottom="4dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
