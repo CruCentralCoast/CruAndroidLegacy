@@ -58,6 +58,8 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     @Bind(R.id.passenger_list_heading) TextView passengerListHeading;
     @Bind(R.id.toolbar) Toolbar toolbar;
 
+    private MyRidesInfoAdapter rideSharingAdapter;
+
 //    @Bind(R.id.editOffering) Button editButton;
 //    @Bind(R.id.cancelOffering) Button cancelButton;
 
@@ -101,12 +103,15 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         eventList.setLayoutManager(llm);
         eventList.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
 
-        //Adapter for RecyclerView
-        MyRidesInfoAdapter rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers, ride.id);
+        setAdapter();
+        setSupportActionBar(toolbar);
+    }
+
+    //Adapter for RecyclerView
+    private void setAdapter() {
+        rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers, ride.id);
         eventList.setAdapter(rideSharingAdapter);
         eventList.setHasFixedSize(true);
-
-        setSupportActionBar(toolbar);
     }
 
     private void editMenuOption()
@@ -195,14 +200,13 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void setPassengers(List<Passenger> passengerList)
-//    {
-//        passengers.clear();
-//        rx.Observable.from(passengerList)
-//                .subscribeOn(Schedulers.immediate())
-//                .subscribe(passengers::add);
-//
-//        recyclerView.setAdapter(new MyRidesInfoAdapter(getContext(), passengers));
-//        swipeRefreshLayout.setRefreshing(false);
-//    }
+    public void updateRide()
+    {
+        RideProvider.requestRideByID(ride.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    ride = result;
+                    setAdapter();
+                });
+    }
 }
