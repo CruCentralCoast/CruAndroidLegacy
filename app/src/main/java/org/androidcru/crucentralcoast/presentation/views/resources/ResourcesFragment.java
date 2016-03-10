@@ -14,6 +14,7 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.providers.ResourceProvider;
+import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class ResourcesFragment extends ListFragment
         //LayoutManager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
         setupCustomTab();
 
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);

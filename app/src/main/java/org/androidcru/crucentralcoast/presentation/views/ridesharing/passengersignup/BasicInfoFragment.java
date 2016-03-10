@@ -89,6 +89,7 @@ public class BasicInfoFragment extends FormContentFragment {
     @Override
     public void setupUI()
     {
+        formHolder.setTitle("Contact Information");
         ride = (Ride) formHolder.getDataObject();
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));

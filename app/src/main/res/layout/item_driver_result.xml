@@ -3,8 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:paddingTop="8dp"
-    >
+                android:padding="16dp">
 
     <ImageView
         android:id="@+id/driverIcon"
@@ -29,15 +28,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Jane Doe"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"/>
+            android:textColor="@color/grey800"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/rideDateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Monday, Febuary 29th, 2016"
-            android:layout_marginBottom="4dp"/>
+            android:layout_marginBottom="4dp"
+            android:textSize="16dp"/>
 
     </LinearLayout>
 </RelativeLayout>

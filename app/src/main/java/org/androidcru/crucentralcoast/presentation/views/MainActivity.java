@@ -37,13 +37,14 @@ public class MainActivity extends AppCompatActivity
     private static MainActivity self;
     private NavigationView navigationView;
     private ConstructionFragment constructionFragment;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -145,30 +146,39 @@ public class MainActivity extends AppCompatActivity
         switch (id)
         {
             case R.id.nav_home:
+                toolbar.setTitle(R.string.app_name);
                 spawnConstructionFragment();
                 break;
             case R.id.nav_tools:
+                toolbar.setTitle(R.string.nav_tools);
                 spawnConstructionFragment();
                 break;
             case R.id.nav_events:
+                toolbar.setTitle(R.string.nav_events);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
                 break;
             case R.id.nav_my_rides:
+                toolbar.setTitle(R.string.nav_my_rides);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new MyRidesFragment()).commit();
                 break;
             case R.id.nav_summer_missions:
+                toolbar.setTitle(R.string.nav_summer_missions);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new SummerMissionsFragment()).commit();
                 break;
             case R.id.nav_community_groups:
+                toolbar.setTitle(R.string.community_groups);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
                 break;
             case R.id.nav_ministry_teams:
+                toolbar.setTitle(R.string.ministry_teams);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new MinistryTeamsFragment()).commit();
                 break;
             case R.id.nav_resources:
+                toolbar.setTitle(R.string.resources);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new ResourcesFragment()).commit();
                 break;
             case R.id.nav_videos:
+                toolbar.setTitle(R.string.nav_videos);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
                 break;
         }

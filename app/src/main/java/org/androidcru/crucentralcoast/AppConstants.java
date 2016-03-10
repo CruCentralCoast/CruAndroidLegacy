@@ -55,6 +55,7 @@ public class AppConstants
             "\\s*([2-9][0-9]{2})\\s*\\W?\\s*([0-9]{4})(\\se?x?t?(\\d*))?";
 
     public final static String DATE_FORMATTER = "EEEE MMMM dd,";
+    public final static String SHORT_DATE_FORMATTER = "EE MMM dd,";
     public final static String TIME_FORMATTER = "h:mm a";
 
     /**

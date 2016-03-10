@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContent;
@@ -43,7 +44,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
     {
         Ride currentRide = rides.get(position);
         holder.driverName.setText(currentRide.driverName);
-        holder.rideDateTime.setText(currentRide.time.format(DateTimeFormatter.RFC_1123_DATE_TIME));
+        holder.rideDateTime.setText(currentRide.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER + " " + AppConstants.TIME_FORMATTER)));
     }
 
     @Override
