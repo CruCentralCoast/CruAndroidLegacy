@@ -18,6 +18,7 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
+import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import java.util.ArrayList;
@@ -90,9 +91,7 @@ public class DriverResultsFragment extends FormContentFragment
 
         ButterKnife.bind(this, view);
 
-        //issue 77712, workaround until Google fixes it
-        swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
-        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        ListFragment.setupSwipeRefreshLayout(swipeRefreshLayout);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -125,6 +124,7 @@ public class DriverResultsFragment extends FormContentFragment
             subscription.unsubscribe();
         subscription = RideProvider.searchRides(query)
                 .flatMap(rides -> Observable.from(rides))
+
                 .map(ride -> {
                     GeocodeProvider.getLatLng(getContext(), ride.location.toString())
                             .compose(RxLoggingUtil.log("RIDE"))
