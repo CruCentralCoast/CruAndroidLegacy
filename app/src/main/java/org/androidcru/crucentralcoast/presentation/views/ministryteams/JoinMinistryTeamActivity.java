@@ -31,7 +31,6 @@ public class JoinMinistryTeamActivity extends FormActivity
         else
         {
             ministryTeam = Parcels.unwrap(bundle.getParcelable(AppConstants.MINISTRY_TEAM_KEY));
-            addDataObject(ministryTeam);
         }
 
         ArrayList<FormContentFragment> fragments = new ArrayList<>();
@@ -44,5 +43,6 @@ public class JoinMinistryTeamActivity extends FormActivity
         fragments.add(new MinistryTeamLeaderInformationFragment());
 
         setAdapter(new MinistryTeamPagerAdapter(getSupportFragmentManager(), this, fragments));
+        addDataObject(ministryTeam);
     }
 }

@@ -51,5 +51,8 @@ public class MinistryTeamInformationFragment extends FormContentFragment
     public void setupUI()
     {
         formHolder.setTitle(ministryTeam.name);
+
+        //TODO @jon make this automatic?
+        formHolder.addDataObject(formHolder.getDataObject());
     }
 }

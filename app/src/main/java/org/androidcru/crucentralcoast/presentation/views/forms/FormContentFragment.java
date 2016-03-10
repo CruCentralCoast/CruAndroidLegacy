@@ -30,7 +30,7 @@ public abstract class FormContentFragment extends Fragment implements FormConten
     }
 
     @Override
-    public void addDataObject(Object dataObject)
+    public final void setNextDataObject(Object dataObject)
     {
         formHolder.addDataObject(dataObject);
     }
