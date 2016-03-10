@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:id="@+id/trip_type_layout">
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/trip_type_icon"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_car_grey600_48dp"
+        android:padding="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/direction"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toRightOf="@+id/trip_type_icon"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp">
+        <RadioButton android:id="@+id/to_event"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="To Event"
+                     android:textSize="14sp"/>
+        <RadioButton android:id="@+id/round_trip"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Round-Trip"
+                     android:layout_marginLeft="32dp"
+                     android:textSize="14sp"/>
+    </RadioGroup>
+</RelativeLayout>

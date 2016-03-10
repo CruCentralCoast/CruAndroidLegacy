@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -40,7 +42,6 @@ import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import butterknife.Bind;
@@ -60,24 +61,26 @@ public class DriverSignupVM extends BaseRideVM {
     private LatLng center;
 
     public boolean editing;
-    protected Ride.Direction[] directions;
-    private GregorianCalendar eventStartDateTime, eventEndDateTime;
+    private GregorianCalendar eventStartDateTime;
     private int minCapacity;
 
-    public @Bind(R.id.name_field) @NotEmpty EditText nameField;
-    public @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.gender_field) @Select Spinner genderField;
-    @Bind(R.id.trip_type_field) @Select Spinner tripTypeField;
-    @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
-//    @Bind(R.id.num_passengers) TextView numPassengers;
-    @Bind(R.id.event_time_field) @NotEmpty EditText timeField;
-    @Bind(R.id.event_date_field) @NotEmpty EditText dateField;
-    @Bind(R.id.gender_view) TextView genderView;
-    @Bind(R.id.radius_field) TextView radiusField;
+    @Bind(R.id.name_field) @NotEmpty public EditText nameField;
+    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) public EditText phoneField;
 
-    public DriverSignupVM(Activity activity, FragmentManager fm) {
-        this(activity, fm, new Ride());
-    }
+    @Bind(R.id.round_trip) RadioButton roundTrip;
+    @Bind(R.id.to_event) RadioButton toEvent;
+    @Bind(R.id.direction) RadioGroup directionGroup;
+
+    @Bind(R.id.gender_field) @Select Spinner genderField;
+    @Bind(R.id.gender_view) TextView genderView;
+
+    @Bind(R.id.time_field) @NotEmpty EditText rideTime;
+    @Bind(R.id.date_field) @NotEmpty EditText rideDate;
+
+    @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
+
+    @Bind(R.id.radius_field) TextView radiusField;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
     public DriverSignupVM(Activity activity, FragmentManager fm, String eventID) {
         super(activity, fm);
@@ -85,7 +88,6 @@ public class DriverSignupVM extends BaseRideVM {
         this.ride = new Ride();
 
         setEventTime(eventID);
-        generateDirections();
         bindUI();
     }
 
@@ -100,13 +102,11 @@ public class DriverSignupVM extends BaseRideVM {
             setEventTime(this.ride.eventId);
         }
 
-        generateDirections();
         bindUI();
     }
 
     private void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        ViewUtil.setSpinner(tripTypeField, directionsForSpinner(directions), null, getDirectionIndex(ride.direction, directions));
 
         if (editing) {
             genderField.setVisibility(View.GONE);
@@ -119,14 +119,25 @@ public class DriverSignupVM extends BaseRideVM {
             nameField.setText(ride.driverName);
             phoneField.setText(ride.driverNumber);
 
-            timeField.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
-            dateField.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            rideTime.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
+            rideDate.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
 
             radiusField.setText(Double.toString(ride.radius));
+
+            switch (ride.direction)
+            {
+                case TO:
+                    directionGroup.check(toEvent.getId());
+                    break;
+                default:
+                    directionGroup.check(roundTrip.getId());
+            }
+
         } else {
             ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
-            timeField.setOnKeyListener(null);
-            dateField.setOnKeyListener(null);
+            directionGroup.check(roundTrip.getId());
+            rideTime.setOnKeyListener(null);
+            rideDate.setOnKeyListener(null);
             minCapacity = 0;
 
             nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
@@ -137,34 +148,25 @@ public class DriverSignupVM extends BaseRideVM {
 
     }
 
-    private String[] carCapacityForSpinner() {
-        int startCapacity = 1;
-        if (editing) {
-            startCapacity = ride.carCapacity;
-        }
-        String[] carCapacities = new String[12 - startCapacity + 2];
-        carCapacities[0] = "Select Car Capacity";
-        for (int i = 1; i < carCapacities.length; i++) {
-            carCapacities[i] = String.valueOf(startCapacity + i - 1);
-        }
-
-        return carCapacities;
-    }
-
-    private int getCarCapacityIndex(int capacity) {
-        int index = 0;
-        String[] carCapacities = carCapacityForSpinner();
-        for (int i = 0; i < carCapacities.length; i++) {
-            if (String.valueOf(capacity).equals(carCapacities[i])) {
-                index = i;
-            }
-        }
-
-        return index;
-    }
-
     private int retrieveCarCapacity() {
         return Integer.parseInt(carCapacity.getText().toString());
+    }
+
+
+    private Ride.Direction retrieveDirection(RadioGroup radioGroup)
+    {
+        int selectedRadioIndex = radioGroup.indexOfChild(rootView.findViewById(radioGroup.getCheckedRadioButtonId()));
+        Ride.Direction direction = Ride.Direction.ROUNDTRIP;
+        switch (selectedRadioIndex)
+        {
+            case 0:
+                direction = Ride.Direction.TO;
+                break;
+            case 1:
+                direction = Ride.Direction.ROUNDTRIP;
+                break;
+        }
+        return direction;
     }
 
     public Ride getRide() {
@@ -172,39 +174,16 @@ public class DriverSignupVM extends BaseRideVM {
         ride.driverNumber = phoneField.getText().toString();
         ride.gender = (String) genderField.getSelectedItem();
         ride.carCapacity = retrieveCarCapacity();
-        ride.direction = retrieveDirection(tripTypeField, directions);
+        ride.direction = retrieveDirection(directionGroup);
         ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());
         return ride;
     }
 
-    private void generateDirections() {
-        if (editing) {
-            ArrayList<Ride.Direction> directions = new ArrayList<>();
-            switch (ride.direction) {
-                case TO:
-                    directions.add(Ride.Direction.TO);
-                    directions.add(Ride.Direction.ROUNDTRIP);
-                    break;
-                case FROM:
-                    directions.add(Ride.Direction.FROM);
-                    directions.add(Ride.Direction.ROUNDTRIP);
-                    break;
-                case ROUNDTRIP:
-                    directions.add(Ride.Direction.ROUNDTRIP);
-            }
-            this.directions = directions.toArray(new Ride.Direction[directions.size()]);
-        } else {
-            directions = new Ride.Direction[]{Ride.Direction.TO, Ride.Direction.FROM, Ride.Direction.ROUNDTRIP};
-        }
-    }
-
     private GregorianCalendar getDefaultEventTime() {
-        int pos = tripTypeField.getSelectedItemPosition();
-        return pos != 0 && retrieveDirection(tripTypeField, directions).getValue().equals("from") ?
-                eventEndDateTime : eventStartDateTime;
+        return eventStartDateTime;
     }
 
-    @OnClick(R.id.event_time_field)
+    @OnClick(R.id.time_field)
     public void onTimeClicked(View v) {
         GregorianCalendar gc;
         if (editing)
@@ -215,7 +194,7 @@ public class DriverSignupVM extends BaseRideVM {
         onEventTimeClicked(v, gc);
     }
 
-    @OnClick(R.id.event_date_field)
+    @OnClick(R.id.date_field)
     public void onDateClicked(View v) {
         GregorianCalendar gc;
         if (editing)
@@ -303,13 +282,12 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
-    //sets the event time start and end which should only happen if not editing
+    //TODO @daniel somehow, avoid this network call
     private void setEventTime(String eventID) {
         EventProvider.requestCruEventByID(eventID)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate);
-                    eventEndDateTime = DateTimeUtils.toGregorianCalendar(event.endDate);
                 });
     }
 
