@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class BasicInfoFragment extends FormContentFragment {
+    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     private Ride ride;
     private BaseValidator validator;
@@ -63,6 +65,11 @@ public class BasicInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
+            // gets the validated information and overwrites the user's information in shared preferences on a background thread
+            sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
+            sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
+
+
             Passenger passenger = getPassenger();
             progressBar.setVisibility(View.VISIBLE);
             formHolder.setNavigationClickable(false);
@@ -83,6 +90,9 @@ public class BasicInfoFragment extends FormContentFragment {
     public void setupUI()
     {
         ride = (Ride) formHolder.getDataObject();
+
+        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
+        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
     }
 }
 
