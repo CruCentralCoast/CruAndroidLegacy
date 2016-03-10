@@ -22,7 +22,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
-import org.androidcru.crucentralcoast.presentation.views.resources.articles.ArticlesFragment;
+import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsFragment;
@@ -165,8 +165,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_ministry_teams:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new MinistryTeamsFragment()).commit();
                 break;
-            case R.id.nav_articles:
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new ArticlesFragment()).commit();
+            case R.id.nav_resources:
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new ResourcesFragment()).commit();
                 break;
             case R.id.nav_videos:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();

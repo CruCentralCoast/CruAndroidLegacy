@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.resources.articles;
+package org.androidcru.crucentralcoast.presentation.views.resources;
 
 
 import android.app.Activity;
@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder>
+public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.ArticleViewHolder>
 {
     private Activity activity;
     private ArrayList<Resource> resources;
     private CustomTabsIntent.Builder customTabsIntentBuilder;
 
-    public ArticlesAdapter(Activity activity, ArrayList<Resource> resources, CustomTabsIntent.Builder customTabsIntentBuilder)
+    public ResourcesAdapter(Activity activity, ArrayList<Resource> resources, CustomTabsIntent.Builder customTabsIntentBuilder)
     {
         this.activity = activity;
         this.resources = resources;

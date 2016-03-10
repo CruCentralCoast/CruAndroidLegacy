@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.views.resources.articles;
+package org.androidcru.crucentralcoast.presentation.views.resources;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +23,7 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class ArticlesFragment extends ListFragment
+public class ResourcesFragment extends ListFragment
 {
     private CustomTabsIntent.Builder customTabsIntentBuilder;
 
@@ -31,7 +31,7 @@ public class ArticlesFragment extends ListFragment
     private Observer<List<Resource>> resourceSubscriber;
     private Subscription subscription;
 
-    public ArticlesFragment()
+    public ResourcesFragment()
     {
         resources = new ArrayList<>();
         setupObserver();
@@ -107,7 +107,7 @@ public class ArticlesFragment extends ListFragment
         swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        subscription = ResourceProvider.findResources(new Resource.ResourceType[] { Resource.ResourceType.ARTICLE }, null)
+        subscription = ResourceProvider.findResources(Resource.ResourceType.values(), null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resourceSubscriber);
     }
@@ -115,8 +115,8 @@ public class ArticlesFragment extends ListFragment
     private void setResources(List<Resource> resources)
     {
         //Adapter for RecyclerView
-        ArticlesAdapter articlesAdapter = new ArticlesAdapter(getActivity(), new ArrayList<>(resources), customTabsIntentBuilder);
-        recyclerView.setAdapter(articlesAdapter);
+        ResourcesAdapter resourcesAdapter = new ResourcesAdapter(getActivity(), new ArrayList<>(resources), customTabsIntentBuilder);
+        recyclerView.setAdapter(resourcesAdapter);
         this.resources = new ArrayList<>(resources);
     }
 

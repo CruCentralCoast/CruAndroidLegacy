@@ -57,7 +57,8 @@ public class SplashActivity extends AppCompatActivity
         {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String userPhoneNumber = telephonyManager.getLine1Number();
-            userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
+            if(userPhoneNumber != null)
+                userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
 
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
