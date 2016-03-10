@@ -14,43 +14,35 @@
             android:id="@+id/nav_my_rides"
             android:icon="@drawable/ic_maps_directions_car"
             android:title="@string/nav_my_rides"/>
+    </group>
+
+    <group android:checkableBehavior="single" android:id="@+id/get_involved">
+            <item
+                android:id="@+id/nav_summer_missions"
+                android:icon="@drawable/ic_place"
+                android:title="@string/nav_summer_missions"/>
+            <item
+                android:id="@+id/nav_community_groups"
+                android:icon="@drawable/ic_group_add"
+                android:title="@string/nav_community_group"/>
+            <item
+                android:id="@+id/nav_ministry_teams"
+                android:icon="@drawable/ic_group_add"
+                android:title="@string/nav_ministry_team"/>
+    </group>
+    <group android:checkableBehavior="single" android:id="@+id/resources_options">
         <item
-            android:id="@+id/nav_summer_missions"
-            android:icon="@drawable/ic_place"
-            android:title="@string/nav_summer_missions"/>
+            android:id="@+id/nav_resources"
+            android:icon="@drawable/ic_assignment"
+            android:title="@string/resources"/>
         <item
             android:id="@+id/nav_videos"
             android:icon="@drawable/ic_youtube_play_grey600_24dp"
             android:title="@string/nav_videos"/>
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="@string/nav_tools"/>
     </group>
-    <item android:title="@string/nav_get_involved">
-        <menu>
-            <group android:checkableBehavior="single" android:id="@+id/get_involved">
-                    <item
-                        android:id="@+id/nav_community_groups"
-                        android:icon="@drawable/ic_group_add"
-                        android:title="@string/nav_community_group"/>
-                    <item
-                        android:id="@+id/nav_ministry_teams"
-                        android:icon="@drawable/ic_group_add"
-                        android:title="@string/nav_ministry_team"/>
-            </group>
-        </menu>
-    </item>
-
-    <item android:title="@string/nav_resources">
-        <menu>
-            <group android:checkableBehavior="single" android:id="@+id/resources_options">
-            <item
-                android:id="@+id/nav_resources"
-                android:icon="@drawable/ic_assignment"
-                android:title="@string/resources"/>
-            <item
-                android:id="@+id/nav_tools"
-                android:icon="@android:drawable/ic_menu_compass"
-                android:title="@string/nav_tools"/>
-            </group>
-        </menu>
-    </item>
 
 </menu>

@@ -109,7 +109,7 @@ public class VideosFragment extends Fragment
             }
         });
 
-        swipeRefreshLayout.setColorSchemeColors(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 

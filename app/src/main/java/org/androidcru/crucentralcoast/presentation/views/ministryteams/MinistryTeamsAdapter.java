@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruImage;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.parceler.Parcels;
@@ -44,7 +45,9 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
         MinistryTeamHolder ministryTeamHolder = (MinistryTeamHolder) holder;
 
         //TODO temporary for now
-        ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
+        CruImage cruImage = ministryTeams.get(position).cruImage;
+        if(cruImage != null)
+            ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
 
         Intent intent = new Intent(parent, JoinMinistryTeamActivity.class);
         intent.putExtra(AppConstants.MINISTRY_TEAM_KEY, Parcels.wrap(ministryTeams.get(position)));
