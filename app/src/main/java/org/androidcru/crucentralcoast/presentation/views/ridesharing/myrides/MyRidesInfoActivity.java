@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +10,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.orhanobut.logger.Logger;
+import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -19,6 +29,7 @@ import org.androidcru.crucentralcoast.data.models.CruImage;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -38,39 +49,43 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     @Bind(R.id.recyclerview) RecyclerView eventList;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
-//    @Bind(R.id.event_banner) ImageView eventBanner; //TODO: change ui so we can have this and a scrollable passenger list
-    @Bind(R.id.eventName) TextView eventName;
+    @Bind(R.id.event_banner) ImageView eventBanner;
+    //@Bind(R.id.eventName) TextView eventName;
     @Bind(R.id.ride_type) TextView rideType;
     @Bind(R.id.ride_time) TextView rideTime;
     @Bind(R.id.departureLoc) TextView departureLoc;
     @Bind(R.id.spots_remaining) TextView spotsRemaining;
     @Bind(R.id.passenger_list_heading) TextView passengerListHeading;
+    @Bind(R.id.toolbar) Toolbar toolbar;
 
+    private MyRidesInfoAdapter rideSharingAdapter;
 
-    @Bind(R.id.editOffering) Button editButton;
-    @Bind(R.id.cancelOffering) Button cancelButton;
+//    @Bind(R.id.editOffering) Button editButton;
+//    @Bind(R.id.cancelOffering) Button cancelButton;
 
     private void setupUI(String theEventName, CruImage theImage) {
         //TODO: query for event to access event name and image
-        eventName.setText(theEventName);
-//        Context context = eventBanner.getContext();
-//        if(theImage != null)
-//        {
-//            Picasso.with(context)
-//                    .load(theImage.url)
-//                    .fit()
-//                    .into(eventBanner);
-//        }
+        //eventName.setText(theEventName);
+        toolbar.setTitle(theEventName);
+        Context context = eventBanner.getContext();
+        if(theImage != null)
+        {
+            Picasso.with(context)
+                    .load(theImage.url)
+                    .fit()
+                    .into(eventBanner);
+        }
         rideType.setText("You are driving: " + ride.direction.getValueDetailed());
-        rideTime.setText("Departure Time: " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+        rideTime.setText("Departure Time:\n" + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
-        departureLoc.setText("Pickup Location: " + ride.location.toString());
+        departureLoc.setText("Pickup Location:\n" + ride.location.toString());
         spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
         //Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
-        passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Passenger List" : "No Passengers");
-        editButton.setOnClickListener(onEditOfferingClicked());
+        passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Your Passengers" : "No Passengers");
+//        editButton.setOnClickListener(onEditOfferingClicked());
         initAlertDialog();
-        cancelButton.setOnClickListener(onCancelOfferingClicked());
+//        cancelButton.setOnClickListener(onCancelOfferingClicked());
+        eventList.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -83,28 +98,41 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 
         getEventData();
 
-        //Enables actions in the Activity Toolbar (top-right buttons)
-        //setHasOptionsMenu(true);
-
         //LayoutManager for RecyclerView
-        eventList.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        eventList.setLayoutManager(llm);
+        eventList.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
 
-        //Adapter for RecyclerView
-        MyRidesInfoAdapter rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers, ride.id);
+        setAdapter();
+        setSupportActionBar(toolbar);
+    }
+
+    //Adapter for RecyclerView
+    private void setAdapter() {
+        rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers, ride.id);
         eventList.setAdapter(rideSharingAdapter);
         eventList.setHasFixedSize(true);
     }
 
-
-    public View.OnClickListener onEditOfferingClicked()
+    private void editMenuOption()
     {
         Intent intent = new Intent(this, DriverSignupActivity.class);
         Bundle extras = new Bundle();
         extras.putString(AppConstants.RIDE_KEY, ride.id);
         extras.putString(AppConstants.EVENT_ID, ride.eventId);
         intent.putExtras(extras);
-        return v -> this.startActivity(intent);
+        this.startActivity(intent);
     }
+
+//    public View.OnClickListener onEditOfferingClicked()
+//    {
+//        Intent intent = new Intent(this, DriverSignupActivity.class);
+//        Bundle extras = new Bundle();
+//        extras.putString(AppConstants.RIDE_KEY, ride.id);
+//        extras.putString(AppConstants.EVENT_ID, ride.eventId);
+//        intent.putExtras(extras);
+//        return v -> this.startActivity(intent);
+//    }
 
     private void initAlertDialog() {
         alertDialog = new AlertDialog.Builder(this).create();
@@ -125,14 +153,19 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         });
     }
 
-    public View.OnClickListener onCancelOfferingClicked()
+//    public View.OnClickListener onCancelOfferingClicked()
+//    {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.show();
+//            }
+//        };
+//    }
+
+    private void cancelMenuOption()
     {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.show();
-            }
-        };
+        alertDialog.show();
     }
 
     private void getEventData()
@@ -140,18 +173,42 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         EventProvider.requestCruEventByID(ride.eventId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                   setupUI(result.name, result.image);
+                    setupUI(result.name, result.image);
                 });
     }
 
-//    public void setPassengers(List<Passenger> passengerList)
-//    {
-//        passengers.clear();
-//        rx.Observable.from(passengerList)
-//                .subscribeOn(Schedulers.immediate())
-//                .subscribe(passengers::add);
-//
-//        recyclerView.setAdapter(new MyRidesInfoAdapter(getContext(), passengers));
-//        swipeRefreshLayout.setRefreshing(false);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.my_rides_info_menu, menu);
+        //LayoutInflater.from(this).inflate(R.menu.my_rides_info_menu, this);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String selected = (String) item.getTitle();
+        switch((String) item.getTitle()) {
+            case "Edit":
+                editMenuOption();
+                break;
+            case "Cancel":
+                cancelMenuOption();
+                break;
+            default:
+                Logger.d("Incorrect item selection for action bar");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void updateRide()
+    {
+        Logger.d("resetting ride");
+        RideProvider.requestRideByID(ride.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    ride = result;
+                    setAdapter();
+                    spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
+                });
+    }
 }

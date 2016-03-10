@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
@@ -106,7 +107,28 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 Logger.d("chose " + selectedPassengerID);
                 RideProvider.dropPassengerFromRide(selectedPassengerID, rideID)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe();
+                        .subscribe(new Observer<Void>() {
+                            @Override
+                            public void onCompleted() {
+                                Logger.d("Completed the drop");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Logger.d("Error on the drop");
+                            }
+
+                            @Override
+                            public void onNext(Void aVoid) {
+                                //TODO: mitch told me to do it
+                                if (context instanceof MyRidesInfoActivity) {
+                                    ((MyRidesInfoActivity)context).updateRide();
+                                }
+                                else {
+                                    Logger.d("wasn't right");
+                                }
+                            }
+                        });
             }
         });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {

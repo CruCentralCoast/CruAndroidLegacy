@@ -291,6 +291,7 @@ public class DriverSignupVM extends BaseRideVM {
                 });
     }
 
+
     private TextWatcher createCarCapacityWatcher()
     {
         return new TextWatcher() {
@@ -304,21 +305,28 @@ public class DriverSignupVM extends BaseRideVM {
 
             }
 
+            @OnTextChanged(R.id.car_capacity_field)
             @Override
             public void afterTextChanged(Editable s) {
+                try
+                {
+                    if (s == null || s.toString().equals("")) {
+                        return;
+                    }
+                    //make sure is within bounds
+                    int setTo = Integer.parseInt(s.toString());
+                    if (setTo < minCapacity)
+                    {
+                        carCapacity.setText(Integer.toString(minCapacity));
+                    }
+                    else if (setTo > AppConstants.MAX_CAR_CAPACITY)
+                    {
+                        carCapacity.setText(Integer.toString(AppConstants.MAX_CAR_CAPACITY));
+                    }
+                }
+                catch (NumberFormatException nfe)
+                {
 
-                if (s == null || s.toString().equals("")) {
-                    return;
-                }
-                //make sure is within bounds
-                int setTo = Integer.parseInt(s.toString());
-                if (setTo < minCapacity)
-                {
-                    carCapacity.setText(Integer.toString(minCapacity));
-                }
-                else if (setTo > AppConstants.MAX_CAR_CAPACITY)
-                {
-                    carCapacity.setText(Integer.toString(AppConstants.MAX_CAR_CAPACITY));
                 }
             }
         };

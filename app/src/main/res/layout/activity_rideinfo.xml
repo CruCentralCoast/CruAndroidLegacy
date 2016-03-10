@@ -16,97 +16,152 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:animateLayoutChanges="true">
 
-            <!--<ImageView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="180dp"-->
-                <!--android:adjustViewBounds="true"-->
-                <!--android:id="@+id/event_banner"-->
-                <!--android:layout_marginBottom="8dp"/>-->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eventName"
-                android:layout_marginLeft="12dp"
-                tools:text="Fall Retreat"
-                android:textColor="@color/grey800"
-                android:textSize="24dp"
-                android:layout_marginTop="8dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ride_time"
-                tools:text="Tuesday, January 11 10:00am - 7:00pm"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="4dp"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/departureLoc"
-                tools:text="Performance Arts Center"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="4dp"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ride_type"
-                tools:text="Round Trip"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="4dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spots_remaining"
-                tools:text="0"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="4dp"
-                android:textSize="16sp"/>
-
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:adjustViewBounds="true"
+                android:id="@+id/event_banner"
+                android:layout_marginBottom="8dp"/>
+            <!--departure time-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/actionLayout">
-
-
-                <Button
+                android:id="@+id/departure_time_layout"
+                android:padding="4dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/departure_time_icon"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_clock_grey600_48dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"/>
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editOffering"
-                    android:text="@string/edit"
-                    android:layout_toLeftOf="@+id/launchPassenger"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:textColor="@color/cruDarkBlue"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="16dp"
-                    android:foreground="?android:attr/selectableItemBackground"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/cancelOffering"
-                    android:text="@string/cancel"
-                    android:layout_alignParentRight="true"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:textColor="@color/cruDarkBlue"
-                    android:layout_marginRight="16dp"
-                    android:layout_centerInParent="true"/>
-
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ride_time"
+                    tools:text="Tuesday, January 11 10:00am - 7:00pm"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="16sp"
+                    android:layout_toRightOf="@+id/departure_time_icon"/>
             </RelativeLayout>
+            <!--departure location-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/departure_loc_layout"
+                android:padding="4dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/departure_loc_icon"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_map_marker_grey600_24dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/departureLoc"
+                    tools:text="Performance Arts Center"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="16sp"
+                    android:layout_toRightOf="@+id/departure_loc_icon"/>
+            </RelativeLayout>
+            <!--ride direction-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ride_dir_layout"
+                android:padding="4dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/ride_dir_icon"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_car_grey600_48dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ride_type"
+                    tools:text="Round Trip"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="16sp"
+                    android:layout_toRightOf="@+id/ride_dir_icon"/>
+            </RelativeLayout>
+            <!--spots remaining-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spots_remaining_layout"
+                android:padding="4dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/spots_remaining_icon"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_seat_recline_extra_grey600_48dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/spots_remaining"
+                    tools:text="0"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="16sp"
+                    android:layout_toRightOf="@+id/spots_remaining_icon"/>
+            </RelativeLayout>
+
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/actionLayout">-->
+
+
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/editOffering"-->
+                    <!--android:text="@string/edit"-->
+                    <!--android:layout_toLeftOf="@+id/launchPassenger"-->
+                    <!--android:background="?android:attr/selectableItemBackground"-->
+                    <!--android:textColor="@color/cruDarkBlue"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:foreground="?android:attr/selectableItemBackground"/>-->
+
+                <!--<Button-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/cancelOffering"-->
+                    <!--android:text="@string/cancel"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:background="?android:attr/selectableItemBackground"-->
+                    <!--android:textColor="@color/cruDarkBlue"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:layout_centerInParent="true"/>-->
+
+            <!--</RelativeLayout>-->
 
             <View android:layout_width="match_parent"
                 android:layout_height="2dip"
@@ -121,7 +176,7 @@
                 android:layout_marginBottom="4dp"
                 android:textSize="24sp"
                 android:paddingTop="0dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview"
@@ -131,5 +186,6 @@
                 android:focusableInTouchMode="true" />
 
         </LinearLayout>
+        </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
