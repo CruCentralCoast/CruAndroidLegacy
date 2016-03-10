@@ -20,8 +20,7 @@ public class BasicInfoValidator extends BaseValidator
 {
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @Optional @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.email_field) @Optional @Email
-    EditText emailField;
+    @Bind(R.id.email_field) @Optional @Email EditText emailField;
 
     public BasicInfoValidator(View view)
     {

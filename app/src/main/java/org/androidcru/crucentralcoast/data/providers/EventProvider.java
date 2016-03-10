@@ -10,18 +10,18 @@ import rx.Observable;
 
 public class EventProvider
 {
-    private static CruApiService mCruService = ApiProvider.getService();
+    private static CruApiService cruService = ApiProvider.getService();
 
     public static Observable<ArrayList<CruEvent>> requestEvents()
     {
 
-        return mCruService.getEvents()
+        return cruService.getEvents()
                 .compose(RxComposeUtil.network());
     }
 
     public static Observable<CruEvent> requestCruEventByID(String id)
     {
-        return mCruService.findSingleCruEvent(id)
+        return cruService.findSingleCruEvent(id)
                 .compose(RxComposeUtil.network())
                 .flatMap(cruevents -> {
                     return Observable.from(cruevents);

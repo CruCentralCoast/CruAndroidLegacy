@@ -13,6 +13,9 @@ public class AppConstants
      */
 
     public static final String FIRST_LAUNCH = "first_launch";
+    public static final String USER_NAME = "user_name";
+    public static final String USER_EMAIL = "user_email";
+    public static final String USER_PHONE_NUMBER = "user_phone_number";
 
     //GCM
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;

@@ -1,15 +1,21 @@
 package org.androidcru.crucentralcoast.presentation.views;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 
+import org.androidcru.crucentralcoast.data.models.CruUser;
+import org.androidcru.crucentralcoast.data.providers.UserProvider;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 
@@ -24,7 +30,7 @@ import rx.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity
 {
-    private SharedPreferences mSharedPreferences;
+    private SharedPreferences sharedPreferences;
     @Bind(R.id.central_coast) TextView centralCoast;
 
     @Override
@@ -36,7 +42,7 @@ public class SplashActivity extends AppCompatActivity
 
         ViewUtil.setFont(centralCoast, "FreigSanProLig.otf");
 
-        this.mSharedPreferences = CruApplication.getSharedPreferences();
+        this.sharedPreferences = CruApplication.getSharedPreferences();
         switchToApp();
     }
 
@@ -45,10 +51,26 @@ public class SplashActivity extends AppCompatActivity
         final Intent intent = new Intent(this, MainActivity.class);
 
         // Determine if the app has launched before.
-        if (mSharedPreferences.getBoolean(AppConstants.FIRST_LAUNCH, false))
+        if (sharedPreferences.getBoolean(AppConstants.FIRST_LAUNCH, false))
             intent.setClass(this, MainActivity.class);
         else
+        {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String userPhoneNumber = telephonyManager.getLine1Number();
+            userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
+
+            sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
+
+            UserProvider.requestCruUser(userPhoneNumber)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(cruUser -> {
+                        SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
+                        userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
+                        userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+                    });
+
             intent.setClass(this, SubscriptionActivity.class);
+        }
 
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

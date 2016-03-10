@@ -43,7 +43,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
     {
         MinistryTeamHolder ministryTeamHolder = (MinistryTeamHolder) holder;
 
-        //TODO tempoary for now
+        //TODO temporary for now
         ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
 
         Intent intent = new Intent(parent, JoinMinistryTeamActivity.class);

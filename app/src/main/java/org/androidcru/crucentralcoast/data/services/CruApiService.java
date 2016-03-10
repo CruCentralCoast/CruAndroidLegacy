@@ -21,14 +21,14 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import rx.Observable;
 
 public interface CruApiService
 {
-    /**
-     * Method modeling the GET request for Events
-     * @return Callback request
-     */
+    @GET("/api/user/phone/{phone}")
+    public Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
+
     @GET("/api/event/list")
     public Observable<ArrayList<CruEvent>> getEvents();
 
