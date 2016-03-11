@@ -6,6 +6,9 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 
+/**
+ * @author Connor Batch
+ */
 public class MinistrySubscriptionVM
 {
     public String campusName;
@@ -23,9 +26,7 @@ public class MinistrySubscriptionVM
     public boolean getIsSubscribed()
     {
         if(isSubscribed == null)
-        {
             isSubscribed = sharedPreferences.getBoolean(ministry.subscriptionId, false);
-        }
         return isSubscribed;
     }
 

@@ -5,6 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.androidcru.crucentralcoast.R;
 
+/**
+ * @author Connor Batch
+ *
+ * Manage Subscriptions Activity
+ */
 public class SubscriptionActivity extends AppCompatActivity
 {
 

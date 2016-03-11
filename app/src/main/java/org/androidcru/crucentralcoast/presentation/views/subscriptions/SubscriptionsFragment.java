@@ -31,8 +31,9 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-
 /**
+ * @author Connor Batch
+ *
  * A simple {@link Fragment} subclass.
  * Use the {@link SubscriptionsFragment#} factory method to
  * create an instance of this fragment.
@@ -61,10 +62,7 @@ public class SubscriptionsFragment extends Fragment
             }
 
             @Override
-            public void onError(Throwable e)
-            {
-
-            }
+            public void onError(Throwable e) {}
 
             @Override
             public void onNext(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
@@ -88,7 +86,9 @@ public class SubscriptionsFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        // Sets the Floating Action Button's check icon to white
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
+
         fab.setOnClickListener(v -> {
 
             if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))
@@ -112,6 +112,7 @@ public class SubscriptionsFragment extends Fragment
             @Override
             public int getSpanSize(int position)
             {
+                // if the element is a header, it should span the columns, otherwise it is a regular element
                 return subscriptionAdapter.isHeader(position) ? layoutManager.getSpanCount() : 1;
             }
         });
@@ -129,6 +130,7 @@ public class SubscriptionsFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
+        // Closing the activity to unsubscribe all RX tasks
         if(subscription != null)
             subscription.unsubscribe();
     }

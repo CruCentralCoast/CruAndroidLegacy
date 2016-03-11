@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.data.providers;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
@@ -12,6 +13,11 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
+/**
+ * @author Connor Batch
+ *
+ * Deals with server calls to get the appropriate information in order to Manage Subscriptions.
+ */
 public final class SubscriptionProvider
 {
     private static CruApiService mCruService = ApiProvider.getService();
@@ -22,7 +28,9 @@ public final class SubscriptionProvider
      */
     public static Observable<ArrayList<MinistrySubscription>> requestMinistries()
     {
-        return mCruService.getMinistries().subscribeOn(Schedulers.io());
+        return mCruService.getMinistries()
+                .compose(RxLoggingUtil.log("MINISTRIES"))
+                .compose(RxComposeUtil.network());
     }
 
     /**
@@ -50,6 +58,7 @@ public final class SubscriptionProvider
                 {
                     Campus selectedCampus = null;
 
+                    // set the selected campus for this ministry
                     for (Campus c : campuses)
                         if (m.campusId.get(0).equals(c.id))
                             selectedCampus = c;
@@ -59,7 +68,8 @@ public final class SubscriptionProvider
                         ArrayList<MinistrySubscription> ministriesSoFar = campusMinistryMap.get(selectedCampus);
                         ministriesSoFar.add(m);
                         campusMinistryMap.put(selectedCampus, ministriesSoFar);
-                    } else
+                    }
+                    else
                     {
                         ArrayList<MinistrySubscription> newMinistries = new ArrayList<>();
                         newMinistries.add(m);
@@ -71,6 +81,6 @@ public final class SubscriptionProvider
                 subscriber.onCompleted();
             }
         })
-                .compose(RxComposeUtil.network());
+        .compose(RxComposeUtil.network());
     }
 }

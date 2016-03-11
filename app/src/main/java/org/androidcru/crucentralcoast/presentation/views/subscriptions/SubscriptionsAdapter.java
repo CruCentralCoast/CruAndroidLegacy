@@ -29,10 +29,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
-
+/**
+ * @author Connor Batch
+ *
+ * Sets up the ViewHolder's for each Ministry tile on the Subscriptions page.
+ */
 public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    private ArrayList<MinistrySubscriptionVM> mMinistries;
+    private ArrayList<MinistrySubscriptionVM> ministries;
     
     public static final int MINISTRY_VIEW = 0;
     public static final int HEADER_VIEW = 1;
@@ -40,7 +44,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public SubscriptionsAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
     {
-        this.mMinistries = new ArrayList<>();
+        this.ministries = new ArrayList<>();
 
         convertSubscriptions(campusMinistryMap);
     }
@@ -50,7 +54,6 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         ArrayList<Pair<Campus, Integer>> sortableList = new ArrayList<>();
         for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinistryMap.entrySet())
         {
-
             sortableList.add(new Pair(entry.getKey(), entry.getValue().size()));
         }
 
@@ -64,13 +67,12 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
         });
 
+        //adds each campus and each ministry in that campus to the ministries ArrayList in order
         for (Pair<Campus, Integer> campusPair : sortableList)
         {
-            mMinistries.add(new MinistrySubscriptionVM(campusPair.first.campusName, null));
+            ministries.add(new MinistrySubscriptionVM(campusPair.first.campusName, null));
             for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
-            {
-                mMinistries.add(new MinistrySubscriptionVM(null, m));
-            }
+                ministries.add(new MinistrySubscriptionVM(null, m));
         }
 
     }
@@ -95,9 +97,9 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
-        if(position < mMinistries.size())
+        if(position < ministries.size())
         {
-            MinistrySubscriptionVM ministrySubscriptionVM = mMinistries.get(position);
+            MinistrySubscriptionVM ministrySubscriptionVM = ministries.get(position);
             if (holder instanceof MinistrySubscriptionHolder)
             {
                 MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
@@ -114,7 +116,8 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
 
 
-            } else if (holder instanceof HeaderHolder)
+            }
+            else if (holder instanceof HeaderHolder)
             {
                 HeaderHolder headerHolder = (HeaderHolder) holder;
                 headerHolder.header.setText(ministrySubscriptionVM.campusName);
@@ -125,15 +128,15 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position)
     {
-        return position >= mMinistries.size() ? FOOTER_VIEW : (isHeader(position) ? HEADER_VIEW : MINISTRY_VIEW);
+        return position >= ministries.size() ? FOOTER_VIEW : (isHeader(position) ? HEADER_VIEW : MINISTRY_VIEW);
     }
 
     @Override
-    public int getItemCount() {return mMinistries.size() + 1;}
+    public int getItemCount() {return ministries.size() + 1;}
 
     public boolean isHeader(int position)
     {
-        return position >= mMinistries.size() || mMinistries.get(position).campusName != null;
+        return position >= ministries.size() || ministries.get(position).campusName != null;
     }
 
     public class HeaderHolder extends RecyclerView.ViewHolder
@@ -162,7 +165,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         @OnClick(R.id.tile_subscription)
         public void onClick(View v)
         {
-            MinistrySubscriptionVM ministrySubscriptionVM = mMinistries.get(getAdapterPosition());
+            MinistrySubscriptionVM ministrySubscriptionVM = ministries.get(getAdapterPosition());
             ministrySubscriptionVM.setIsSubscribed(!ministrySubscriptionVM.getIsSubscribed());
             notifyItemChanged(getAdapterPosition());
         }
@@ -170,7 +173,6 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class FooterHolder extends RecyclerView.ViewHolder
     {
-
         public FooterHolder(View itemView)
         {
             super(itemView);

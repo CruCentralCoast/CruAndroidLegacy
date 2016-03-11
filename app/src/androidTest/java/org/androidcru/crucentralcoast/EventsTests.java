@@ -30,7 +30,7 @@ public class EventsTests {
 
     //call this so that Espresso will wait for network requests to complete before asserting UI stuff
     @BeforeClass
-    public static void setup()
+         public static void setup()
     {
         Espresso.registerIdlingResources(RxIdlingResource.get());
     }
