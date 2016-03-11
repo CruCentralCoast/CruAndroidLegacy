@@ -81,7 +81,7 @@ public class EventsFragment extends ListFragment
         //setup RecyclerView
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
+
         swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
     }
 

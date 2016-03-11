@@ -18,6 +18,7 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
+import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
@@ -94,7 +95,9 @@ public class DriverResultsFragment extends FormContentFragment
         ListFragment.setupSwipeRefreshLayout(swipeRefreshLayout);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
     }
 
     @Override
