@@ -1,11 +1,14 @@
 package org.androidcru.crucentralcoast;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.androidcru.crucentralcoast.common.RxIdlingResource;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,15 +26,14 @@ import static org.hamcrest.core.IsNot.not;
 public class EventsTests {
 
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule(MainActivity.class);
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class);
 
-    //suppose to tell Espresso when RxJava finishes a task but it just times out
-    //TODO @jon
-    /*@BeforeClass
+    //call this so that Espresso will wait for network requests to complete before asserting UI stuff
+    @BeforeClass
     public static void setup()
     {
-        Espresso.registerIdlingResources(new BetterIdlingResource());
-    }*/
+        Espresso.registerIdlingResources(RxIdlingResource.get());
+    }
 
     private void switchEvents()
     {
@@ -52,7 +54,7 @@ public class EventsTests {
         onView(withRecyclerView(R.id.recyclerview)
                 .atPositionOnView(0, R.id.eventDescription))
                 .check(matches(isDisplayed()));
-        
+
         //click on first item again
         onView(withId(R.id.recyclerview))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
