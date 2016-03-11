@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class EventProvider
     {
 
         return cruService.getEvents()
-                .compose(RxLoggingUtil.log("EVENTS"))
                 .compose(RxComposeUtil.network());
     }
 
