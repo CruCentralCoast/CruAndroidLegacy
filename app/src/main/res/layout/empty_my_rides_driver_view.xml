@@ -20,8 +20,8 @@
         android:gravity="center_horizontal"/>
 
     <Button
-        android:id="@+id/events_button"
-        android:text="@string/view_upcoming_events"
+        android:id="@+id/events_button_driver"
+        android:text="@string/view_upcoming_events_driver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/informational_text"

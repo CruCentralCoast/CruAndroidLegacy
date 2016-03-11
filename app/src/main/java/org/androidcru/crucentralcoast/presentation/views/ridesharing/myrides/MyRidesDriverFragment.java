@@ -147,7 +147,7 @@ public class MyRidesDriverFragment extends ListFragment
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    @OnClick(R.id.events_button)
+    @OnClick(R.id.events_button_driver)
     @SuppressWarnings("unused")
     public void onViewUpcomingEventsClicked()
     {
