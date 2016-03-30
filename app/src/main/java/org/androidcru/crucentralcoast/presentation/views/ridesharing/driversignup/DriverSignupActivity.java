@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversign
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
@@ -16,16 +14,16 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 
-public class DriverSignupActivity extends AppCompatActivity
+public class DriverSignupActivity extends BaseAppCompatActivity
 {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
@@ -79,24 +77,12 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void createDriver()
     {
-        RideProvider.createRide(completeRide(driverSignupVM.getRide()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(current -> {
-                    Logger.d("Output is", current.toString());
-                }, throwable -> {
-                    Logger.e("Error:", throwable.getMessage());
-                });
+        RideProvider.createRide(this, Observers.empty(), completeRide(driverSignupVM.getRide()));
     }
 
     private void updateDriver()
     {
-        RideProvider.updateRide(completeRide(driverSignupVM.getRide()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(current -> {
-                    Logger.d("Output is", current.toString());
-                }, throwable -> {
-                    Logger.e("Error:", throwable.getMessage());
-                });
+        RideProvider.updateRide(this, Observers.empty(), completeRide(driverSignupVM.getRide()));
     }
 
     private void setupPlacesAutocomplete()
@@ -111,18 +97,7 @@ public class DriverSignupActivity extends AppCompatActivity
 
     private void requestRides(String rideId)
     {
-        RideProvider.requestRideByID(rideId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(ride -> {
-                    GeocodeProvider.getLatLng(this, ride.location.toString())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(address ->
-                        {
-                            ride.address = address;
-                            bindNewRideVM(ride);
-                        });
-
-                });
+        RideProvider.requestRideByID(this, Observers.empty(), rideId);
     }
 
     private void bindNewRideVM(Ride r) {

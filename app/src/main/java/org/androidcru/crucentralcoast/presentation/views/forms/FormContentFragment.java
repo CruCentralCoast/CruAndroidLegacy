@@ -1,9 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.forms;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
-public abstract class FormContentFragment extends Fragment implements FormContent
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
+
+public abstract class FormContentFragment extends BaseSupportFragment implements FormContent
 {
     protected FormHolder formHolder;
     protected FormAdapter adapter;

@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.videos;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,22 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class VideosFragment extends Fragment
+public class VideosFragment extends BaseSupportFragment
 {
     @Bind(R.id.video_list) RecyclerView videoList;
     @Bind(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
@@ -113,23 +116,9 @@ public class VideosFragment extends Fragment
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        subscription.unsubscribe();
-    }
-
     private void getCruVideos(String nextPageToken)
     {
-        if(subscription != null)
-        {
-            subscription.unsubscribe();
-        }
-
-        subscription = YouTubeVideoProvider.getInstance().requestChannelVideos(nextPageToken)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(videoSubscriber);
+        YouTubeVideoProvider.getInstance().requestChannelVideos(this, videoSubscriber, nextPageToken);
     }
 
     // Places the videos in the returned response into the Adapter's list of videos
@@ -183,9 +172,7 @@ public class VideosFragment extends Fragment
         curSize = 0;
         videosAdapter = null;
 
-        YouTubeVideoProvider.getInstance().requestChannelVideos("")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(videoSubscriber);
+        YouTubeVideoProvider.getInstance().requestChannelVideos(this, videoSubscriber, "");
     }
 
     @Override

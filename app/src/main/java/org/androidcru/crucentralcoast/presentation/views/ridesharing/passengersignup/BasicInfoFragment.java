@@ -25,7 +25,7 @@ import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragme
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 
 public class BasicInfoFragment extends FormContentFragment {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
@@ -75,13 +75,7 @@ public class BasicInfoFragment extends FormContentFragment {
             formHolder.setNavigationClickable(false);
             passenger.direction = ride.direction;
             passenger.gcm_id = CruApplication.getGCMID();
-            PassengerProvider.addPassenger(passenger)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(passenger1 -> {
-                    RideProvider.addPassengerToRide(passenger1.id, ride.id)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(v -> {}, e -> {}, () -> super.onNext());
-                });
+            PassengerProvider.addPassenger(this, Observers.create(passenger1 -> RideProvider.addPassengerToRide(this, Observers.empty(), ride.id, passenger1.id)), passenger);
         }
 
     }

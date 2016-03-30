@@ -7,16 +7,27 @@ import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
 import java.util.List;
 
 import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
 
 public final class ResourceProvider
 {
     private static CruApiService cruApiService = ApiProvider.getService();
 
-    public static Observable<List<Resource>> findResources(Resource.ResourceType[] types, ResourceTag[] tags)
+    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, Resource.ResourceType[] types, ResourceTag[] tags)
+    {
+        Subscription s = findResources(types, tags)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<List<Resource>> findResources(Resource.ResourceType[] types, ResourceTag[] tags)
     {
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
@@ -78,7 +89,15 @@ public final class ResourceProvider
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<List<ResourceTag>> getResourceTags()
+    public static void getResourceTags(SubscriptionsHolder holder, Observer<List<ResourceTag>> observer)
+    {
+        Subscription s = getResourceTags()
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<List<ResourceTag>> getResourceTags()
     {
         return cruApiService.getResourceTag()
                 .compose(RxComposeUtil.network());

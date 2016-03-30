@@ -4,31 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.providers.UserProvider;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
-
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class SplashActivity extends AppCompatActivity
+public class SplashActivity extends BaseAppCompatActivity
 {
     private SharedPreferences sharedPreferences;
     @Bind(R.id.central_coast) TextView centralCoast;
@@ -62,13 +59,30 @@ public class SplashActivity extends AppCompatActivity
 
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
-            UserProvider.requestCruUser(userPhoneNumber)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(cruUser -> {
-                        SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
-                        userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
-                        userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
-                    });
+            Observer<CruUser> observer = new Observer<CruUser>()
+            {
+                @Override
+                public void onCompleted()
+                {
+
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+
+                }
+
+                @Override
+                public void onNext(CruUser cruUser)
+                {
+                    SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
+                    userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
+                    userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+                }
+            };
+
+            UserProvider.requestCruUser(this, observer, userPhoneNumber);
 
             intent.setClass(this, SubscriptionActivity.class);
         }

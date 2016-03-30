@@ -42,7 +42,7 @@ public class RideInfoFragment extends FormContentFragment {
     public void setupUI()
     {
         formHolder.setTitle(getString(R.string.passenger_signup));
-        rideFilterVM = new RideFilterVM(getView(), getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject());
+        rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject());
         validator = new BaseValidator(rideFilterVM);
         setupPlacesAutocomplete();
     }

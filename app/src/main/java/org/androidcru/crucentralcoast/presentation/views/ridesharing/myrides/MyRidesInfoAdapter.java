@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -22,23 +20,20 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 
-/**
- * Created by main on 2/27/2016.
- */
+
 public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     List<Passenger> passengers;
-    private Context context;
+    private MyRidesInfoActivity parent;
     private AlertDialog alertDialog;
     private String rideID;
     private String selectedPassengerID;
 
-    public MyRidesInfoAdapter(Context context, List<Passenger> passengers, String rideID)
+    public MyRidesInfoAdapter(MyRidesInfoActivity parent, List<Passenger> passengers, String rideID)
     {
-        this.context = context;
+        this.parent = parent;
         this.rideID = rideID;
         this.passengers = (passengers == null) ? new ArrayList<Passenger>() : passengers;
         selectedPassengerID = null;
@@ -100,35 +95,12 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
     private void initAlertDialog() {
-        alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog = new AlertDialog.Builder(parent).create();
         alertDialog.setTitle("Kick Passenger");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Logger.d("chose " + selectedPassengerID);
-                RideProvider.dropPassengerFromRide(selectedPassengerID, rideID)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Void>() {
-                            @Override
-                            public void onCompleted() {
-                                Logger.d("Completed the drop");
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Logger.d("Error on the drop");
-                            }
-
-                            @Override
-                            public void onNext(Void aVoid) {
-                                //TODO: mitch told me to do it
-                                if (context instanceof MyRidesInfoActivity) {
-                                    ((MyRidesInfoActivity)context).updateRide();
-                                }
-                                else {
-                                    Logger.d("wasn't right");
-                                }
-                            }
-                        });
+                RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.updateRide()), rideID, selectedPassengerID);
             }
         });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {

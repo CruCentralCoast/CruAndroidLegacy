@@ -15,14 +15,13 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.providers.ResourceProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
-import org.androidcru.crucentralcoast.presentation.views.ListFragment;
+import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class ResourcesFragment extends ListFragment
 {
@@ -95,22 +94,12 @@ public class ResourcesFragment extends ListFragment
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if(subscription != null)
-            subscription.unsubscribe();
-    }
-
     private void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        subscription = ResourceProvider.findResources(Resource.ResourceType.values(), null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resourceSubscriber);
+        ResourceProvider.findResources(this, resourceSubscriber, Resource.ResourceType.values(), null);
     }
 
     private void setResources(List<Resource> resources)

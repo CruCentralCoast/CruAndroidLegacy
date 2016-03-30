@@ -18,10 +18,9 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
-import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
-import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class EventsFragment extends ListFragment
@@ -92,14 +90,6 @@ public class EventsFragment extends ListFragment
         getCruEvents();
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if(subscription != null)
-            subscription.unsubscribe();
-    }
-
     private void setupObserver()
     {
         eventSubscriber = new Observer<ArrayList<CruEvent>>()
@@ -142,11 +132,7 @@ public class EventsFragment extends ListFragment
     private void getCruEvents()
     {
         swipeRefreshLayout.setRefreshing(true);
-        if(subscription != null)
-            subscription.unsubscribe();
-        subscription = EventProvider.requestEvents()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(eventSubscriber);
+        EventProvider.requestEvents(this, eventSubscriber);
     }
 
 

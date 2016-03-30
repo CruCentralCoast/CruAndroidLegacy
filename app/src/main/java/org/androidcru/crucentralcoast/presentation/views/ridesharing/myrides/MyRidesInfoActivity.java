@@ -7,16 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,16 +25,19 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.Observer;
+import rx.observers.Observers;
 
 
-public class MyRidesInfoActivity extends AppCompatActivity {
+public class MyRidesInfoActivity extends BaseAppCompatActivity
+{
 
     private Ride ride;
 
@@ -59,6 +57,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     @Bind(R.id.toolbar) Toolbar toolbar;
 
     private MyRidesInfoAdapter rideSharingAdapter;
+    private Observer<Ride> observer;
 
 //    @Bind(R.id.editOffering) Button editButton;
 //    @Bind(R.id.cancelOffering) Button cancelButton;
@@ -140,9 +139,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
         alertDialog.setMessage("Are you sure you want to cancel this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.dropRide(ride.id)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe();
+                RideProvider.dropRide(MyRidesInfoActivity.this, Observers.empty() , ride.id);
 
             }
         });
@@ -170,11 +167,7 @@ public class MyRidesInfoActivity extends AppCompatActivity {
 
     private void getEventData()
     {
-        EventProvider.requestCruEventByID(ride.eventId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    setupUI(result.name, result.image);
-                });
+        EventProvider.requestCruEventByID(this, Observers.create(event -> setupUI(event.name, event.image)), ride.eventId);
     }
 
     @Override
@@ -203,12 +196,23 @@ public class MyRidesInfoActivity extends AppCompatActivity {
     public void updateRide()
     {
         Logger.d("resetting ride");
-        RideProvider.requestRideByID(ride.id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    ride = result;
-                    setAdapter();
-                    spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
-                });
+
+        Observer<Ride> observer = new Observer<Ride>()
+        {
+            @Override
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onNext(Ride ride)
+            {
+                setAdapter();
+                spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
+            }
+        };
+
+        RideProvider.requestRideByID(this, observer, ride.id);
     }
 }
