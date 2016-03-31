@@ -11,11 +11,14 @@ import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
+import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
 import java.io.IOException;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
 
 // Used to query the SLOCru YouTube channel for its videos
 public final class YouTubeVideoProvider
@@ -55,9 +58,17 @@ public final class YouTubeVideoProvider
         return instance;
     }
 
+    public void requestChannelVideos(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String nextPageToken)
+    {
+        Subscription s = requestChannelVideos(nextPageToken)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
     // Returns a video response to its observer. The response contains a list of 20 videos,
     // including the videos' ids and snippets.
-    public Observable<SearchListResponse> requestChannelVideos(String nextPageToken)
+    protected Observable<SearchListResponse> requestChannelVideos(String nextPageToken)
     {
         return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
             @Override

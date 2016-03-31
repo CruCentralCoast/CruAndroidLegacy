@@ -14,7 +14,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesPassengerFragment;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 
 public class MyRidesPassengerVM {
 
@@ -45,11 +45,7 @@ public class MyRidesPassengerVM {
     public void updateEventName() {
         final Holder<String> evName = new Holder<String>();
 
-        EventProvider.requestCruEventByID(ride.eventId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(results -> {
-                    eventName = results.name;
-                });
+        EventProvider.requestCruEventByID(parent, Observers.create(results -> eventName = results.name), ride.eventId);
     }
 
     public String getLocation() {
@@ -75,9 +71,7 @@ public class MyRidesPassengerVM {
                 {
                     if (p.gcm_id.equals(CruApplication.getGCMID()))
                     {
-                        RideProvider.dropPassengerFromRide(p.id, ride.id)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(v -> parent.forceUpdate());
+                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id, p.id);
                     }
                 }
             }

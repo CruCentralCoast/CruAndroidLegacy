@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -35,6 +34,7 @@ import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
 import org.threeten.bp.DateTimeUtils;
@@ -47,7 +47,7 @@ import java.util.GregorianCalendar;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 
 public class DriverSignupVM extends BaseRideVM {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
@@ -82,7 +82,7 @@ public class DriverSignupVM extends BaseRideVM {
     @Bind(R.id.radius_field) TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-    public DriverSignupVM(Activity activity, FragmentManager fm, String eventID) {
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventID) {
         super(activity, fm);
         this.editing = false;
         this.ride = new Ride();
@@ -91,7 +91,7 @@ public class DriverSignupVM extends BaseRideVM {
         bindUI();
     }
 
-    public DriverSignupVM(Activity activity, FragmentManager fm, Ride ride) {
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride) {
         super(activity, fm);
         this.editing = ride != null && !ride.isEmpty();
         this.ride = ride != null ? ride : new Ride();
@@ -284,11 +284,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     //TODO @daniel somehow, avoid this network call
     private void setEventTime(String eventID) {
-        EventProvider.requestCruEventByID(eventID)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate);
-                });
+        EventProvider.requestCruEventByID(holder, Observers.create(event -> eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate)), eventID);
     }
 
 

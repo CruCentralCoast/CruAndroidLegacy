@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.data.providers.util;
 import org.androidcru.crucentralcoast.AppConstants;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class RxComposeUtil
@@ -12,5 +13,10 @@ public class RxComposeUtil
                 .subscribeOn(Schedulers.io())
                 .retry(AppConstants.RETRY_ATTEMPTS)
                 .onErrorResumeNext(Observable.empty());
+    }
+
+    public static <T> Observable.Transformer<T, T> ui() {
+        return o -> o
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

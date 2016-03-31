@@ -21,6 +21,7 @@ import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * @author Connor Batch
@@ -38,7 +38,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Use the {@link SubscriptionsFragment#} factory method to
  * create an instance of this fragment.
  */
-public class SubscriptionsFragment extends Fragment
+public class SubscriptionsFragment extends BaseSupportFragment
 {
 
     private GridLayoutManager layoutManager;
@@ -126,15 +126,6 @@ public class SubscriptionsFragment extends Fragment
         getCampusMinistryMap();
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        // Closing the activity to unsubscribe all RX tasks
-        if(subscription != null)
-            subscription.unsubscribe();
-    }
-
     private void toggleProgessBar(boolean isShown)
     {
         progressBar.setVisibility(isShown ? View.VISIBLE : View.GONE);
@@ -144,11 +135,7 @@ public class SubscriptionsFragment extends Fragment
 
     public void getCampusMinistryMap()
     {
-        if(subscription != null)
-            subscription.unsubscribe();
         toggleProgessBar(true);
-        subscription = SubscriptionProvider.requestCampusMinistryMap()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        SubscriptionProvider.requestCampusMinistryMap(this, observer);
     }
 }

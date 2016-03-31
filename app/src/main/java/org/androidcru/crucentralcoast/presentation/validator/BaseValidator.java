@@ -24,7 +24,6 @@ public class BaseValidator implements Validator.ValidationListener
     {
         context = baseVM.context;
         validator = new Validator(baseVM);
-        baseVM.rebind(this);
         postInit();
     }
 

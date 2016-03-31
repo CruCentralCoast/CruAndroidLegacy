@@ -22,19 +22,20 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdapter.SummerMissionVH>
 {
-    private ArrayList<SummerMission> summerMissions;
+    private List<SummerMission> summerMissions;
     private RecyclerView.LayoutManager layoutManager;
     private Context context;
 
-    private ArrayList<Boolean> isExpanded;
+    private List<Boolean> isExpanded;
 
-    public SummerMissionAdapter(Context context, ArrayList<SummerMission> summerMissions, RecyclerView.LayoutManager layoutManager)
+    public SummerMissionAdapter(Context context, List<SummerMission> summerMissions, RecyclerView.LayoutManager layoutManager)
     {
         this.context = context;
         this.summerMissions = summerMissions;

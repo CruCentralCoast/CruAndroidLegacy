@@ -1,7 +1,6 @@
-package org.androidcru.crucentralcoast.presentation.views;
+package org.androidcru.crucentralcoast.presentation.views.base;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,7 +16,7 @@ import butterknife.ButterKnife;
  *
  * Takes care of inflating a ViewStub when the time is right as well as a SwipeRefreshLayout workaround (see below)
  */
-public class ListFragment extends Fragment
+public class ListFragment extends BaseSupportFragment
 {
     //Inject views
     protected RecyclerView recyclerView;

@@ -2,22 +2,58 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
-import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
 import java.util.List;
 
 import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public final class RideProvider
 {
     private static CruApiService mCruService = ApiProvider.getService();
 
-    public static Observable<List<Ride>> requestRides()
+
+
+    public static void requestRides(SubscriptionsHolder holder, Observer<List<Ride>> observer)
+    {
+        Subscription s = requestRides()
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    public static void requestMyRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, String gcmId)
+    {
+        Subscription s = requestRides()
+                .compose(RxComposeUtil.ui())
+                .flatMap(rides -> Observable.from(rides))
+                .filter(ride -> {
+                    boolean status = false;
+                    for (Passenger p : ride.passengers)
+                    {
+                        if (p.gcm_id != null && p.gcm_id.equals(CruApplication.getGCMID()))
+                        {
+                            status = true;
+                        }
+                    }
+                    return status || ride.gcmID.equals(gcmId);
+                })
+                .toList()
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
                 .compose(RxComposeUtil.network())
@@ -45,43 +81,111 @@ public final class RideProvider
                 .toList();
     }
 
-    public static Observable<List<Ride>> searchRides(Query query)
+
+
+    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query)
+    {
+        Subscription s = searchRides(query)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<List<Ride>> searchRides(Query query)
     {
         return mCruService.searchRides(query)
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<Ride> createRide(Ride ride)
+
+
+    public static void createRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
+    {
+        Subscription s = createRide(ride)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<Ride> createRide(Ride ride)
     {
         return mCruService.postRide(ride)
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<Ride> updateRide(Ride ride)
+
+
+    public static void updateRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
+    {
+        Subscription s = updateRide(ride)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<Ride> updateRide(Ride ride)
     {
         return mCruService.updateRide(ride)
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<Void> addPassengerToRide(String passengerId, String rideId)
+
+
+    public static void addPassengerToRide(SubscriptionsHolder holder, Observer<Void> observer, String rideId, String passengerId)
+    {
+        Subscription s = addPassengerToRide(rideId, passengerId)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<Void> addPassengerToRide(String rideId, String passengerId)
     {
         return mCruService.addPassenger(rideId, passengerId)
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<Void> dropPassengerFromRide(String passengerId, String rideId)
+
+
+    public static void dropPassengerFromRide(SubscriptionsHolder holder, Observer<Void> observer, String rideId, String passengerId)
+    {
+        Subscription s = dropPassengerFromRide(rideId, passengerId)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<Void> dropPassengerFromRide(String rideId, String passengerId)
     {
         return mCruService.dropPassenger(rideId, passengerId)
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<Void> dropRide(String rideId)
+
+    public static void dropRide(SubscriptionsHolder holder, Observer<Void> observer, String rideId)
+    {
+        Subscription s = dropRide(rideId)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<Void> dropRide(String rideId)
     {
         return mCruService.dropRide(rideId)
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<Ride> requestRideByID(String id)
+
+    public static void requestRideByID(SubscriptionsHolder holder, Observer<Ride> observer, String id)
+    {
+        Subscription s = requestRideByID(id)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<Ride> requestRideByID(String id)
     {
         return mCruService.findSingleRide(id)
                 .compose(RxComposeUtil.network())

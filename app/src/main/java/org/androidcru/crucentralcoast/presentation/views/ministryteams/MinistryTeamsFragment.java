@@ -2,7 +2,6 @@ package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +12,7 @@ import android.widget.ProgressBar;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +20,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
 
-public class MinistryTeamsFragment extends Fragment
+public class MinistryTeamsFragment extends BaseSupportFragment
 {
     @Bind(R.id.subscription_list) RecyclerView subscriptionList;
     @Bind(R.id.progress) ProgressBar progressBar;
@@ -88,10 +86,7 @@ public class MinistryTeamsFragment extends Fragment
     public void getMinistryTeamsList()
     {
         toggleProgessBar(true);
-        MinistryTeamProvider.requestMinistryTeams()
-                .compose(RxLoggingUtil.log("MINISTRY TEAMS"))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        MinistryTeamProvider.requestMinistryTeams(this, observer);
     }
 
 }

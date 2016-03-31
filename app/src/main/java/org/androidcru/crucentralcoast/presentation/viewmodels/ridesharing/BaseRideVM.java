@@ -1,10 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
-import android.app.Activity;
 import android.app.FragmentManager;
-import android.media.Image;
-import android.support.v4.app.Fragment;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -13,7 +9,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.api.client.util.DateTime;
 import com.orhanobut.logger.Logger;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -21,11 +16,12 @@ import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.Month;
-import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.temporal.ChronoUnit;
@@ -57,21 +53,15 @@ public abstract class BaseRideVM extends BaseVM
 
     protected FragmentManager fm;
 
-    public BaseRideVM(Activity activity, FragmentManager fm)
+    public BaseRideVM(BaseAppCompatActivity activity, FragmentManager fm)
     {
         super(activity);
         this.fm = fm;
     }
 
-    public BaseRideVM(Fragment fragment, FragmentManager fm)
+    public BaseRideVM(BaseSupportFragment fragment, FragmentManager fm)
     {
         super(fragment);
-        this.fm = fm;
-    }
-
-    public BaseRideVM(View rootView, FragmentManager fm)
-    {
-        super(rootView);
         this.fm = fm;
     }
 

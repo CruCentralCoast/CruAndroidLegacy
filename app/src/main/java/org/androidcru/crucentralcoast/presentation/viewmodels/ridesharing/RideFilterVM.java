@@ -20,11 +20,9 @@ import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
-import org.androidcru.crucentralcoast.util.DateTimeUtils;
+import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.RideInfoFragment;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
-
-import java.util.GregorianCalendar;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -41,9 +39,9 @@ public class RideFilterVM extends BaseRideVM
     @Bind(R.id.date_field) @NotEmpty EditText rideDate;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-    public RideFilterVM(View rootView, FragmentManager fm, CruEvent event)
+    public RideFilterVM(RideInfoFragment fragment, FragmentManager fm, CruEvent event)
     {
-        super(rootView, fm);
+        super(fragment, fm);
         this.event = event;
         bindUI();
     }

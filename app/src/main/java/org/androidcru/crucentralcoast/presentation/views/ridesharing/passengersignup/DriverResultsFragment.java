@@ -10,16 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
-import org.androidcru.crucentralcoast.presentation.providers.GeocodeProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
-import org.androidcru.crucentralcoast.presentation.views.ListFragment;
+import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import java.util.ArrayList;
@@ -27,11 +23,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class DriverResultsFragment extends FormContentFragment
 {
@@ -101,14 +94,6 @@ public class DriverResultsFragment extends FormContentFragment
     }
 
     @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if(subscription != null)
-            subscription.unsubscribe();
-    }
-
-    @Override
     public void setupUI()
     {
         formHolder.setTitle("Pick a Driver");
@@ -124,24 +109,8 @@ public class DriverResultsFragment extends FormContentFragment
     {
         swipeRefreshLayout.setRefreshing(true);
         results.clear();
-        if(subscription != null)
-            subscription.unsubscribe();
-        subscription = RideProvider.searchRides(query)
-                .flatMap(rides -> Observable.from(rides))
-
-                .map(ride -> {
-                    GeocodeProvider.getLatLng(getContext(), ride.location.toString())
-                            .compose(RxLoggingUtil.log("RIDE"))
-                            .observeOn(Schedulers.immediate())
-                            .toBlocking()
-                            .subscribe(address -> {
-                                ride.location.preciseLocation = new LatLng(address.getLatitude(), address.getLongitude());
-                            });
-                    return ride;
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .toList()
-                .subscribe(rideResultsObserver);
+        //TODO GeocoderProvider was used to obtain LatLng for rides at this point
+        RideProvider.searchRides(this, rideResultsObserver, query);
     }
 
     private void handleResults(List<Ride> results)

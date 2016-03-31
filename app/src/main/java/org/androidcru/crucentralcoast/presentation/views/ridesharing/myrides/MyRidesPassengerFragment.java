@@ -9,23 +9,19 @@ import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesPassengerVM;
-import org.androidcru.crucentralcoast.presentation.views.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.OnClick;
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MyRidesPassengerFragment extends ListFragment
@@ -107,34 +103,10 @@ public class MyRidesPassengerFragment extends ListFragment
         forceUpdate();
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if(subscription != null)
-            subscription.unsubscribe();
-    }
-
     public void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
-        if(subscription != null)
-            subscription.unsubscribe();
-        subscription = RideProvider.requestRides()
-                .flatMap(rides -> Observable.from(rides))
-                .filter(ride -> {
-                    for (Passenger p : ride.passengers)
-                    {
-                        if (p.gcm_id != null && p.gcm_id.equals(CruApplication.getGCMID()))
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .toList()
-                .subscribe(rideSubscriber);
+        RideProvider.requestRides(this, rideSubscriber);
     }
 
     /**

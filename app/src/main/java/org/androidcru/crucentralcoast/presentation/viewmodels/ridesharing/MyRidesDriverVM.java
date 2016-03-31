@@ -16,7 +16,7 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignu
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 
 public class MyRidesDriverVM {
 
@@ -47,11 +47,7 @@ public class MyRidesDriverVM {
     public void updateEventName() {
         final Holder<String> evName = new Holder<String>();
 
-        EventProvider.requestCruEventByID(ride.eventId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(results -> {
-                eventName = results.name;
-            });
+        EventProvider.requestCruEventByID(parent, Observers.create(results -> eventName = results.name), ride.eventId);
     }
 
     public String getLocation() {
@@ -86,9 +82,7 @@ public class MyRidesDriverVM {
         alertDialog.setMessage("Are you sure you want to cancel this ride?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                RideProvider.dropRide(ride.id)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(v -> parent.forceUpdate());
+                RideProvider.dropRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id);
 
             }
         });

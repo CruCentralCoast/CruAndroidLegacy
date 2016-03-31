@@ -5,13 +5,15 @@ import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
-import rx.schedulers.Schedulers;
+import rx.Subscription;
 
 /**
  * @author Connor Batch
@@ -22,27 +24,51 @@ public final class SubscriptionProvider
 {
     private static CruApiService mCruService = ApiProvider.getService();
 
+    public static void requestMinistries(SubscriptionsHolder holder, Observer<ArrayList<MinistrySubscription>> observer)
+    {
+        Subscription s = requestMinistries()
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
     /**
      * Gets the list of available ministries from the server.
      * @return list of ministries
      */
-    public static Observable<ArrayList<MinistrySubscription>> requestMinistries()
+    protected static Observable<ArrayList<MinistrySubscription>> requestMinistries()
     {
         return mCruService.getMinistries()
                 .compose(RxLoggingUtil.log("MINISTRIES"))
                 .compose(RxComposeUtil.network());
     }
 
+    public static void requestCampuses(SubscriptionsHolder holder, Observer<ArrayList<Campus>> observer)
+    {
+        Subscription s = requestCampuses()
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
     /**
      * Gets the list of campuses from the server.
      */
-    public static Observable<ArrayList<Campus>> requestCampuses()
+    protected static Observable<ArrayList<Campus>> requestCampuses()
     {
         return mCruService.getCampuses()
                 .compose(RxComposeUtil.network());
     }
 
-    public static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
+    public static void requestCampusMinistryMap(SubscriptionsHolder holder, Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer)
+    {
+        Subscription s = requestCampusMinistryMap()
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
     {
         return Observable.create(new Observable.OnSubscribe<HashMap<Campus, ArrayList<MinistrySubscription>>>()
         {
