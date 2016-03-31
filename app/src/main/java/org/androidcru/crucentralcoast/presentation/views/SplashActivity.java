@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
 public class SplashActivity extends BaseAppCompatActivity
@@ -59,28 +60,11 @@ public class SplashActivity extends BaseAppCompatActivity
 
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
-            Observer<CruUser> observer = new Observer<CruUser>()
-            {
-                @Override
-                public void onCompleted()
-                {
-
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-
-                }
-
-                @Override
-                public void onNext(CruUser cruUser)
-                {
-                    SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
-                    userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
-                    userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
-                }
-            };
+            Observer<CruUser> observer = Observers.create(cruUser -> {
+                SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
+                userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
+                userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+            });
 
             UserProvider.requestCruUser(this, observer, userPhoneNumber);
 

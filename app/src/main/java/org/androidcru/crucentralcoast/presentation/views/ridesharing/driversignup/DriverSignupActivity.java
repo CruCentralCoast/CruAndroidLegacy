@@ -97,6 +97,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     private void requestRides(String rideId)
     {
+        //TODO GeocodeProvider was used to populate the address of the Ride at this time
         RideProvider.requestRideByID(this, Observers.empty(), rideId);
     }
 

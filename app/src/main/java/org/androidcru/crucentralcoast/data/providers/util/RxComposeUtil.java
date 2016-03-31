@@ -15,6 +15,6 @@ public class RxComposeUtil
 
     public static <T> Observable.Transformer<T, T> ui() {
         return o -> o
-                .subscribeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
