@@ -25,7 +25,7 @@ import android.view.View;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+//REVIEW formatting
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider

@@ -15,7 +15,10 @@ import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-//TODO left as it's own class because we know we need email or phone validation
+/* TODO Kyle wanted both phone AND email so this class is unnecessary
+   the view references can moved to another class
+ */
+
 public class BasicInfoValidator extends BaseValidator
 {
     @Bind(R.id.name_field) @NotEmpty EditText nameField;

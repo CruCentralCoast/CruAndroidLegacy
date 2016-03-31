@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-
-import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.providers.UserProvider;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
-
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +34,7 @@ public class SplashActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-
+        //REVIEW magic string, AppConstants
         ViewUtil.setFont(centralCoast, "FreigSanProLig.otf");
 
         this.sharedPreferences = CruApplication.getSharedPreferences();
@@ -76,6 +71,7 @@ public class SplashActivity extends AppCompatActivity
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+        //REVIEW should this be moved to AppConstants?
         final long DELAY_SECONDS = 2l;
 
         Observable.timer(DELAY_SECONDS, TimeUnit.SECONDS)

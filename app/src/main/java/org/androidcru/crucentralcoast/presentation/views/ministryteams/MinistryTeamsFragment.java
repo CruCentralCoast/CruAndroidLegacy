@@ -33,6 +33,7 @@ public class MinistryTeamsFragment extends Fragment
 
     public MinistryTeamsFragment()
     {
+        //REVIEW This could be written more efficiently with Observers.create()
         observer = new Observer<List<MinistryTeam>>()
         {
             @Override

@@ -17,8 +17,7 @@ public class WebViewActivity extends AppCompatActivity
 
     @Bind(R.id.web_view) WebView webView;
 
-    public static final String EXTRA_URL =
-            "com.hitherejoe.tabby.ui.activity.WebViewActivity.EXTRA_URL";
+    public static final String EXTRA_URL = "EXTRA_URL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -19,6 +19,7 @@ public class SubscriptionActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_startup);
 
+        //REVIEW magic strings
         getSupportActionBar().setTitle("Subscriptions");
         getSupportActionBar().setSubtitle("Select ministries of interest");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();

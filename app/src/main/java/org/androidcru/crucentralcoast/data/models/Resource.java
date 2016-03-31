@@ -46,7 +46,6 @@ public class Resource
         return result;
     }
 
-    //TODO inquire about migrating resource type to individual article, videos, audio  objects
     public enum ResourceType
     {
         ARTICLE("article"), AUDIO("audio"), VIDEO("video");

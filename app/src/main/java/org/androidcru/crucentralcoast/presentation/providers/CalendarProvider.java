@@ -20,6 +20,7 @@ import java.util.Calendar;
 import rx.Observable;
 import rx.Observer;
 
+//REVIEW singleton class that does not need to be singleton, static methods should do
 public final class CalendarProvider
 {
     private static CalendarProvider mInstance;

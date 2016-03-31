@@ -9,7 +9,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import org.androidcru.crucentralcoast.data.models.Resource;
-import org.androidcru.crucentralcoast.data.models.Ride;
 
 import java.lang.reflect.Type;
 
@@ -18,6 +17,7 @@ public class ResourceTypeConverter  implements JsonDeserializer<Resource.Resourc
 {
     @Override
     public Resource.ResourceType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        //REVIEW could there be a way of doing this without switch on hardcoded strings? The strings are already in the enum, utilize them?
         switch(json.getAsString())
         {
             case "article":

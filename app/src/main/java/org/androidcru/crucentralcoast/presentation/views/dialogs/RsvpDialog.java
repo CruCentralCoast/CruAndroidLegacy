@@ -63,6 +63,7 @@ public class RsvpDialog extends AlertDialog
 
     private void setupButtons()
     {
+        //REVIEW magic strings
         super.setButton(BUTTON_NEGATIVE, "JUST OPEN IN FACEBOOK", (dialog, which) -> {
             Logger.d("Should have opened in Facebook");
             getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mEventURL)));

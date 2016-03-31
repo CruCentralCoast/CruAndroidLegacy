@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity
             }
             else
             {
+                //REVIEW magic strings
                 new AlertDialog.Builder(this)
                         .setTitle("Unsupported Device")
                         .setMessage("Sorry but your device does not support Google Play Services")
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
     }
 
+    //REVIEW this should be used in onNavigationItemSelected
     public void switchToEvents()
     {
         navigationView.setCheckedItem(R.id.nav_events);
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity
 
     public static void loginWithFacebook()
     {
+        //REVIEW magic string, AppConstants
         LoginManager.getInstance().logInWithPublishPermissions(self, Collections.singletonList("rsvp_event"));
     }
 }

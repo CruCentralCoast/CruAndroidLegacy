@@ -41,6 +41,7 @@ public class CruEventVM
     public boolean addedToCalendar;
     public long localEventId;
 
+    //REVIEW can we reuse what's in AppConstants for consistents date formats?
     public final static String DATE_FORMATTER = "EEEE MMMM d,";
     public final static String TIME_FORMATTER = "h:mm a";
 
@@ -63,6 +64,7 @@ public class CruEventVM
     {
         final SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
+        //REVIEW Observer could more efficiently written with Observers.create()
         Observer<Pair<String, Long>> onCalendarWrittenObserver = new Observer<Pair<String, Long>>()
         {
             @Override
@@ -98,6 +100,7 @@ public class CruEventVM
         return v -> {
             CruEvent selectedEvent = cruEvent;
             final boolean adding = !addedToCalendar;
+            //REVIEW magic strings
             String operation = adding ? "Add " : "Remove ";
             AlertDialog confirmDialog = new AlertDialog.Builder(v.getContext())
                     .setTitle(operation + selectedEvent.name + " to your calendar?")
@@ -131,6 +134,7 @@ public class CruEventVM
             }
             catch(ActivityNotFoundException ex)
             {
+                //REVIEW magic string
                 Toast.makeText(v.getContext(), "Please install Google Maps to view this event's location", Toast.LENGTH_LONG).show();
             }
         };
@@ -155,6 +159,7 @@ public class CruEventVM
                 @Override
                 public void onNext(LoginResult loginResult) {
                     Set<String> grantedPermissions = FacebookProvider.getInstance().getPermissions();
+                    //REVIEW magic strings, AppConstants
                     if(grantedPermissions.contains("rsvp_event"))
                         rsvpDialog.show();
                     else
@@ -202,6 +207,7 @@ public class CruEventVM
         return v -> {
             if(cruEvent.rideSharingEnabled)
             {
+                //REVIEW magic strings
                 AlertDialog dialog = new AlertDialog.Builder(v.getContext())
                         .setTitle("Ride Sharing")
                         .setMessage(Html.fromHtml(String.format("For %s, would you like to be a <b>Driver</b> " +

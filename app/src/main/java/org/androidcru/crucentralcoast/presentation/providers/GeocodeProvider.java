@@ -13,6 +13,7 @@ import java.io.IOException;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
+//REVIEW should be deprecated
 public class GeocodeProvider
 {
     public static Observable<Address> getLatLng(Context context, String location)

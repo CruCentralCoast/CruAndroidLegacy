@@ -12,6 +12,7 @@ import android.util.Log;
 
 import java.util.List;
 
+//REVIEW mFieldName should be refactored, Log.d(TAG, ...) --> Log.t(TAG).d(...)
 public class CustomTabActivityHelper {
     private static final String TAG = "CUSTOM_TAB_ACTIVITY";
     private CustomTabsSession mCustomTabsSession;

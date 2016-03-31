@@ -41,14 +41,4 @@ public class CruEvent
         this.id = UUID.randomUUID().toString().replaceAll("-", "");
         this.parentMinistrySubscriptions = parentMinistrySubscriptions;
     }
-
-    public boolean isClean()
-    {
-        if(name == null || description == null || startDate == null || endDate == null
-                || location == null)
-        {
-            return false;
-        }
-        return true;
-    }
 }

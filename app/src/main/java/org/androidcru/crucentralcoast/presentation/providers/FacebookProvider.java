@@ -25,6 +25,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
+//REVIEW singleton class that does not need to be singleton, static methods should do
 public final class FacebookProvider
 {
     private CallbackManager callbackManager = com.facebook.CallbackManager.Factory.create();
