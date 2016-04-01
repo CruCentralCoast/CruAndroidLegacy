@@ -1,20 +1,18 @@
-package org.androidcru.crucentralcoast;
+package org.androidcru.crucentralcoast.tests;
 
 
-import android.content.SharedPreferences;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import junit.framework.AssertionFailedError;
 
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.common.RxIdlingResource;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -24,7 +22,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.androidcru.crucentralcoast.common.RecyclerViewUtils.withRecyclerView;
 import static org.hamcrest.core.IsNot.not;
 
-@RunWith(AndroidJUnit4.class)
 public class SubscriptionsTests
 {
     @Rule

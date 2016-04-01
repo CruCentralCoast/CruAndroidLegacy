@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'jacoco'
 
 
 android {
@@ -8,8 +9,8 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "org.androidcru.crucentralcoast"
+        testInstrumentationRunner applicationId + ".JUnitJacocoTestRunner"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -43,6 +44,7 @@ android {
             buildConfigField "Integer", "LOG_LEVEL", '1'
         }
         debug {
+            testCoverageEnabled = true
             buildConfigField "Integer", "LOG_LEVEL", '0'
             buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
             buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'

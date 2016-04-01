@@ -1,14 +1,15 @@
-package org.androidcru.crucentralcoast;
+package org.androidcru.crucentralcoast.tests;
 
-import android.app.Activity;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.common.RxIdlingResource;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.hamcrest.Matcher;
@@ -41,7 +42,7 @@ public class DriverSignupTests {
 
     private void switchToEvents()
     {
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(ViewMatchers.withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withText(R.string.nav_events)).perform(click());
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
     }
