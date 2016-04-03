@@ -9,9 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
+
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import butterknife.Bind;
@@ -21,11 +26,11 @@ import butterknife.ButterKnife;
 public class BasicInfoFragment extends FormContentFragment
 {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
-    private BasicInfoValidator validator;
+    private BaseValidator validator;
 
-    @Bind(R.id.name_field) EditText nameField;
-    @Bind(R.id.email_field) EditText emailField;
-    @Bind(R.id.phone_field) EditText phoneField;
+    @Bind(R.id.name_field) @NotEmpty EditText nameField;
+    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    @Bind(R.id.email_field) @Email EditText emailField;
 
 
     @Nullable
@@ -39,7 +44,7 @@ public class BasicInfoFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        validator = new BasicInfoValidator(view);
+        validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         formHolder.setTitle("Contact Information");

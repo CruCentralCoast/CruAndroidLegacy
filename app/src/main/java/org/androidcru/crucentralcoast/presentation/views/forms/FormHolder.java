@@ -5,7 +5,6 @@ import java.util.List;
 public interface FormHolder
 {
     void setFormContent(List<FormContentFragment> fragments);
-    void clearUI();
     void setTitle(String title);
     void setSubtitle(String title);
     void setPreviousVisibility(int visibility);
@@ -13,7 +12,6 @@ public interface FormHolder
     void complete();
     void setNavigationVisibility(int visibility);
     void next();
-    void setFormState(FormState state);
     void setNextText(String text);
     void prev();
     void setNavigationClickable(boolean isClickable);

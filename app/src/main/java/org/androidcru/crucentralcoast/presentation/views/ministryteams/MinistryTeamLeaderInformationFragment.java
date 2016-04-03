@@ -10,17 +10,13 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
-import org.androidcru.crucentralcoast.data.providers.ApiProvider;
-import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
-import org.androidcru.crucentralcoast.presentation.views.forms.FormState;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 {
-    private static CruApiService cruService = ApiProvider.getService();
     private MinistryTeam ministryTeam;
 
     @Bind(R.id.ministry_leader_info_text_view) TextView ministryTeamLeaderInfo;
@@ -56,6 +52,6 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
                             (user.phoneNumber != null ? user.phoneNumber + "\n" : "") + "\n");
         }
 
-        formHolder.setFormState(FormState.FINISH);
+        //formHolder.setFormState(FormState.FINISH);
     }
 }

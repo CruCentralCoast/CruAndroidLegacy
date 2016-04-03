@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,22 +29,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     private int currentIndex = 0;
 
     private FragmentManager fm;
-    private Animation.AnimationListener animationListener = new Animation.AnimationListener()
-    {
-        @Override
-        public void onAnimationStart(Animation animation) {}
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            if (previousFragment != null) {
-                FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().hide(previousFragment).commit();
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {}
-    };
 
     public FormState formState;
 
@@ -96,6 +79,32 @@ public class FormActivity extends AppCompatActivity implements FormHolder
             throw new RuntimeException("Only " + FormContentFragment.class.getSimpleName()
                     + " are allowed to be attached to this Activity.");
         }
+        else
+        {
+            currentFormContent = (FormContentFragment) fragment;
+        }
+    }
+
+    private void onPageChange()
+    {
+        clearUI();
+        if(currentIndex == 0 && fragments.size() != currentIndex + 1)
+        {
+            formState = FormState.PROGRESS;
+            setPreviousVisibility(View.GONE);
+            nextText.setText("NEXT");
+        }
+        else if(fragments.size() == currentIndex + 1)
+        {
+            formState = FormState.FINISH;
+            setPreviousVisibility(View.GONE);
+            setNextText("FINISH");
+        }
+        else
+        {
+            formState = FormState.PROGRESS;
+            nextText.setText("NEXT");
+        }
     }
 
     @Override
@@ -107,12 +116,11 @@ public class FormActivity extends AppCompatActivity implements FormHolder
             this.fragments = new ArrayList<>();
             for(FormContentFragment fragment : fragments)
             {
-                //fragment.setAnimationListener(animationListener);
                 this.fragments.add(new WeakReference<FormContentFragment>(fragment));
             }
-            currentFormContent = fragments.get(0);
             performTransaction(fragments.get(0));
             previousFragment = null;
+            onPageChange();
         }
     }
 
@@ -143,13 +151,13 @@ public class FormActivity extends AppCompatActivity implements FormHolder
                 R.anim.slide_in_right, R.anim.slide_out_right).replace(R.id.content, fragment).addToBackStack(null).commit();
     }
 
-    @Override
-    public void clearUI()
+    private void clearUI()
     {
         setTitle(getResources().getString(R.string.app_name));
         setNavigationVisibility(View.VISIBLE);
         setPreviousVisibility(View.VISIBLE);
         setNextVisibility(View.VISIBLE);
+        setNavigationClickable(true);
         setNextText("NEXT");
     }
 
@@ -199,23 +207,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         {
             performTransaction(nextFragment);
         }
-
-    }
-
-    @Override
-    public void setFormState(FormState state)
-    {
-        formState = state;
-        switch(state)
-        {
-            case PROGRESS:
-                setNextText("NEXT");
-                break;
-            case FINISH:
-                setNextText(FormState.FINISH.toString());
-                setPreviousVisibility(View.GONE);
-                break;
-        }
+        onPageChange();
     }
 
     @Override
@@ -230,6 +222,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         previousFragment = fragments.get(currentIndex).get();
         currentIndex--;
         fm.popBackStack();
+        onPageChange();
     }
 
     @Override
