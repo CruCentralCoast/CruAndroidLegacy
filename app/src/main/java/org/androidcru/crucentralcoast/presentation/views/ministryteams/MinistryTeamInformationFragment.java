@@ -40,15 +40,8 @@ public class MinistryTeamInformationFragment extends FormContentFragment
     {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-    }
 
-    @Override
-    public void setupUI()
-    {
-        //TODO @jon make this automatic?
-        formHolder.addDataObject(formHolder.getDataObject());
-
-        ministryTeam = (MinistryTeam) formHolder.getDataObject();
+        ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
         formHolder.setTitle(ministryTeam.name);
 
         ViewUtil.setSource(ministryInfoImage, ministryTeam.teamImage != null ? ministryTeam.teamImage.url : null, 0, null, null);

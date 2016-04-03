@@ -15,7 +15,12 @@ import java.util.ArrayList;
 
 public class PassengerSignupActivity extends FormActivity
 {
-    CruEvent event;
+    private CruEvent event;
+
+    public static final String CRU_EVENT = "CRU_EVENT";
+    public static final String SELECTED_RIDE = "SELECTED_RIDE";
+    public static final String QUERY = "QUERY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +41,8 @@ public class PassengerSignupActivity extends FormActivity
 
         ArrayList<FormContentFragment> fragments = setupForm(bundle);
 
-        setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), this, fragments));
-        setFirstDataObject(event);
+        addDataObject(CRU_EVENT, event);
+        setFormContent(fragments);
 
     }
 

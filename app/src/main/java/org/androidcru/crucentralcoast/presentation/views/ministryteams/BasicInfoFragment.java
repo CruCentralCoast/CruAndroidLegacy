@@ -12,7 +12,6 @@ import android.widget.EditText;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import butterknife.Bind;
@@ -42,15 +41,8 @@ public class BasicInfoFragment extends FormContentFragment
         ButterKnife.bind(this, view);
         validator = new BasicInfoValidator(view);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-    }
 
-    @Override
-    public void setupUI()
-    {
         formHolder.setTitle("Contact Information");
-
-        //TODO @jon make this automatic?
-        formHolder.addDataObject(formHolder.getDataObject());
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));

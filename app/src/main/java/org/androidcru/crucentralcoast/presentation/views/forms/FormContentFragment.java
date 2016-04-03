@@ -1,18 +1,33 @@
 package org.androidcru.crucentralcoast.presentation.views.forms;
 
 import android.content.Context;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 public abstract class FormContentFragment extends BaseSupportFragment implements FormContent
 {
     protected FormHolder formHolder;
-    protected FormAdapter adapter;
-
-
+    private Animation.AnimationListener animListener;
 
     @Override
-    public void onAttach(Context context)
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+
+        if (nextAnim != 0) {
+            Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+            if(animListener != null)
+            {
+                anim.setAnimationListener(animListener);
+            }
+            return anim;
+        } else {
+            return super.onCreateAnimation(transit, enter, nextAnim);
+        }
+    }
+
+    @Override
+    public final void onAttach(Context context)
     {
         super.onAttach(context);
         formHolder = (FormHolder) getActivity();
@@ -30,9 +45,8 @@ public abstract class FormContentFragment extends BaseSupportFragment implements
         formHolder.prev();
     }
 
-    @Override
-    public final void setNextDataObject(Object dataObject)
+    public void setAnimationListener(Animation.AnimationListener animListener)
     {
-        formHolder.addDataObject(dataObject);
+        this.animListener = animListener;
     }
 }

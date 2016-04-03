@@ -69,7 +69,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         @Override
         public void onClick(View v)
         {
-            formHolder.addDataObject(rides.get(getAdapterPosition()));
+            formHolder.addDataObject(PassengerSignupActivity.SELECTED_RIDE, rides.get(getAdapterPosition()));
             formContent.onNext();
         }
     }

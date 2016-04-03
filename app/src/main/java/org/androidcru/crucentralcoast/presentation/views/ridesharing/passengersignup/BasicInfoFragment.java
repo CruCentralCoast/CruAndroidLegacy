@@ -50,6 +50,12 @@ public class BasicInfoFragment extends FormContentFragment {
         ButterKnife.bind(this, view);
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+        formHolder.setTitle("Contact Information");
+        ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT);
+
+        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
+        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
     }
 
     private Passenger getPassenger()
@@ -80,14 +86,5 @@ public class BasicInfoFragment extends FormContentFragment {
 
     }
 
-    @Override
-    public void setupUI()
-    {
-        formHolder.setTitle("Contact Information");
-        ride = (Ride) formHolder.getDataObject();
-
-        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-    }
 }
 

@@ -1,19 +1,22 @@
 package org.androidcru.crucentralcoast.presentation.views.forms;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,12 +24,31 @@ import butterknife.ButterKnife;
 public class FormActivity extends AppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
-    private ArrayList<Object> dataObjects;
+    private HashMap<String, Object> dataObjects = new HashMap<>();
+    private FormContentFragment previousFragment;
+    private ArrayList<WeakReference<FormContentFragment>> fragments = new ArrayList<>();
+    private int currentIndex = 0;
+
+    private FragmentManager fm;
+    private Animation.AnimationListener animationListener = new Animation.AnimationListener()
+    {
+        @Override
+        public void onAnimationStart(Animation animation) {}
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            if (previousFragment != null) {
+                FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().hide(previousFragment).commit();
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {}
+    };
+
     public FormState formState;
 
-    @Bind(R.id.appbar) AppBarLayout appBar;
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.viewPager) ViewPager viewPager;
     @Bind(R.id.bottom_bar) RelativeLayout bottomBar;
     @Bind(R.id.prev) RelativeLayout prev;
     @Bind(R.id.next) RelativeLayout next;
@@ -39,8 +61,9 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         setContentView(R.layout.activity_form);
 
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
         formState = FormState.PROGRESS;
+
+        fm = getSupportFragmentManager();
     }
 
     @Override
@@ -64,16 +87,33 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         }
     }
 
-    protected void setCurrentFormContent(FormContent content)
+    @Override
+    public void onAttachFragment(Fragment fragment)
     {
-        currentFormContent = content;
-        clearUI();
-        if (viewPager.getCurrentItem() == 0)
+        super.onAttachFragment(fragment);
+        if(!(fragment instanceof FormContentFragment))
         {
-            setPreviousVisibility(View.GONE);
+            throw new RuntimeException("Only " + FormContentFragment.class.getSimpleName()
+                    + " are allowed to be attached to this Activity.");
         }
-        currentFormContent.setupUI();
-        setupButtonListeners();
+    }
+
+    @Override
+    public void setFormContent(List<FormContentFragment> fragments)
+    {
+        if(fragments != null && !fragments.isEmpty())
+        {
+            setupButtonListeners();
+            this.fragments = new ArrayList<>();
+            for(FormContentFragment fragment : fragments)
+            {
+                //fragment.setAnimationListener(animationListener);
+                this.fragments.add(new WeakReference<FormContentFragment>(fragment));
+            }
+            currentFormContent = fragments.get(0);
+            performTransaction(fragments.get(0));
+            previousFragment = null;
+        }
     }
 
     private void setupButtonListeners()
@@ -92,23 +132,15 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void onBackPressed()
     {
-        if (formState == FormState.FINISH)
+        if (formState == FormState.FINISH || currentIndex == 0)
             complete();
-        else if(viewPager.getCurrentItem() != 0)
-            currentFormContent.onPrevious();
         else
-            super.onBackPressed();
+            currentFormContent.onPrevious();
     }
 
-    @Override
-    public void setAdapter(FormAdapter adapter)
-    {
-        dataObjects = new ArrayList<>();
-        for(int i = 0; i < adapter.getCount(); i++)
-        {
-            dataObjects.add(null);
-        }
-        viewPager.setAdapter(adapter);
+    public void performTransaction(Fragment fragment) {
+        fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                R.anim.slide_in_right, R.anim.slide_out_right).replace(R.id.content, fragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -124,17 +156,13 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void setTitle(String title)
     {
-        toolbar.setTitle(title);
-        toolbar.requestLayout();
-        toolbar.invalidate();
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
     public void setSubtitle(String subtitle)
     {
-        toolbar.setSubtitle(subtitle);
-        toolbar.requestLayout();
-        toolbar.invalidate();
+        getSupportActionBar().setSubtitle(subtitle);
     }
 
     @Override
@@ -164,14 +192,14 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void next()
     {
-        if(viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1)
+        previousFragment = fragments.get(currentIndex).get();
+        currentIndex++;
+        FormContentFragment nextFragment = fragments.get(currentIndex).get();
+        if(nextFragment != null)
         {
-            complete();
+            performTransaction(nextFragment);
         }
-        else
-        {
-            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-        }
+
     }
 
     @Override
@@ -199,7 +227,9 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void prev()
     {
-        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        previousFragment = fragments.get(currentIndex).get();
+        currentIndex--;
+        fm.popBackStack();
     }
 
     @Override
@@ -210,28 +240,17 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     }
 
     @Override
-    public void addDataObject(Object dataObject)
+    public void addDataObject(String key, Object dataObject)
     {
-        if(viewPager.getCurrentItem() + 1 >= dataObjects.size())
-        {
-            this.dataObjects.add(dataObject);
-            return;
-        }
-        this.dataObjects.set(viewPager.getCurrentItem() + 1, dataObject);
-    }
-
-    protected void setFirstDataObject(Object dataObject) {
-        if (dataObjects != null && !dataObjects.isEmpty()) {
-            dataObjects.set(0, dataObject);
-        }
+        dataObjects.put(key, dataObject);
     }
 
     @Override
-    public Object getDataObject()
+    public Object getDataObject(String key)
     {
-        if(dataObjects.size() < viewPager.getCurrentItem())
-            return null;
-        return dataObjects.get(viewPager.getCurrentItem());
+        if(dataObjects.containsKey(key))
+            return dataObjects.get(key);
+        return null;
     }
 }
 

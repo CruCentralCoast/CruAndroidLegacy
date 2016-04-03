@@ -16,6 +16,8 @@ public class JoinMinistryTeamActivity extends FormActivity
 {
     public MinistryTeam ministryTeam;
 
+    public static final String MINISTRY_TEAM = "MINISTRY_TEAM";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class JoinMinistryTeamActivity extends FormActivity
         fragments.add(new BasicInfoFragment());
         fragments.add(new MinistryTeamLeaderInformationFragment());
 
-        setAdapter(new MinistryTeamPagerAdapter(getSupportFragmentManager(), this, fragments));
-        setFirstDataObject(ministryTeam);
+        addDataObject(MINISTRY_TEAM, ministryTeam);
+        setFormContent(fragments);
     }
 }

@@ -15,11 +15,8 @@ import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormState;
 
-import java.util.ArrayList;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.schedulers.Schedulers;
 
 public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 {
@@ -45,12 +42,8 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
     {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-    }
 
-    @Override
-    public void setupUI()
-    {
-        ministryTeam = (MinistryTeam) formHolder.getDataObject();
+        ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
 
         formHolder.setTitle(ministryTeam.name);
 

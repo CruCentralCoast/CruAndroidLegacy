@@ -1,8 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.forms;
 
+import java.util.List;
+
 public interface FormHolder
 {
-    void setAdapter(FormAdapter adapter);
+    void setFormContent(List<FormContentFragment> fragments);
     void clearUI();
     void setTitle(String title);
     void setSubtitle(String title);
@@ -16,6 +18,6 @@ public interface FormHolder
     void prev();
     void setNavigationClickable(boolean isClickable);
 
-    void addDataObject(Object dataObject);
-    Object getDataObject();
+    void addDataObject(String key, Object dataObject);
+    Object getDataObject(String key);
 }
