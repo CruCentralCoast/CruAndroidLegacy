@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +23,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
     private HashMap<String, Object> dataObjects = new HashMap<>();
-    private FormContentFragment previousFragment;
-    private ArrayList<WeakReference<FormContentFragment>> fragments = new ArrayList<>();
+    private ArrayList<FormContentFragment> fragments = new ArrayList<>();
     private int currentIndex = 0;
 
     private FragmentManager fm;
@@ -113,13 +111,8 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         if(fragments != null && !fragments.isEmpty())
         {
             setupButtonListeners();
-            this.fragments = new ArrayList<>();
-            for(FormContentFragment fragment : fragments)
-            {
-                this.fragments.add(new WeakReference<FormContentFragment>(fragment));
-            }
+            this.fragments = new ArrayList<>(fragments);
             performTransaction(fragments.get(0));
-            previousFragment = null;
             onPageChange();
         }
     }
@@ -200,9 +193,8 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void next()
     {
-        previousFragment = fragments.get(currentIndex).get();
         currentIndex++;
-        FormContentFragment nextFragment = fragments.get(currentIndex).get();
+        FormContentFragment nextFragment = fragments.get(currentIndex);
         if(nextFragment != null)
         {
             performTransaction(nextFragment);
@@ -219,7 +211,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void prev()
     {
-        previousFragment = fragments.get(currentIndex).get();
         currentIndex--;
         fm.popBackStack();
         onPageChange();

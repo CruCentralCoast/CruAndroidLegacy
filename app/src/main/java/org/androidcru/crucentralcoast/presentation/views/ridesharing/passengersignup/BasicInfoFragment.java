@@ -52,7 +52,7 @@ public class BasicInfoFragment extends FormContentFragment {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         formHolder.setTitle("Contact Information");
-        ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT);
+        ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
@@ -82,6 +82,8 @@ public class BasicInfoFragment extends FormContentFragment {
             passenger.direction = ride.direction;
             passenger.gcm_id = CruApplication.getGCMID();
             PassengerProvider.addPassenger(this, Observers.create(passenger1 -> RideProvider.addPassengerToRide(this, Observers.empty(), ride.id, passenger1.id)), passenger);
+
+            super.onNext();
         }
 
     }

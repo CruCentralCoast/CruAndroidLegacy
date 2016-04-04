@@ -50,7 +50,7 @@
         <activity
             android:name=".presentation.views.forms.FormActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".presentation.views.ridesharing.driversignup.DriverSignupActivity"
             android:screenOrientation="portrait"
@@ -58,7 +58,7 @@
         <activity
             android:name=".presentation.views.ridesharing.passengersignup.PassengerSignupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".presentation.views.ministryteams.JoinMinistryTeamActivity"
             android:screenOrientation="portrait"
