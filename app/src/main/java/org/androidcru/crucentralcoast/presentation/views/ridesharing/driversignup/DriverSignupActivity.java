@@ -40,7 +40,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_form);
-
+        //get event from bundle
         Bundle bundle = getIntent().getExtras();
         if(bundle == null || bundle.getString(AppConstants.EVENT_ID, "").isEmpty())
         {
@@ -98,7 +98,12 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private void requestRides(String rideId)
     {
         //TODO GeocodeProvider was used to populate the address of the Ride at this time
-        RideProvider.requestRideByID(this, Observers.empty(), rideId);
+        RideProvider.requestRideByID(this,
+                Observers.create(
+                        ride -> {
+                            bindNewRideVM(ride);
+                        }
+                ), rideId);
     }
 
     private void bindNewRideVM(Ride r) {

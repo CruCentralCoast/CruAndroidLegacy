@@ -67,7 +67,7 @@ public abstract class BaseRideVM extends BaseVM
 
     protected abstract void placeSelected(LatLng precisePlace, String placeAddress);
 
-
+    //not used
     private TimePickerDialog getTimeDialog()
     {
         ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -83,6 +83,7 @@ public abstract class BaseRideVM extends BaseVM
         return tpd;
     }
 
+    //not used
     private DatePickerDialog getDateDialog()
 {
     ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -96,7 +97,7 @@ public abstract class BaseRideVM extends BaseVM
     dpd.vibrate(false);
     return dpd;
 }
-
+    //not used
     protected void onEventDateClicked(View v)
     {
         DatePickerDialog dpd = getDateDialog();
@@ -198,7 +199,7 @@ public abstract class BaseRideVM extends BaseVM
 
         return f2.format(d);
     }
-
+    //not used
     protected void onEventTimeClicked(View v)
     {
         TimePickerDialog tpd = getTimeDialog();
@@ -228,7 +229,7 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] directionsForSpinner(Ride.Direction[] directions)
     {
         String[] directionsForSpinner = new String[directions.length + 1];
-        directionsForSpinner[0] = "Select Direction";
+        directionsForSpinner[0] = "Select Direction"; //TODO: remove hardcoded string
         for(int i = 0; i < directions.length; i++)
         {
             directionsForSpinner[i + 1] = directions[i].getValueDetailed();
@@ -280,7 +281,7 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] gendersForSpinner(String[] actualGenders)
     {
         genders = new String[actualGenders.length + 1];
-        genders[0] = "Select Gender";
+        genders[0] = "Select Gender"; //TODO: remove hardcoded string
         System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
         return genders;
     }
@@ -288,6 +289,7 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] gendersForSpinner(int resourceId)
     {
         String[] actualGenders = context.getResources().getStringArray(resourceId);
+//        return gendersForSpinner(actualGenders);
         genders = new String[actualGenders.length + 1];
         genders[0] = "Select Gender";
         System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);

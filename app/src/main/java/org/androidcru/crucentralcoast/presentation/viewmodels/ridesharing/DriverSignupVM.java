@@ -81,7 +81,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Bind(R.id.radius_field) TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
-
+    //constructor for a new Ride
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventID) {
         super(activity, fm);
         this.editing = false;
@@ -90,16 +90,16 @@ public class DriverSignupVM extends BaseRideVM {
         setEventTime(eventID);
         bindUI();
     }
-
+    //constructor for editing an existing Ride
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride) {
         super(activity, fm);
         this.editing = ride != null && !ride.isEmpty();
         this.ride = ride != null ? ride : new Ride();
-
+        //set time variables in the parent class
         if (editing) {
             date = this.ride.time.toLocalDate();
             time = this.ride.time.toLocalTime();
-            setEventTime(this.ride.eventId);
+//            setEventTime(this.ride.eventId); //if editing don't need to call this
         }
 
         bindUI();
@@ -118,7 +118,6 @@ public class DriverSignupVM extends BaseRideVM {
 
             nameField.setText(ride.driverName);
             phoneField.setText(ride.driverNumber);
-
             rideTime.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
             rideDate.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
 
@@ -132,7 +131,6 @@ public class DriverSignupVM extends BaseRideVM {
                 default:
                     directionGroup.check(roundTrip.getId());
             }
-
         } else {
             ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
             directionGroup.check(roundTrip.getId());
@@ -145,7 +143,6 @@ public class DriverSignupVM extends BaseRideVM {
         }
 
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
-
     }
 
     private int retrieveCarCapacity() {
@@ -168,7 +165,7 @@ public class DriverSignupVM extends BaseRideVM {
         }
         return direction;
     }
-
+    //populates ride's fields with data from the view
     public Ride getRide() {
         ride.driverName = nameField.getText().toString();
         ride.driverNumber = phoneField.getText().toString();
@@ -283,10 +280,11 @@ public class DriverSignupVM extends BaseRideVM {
     }
 
     //TODO @daniel somehow, avoid this network call
+    //to fix: change CruEventVM 229: driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
+    //        to  driverIntent.putExtra(AppConstants.EVENT_STARTDATE, cruEvent.startDate); will involve renaming
     private void setEventTime(String eventID) {
         EventProvider.requestCruEventByID(holder, Observers.create(event -> eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate)), eventID);
     }
-
 
     private TextWatcher createCarCapacityWatcher()
     {
