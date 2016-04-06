@@ -3,6 +3,7 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
@@ -18,6 +19,8 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
@@ -25,6 +28,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
         maven { url "http://dl.bintray.com/tbruyelle/tbruyelle" }
         maven { url "https://jitpack.io" }
     }

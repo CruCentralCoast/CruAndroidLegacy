@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.multidex.MultiDexApplication;
 
 import com.anupcowkur.reservoir.Reservoir;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
@@ -28,6 +29,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.threeten.bp.ZonedDateTime;
 
+import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
 public class CruApplication extends MultiDexApplication
@@ -50,7 +52,9 @@ public class CruApplication extends MultiDexApplication
         super.onCreate();
         context = this;
 
-        Logger.init().setLogLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
+        Fabric.with(this, new Crashlytics());
+
+        Logger.init().logLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
 
         Stetho.initializeWithDefaults(this);
 
