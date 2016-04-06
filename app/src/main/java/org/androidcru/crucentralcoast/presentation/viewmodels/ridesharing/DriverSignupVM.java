@@ -65,7 +65,7 @@ public class DriverSignupVM extends BaseRideVM {
     private int minCapacity;
 
     @Bind(R.id.name_field) @NotEmpty public EditText nameField;
-    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) public EditText phoneField;
+    @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX, messageResId = R.string.phone_number_error) public EditText phoneField;
 
     @Bind(R.id.round_trip) RadioButton roundTrip;
     @Bind(R.id.to_event) RadioButton toEvent;
@@ -79,7 +79,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
 
-    @Bind(R.id.radius_field) TextView radiusField;
+    @Bind(R.id.radius_field) @NotEmpty TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventID) {
