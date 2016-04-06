@@ -85,6 +85,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
 
     private void onPageChange()
     {
+        if(fragments.size() <=  currentIndex)
+        {
+            complete();
+            return;
+        }
+
         clearUI();
         if(currentIndex == 0 && fragments.size() != currentIndex + 1)
         {
@@ -194,7 +200,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     public void next()
     {
         currentIndex++;
-        FormContentFragment nextFragment = fragments.get(currentIndex);
+        FormContentFragment nextFragment = currentIndex < fragments.size() ? fragments.get(currentIndex) : null;
         if(nextFragment != null)
         {
             performTransaction(nextFragment);

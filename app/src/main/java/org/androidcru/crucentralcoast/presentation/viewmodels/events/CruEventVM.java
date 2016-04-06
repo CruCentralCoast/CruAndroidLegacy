@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
@@ -24,6 +23,7 @@ import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
+import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
 import org.parceler.Parcels;
@@ -35,7 +35,7 @@ import rx.Observer;
 
 public class CruEventVM
 {
-    private Fragment eventFragment;
+    private EventsFragment eventFragment;
     public CruEvent cruEvent;
     public boolean isExpanded;
     public boolean addedToCalendar;
@@ -45,7 +45,7 @@ public class CruEventVM
     public final static String DATE_FORMATTER = "EEEE MMMM d,";
     public final static String TIME_FORMATTER = "h:mm a";
 
-    public CruEventVM(Fragment eventFragment, CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
+    public CruEventVM(EventsFragment eventFragment, CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
     {
         this.cruEvent = cruEvent;
         this.isExpanded = isExpanded;
@@ -82,18 +82,14 @@ public class CruEventVM
             {
                 String cruEventId = eventInfo.first;
                 long calendarId = eventInfo.second;
-                if (eventInfo.second > -1)
+                if (eventInfo.second > 0)
                 {
-                    /*Toast.makeText(getActivity(), "EventID: " + Long.toString(calendarId) + " added to default calendar",
-                            Toast.LENGTH_LONG).show();*/
                     sharedPreferences.edit().putLong(cruEventId, calendarId).commit();
-                } else
-                {
-                    sharedPreferences.edit().remove(cruEventId).commit();
                 }
 
                 addedToCalendar = sharedPreferences.contains(cruEvent.id);
                 localEventId = sharedPreferences.getLong(cruEvent.id, -1);
+                eventFragment.refreshAdapter();
             }
         };
 
@@ -108,9 +104,9 @@ public class CruEventVM
                     })
                     .setPositiveButton("SURE", (dialog, which) -> {
                         if (adding)
-                            CalendarProvider.getInstance().addEventToCalendar(v.getContext(), selectedEvent, onCalendarWrittenObserver);
+                            CalendarProvider.addEventToCalendar(v.getContext(), selectedEvent, onCalendarWrittenObserver);
                         else
-                            CalendarProvider.getInstance().removeEventFromCalendar(v.getContext(), selectedEvent, localEventId, onCalendarWrittenObserver);
+                            CalendarProvider.removeEventFromCalendar(v.getContext(), selectedEvent, localEventId, onCalendarWrittenObserver);
                     })
                     .create();
             confirmDialog.show();
