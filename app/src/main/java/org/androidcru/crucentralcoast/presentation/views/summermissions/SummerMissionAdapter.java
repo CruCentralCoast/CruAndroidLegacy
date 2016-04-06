@@ -78,10 +78,7 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         }
         else
         {
-            Picasso.with(context)
-                    .load(R.drawable.logo_grey)
-                    .fit()
-                    .into(holder.missionBanner);
+            holder.missionBanner.setImageResource(android.R.color.transparent);
         }
 
         holder.chevView.setImageDrawable(isExpanded.get(position)
