@@ -49,7 +49,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(cruImage != null)
             ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
         else
-            ministryTeamHolder.ministryImage.setImageResource(android.R.color.transparent);
+            ministryTeamHolder.ministryImage.setImageResource(R.drawable.default_box);
 
         Intent intent = new Intent(parent, JoinMinistryTeamActivity.class);
         intent.putExtra(AppConstants.MINISTRY_TEAM_KEY, Parcels.wrap(ministryTeams.get(position)));
