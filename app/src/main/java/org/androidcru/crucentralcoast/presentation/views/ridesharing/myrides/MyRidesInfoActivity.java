@@ -118,7 +118,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         Intent intent = new Intent(this, DriverSignupActivity.class);
         Bundle extras = new Bundle();
         extras.putString(AppConstants.RIDE_KEY, ride.id);
-        extras.putString(AppConstants.EVENT_ID, ride.eventId);
+        extras.putSerializable(AppConstants.EVENT_STARTDATE, ride.time);
         intent.putExtras(extras);
         this.startActivity(intent);
     }

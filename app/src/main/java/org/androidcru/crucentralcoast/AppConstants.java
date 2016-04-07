@@ -43,6 +43,7 @@ public class AppConstants
     //RideSharing intent keys
     public static final String RIDE_KEY = "filled ride";
     public static final String EVENT_KEY = "event";
+    public static final String EVENT_STARTDATE = "event_startdate";
     public static final String DATE_yyyyMMdd_ = "yyyy-MM-dd";
     public static final String DATE_DISPLAY_PATTERN = "MMM dd, yyyy";
     public static final String TIME_PARSE = "HH:mm:ss";
