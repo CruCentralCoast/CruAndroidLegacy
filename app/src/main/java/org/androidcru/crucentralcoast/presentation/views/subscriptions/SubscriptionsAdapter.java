@@ -116,7 +116,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
                 else
                 {
-                    ministrySubscriptionHolder.ministryImage.setImageResource(android.R.color.transparent);
+                    ministrySubscriptionHolder.ministryImage.setImageResource(R.drawable.default_box);
                 }
 
 

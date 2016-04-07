@@ -3,13 +3,18 @@ package org.androidcru.crucentralcoast.presentation.views;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.Manifest;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.UserProvider;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
@@ -56,21 +61,30 @@ public class SplashActivity extends BaseAppCompatActivity
             intent.setClass(this, MainActivity.class);
         else
         {
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            String userPhoneNumber = telephonyManager.getLine1Number();
-            if(userPhoneNumber != null)
-                userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
+            Boolean readPhoneStateAccess = false;
+            if (Build.VERSION.SDK_INT >= 23)
+            {
+                // TODO Finish figuring out why this isn't recognized.
+//                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+//                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_CONTACTS}, REQUEST_CODE_ASK_PERMISSIONS);
+            }
+            if (Build.VERSION.SDK_INT < 23)
+            {
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                String userPhoneNumber = telephonyManager.getLine1Number();
+                if (userPhoneNumber != null)
+                    userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
 
-            sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
+                sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
-            Observer<CruUser> observer = Observers.create(cruUser -> {
-                SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
-                userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
-                userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
-            });
+                Observer<CruUser> observer = Observers.create(cruUser -> {
+                    SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
+                    userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
+                    userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+                });
 
-            UserProvider.requestCruUser(this, observer, userPhoneNumber);
-
+                UserProvider.requestCruUser(this, observer, userPhoneNumber);
+            }
             intent.setClass(this, SubscriptionActivity.class);
         }
 

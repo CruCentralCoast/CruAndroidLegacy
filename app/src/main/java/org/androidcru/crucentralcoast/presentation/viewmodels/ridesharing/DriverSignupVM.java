@@ -142,6 +142,7 @@ public class DriverSignupVM extends BaseRideVM {
 
             nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
             phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
+
         }
 
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
