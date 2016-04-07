@@ -97,8 +97,8 @@ public class DriverSignupVM extends BaseRideVM {
         this.ride = ride != null ? ride : new Ride();
         //set time variables in the parent class
         if (editing) {
-            date = this.ride.time.toLocalDate();
-            time = this.ride.time.toLocalTime();
+            rideSetDate = this.ride.time.toLocalDate();
+            rideSetTime = this.ride.time.toLocalTime();
 //            setEventTime(this.ride.eventId); //if editing don't need to call this
         }
 
@@ -121,6 +121,7 @@ public class DriverSignupVM extends BaseRideVM {
             rideTime.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
             rideDate.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
 
+            searchInput.setText(ride.location.toString());
             radiusField.setText(Double.toString(ride.radius));
 
             switch (ride.direction)
@@ -172,7 +173,7 @@ public class DriverSignupVM extends BaseRideVM {
         ride.gender = (String) genderField.getSelectedItem();
         ride.carCapacity = retrieveCarCapacity();
         ride.direction = retrieveDirection(directionGroup);
-        ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());
+        ride.time = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
         return ride;
     }
 
@@ -204,12 +205,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Override
     protected void placeSelected(LatLng precisePlace, String placeAddress) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(precisePlace, 14.0f));
-        center = precisePlace;
-        setMarker(center);
-
-        if (radius != null)
-            setCircle(center, radius);
+        updateMap(precisePlace);
 
         if (placeAddress != null) {
             String[] splitAddress = placeAddress.split("\\s*,\\s*");
@@ -218,6 +214,15 @@ public class DriverSignupVM extends BaseRideVM {
                     splitAddress[1], splitAddress[0], splitAddress[3]);
             ride.location.preciseLocation = precisePlace;
         }
+    }
+
+    private void updateMap(LatLng precisePlace) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(precisePlace, 14.0f));
+        center = precisePlace;
+        setMarker(center);
+
+        if (radius != null)
+            setCircle(center, radius);
     }
 
     @OnTextChanged(R.id.radius_field)
@@ -236,8 +241,8 @@ public class DriverSignupVM extends BaseRideVM {
         return googleMap -> {
             if (map == null) {
                 map = googleMap;
-                if (ride.address != null)
-                    placeSelected(new LatLng(ride.address.getLatitude(), ride.address.getLongitude()), null);
+                if (ride.location.preciseLocation != null)
+                    updateMap(ride.location.preciseLocation);
                 else
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
             } else {

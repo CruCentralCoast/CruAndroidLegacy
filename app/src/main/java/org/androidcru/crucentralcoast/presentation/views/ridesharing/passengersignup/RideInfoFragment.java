@@ -54,7 +54,7 @@ public class RideInfoFragment extends FormContentFragment {
                 .build();
         autocompleteFragment.setHint("Find drivers near...");
         autocompleteFragment.setFilter(typeFilter);
-        autocompleteFragment.setOnPlaceSelectedListener(rideFilterVM.onPlaceSelected());
+        autocompleteFragment.setOnPlaceSelectedListener(rideFilterVM.createPlaceSelectionListener());
     }
 
     @Override
