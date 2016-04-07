@@ -214,8 +214,8 @@ public class DriverSignupVM extends BaseRideVM {
             String[] splitAddress = placeAddress.split("\\s*,\\s*");
             String[] splitStateZip = splitAddress[2].split(" ");
             ride.location = new Location(splitStateZip[1], splitStateZip[0],
-                    splitAddress[1], splitAddress[0], splitAddress[3]);
-            ride.location.preciseLocation = precisePlace;
+                    splitAddress[1], splitAddress[0], splitAddress[3],
+                    new double[] {precisePlace.longitude, precisePlace.latitude});
         }
     }
 
@@ -244,8 +244,8 @@ public class DriverSignupVM extends BaseRideVM {
         return googleMap -> {
             if (map == null) {
                 map = googleMap;
-                if (ride != null && ride.location != null && ride.location.preciseLocation != null)
-                    updateMap(ride.location.preciseLocation);
+                if (ride != null && ride.location != null)
+                    updateMap(new LatLng(ride.location.geo[1], ride.location.geo[0]));
                 else
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
             } else {
@@ -328,7 +328,7 @@ public class DriverSignupVM extends BaseRideVM {
                 }
                 catch (NumberFormatException nfe)
                 {
-
+                    carCapacity.setText("");
                 }
             }
         };

@@ -36,7 +36,6 @@ import rx.Observable;
 @SuppressWarnings("unused")
 public abstract class BaseRideVM extends BaseVM
 {
-    //TODO: move the final vars to app constants
     protected static final int NUM_HOURS = 24;
     protected static final int NUM_MINUTES = 60;
     protected static final int INTERVAL = 15;
@@ -50,7 +49,7 @@ public abstract class BaseRideVM extends BaseVM
     protected LocalTime rideSetTime;
     private String[] genders;
 
-    private FragmentManager fm; //TODO: ask jon why this is protected
+    private FragmentManager fm;
 
     public BaseRideVM(BaseAppCompatActivity activity, FragmentManager fm)
     {
@@ -93,7 +92,6 @@ public abstract class BaseRideVM extends BaseVM
 
     protected void onEventDateClicked(View v, GregorianCalendar gc)
     {
-        //TODO: have group vote on this or a much better ternary operator
         DatePickerDialog dpd;
         //use Ride's start time if editing a Ride
         if (rideSetDate == null)
@@ -104,29 +102,31 @@ public abstract class BaseRideVM extends BaseVM
         dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
             rideSetDate = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
             String yyyymmdd = rideSetDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-            ((EditText) v).setText(convertToddMMyyyy(yyyymmdd)); //TODO: do we have to check for class cast exception?
+            ((EditText) v).setText(convertToddMMyyyy(yyyymmdd));
         });
 
-        dpd.show(fm, "whatever"); //TODO: hardcorded string
+        dpd.show(fm, AppConstants.SUPER_SPECIAL_STRING);
     }
 
     protected void onEventTimeClicked(View v, GregorianCalendar gc)
     {
-        TimePickerDialog tpd = rideSetTime == null ?
-                getTimeDialog(gc) :
-                getTimeDialog(new GregorianCalendar(0, 0, 0, rideSetTime.getHour(), rideSetTime.getMinute()));
+        TimePickerDialog tpd;
+        if (rideSetTime == null)
+            tpd = getTimeDialog(gc);
+        else
+            tpd = getTimeDialog(new GregorianCalendar(0, 0, 0, rideSetTime.getHour(), rideSetTime.getMinute()));
         //sets the text of the TimePicker EditText
         tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
             rideSetTime = LocalTime.of(hourOfDay, minute, second);
             String milTime = rideSetTime.format(DateTimeFormatter.ISO_LOCAL_TIME);
             ((EditText) v).setText(convertTo12Hour(milTime));
         });
-        tpd.show(fm, "whatever"); //TODO: another wonderful hardcoded string
+        tpd.show(fm, AppConstants.SUPER_SPECIAL_STRING);
     }
 
     private String convertToddMMyyyy(String s)
     {
-        SimpleDateFormat sdf = new SimpleDateFormat(AppConstants.DATE_yyyyMMdd_);
+        SimpleDateFormat sdf = new SimpleDateFormat(AppConstants.DATE_yyyyMMdd);
         Date d = null;
 
         try
@@ -135,7 +135,6 @@ public abstract class BaseRideVM extends BaseVM
         }
         catch (ParseException e) {
             e.printStackTrace();
-            //TODO: do we need to do anything else here?
         }
 
         sdf.applyPattern(AppConstants.DATE_DISPLAY_PATTERN);
@@ -187,23 +186,23 @@ public abstract class BaseRideVM extends BaseVM
     }
 
     //not used??? TODO: probably get rid of but make sure??
-    protected int getDirectionIndex(Ride.Direction d, Ride.Direction[] directions)
-    {
-        int index = 0;
-
-        if(d == null)
-            return index;
-
-        for(int i = 0; i < directions.length; i++)
-        {
-            if(d == directions[i])
-            {
-                index = i + 1;
-                break;
-            }
-        }
-        return index;
-    }
+//    protected int getDirectionIndex(Ride.Direction d, Ride.Direction[] directions)
+//    {
+//        int index = 0;
+//
+//        if(d == null)
+//            return index;
+//
+//        for(int i = 0; i < directions.length; i++)
+//        {
+//            if(d == directions[i])
+//            {
+//                index = i + 1;
+//                break;
+//            }
+//        }
+//        return index;
+//    }
 
     protected Ride.Direction retrieveDirection(Spinner tripTypeField, Ride.Direction[] directions)
     {

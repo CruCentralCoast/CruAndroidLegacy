@@ -36,7 +36,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private SupportPlaceAutocompleteFragment autocompleteFragment;
     private MapFragment mapFragment;
 
-    private ZonedDateTime eventStartDate; //TODO: rename EVENT_ID
+    private ZonedDateTime eventStartDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

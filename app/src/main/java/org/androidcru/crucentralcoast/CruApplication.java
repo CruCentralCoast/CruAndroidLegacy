@@ -68,6 +68,7 @@ public class CruApplication extends MultiDexApplication
             Intent service = new Intent(this, RegistrationIntentService.class);
             startService(service);
         }
+        Logger.d(getGCMID());
     }
 
     private void setupOkHttpClient()
