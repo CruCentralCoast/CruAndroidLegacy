@@ -226,7 +226,7 @@ public class CruEventVM
                             Intent driverIntent = new Intent(eventFragment.getContext(),
                                     DriverSignupActivity.class);
 
-                            driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
+                            driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.startDate);
 
                             eventFragment.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
                         })

@@ -82,12 +82,13 @@ public class DriverSignupVM extends BaseRideVM {
     @Bind(R.id.radius_field) TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
     //constructor for a new Ride
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventID) {
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventStartTime) {
         super(activity, fm);
         this.editing = false;
         this.ride = new Ride();
 
-        setEventTime(eventID);
+        eventStartDateTime = DateTimeUtils.toGregorianCalendar(eventStartTime);
+//        setEventTime(eventStartTime);
         bindUI();
     }
     //constructor for editing an existing Ride
@@ -99,7 +100,6 @@ public class DriverSignupVM extends BaseRideVM {
         if (editing) {
             rideSetDate = this.ride.time.toLocalDate();
             rideSetTime = this.ride.time.toLocalTime();
-//            setEventTime(this.ride.eventId); //if editing don't need to call this
         }
 
         bindUI();
@@ -241,7 +241,7 @@ public class DriverSignupVM extends BaseRideVM {
         return googleMap -> {
             if (map == null) {
                 map = googleMap;
-                if (ride.location.preciseLocation != null)
+                if (ride != null && ride.location != null && ride.location.preciseLocation != null)
                     updateMap(ride.location.preciseLocation);
                 else
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));

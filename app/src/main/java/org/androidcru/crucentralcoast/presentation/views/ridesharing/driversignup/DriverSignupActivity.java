@@ -18,6 +18,7 @@ import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +35,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private SupportPlaceAutocompleteFragment autocompleteFragment;
     private MapFragment mapFragment;
 
-    private String eventID; //will be changed to eventstartdate
+    private ZonedDateTime eventStartDate; //TODO: rename EVENT_ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,9 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         setContentView(R.layout.activity_driver_form);
         //get event from bundle
         Bundle bundle = getIntent().getExtras();
-        eventID = bundle.getString(AppConstants.EVENT_ID, "");
-        if(bundle == null || eventID.isEmpty())
+//        eventStartDate = bundle.getString(AppConstants.EVENT_ID, "");
+        eventStartDate = (ZonedDateTime)bundle.getSerializable(AppConstants.EVENT_ID);
+        if(bundle == null || eventStartDate == null)
         {
             Logger.e("DriverSignupActivity requires that you pass an event");
             Logger.e("Finishing activity...");
@@ -70,7 +72,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private Ride completeRide(Ride r)
     {
         r.gcmID = CruApplication.getGCMID();
-        r.eventId = eventID;
+//        r.eventId = eventStartDate; //TODO: do we need this??
         return r;
     }
 
@@ -108,7 +110,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private void bindNewRideVM(Ride r) {
         //new ride
         if (r == null)
-            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), eventID);
+            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), eventStartDate);
         //editing an existing ride
         else
             driverSignupVM = new DriverSignupVM(this, getFragmentManager(), r);
