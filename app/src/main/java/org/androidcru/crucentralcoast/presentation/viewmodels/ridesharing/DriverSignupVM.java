@@ -52,17 +52,17 @@ import rx.observers.Observers;
 public class DriverSignupVM extends BaseRideVM {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
-    private Ride ride;
+    protected Ride ride;
 
     public Double radius;
-    private GoogleMap map;
-    private Marker marker;
-    private Circle circle;
-    private LatLng center;
+    protected GoogleMap map;
+    protected Marker marker;
+    protected Circle circle;
+    protected LatLng center;
 
     public boolean editing;
-    private GregorianCalendar eventStartDateTime;
-    private int minCapacity;
+    protected GregorianCalendar eventStartDateTime;
+    protected int minCapacity;
 
     @Bind(R.id.name_field) @NotEmpty public EditText nameField;
     @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) public EditText phoneField;
@@ -81,6 +81,9 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Bind(R.id.radius_field) TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm) {
+        super(activity, fm);
+    }
     //constructor for a new Ride
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventStartTime) {
         super(activity, fm);
@@ -105,7 +108,7 @@ public class DriverSignupVM extends BaseRideVM {
         bindUI();
     }
 
-    private void bindUI() {
+    protected void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         if (editing) {
@@ -146,12 +149,12 @@ public class DriverSignupVM extends BaseRideVM {
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
     }
 
-    private int retrieveCarCapacity() {
+    protected int retrieveCarCapacity() {
         return Integer.parseInt(carCapacity.getText().toString());
     }
 
 
-    private Ride.Direction retrieveDirection(RadioGroup radioGroup)
+    protected Ride.Direction retrieveDirection(RadioGroup radioGroup)
     {
         int selectedRadioIndex = radioGroup.indexOfChild(rootView.findViewById(radioGroup.getCheckedRadioButtonId()));
         Ride.Direction direction = Ride.Direction.ROUNDTRIP;
@@ -177,7 +180,7 @@ public class DriverSignupVM extends BaseRideVM {
         return ride;
     }
 
-    private GregorianCalendar getDefaultEventTime() {
+    protected GregorianCalendar getDefaultEventTime() {
         return eventStartDateTime;
     }
 
@@ -216,7 +219,7 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
-    private void updateMap(LatLng precisePlace) {
+    protected void updateMap(LatLng precisePlace) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(precisePlace, 14.0f));
         center = precisePlace;
         setMarker(center);
@@ -251,7 +254,7 @@ public class DriverSignupVM extends BaseRideVM {
         };
     }
 
-    private void setMarker(LatLng latLng) {
+    protected void setMarker(LatLng latLng) {
         if (marker != null) {
             marker.remove();
         }
@@ -260,7 +263,7 @@ public class DriverSignupVM extends BaseRideVM {
                 .position(latLng));
     }
 
-    private void setCircle(LatLng center, double radius) {
+    protected void setCircle(LatLng center, double radius) {
         if (circle != null)
             circle.remove();
 
@@ -287,11 +290,11 @@ public class DriverSignupVM extends BaseRideVM {
     //TODO @daniel somehow, avoid this network call
     //to fix: change CruEventVM 229: driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
     //        to  driverIntent.putExtra(AppConstants.EVENT_STARTDATE, cruEvent.startDate); will involve renaming
-    private void setEventTime(String eventID) {
-        EventProvider.requestCruEventByID(holder, Observers.create(event -> eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate)), eventID);
-    }
+//    protected void setEventTime(String eventID) {
+//        EventProvider.requestCruEventByID(holder, Observers.create(event -> eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate)), eventID);
+//    }
 
-    private TextWatcher createCarCapacityWatcher()
+    protected TextWatcher createCarCapacityWatcher()
     {
         return new TextWatcher() {
             @Override

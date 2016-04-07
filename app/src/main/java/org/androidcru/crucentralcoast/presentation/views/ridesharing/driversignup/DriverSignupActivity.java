@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.threeten.bp.ZonedDateTime;
 
@@ -113,7 +114,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             driverSignupVM = new DriverSignupVM(this, getFragmentManager(), eventStartDate);
         //editing an existing ride
         else
-            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), r);
+            driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());
         setupPlacesAutocomplete();
         validator = new BaseValidator(driverSignupVM);
