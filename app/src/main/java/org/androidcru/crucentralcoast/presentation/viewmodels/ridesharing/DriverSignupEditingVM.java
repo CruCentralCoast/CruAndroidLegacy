@@ -8,6 +8,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.threeten.bp.DateTimeUtils;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.GregorianCalendar;
@@ -19,8 +20,8 @@ import butterknife.OnClick;
  */
 public class DriverSignupEditingVM extends DriverSignupVM {
 
-    public DriverSignupEditingVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride) {
-        super(activity, fm);
+    public DriverSignupEditingVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride, ZonedDateTime eventEndTime) {
+        super(activity, fm, eventEndTime);
 //        this.ride = ride != null ? ride : new Ride();
         this.ride = ride;
         //set time variables in the parent class

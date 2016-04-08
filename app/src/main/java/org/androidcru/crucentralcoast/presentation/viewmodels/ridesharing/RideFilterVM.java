@@ -21,6 +21,7 @@ import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.RideInfoFragment;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
@@ -43,6 +44,7 @@ public class RideFilterVM extends BaseRideVM
     {
         super(fragment, fm);
         this.event = event;
+        eventEndDate = DateTimeUtils.toGregorianCalendar(event.endDate);
         bindUI();
     }
 

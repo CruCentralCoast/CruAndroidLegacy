@@ -81,12 +81,13 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Bind(R.id.radius_field) TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm) {
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventEndTime) {
         super(activity, fm);
+        eventEndDate = DateTimeUtils.toGregorianCalendar(eventEndTime);
     }
     //constructor for a new Ride
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventStartTime) {
-        super(activity, fm);
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventStartTime, ZonedDateTime eventEndTime) {
+        this(activity, fm, eventEndTime);
         this.editing = false;
         this.ride = new Ride();
 
@@ -94,7 +95,7 @@ public class DriverSignupVM extends BaseRideVM {
 //        setEventTime(eventStartTime);
         bindUI();
     }
-    //constructor for editing an existing Ride
+    //constructor for editing an existing Ride -- remove this
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride) {
         super(activity, fm);
         this.editing = ride != null && !ride.isEmpty();
@@ -211,8 +212,9 @@ public class DriverSignupVM extends BaseRideVM {
         updateMap(precisePlace);
 
         if (placeAddress != null) {
-            String[] splitAddress = placeAddress.split("\\s*,\\s*");
+            String[] splitAddress = placeAddress.split("\\s*,\\s*"); //TODO: remove hardcoded string
             String[] splitStateZip = splitAddress[2].split(" ");
+
             ride.location = new Location(splitStateZip[1], splitStateZip[0],
                     splitAddress[1], splitAddress[0], splitAddress[3],
                     new double[] {precisePlace.longitude, precisePlace.latitude});
@@ -232,10 +234,12 @@ public class DriverSignupVM extends BaseRideVM {
     public void onRadiusChanged(CharSequence s) {
         if (!s.toString().isEmpty()) {
             try {
-                this.radius = Double.valueOf(s.toString());
+
+                this.radius = Double.parseDouble(s.toString());
                 setCircle(center, this.radius);
                 ride.radius = radius;
             } catch (NumberFormatException e) {
+                radiusField.setText("");
             }
         }
     }

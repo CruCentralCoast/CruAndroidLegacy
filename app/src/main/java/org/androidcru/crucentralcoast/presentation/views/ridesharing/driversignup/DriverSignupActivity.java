@@ -12,6 +12,7 @@ import com.orhanobut.logger.Logger;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
@@ -19,6 +20,7 @@ import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.parceler.Parcels;
 import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
@@ -37,6 +39,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private MapFragment mapFragment;
 
     private ZonedDateTime eventStartDate;
+    private CruEvent event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,8 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         //get event from bundle
         Bundle bundle = getIntent().getExtras();
 //        eventStartDate = bundle.getString(AppConstants.EVENT_ID, "");
-        eventStartDate = (ZonedDateTime)bundle.getSerializable(AppConstants.EVENT_STARTDATE);
-        if(bundle == null || eventStartDate == null)
+        event = (CruEvent)Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_STARTDATE));
+        if(bundle == null || event == null)
         {
             Logger.e("DriverSignupActivity requires that you pass an event");
             Logger.e("Finishing activity...");
@@ -111,10 +114,10 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private void bindNewRideVM(Ride r) {
         //new ride
         if (r == null)
-            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), eventStartDate);
+            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), event.startDate, event.endDate);
         //editing an existing ride
         else
-            driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r);
+            driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r, event.endDate);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());
         setupPlacesAutocomplete();
         validator = new BaseValidator(driverSignupVM);
@@ -130,7 +133,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
                 sharedPreferences.edit().putString(AppConstants.USER_NAME, driverSignupVM.nameField.getText().toString()).apply();
                 sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, driverSignupVM.phoneField.getText().toString()).apply();
 
-                if(driverSignupVM.editing)
+                if(driverSignupVM instanceof DriverSignupEditingVM)
                     updateDriver();
                 else
                     createDriver();

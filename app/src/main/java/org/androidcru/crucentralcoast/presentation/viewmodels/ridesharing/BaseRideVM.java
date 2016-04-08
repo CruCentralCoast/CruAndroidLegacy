@@ -47,6 +47,7 @@ public abstract class BaseRideVM extends BaseVM
 
     protected LocalDate rideSetDate;
     protected LocalTime rideSetTime;
+    protected GregorianCalendar eventEndDate;
     private String[] genders;
 
     private FragmentManager fm;
@@ -74,6 +75,7 @@ public abstract class BaseRideVM extends BaseVM
                 c.get(Calendar.DAY_OF_MONTH)
         );
         dpd.vibrate(false);
+        dpd.setMaxDate(eventEndDate);
         return dpd;
     }
 

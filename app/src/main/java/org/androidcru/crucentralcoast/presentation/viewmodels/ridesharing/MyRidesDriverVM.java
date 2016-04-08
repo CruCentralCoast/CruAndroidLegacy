@@ -15,6 +15,7 @@ import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.observers.Observers;
@@ -27,6 +28,7 @@ public class MyRidesDriverVM {
 
     public String passengerList;
     public String eventName;
+    public ZonedDateTime eventEndDate;
     AlertDialog alertDialog;
 
     public MyRidesDriverVM(MyRidesDriverFragment fragment, Ride ride, boolean isExpanded)
@@ -48,7 +50,11 @@ public class MyRidesDriverVM {
     public void updateEventName() {
         final Holder<String> evName = new Holder<String>();
 
-        EventProvider.requestCruEventByID(parent, Observers.create(results -> eventName = results.name), ride.eventId);
+        EventProvider.requestCruEventByID(parent, Observers.create(results ->
+            {
+                eventName = results.name;
+                eventEndDate = results.endDate;
+            }), ride.eventId);
     }
 
     public String getLocation() {
