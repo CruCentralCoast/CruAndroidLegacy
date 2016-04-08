@@ -3,18 +3,23 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+
+import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
+import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
+import org.parceler.Parcels;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -29,6 +34,7 @@ public class MyRidesDriverVM {
     public String passengerList;
     public String eventName;
     public ZonedDateTime eventEndDate;
+    public CruEvent cruEvent;
     AlertDialog alertDialog;
 
     public MyRidesDriverVM(MyRidesDriverFragment fragment, Ride ride, boolean isExpanded)
@@ -37,6 +43,7 @@ public class MyRidesDriverVM {
         this.isExpanded = isExpanded;
         this.parent = fragment;
         initAlertDialog();
+        cruEvent = ride.event;
 //        updateEventName();
         updatePassengerList();
     }
@@ -52,8 +59,11 @@ public class MyRidesDriverVM {
 
         EventProvider.requestCruEventByID(parent, Observers.create(results ->
             {
+                Logger.d("getting the results " + results);
+                cruEvent = results;
                 eventName = results.name;
                 eventEndDate = results.endDate;
+                Logger.d("so now cruEvent is set.... right? " + cruEvent);
             }), ride.eventId);
     }
 
@@ -78,7 +88,10 @@ public class MyRidesDriverVM {
         Intent intent = new Intent(parent.getContext(), DriverSignupActivity.class);
         Bundle extras = new Bundle();
         extras.putString(AppConstants.RIDE_KEY, ride.id);
-        extras.putSerializable(AppConstants.EVENT_STARTDATE, ride.time); //TODO: we need to send something but it'll be bogus
+        Parcelable serializedEvent = Parcels.wrap(cruEvent);
+        intent.putExtra(AppConstants.EVENT_STARTDATE, serializedEvent);
+//        Logger.d(" hi this is the event " + cruEvent);
+//        extras.putSerializable(AppConstants.EVENT_STARTDATE, results); //TODO: we need to send something but it'll be bogus
         intent.putExtras(extras);
         return v -> parent.startActivity(intent);
     }

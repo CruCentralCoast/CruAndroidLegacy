@@ -319,15 +319,22 @@ public class DriverSignupVM extends BaseRideVM {
                     if (s == null || s.toString().equals("")) {
                         return;
                     }
+
+                    String str = s.toString().replaceAll("[^\\d]", "");
+
                     //make sure is within bounds
-                    int setTo = Integer.parseInt(s.toString());
+                    int setTo = Integer.parseInt(str);
                     if (setTo < minCapacity)
                     {
-                        carCapacity.setText(Integer.toString(minCapacity));
+                        str = Integer.toString(minCapacity);
                     }
                     else if (setTo > AppConstants.MAX_CAR_CAPACITY)
                     {
-                        carCapacity.setText(Integer.toString(AppConstants.MAX_CAR_CAPACITY));
+                        str = Integer.toString(AppConstants.MAX_CAR_CAPACITY);
+                    }
+
+                    if (!str.equals(s.toString())) {
+                        carCapacity.setText(str);
                     }
                 }
                 catch (NumberFormatException nfe)
