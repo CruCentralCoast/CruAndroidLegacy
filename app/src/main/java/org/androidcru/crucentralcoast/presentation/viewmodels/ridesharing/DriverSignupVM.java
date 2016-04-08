@@ -234,10 +234,13 @@ public class DriverSignupVM extends BaseRideVM {
     public void onRadiusChanged(CharSequence s) {
         if (!s.toString().isEmpty()) {
             try {
-
-                this.radius = Double.parseDouble(s.toString());
+                String str = s.toString().replaceAll("[^\\d.]", "");
+                this.radius = Double.parseDouble(str);
                 setCircle(center, this.radius);
                 ride.radius = radius;
+                if (!str.equals(s.toString())) {
+                    radiusField.setText(str);
+                }
             } catch (NumberFormatException e) {
                 radiusField.setText("");
             }
