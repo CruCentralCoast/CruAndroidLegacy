@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.base;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import rx.Subscription;
@@ -26,5 +27,11 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
     public void clearSubscriptions()
     {
         subscriptions.clear();
+    }
+
+    @Override
+    public Context getContext()
+    {
+        return this;
     }
 }

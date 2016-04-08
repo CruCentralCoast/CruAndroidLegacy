@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.base;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
 import rx.Subscription;
@@ -27,5 +28,11 @@ public class BaseSupportFragment extends Fragment implements SubscriptionsHolder
     public void clearSubscriptions()
     {
         subscriptions.clear();
+    }
+
+    @Override
+    public Context getContext()
+    {
+        return super.getContext();
     }
 }

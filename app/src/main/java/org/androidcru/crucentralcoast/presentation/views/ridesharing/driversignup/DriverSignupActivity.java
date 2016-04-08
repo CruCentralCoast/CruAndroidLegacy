@@ -3,6 +3,8 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversign
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
@@ -16,13 +18,14 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
+import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.observers.Observers;
 
 public class DriverSignupActivity extends BaseAppCompatActivity
@@ -34,6 +37,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     @Bind(R.id.fab) FloatingActionButton fab;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
     private MapFragment mapFragment;
 
     private ZonedDateTime eventStartDate;
@@ -67,6 +71,14 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             requestRides(rideId);
         else
             bindNewRideVM(null);
+    }
+
+    @OnClick(R.id.autocomplete_layout)
+    public void onAutocompleteTouched(View v)
+    {
+        if(getCurrentFocus() != null)
+            getCurrentFocus().clearFocus();
+        searchInput.callOnClick();
     }
 
     //fill in fields that only the DriverSignupActivity has access to but DriverSignupVM doesn't
