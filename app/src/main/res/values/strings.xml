@@ -115,5 +115,12 @@
     <string name="default_gender_op">Select Gender</string>
     <string name="autocomplete_hint">Pickup Location</string>
     <string name="any_gender">Any</string>
+    <string name="myrides_passenger_list_name">Name: </string>
+    <string name="myrides_passenger_list_phone">Phone: </string>
+    <string name="alert_dialog_title">Cancel Ride</string>
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_driver_msg">Are you sure you want to cancel this ride?</string>
+    <string name="alert_dialog_passenger_msg">Are you sure that you want to drop yourself from this ride?</string>
 
 </resources>

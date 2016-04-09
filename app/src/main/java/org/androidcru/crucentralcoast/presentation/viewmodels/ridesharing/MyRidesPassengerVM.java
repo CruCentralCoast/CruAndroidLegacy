@@ -7,6 +7,7 @@ import android.view.View;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
@@ -22,7 +23,6 @@ public class MyRidesPassengerVM {
     public boolean isExpanded;
     private MyRidesPassengerFragment parent;
 
-    public String eventName;
     AlertDialog alertDialog;
 
     public MyRidesPassengerVM(MyRidesPassengerFragment parent, Ride ride, boolean isExpanded)
@@ -31,65 +31,57 @@ public class MyRidesPassengerVM {
         this.isExpanded = isExpanded;
         this.parent = parent;
         initAlertDialog();
-        updateEventName();
     }
 
-    //TODO: will eventually need to get a to and from time, not just 1
     public String getDateTime()
     {
         return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
     }
 
-    //TODO: query for name
-    public void updateEventName() {
-        final Holder<String> evName = new Holder<String>();
-
-        EventProvider.requestCruEventByID(parent, Observers.create(results -> eventName = results.name), ride.eventId);
-    }
-
     public String getLocation() {
         return ride.location.toString();
     }
 
-    //TODO: display actual info, but that'll wait for a passenger model implementation
-    //TODO: also, pick some way to display the passenger stuff
     public String getDriverInfo() {
-        return "Name: " + ride.driverName + "\nPhone: " + ride.driverNumber;
+        return CruApplication.getContext().getString(R.string.myrides_passenger_list_name)
+                + ride.driverName + "\n"
+                + CruApplication.getContext().getString(R.string.myrides_passenger_list_phone)
+                + ride.driverNumber;
     }
 
     private void initAlertDialog()
     {
         alertDialog = new AlertDialog.Builder(parent.getContext()).create();
-        alertDialog.setTitle("Cancel Ride");
-        alertDialog.setMessage("Are you sure that you want to drop yourself from this ride?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                for (Passenger p : ride.passengers)
-                {
-                    if (p.gcm_id.equals(CruApplication.getGCMID()))
-                    {
-                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id, p.id);
+        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_title));
+        alertDialog.setMessage(CruApplication.getContext().getString(R.string.alert_dialog_passenger_msg));
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                CruApplication.getContext().getString(R.string.alert_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (Passenger p : ride.passengers) {
+                            if (p.gcm_id.equals(CruApplication.getGCMID())) {
+                                RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id, p.id);
+                            }
+                        }
                     }
-                }
-            }
-        });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                CruApplication.getContext().getString(R.string.alert_dialog_no),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                 alertDialog.hide();
             }
-        });
+                });
     }
 
-    //TODO: change thissssss
     public View.OnClickListener onCancelOfferingClicked()
     {
         return new View.OnClickListener(){
-          @Override
-          public void onClick(View v)
+            @Override
+            public void onClick(View v)
           {
               alertDialog.show();
           }

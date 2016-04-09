@@ -10,7 +10,9 @@ import android.view.View;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Passenger;
@@ -32,10 +34,8 @@ public class MyRidesDriverVM {
     private MyRidesDriverFragment parent;
 
     public String passengerList;
-    public String eventName;
-    public ZonedDateTime eventEndDate;
     public CruEvent cruEvent;
-    AlertDialog alertDialog;
+    private AlertDialog alertDialog;
 
     public MyRidesDriverVM(MyRidesDriverFragment fragment, Ride ride, boolean isExpanded)
     {
@@ -53,19 +53,6 @@ public class MyRidesDriverVM {
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
     }
 
-    public void updateEventName() {
-        final Holder<String> evName = new Holder<String>();
-
-        EventProvider.requestCruEventByID(parent, Observers.create(results ->
-            {
-                Logger.d("getting the results " + results);
-                cruEvent = results;
-                eventName = results.name;
-                eventEndDate = results.endDate;
-                Logger.d("so now cruEvent is set.... right? " + cruEvent);
-            }), ride.eventId);
-    }
-
     public String getLocation() {
         return ride.location.toString();
     }
@@ -73,10 +60,11 @@ public class MyRidesDriverVM {
     public void updatePassengerList() {
         StringBuilder list = new StringBuilder();
         for (Passenger p : ride.passengers) {
-            if (list.toString().isEmpty())
-                list.append("Name: ").append(p.name).append("\nPhone: ").append(p.phone).append("\n\n");
-            else
-                list.append("Name: ").append(p.name).append("\nPhone: ").append(p.phone).append("\n\n");
+            list.append(CruApplication.getContext().getString(R.string.myrides_passenger_list_name))
+                    .append(p.name)
+                    .append("\n" + CruApplication.getContext().getString(R.string.myrides_passenger_list_name))
+                    .append(p.phone)
+                    .append("\n\n");
         }
         passengerList = list.toString();
     }
@@ -86,30 +74,32 @@ public class MyRidesDriverVM {
     {
         Intent intent = new Intent(parent.getContext(), DriverSignupActivity.class);
         Bundle extras = new Bundle();
+        //pack ride id and event
         extras.putString(AppConstants.RIDE_KEY, ride.id);
         Parcelable serializedEvent = Parcels.wrap(cruEvent);
-        intent.putExtra(AppConstants.EVENT_STARTDATE, serializedEvent);
-//        Logger.d(" hi this is the event " + cruEvent);
-//        extras.putSerializable(AppConstants.EVENT_STARTDATE, results); //TODO: we need to send something but it'll be bogus
+        intent.putExtra(AppConstants.EVENT_KEY, serializedEvent);
         intent.putExtras(extras);
         return v -> parent.startActivity(intent);
     }
 
     private void initAlertDialog() {
         alertDialog = new AlertDialog.Builder(parent.getContext()).create();
-        alertDialog.setTitle("Cancel Ride");
-        alertDialog.setMessage("Are you sure you want to cancel this ride?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                RideProvider.dropRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id);
-
-            }
-        });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.hide();
-            }
-        });
+        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_title));
+        alertDialog.setMessage(CruApplication.getContext().getString(R.string.alert_dialog_driver_msg));
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                CruApplication.getContext().getString(R.string.alert_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        RideProvider.dropRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id);
+                    }
+                });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                CruApplication.getContext().getString(R.string.alert_dialog_no),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.hide();
+                    }
+                });
     }
 
     public View.OnClickListener onCancelOfferingClicked()

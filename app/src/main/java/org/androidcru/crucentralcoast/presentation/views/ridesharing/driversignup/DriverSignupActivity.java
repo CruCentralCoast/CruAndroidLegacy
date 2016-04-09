@@ -48,7 +48,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         //get event from bundle
         Bundle bundle = getIntent().getExtras();
 //        eventStartDate = bundle.getString(AppConstants.EVENT_ID, "");
-        event = (CruEvent)Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_STARTDATE));
+        event = (CruEvent)Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
         if(bundle == null || event == null)
         {
             Logger.e("DriverSignupActivity requires that you pass an event");
