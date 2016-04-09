@@ -96,7 +96,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         autocompleteFragment.setFilter(typeFilter);
-        autocompleteFragment.setHint(AppConstants.AUTOCOMPLETE_HINT);
+        autocompleteFragment.setHint(CruApplication.getContext().getString(R.string.autocomplete_hint));
         autocompleteFragment.setOnPlaceSelectedListener(driverSignupVM.createPlaceSelectionListener());
     }
 

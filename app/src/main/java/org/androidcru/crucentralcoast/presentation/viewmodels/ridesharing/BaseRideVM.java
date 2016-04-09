@@ -15,6 +15,8 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
 import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
@@ -179,32 +181,13 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] directionsForSpinner(Ride.Direction[] directions)
     {
         String[] directionsForSpinner = new String[directions.length + 1];
-        directionsForSpinner[0] = AppConstants.INIT_DIRECTION_SPINNER_OPTION;
+        directionsForSpinner[0] = context.getString(R.string.default_direction_op);
         for(int i = 0; i < directions.length; i++)
         {
             directionsForSpinner[i + 1] = directions[i].getValueDetailed();
         }
         return directionsForSpinner;
     }
-
-    //not used??? TODO: probably get rid of but make sure??
-//    protected int getDirectionIndex(Ride.Direction d, Ride.Direction[] directions)
-//    {
-//        int index = 0;
-//
-//        if(d == null)
-//            return index;
-//
-//        for(int i = 0; i < directions.length; i++)
-//        {
-//            if(d == directions[i])
-//            {
-//                index = i + 1;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
 
     protected Ride.Direction retrieveDirection(Spinner tripTypeField, Ride.Direction[] directions)
     {
@@ -232,7 +215,7 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] gendersForSpinner(String[] actualGenders)
     {
         genders = new String[actualGenders.length + 1];
-        genders[0] = AppConstants.INIT_GENDER_SPINNER_OPTION;
+        genders[0] = context.getString(R.string.default_gender_op);
         System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
         return genders;
     }

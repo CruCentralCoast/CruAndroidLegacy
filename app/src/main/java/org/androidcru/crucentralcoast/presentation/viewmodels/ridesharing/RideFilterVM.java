@@ -12,6 +12,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Select;
 import com.orhanobut.logger.Logger;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
@@ -56,6 +57,7 @@ public class RideFilterVM extends BaseRideVM
 
     public Query getQuery()
     {
+        //ride direction
         int selectedRadioIndex = directionGroup.indexOfChild(rootView.findViewById(directionGroup.getCheckedRadioButtonId()));
         Ride.Direction direction = Ride.Direction.ROUNDTRIP;
         switch (selectedRadioIndex)
@@ -67,15 +69,17 @@ public class RideFilterVM extends BaseRideVM
                 direction = Ride.Direction.ROUNDTRIP;
                 break;
         }
+        //ride gender
         String gender = (String) genderField.getSelectedItem();
-        if(gender.equals("Any"))
+        if(gender.equals(CruApplication.getContext().getString(R.string.any_gender)))
             gender = null;
 
+        //ride time
         ZonedDateTime dateTime = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
-
         ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
         ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
 
+        //build query
         Query query = new Query.Builder()
                 .setCondition(new ConditionsBuilder()
                         .setCombineOperator(ConditionsBuilder.OPERATOR.AND)

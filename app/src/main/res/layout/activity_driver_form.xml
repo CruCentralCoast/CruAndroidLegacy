@@ -141,7 +141,8 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/car_capacity_field"
                                 android:layout_centerVertical="true"
-                                android:inputType="phone"
+                                android:inputType="number"
+                                android:digits="0123456789"
                                 android:hint="Seats Available"/>
                         </android.support.design.widget.TextInputLayout>
                         <!--<TextView-->
@@ -197,7 +198,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/radius_field"
                         android:layout_centerVertical="true"
-                        android:inputType="phone"
+                        android:inputType="number"
+                        android:digits="0123456789."
                         android:hint="Circle Radius (Miles)"/>
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>

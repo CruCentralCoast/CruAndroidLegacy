@@ -22,7 +22,6 @@ public class DriverSignupEditingVM extends DriverSignupVM {
 
     public DriverSignupEditingVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride, ZonedDateTime eventEndTime) {
         super(activity, fm, eventEndTime);
-//        this.ride = ride != null ? ride : new Ride();
         this.ride = ride;
         //set time variables in the parent class
         rideSetDate = this.ride.time.toLocalDate();

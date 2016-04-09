@@ -111,4 +111,9 @@
         <item>Roundtrip</item>
     </string-array>
 
+    <string name="default_direction_op">Select Direction</string>
+    <string name="default_gender_op">Select Gender</string>
+    <string name="autocomplete_hint">Pickup Location</string>
+    <string name="any_gender">Any</string>
+
 </resources>

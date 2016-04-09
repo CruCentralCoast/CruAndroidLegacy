@@ -60,7 +60,6 @@ public class DriverSignupVM extends BaseRideVM {
     protected Circle circle;
     protected LatLng center;
 
-    public boolean editing;
     protected GregorianCalendar eventStartDateTime;
     protected int minCapacity;
 
@@ -81,71 +80,31 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Bind(R.id.radius_field) TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
+
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventEndTime) {
         super(activity, fm);
         eventEndDate = DateTimeUtils.toGregorianCalendar(eventEndTime);
     }
-    //constructor for a new Ride
+
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventStartTime, ZonedDateTime eventEndTime) {
         this(activity, fm, eventEndTime);
-        this.editing = false;
         this.ride = new Ride();
 
         eventStartDateTime = DateTimeUtils.toGregorianCalendar(eventStartTime);
-//        setEventTime(eventStartTime);
-        bindUI();
-    }
-    //constructor for editing an existing Ride -- remove this
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride) {
-        super(activity, fm);
-        this.editing = ride != null && !ride.isEmpty();
-        this.ride = ride != null ? ride : new Ride();
-        //set time variables in the parent class
-        if (editing) {
-            rideSetDate = this.ride.time.toLocalDate();
-            rideSetTime = this.ride.time.toLocalTime();
-        }
-
         bindUI();
     }
 
     protected void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        if (editing) {
-            genderField.setVisibility(View.GONE);
-            genderView.setVisibility(View.VISIBLE);
-            genderView.setText(ride.gender);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
+        directionGroup.check(roundTrip.getId());
+        rideTime.setOnKeyListener(null);
+        rideDate.setOnKeyListener(null);
+        minCapacity = 0;
 
-            carCapacity.setText(Integer.toString(ride.carCapacity));
-            minCapacity = ride.passengerIds.size();
-
-            nameField.setText(ride.driverName);
-            phoneField.setText(ride.driverNumber);
-            rideTime.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
-            rideDate.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
-
-            searchInput.setText(ride.location.toString());
-            radiusField.setText(Double.toString(ride.radius));
-
-            switch (ride.direction)
-            {
-                case TO:
-                    directionGroup.check(toEvent.getId());
-                    break;
-                default:
-                    directionGroup.check(roundTrip.getId());
-            }
-        } else {
-            ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
-            directionGroup.check(roundTrip.getId());
-            rideTime.setOnKeyListener(null);
-            rideDate.setOnKeyListener(null);
-            minCapacity = 0;
-
-            nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-            phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-        }
+        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
+        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
 
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
     }
@@ -181,30 +140,14 @@ public class DriverSignupVM extends BaseRideVM {
         return ride;
     }
 
-    protected GregorianCalendar getDefaultEventTime() {
-        return eventStartDateTime;
-    }
-
     @OnClick(R.id.time_field)
     public void onTimeClicked(View v) {
-        GregorianCalendar gc;
-        if (editing)
-            gc = DateTimeUtils.toGregorianCalendar(ride.time);
-        else {
-            gc = getDefaultEventTime();
-        }
-        onEventTimeClicked(v, gc);
+        onEventTimeClicked(v, eventStartDateTime);
     }
 
     @OnClick(R.id.date_field)
     public void onDateClicked(View v) {
-        GregorianCalendar gc;
-        if (editing)
-            gc = DateTimeUtils.toGregorianCalendar(ride.time);
-        else {
-            gc = getDefaultEventTime();
-        }
-        onEventDateClicked(v, gc);
+        onEventDateClicked(v, eventStartDateTime);
     }
 
     @Override
@@ -221,6 +164,7 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
+    //updates the map on the bottom
     protected void updateMap(LatLng precisePlace) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(precisePlace, 14.0f));
         center = precisePlace;
@@ -234,13 +178,9 @@ public class DriverSignupVM extends BaseRideVM {
     public void onRadiusChanged(CharSequence s) {
         if (!s.toString().isEmpty()) {
             try {
-                String str = s.toString().replaceAll("[^\\d.]", "");
-                this.radius = Double.parseDouble(str);
+                this.radius = Double.parseDouble(s.toString());
                 setCircle(center, this.radius);
                 ride.radius = radius;
-                if (!str.equals(s.toString())) {
-                    radiusField.setText(str);
-                }
             } catch (NumberFormatException e) {
                 radiusField.setText("");
             }
@@ -294,13 +234,6 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
-    //TODO @daniel somehow, avoid this network call
-    //to fix: change CruEventVM 229: driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
-    //        to  driverIntent.putExtra(AppConstants.EVENT_STARTDATE, cruEvent.startDate); will involve renaming
-//    protected void setEventTime(String eventID) {
-//        EventProvider.requestCruEventByID(holder, Observers.create(event -> eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate)), eventID);
-//    }
-
     protected TextWatcher createCarCapacityWatcher()
     {
         return new TextWatcher() {
@@ -323,21 +256,15 @@ public class DriverSignupVM extends BaseRideVM {
                         return;
                     }
 
-                    String str = s.toString().replaceAll("[^\\d]", "");
-
                     //make sure is within bounds
-                    int setTo = Integer.parseInt(str);
+                    int setTo = Integer.parseInt(s.toString());
                     if (setTo < minCapacity)
                     {
-                        str = Integer.toString(minCapacity);
+                        carCapacity.setText(Integer.toString(minCapacity));
                     }
                     else if (setTo > AppConstants.MAX_CAR_CAPACITY)
                     {
-                        str = Integer.toString(AppConstants.MAX_CAR_CAPACITY);
-                    }
-
-                    if (!str.equals(s.toString())) {
-                        carCapacity.setText(str);
+                        carCapacity.setText(Integer.toString(AppConstants.MAX_CAR_CAPACITY));
                     }
                 }
                 catch (NumberFormatException nfe)

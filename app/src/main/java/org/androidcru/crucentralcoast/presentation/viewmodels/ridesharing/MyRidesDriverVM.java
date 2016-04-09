@@ -44,7 +44,6 @@ public class MyRidesDriverVM {
         this.parent = fragment;
         initAlertDialog();
         cruEvent = ride.event;
-//        updateEventName();
         updatePassengerList();
     }
 
