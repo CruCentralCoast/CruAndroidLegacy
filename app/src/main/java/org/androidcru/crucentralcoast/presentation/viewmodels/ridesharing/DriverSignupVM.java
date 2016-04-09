@@ -134,7 +134,7 @@ public class DriverSignupVM extends BaseRideVM {
             }
 
         } else {
-            ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
+            ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, ride.gender);
             directionGroup.check(roundTrip.getId());
             rideTime.setOnKeyListener(null);
             rideDate.setOnKeyListener(null);
@@ -173,7 +173,7 @@ public class DriverSignupVM extends BaseRideVM {
     public Ride getRide() {
         ride.driverName = nameField.getText().toString();
         ride.driverNumber = phoneField.getText().toString();
-        ride.gender = (String) genderField.getSelectedItem();
+        ride.gender = getGenderIndex((String) genderField.getSelectedItem());
         ride.carCapacity = retrieveCarCapacity();
         ride.direction = retrieveDirection(directionGroup);
         ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());

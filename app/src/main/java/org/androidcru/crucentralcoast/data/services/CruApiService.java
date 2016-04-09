@@ -30,26 +30,26 @@ public interface CruApiService
     @GET("/api/users/phone/{phone}") // ask jon
     public Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
 
-    @GET("/api/events/") // check
+    @GET("/api/events/")
     public Observable<ArrayList<CruEvent>> getEvents();
 
-    @GET("/api/ministries/") // check
+    @GET("/api/ministries/")
     public Observable<ArrayList<MinistrySubscription>> getMinistries();
 
-    @GET("/api/campuses/") // check
+    @GET("/api/campuses/")
     public Observable<ArrayList<Campus>> getCampuses();
 
-    @GET("/api/ministryteams/") // check
+    @GET("/api/ministryteams/")
     public Observable<ArrayList<MinistryTeam>> getMinistryTeams();
 
     @FormUrlEncoded
-    @POST("/api/users/find") // check
+    @POST("/api/users/find")
     public Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Field("ministryTeams") ArrayList<String> ministryId);
 
-    @GET("/api/rides/") // check
+    @GET("/api/rides/")
     Observable<ArrayList<Ride>> getRides();
 
-    @POST("/api/rides/search") // check
+    @POST("/api/rides/search")
     Observable<ArrayList<Ride>> searchRides(@Body Query query);
 
     @POST("api/resources/find")
@@ -73,7 +73,7 @@ public interface CruApiService
     @POST("/api/events/find")
     Observable<ArrayList<CruEvent>> findSingleCruEvent(@Field("_id") String id);
 
-    @POST("/api/rides") // need to update model for this
+    @POST("/api/rides")
     Observable<Ride> postRide(@Body Ride ride);
 
     //@POST("/api/rides/update")
@@ -90,9 +90,11 @@ public interface CruApiService
     @DELETE("/api/rides/{ride_id}/passengers/{passenger_id}")
     Observable<Void> dropPassenger(@Path("ride_id") String rideId, @Path("passenger_id") String passengerId);
 
-    @FormUrlEncoded
-    @DELETE("/api/rides")
-    Observable<Void> dropRide(@Field("ride_id") String rideId);
+    //@FormUrlEncoded
+    //@BODY_DELETE("/api/rides/")
+    //@HTTP(method = "DELETE", path = "api/rides/", hasBody = true)
+    @DELETE("/api/rides/{ride_id}")
+    Observable<Void> dropRide(@Path("ride_id") String rideId);
 
     @GET("/api/summermissions/")
     Observable<ArrayList<SummerMission>> getSummerMissions();

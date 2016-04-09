@@ -29,7 +29,7 @@ public class Ride
 
     @SerializedName(serializedDriverName) public String driverName;
     @SerializedName(serializedDriverNumber) public String driverNumber;
-    @SerializedName(serializedGender) public String gender;
+    @SerializedName(serializedGender) public int gender;
     @SerializedName(serializedEvent) public String eventId;
     @SerializedName(serializedTime) public ZonedDateTime time;
     @SerializedName(serializedLocation) public Location location;
@@ -48,7 +48,7 @@ public class Ride
 
     // name, phone, gender, event id, car capacity, direction, time, location
     // need gcmID, radius
-    public Ride(String driverName, String driverNumber, String gender, String eventId,
+    public Ride(String driverName, String driverNumber, int gender, String eventId,
                 ZonedDateTime time, Location location, //ArrayList<String> passengerIds,
                 double radius, Direction direction, //String gcmID,
                 int carCapacity)
