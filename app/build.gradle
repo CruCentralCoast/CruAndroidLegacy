@@ -50,7 +50,7 @@ android {
             buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
             buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'
             buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
-            buildConfigField "String", "CRU_SERVER", '"http://androidcru-dev.jonamireh.com"'
+            buildConfigField "String", "CRU_SERVER", '"http://androidcru-staging.jonamireh.com"'
         }
     }
 

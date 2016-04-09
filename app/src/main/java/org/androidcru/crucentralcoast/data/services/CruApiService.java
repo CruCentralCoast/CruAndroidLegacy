@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import java.util.ArrayList;
 
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -26,79 +27,74 @@ import rx.Observable;
 
 public interface CruApiService
 {
-    @GET("/api/user/phone/{phone}")
+    @GET("/api/users/phone/{phone}") // ask jon
     public Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
 
-    @GET("/api/event/list")
+    @GET("/api/events/") // check
     public Observable<ArrayList<CruEvent>> getEvents();
 
-    @GET("/api/ministry/list")
+    @GET("/api/ministries/") // check
     public Observable<ArrayList<MinistrySubscription>> getMinistries();
 
-    @GET("/api/campus/list")
+    @GET("/api/campuses/") // check
     public Observable<ArrayList<Campus>> getCampuses();
 
-    @GET("/api/ministryteam/list")
+    @GET("/api/ministryteams/") // check
     public Observable<ArrayList<MinistryTeam>> getMinistryTeams();
 
     @FormUrlEncoded
-    @POST("/api/user/find")
+    @POST("/api/users/find") // check
     public Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Field("ministryTeams") ArrayList<String> ministryId);
 
-    @GET("/api/ride/list")
+    @GET("/api/rides/") // check
     Observable<ArrayList<Ride>> getRides();
 
-    @POST("/api/ride/search")
+    @POST("/api/rides/search") // check
     Observable<ArrayList<Ride>> searchRides(@Body Query query);
 
-    @POST("api/resource/find")
+    @POST("api/resources/find")
     Observable<ArrayList<Resource>> findResources(@Body JsonObject query);
 
-    @POST("/api/resourcetag/find")
+    @POST("/api/resourcetags/find")
     Observable<ArrayList<ResourceTag>> findResourceTag(@Body JsonObject query);
 
-    @GET("/api/resourcetag/list")
+    @GET("/api/resourcetags/")
     Observable<ArrayList<ResourceTag>> getResourceTag();
 
     @FormUrlEncoded
-    @POST("/api/ride/find")
+    @POST("/api/rides/find")
     Observable<ArrayList<Ride>> findSingleRide(@Field("_id") String id);
 
     @FormUrlEncoded
-    @POST("/api/passenger/find")
+    @POST("/api/passengers/find")
     Observable<ArrayList<Passenger>> findSinglePassenger(@Field("_id") String id);
 
     @FormUrlEncoded
-    @POST("/api/event/find")
+    @POST("/api/events/find")
     Observable<ArrayList<CruEvent>> findSingleCruEvent(@Field("_id") String id);
 
-    @POST("/api/ride/create")
+    @POST("/api/rides") // need to update model for this
     Observable<Ride> postRide(@Body Ride ride);
 
-    @POST("/api/ride/update")
+    //@POST("/api/rides/update")
+    @POST("/api/rides/")
     Observable<Ride> updateRide(@Body Ride ride);
 
-    @POST("/api/passenger/create")
+    @POST("/api/passengers")
     Observable<Passenger> createPassenger(@Body Passenger passenger);
 
     @FormUrlEncoded
-    @POST("/api/ride/addPassenger")
-    Observable<Void> addPassenger(@Field("ride_id") String rideId, @Field("passenger_id") String passengerId);
+    @POST("/api/rides/{ride_id}/passengers")
+    Observable<Void> addPassenger(@Path("ride_id") String rideId, @Field("passenger_id") String passengerId);
+
+    @DELETE("/api/rides/{ride_id}/passengers/{passenger_id}")
+    Observable<Void> dropPassenger(@Path("ride_id") String rideId, @Path("passenger_id") String passengerId);
 
     @FormUrlEncoded
-    @POST("/api/ride/dropPassenger")
-    Observable<Void> dropPassenger(@Field("ride_id") String rideId, @Field("passenger_id") String passengerId);
-
-    @FormUrlEncoded
-    @POST("/api/ride/dropRide")
+    @DELETE("/api/rides")
     Observable<Void> dropRide(@Field("ride_id") String rideId);
 
-    @GET("/api/summermission/list")
+    @GET("/api/summermissions/")
     Observable<ArrayList<SummerMission>> getSummerMissions();
 
-//    @GET("api/event/:id")
-//    public CruEvent getEventByID(String id);
-
-    //@POST("/api/passenger/create")
-    //Observable<Passenger> postPassenger(@Body Passenger passenger);
 }
