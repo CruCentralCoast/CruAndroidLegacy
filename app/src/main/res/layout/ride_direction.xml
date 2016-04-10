@@ -24,12 +24,12 @@
         <RadioButton android:id="@+id/to_event"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="To Event"
+                     android:text="@string/ride_dir_to"
                      android:textSize="14sp"/>
         <RadioButton android:id="@+id/round_trip"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="Round-Trip"
+                     android:text="@string/ride_dir_roundtrip"
                      android:layout_marginLeft="32dp"
                      android:textSize="14sp"/>
     </RadioGroup>

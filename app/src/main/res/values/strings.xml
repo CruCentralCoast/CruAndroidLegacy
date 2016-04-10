@@ -133,6 +133,12 @@
     <string name="myride_info_spots">Spots Open: </string>
     <string name="myride_info_passenger_list_nonempty">Your Passengers</string>
     <string name="myride_info_passenger_list_empty">No Passengers</string>
+    <string name="passenger_name_hint">Full Name</string>
+    <string name="passenger_phone_hint">Phone Number</string>
+    <string name="passenger_info_msg">This information will be sent to Cru Central Coast and your selected driver.</string>
+    <string name="ride_datetime_hint">Ride Time</string>
+    <string name="ride_dir_to">To Event</string>
+    <string name="ride_dir_roundtrip">Round-Trip</string>
 
     <string-array name="myrides_titles">
         <item>Driver</item>

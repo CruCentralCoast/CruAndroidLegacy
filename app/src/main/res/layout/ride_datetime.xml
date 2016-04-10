@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/time_field"
-                android:hint="Ride Time"
+                android:hint="@string/ride_datetime_hint"
                 android:inputType="date"
                 android:layout_centerVertical="true"
                 android:focusable="false"/>

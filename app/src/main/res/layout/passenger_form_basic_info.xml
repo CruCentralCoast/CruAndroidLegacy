@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/name_field"
                 android:layout_centerVertical="true"
-                android:hint="Full Name"
+                android:hint="@string/passenger_name_hint"
                 android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
@@ -68,7 +68,7 @@
                 android:id="@+id/phone_field"
                 android:layout_centerVertical="true"
                 android:inputType="phone"
-                android:hint="Phone Number"/>
+                android:hint="@string/passenger_phone_hint"/>
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
@@ -78,5 +78,5 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         android:textSize="16sp"
-        android:text="This information will be sent to Cru Central Coast and your selected driver."/>
+        android:text="@string/passenger_info_msg"/>
 </LinearLayout>
