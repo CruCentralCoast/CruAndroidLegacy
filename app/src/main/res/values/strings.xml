@@ -113,7 +113,7 @@
 
     <string name="default_direction_op">Select Direction</string>
     <string name="default_gender_op">Select Gender</string>
-    <string name="autocomplete_hint">Pickup Location</string>
+    <string name="autocomplete_hint_driver">Pickup Location</string>
     <string name="any_gender">Any</string>
     <string name="myrides_passenger_list_name">Name: </string>
     <string name="myrides_passenger_list_phone">Phone: </string>
@@ -122,5 +122,21 @@
     <string name="alert_dialog_no">No</string>
     <string name="alert_dialog_driver_msg">Are you sure you want to cancel this ride?</string>
     <string name="alert_dialog_passenger_msg">Are you sure that you want to drop yourself from this ride?</string>
+    <string name="alert_dialog_kick_msg">Are you sure you want to kick </string>
+    <string name="alert_dialog_kick_title">Kick Passenger</string>
+    <string name="passenger_contact_info">Contact Info</string>
+    <string name="passenger_pick_driver">Pick a Driver</string>
+    <string name="autocomplete_hint_passenger">Find drivers near...</string>
+    <string name="myride_info_dir">You are driving: </string>
+    <string name="myride_info_departure_time">Departure Time:</string>
+    <string name="myride_info_pickup_loc">Pickup Location:</string>
+    <string name="myride_info_spots">Spots Open: </string>
+    <string name="myride_info_passenger_list_nonempty">Your Passengers</string>
+    <string name="myride_info_passenger_list_empty">No Passengers</string>
+
+    <string-array name="myrides_titles">
+        <item>Driver</item>
+        <item>Passenger</item>
+    </string-array>
 
 </resources>

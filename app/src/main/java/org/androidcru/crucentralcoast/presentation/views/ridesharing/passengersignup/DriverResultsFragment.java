@@ -96,7 +96,7 @@ public class DriverResultsFragment extends FormContentFragment
     @Override
     public void setupUI()
     {
-        formHolder.setTitle("Pick a Driver");
+        formHolder.setTitle(getString(R.string.passenger_pick_driver));
         query = (Query) formHolder.getDataObject();
 
         formHolder.setNavigationVisibility(View.VISIBLE);

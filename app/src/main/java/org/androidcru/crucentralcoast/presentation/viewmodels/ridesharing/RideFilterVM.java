@@ -71,7 +71,7 @@ public class RideFilterVM extends BaseRideVM
         }
         //ride gender
         String gender = (String) genderField.getSelectedItem();
-        if(gender.equals(CruApplication.getContext().getString(R.string.any_gender)))
+        if(gender.equals(context.getString(R.string.any_gender)))
             gender = null;
 
         //ride time

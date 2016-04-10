@@ -4,10 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import org.androidcru.crucentralcoast.CruApplication;
+import org.androidcru.crucentralcoast.R;
+
 
 public class MyRidesFragmentPagerAdapter extends FragmentStatePagerAdapter
 {
-    private String tabTitles[] = new String[] { "Driver", "Passenger" };
+    private String tabTitles[] = CruApplication.getContext().getResources().getStringArray(R.array.myrides_titles);
     final int PAGE_COUNT = tabTitles.length;
 
     public MyRidesFragmentPagerAdapter(FragmentManager fm) {

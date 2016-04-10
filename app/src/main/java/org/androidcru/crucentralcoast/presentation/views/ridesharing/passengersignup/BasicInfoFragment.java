@@ -69,7 +69,6 @@ public class BasicInfoFragment extends FormContentFragment {
             sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
 
-
             Passenger passenger = getPassenger();
             progressBar.setVisibility(View.VISIBLE);
             formHolder.setNavigationClickable(false);
@@ -83,7 +82,7 @@ public class BasicInfoFragment extends FormContentFragment {
     @Override
     public void setupUI()
     {
-        formHolder.setTitle("Contact Information");
+        formHolder.setTitle(getString(R.string.passenger_contact_info));
         ride = (Ride) formHolder.getDataObject();
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));

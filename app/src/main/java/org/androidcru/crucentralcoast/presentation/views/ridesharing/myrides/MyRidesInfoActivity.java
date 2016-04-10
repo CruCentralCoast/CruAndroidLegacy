@@ -48,7 +48,6 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.event_banner) ImageView eventBanner;
-    //@Bind(R.id.eventName) TextView eventName;
     @Bind(R.id.ride_type) TextView rideType;
     @Bind(R.id.ride_time) TextView rideTime;
     @Bind(R.id.departureLoc) TextView departureLoc;
@@ -59,12 +58,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     private MyRidesInfoAdapter rideSharingAdapter;
     private Observer<Ride> observer;
 
-//    @Bind(R.id.editOffering) Button editButton;
-//    @Bind(R.id.cancelOffering) Button cancelButton;
-
     private void setupUI(String theEventName, CruImage theImage) {
-        //TODO: query for event to access event name and image
-        //eventName.setText(theEventName);
         toolbar.setTitle(theEventName);
         Context context = eventBanner.getContext();
         if(theImage != null)
@@ -74,16 +68,16 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
                     .fit()
                     .into(eventBanner);
         }
-        rideType.setText("You are driving: " + ride.direction.getValueDetailed());
-        rideTime.setText("Departure Time:\n" + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+        rideType.setText(getString(R.string.myride_info_dir) + ride.direction.getValueDetailed());
+        rideTime.setText(getString(R.string.myride_info_departure_time)
+                + "\n" + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
-        departureLoc.setText("Pickup Location:\n" + ride.location.toString());
-        spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
-        //Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
-        passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Your Passengers" : "No Passengers");
-//        editButton.setOnClickListener(onEditOfferingClicked());
+        departureLoc.setText(getString(R.string.myride_info_pickup_loc) + "\n" + ride.location.toString());
+        spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+        passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ?
+                getString(R.string.myride_info_passenger_list_nonempty) :
+                getString(R.string.myride_info_passenger_list_empty));
         initAlertDialog();
-//        cancelButton.setOnClickListener(onCancelOfferingClicked());
         eventList.setNestedScrollingEnabled(false);
     }
 
@@ -93,7 +87,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         setContentView(R.layout.activity_rideinfo);
         //Let ButterKnife find all injected views and bind them to member variables
         ButterKnife.bind(this);
-        ride = Parcels.unwrap(getIntent().getExtras().getParcelable("ride"));
+        ride = Parcels.unwrap(getIntent().getExtras().getParcelable(AppConstants.MYRIDE_RIDE_KEY));
 
         getEventData();
 
@@ -123,42 +117,25 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         this.startActivity(intent);
     }
 
-//    public View.OnClickListener onEditOfferingClicked()
-//    {
-//        Intent intent = new Intent(this, DriverSignupActivity.class);
-//        Bundle extras = new Bundle();
-//        extras.putString(AppConstants.RIDE_KEY, ride.id);
-//        extras.putString(AppConstants.EVENT_ID, ride.eventId);
-//        intent.putExtras(extras);
-//        return v -> this.startActivity(intent);
-//    }
-
     private void initAlertDialog() {
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Cancel Ride");
-        alertDialog.setMessage("Are you sure you want to cancel this ride?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                RideProvider.dropRide(MyRidesInfoActivity.this, Observers.empty() , ride.id);
-
-            }
-        });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialog.setTitle(getString(R.string.alert_dialog_title));
+        alertDialog.setMessage(getString(R.string.alert_dialog_driver_msg));
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                getString(R.string.alert_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        RideProvider.dropRide(MyRidesInfoActivity.this, Observers.empty() , ride.id);
+                    }
+                });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                getString(R.string.alert_dialog_no),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
                 alertDialog.hide();
             }
-        });
+                });
     }
-
-//    public View.OnClickListener onCancelOfferingClicked()
-//    {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                alertDialog.show();
-//            }
-//        };
-//    }
 
     private void cancelMenuOption()
     {
@@ -173,7 +150,6 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_rides_info_menu, menu);
-        //LayoutInflater.from(this).inflate(R.menu.my_rides_info_menu, this);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -209,7 +185,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
             public void onNext(Ride ride)
             {
                 setAdapter();
-                spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
+                spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
             }
         };
 
