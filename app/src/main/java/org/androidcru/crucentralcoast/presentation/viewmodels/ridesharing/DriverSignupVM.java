@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -48,6 +47,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import rx.observers.Observers;
+import timber.log.Timber;
 
 public class DriverSignupVM extends BaseRideVM {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
@@ -245,7 +245,7 @@ public class DriverSignupVM extends BaseRideVM {
                 else
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
             } else {
-                Logger.d("Unable to display map....");
+                Timber.d("Unable to display map....");
             }
         };
     }

@@ -4,7 +4,6 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.BuildConfig;
@@ -19,6 +18,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
+import timber.log.Timber;
 
 // Used to query the SLOCru YouTube channel for its videos
 public final class YouTubeVideoProvider
@@ -42,7 +42,7 @@ public final class YouTubeVideoProvider
         }
         catch (IOException e)
         {
-            Logger.e(e, "YouTubeVideoProvider error");
+            Timber.e(e, "YouTubeVideoProvider error");
         }
         query.setKey(BuildConfig.YOUTUBEBROWSERAPIKEY);
         query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);

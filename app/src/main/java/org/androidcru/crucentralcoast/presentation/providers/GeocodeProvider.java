@@ -4,14 +4,13 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 
 import java.io.IOException;
 
 import rx.Observable;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 //REVIEW should be deprecated
 public class GeocodeProvider
@@ -34,7 +33,7 @@ public class GeocodeProvider
         }
         else
         {
-            Logger.e("Geocoder not implemented on this device!");
+            Timber.e("Geocoder not implemented on this device!");
             return Observable.empty();
         }
     }

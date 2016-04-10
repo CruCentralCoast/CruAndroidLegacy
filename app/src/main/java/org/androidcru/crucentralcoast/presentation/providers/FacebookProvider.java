@@ -6,11 +6,11 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -24,26 +24,18 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 //REVIEW singleton class that does not need to be singleton, static methods should do
 public final class FacebookProvider
 {
-    private CallbackManager callbackManager = com.facebook.CallbackManager.Factory.create();
+    private static CallbackManager callbackManager = com.facebook.CallbackManager.Factory.create();
 
-    private FacebookProvider()
-    {
+    static {
+        FacebookSdk.sdkInitialize(CruApplication.getContext());
     }
 
-    private static FacebookProvider instance = null;
-
-    public static FacebookProvider getInstance()
-    {
-        if (instance == null)
-            instance = new FacebookProvider();
-        return instance;
-    }
-
-    public void setupTokenCallback(Observer<LoginResult> loginResultObserver)
+    public static void setupTokenCallback(Observer<LoginResult> loginResultObserver)
     {
         Observable.create(new Observable.OnSubscribe<LoginResult>()
         {
@@ -62,35 +54,35 @@ public final class FacebookProvider
                     @Override
                     public void onCancel()
                     {
-                        Logger.d("User Cancelled Logging in");
+                        Timber.d("User Cancelled Logging in");
                     }
 
                     @Override
                     public void onError(FacebookException error)
                     {
-                        Logger.e(error, "Facebook SDK error");
+                        Timber.e(error, "Facebook SDK error");
                     }
                 });
             }
         }).subscribe(loginResultObserver);
     }
 
-    public void tokenReceived(int requestCode, int resultCode, Intent data)
+    public static void tokenReceived(int requestCode, int resultCode, Intent data)
     {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean isTokenValid()
+    public static boolean isTokenValid()
     {
         return AccessToken.getCurrentAccessToken() != null;
     }
 
-    public void invalidate()
+    public static void invalidate()
     {
         CruApplication.getSharedPreferences().edit().remove(AppConstants.FB_TOKEN_KEY).apply();
     }
 
-    public String getEventId(String eventURL)
+    public static String getEventId(String eventURL)
     {
         if (eventURL.charAt(eventURL.length() - 1) == '/')
         {
@@ -99,13 +91,13 @@ public final class FacebookProvider
         return eventURL.substring(eventURL.lastIndexOf("/") + 1);
     }
 
-    public Observable<RsvpDialog.RSVP_STATUS> getEventStatus(String eventURL)
+    public static Observable<RsvpDialog.RSVP_STATUS> getEventStatus(String eventURL)
     {
         String eventId = getEventId(eventURL);
 
-        Logger.d("eventId: " + eventId);
+        Timber.d("eventId: " + eventId);
 
-        if(FacebookProvider.getInstance().isTokenValid())
+        if(FacebookProvider.isTokenValid())
         {
 
             return Observable.create(new Observable.OnSubscribe<RsvpDialog.RSVP_STATUS>()
@@ -154,15 +146,15 @@ public final class FacebookProvider
         return Observable.empty();
     }
 
-    public Observable<RsvpDialog.RSVP_STATUS> setRSVPStatus(String eventURL, RsvpDialog.RSVP_STATUS rsvpStatus)
+    public static Observable<RsvpDialog.RSVP_STATUS> setRSVPStatus(String eventURL, RsvpDialog.RSVP_STATUS rsvpStatus)
     {
         String eventId = getEventId(eventURL);
 
-        Logger.d("eventId: " + eventId);
+        Timber.d("eventId: " + eventId);
 
 
 
-        if(FacebookProvider.getInstance().isTokenValid())
+        if(FacebookProvider.isTokenValid())
         {
             return Observable.create(new Observable.OnSubscribe<RsvpDialog.RSVP_STATUS>()
             {
@@ -190,7 +182,7 @@ public final class FacebookProvider
                             null,
                             HttpMethod.POST,
                             response -> {
-                                Logger.d(response.getRawResponse());
+                                Timber.d(response.getRawResponse());
                             }
                     ).executeAndWait();
 
@@ -202,7 +194,7 @@ public final class FacebookProvider
         return Observable.empty();
     }
 
-    public Set<String> getPermissions()
+    public static Set<String> getPermissions()
     {
         return AccessToken.getCurrentAccessToken().getPermissions();
     }

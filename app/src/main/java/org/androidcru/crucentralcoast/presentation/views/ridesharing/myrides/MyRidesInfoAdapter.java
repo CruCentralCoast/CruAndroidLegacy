@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Passenger;
@@ -99,7 +99,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         alertDialog.setTitle("Kick Passenger");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Logger.d("chose " + selectedPassengerID);
+                Timber.d("chose " + selectedPassengerID);
                 RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.updateRide()), rideID, selectedPassengerID);
             }
         });

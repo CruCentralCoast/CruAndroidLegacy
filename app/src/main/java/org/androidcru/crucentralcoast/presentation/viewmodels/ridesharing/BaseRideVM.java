@@ -9,7 +9,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.orhanobut.logger.Logger;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
@@ -34,6 +33,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import rx.Observable;
+import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public abstract class BaseRideVM extends BaseVM
@@ -220,7 +220,7 @@ public abstract class BaseRideVM extends BaseVM
 
             @Override
             public void onError(Status status) {
-                Logger.i("ERROR:", "An error occurred: " + status);
+                Timber.i("ERROR:", "An error occurred: " + status);
             }
         };
     }

@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
@@ -27,6 +26,7 @@ import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class VideosFragment extends BaseSupportFragment
 {
@@ -70,7 +70,7 @@ public class VideosFragment extends BaseSupportFragment
             @Override
             public void onError(Throwable e)
             {
-                Logger.e(e, "videos failed to retrieve.");
+                Timber.e(e, "videos failed to retrieve.");
             }
 
             @Override

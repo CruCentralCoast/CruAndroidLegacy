@@ -47,11 +47,9 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "Integer", "LOG_LEVEL", '1'
         }
         debug {
             testCoverageEnabled = true
-            buildConfigField "Integer", "LOG_LEVEL", '0'
         }
     }
 
@@ -116,6 +114,11 @@ dependencies {
 
 
     //Logging
+    compile 'com.jakewharton.timber:timber:4.1.2'
+    compile ('net.ypresto.timbertreeutils:timbertreeutils:1.0.0') {
+        exclude group: 'com.crashlytics.sdk.android', module: 'crashlytics'
+        exclude group: 'com.jakewharton.timber', module: 'timber'
+    }
     compile 'com.github.orhanobut:logger:1.12'
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'

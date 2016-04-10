@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
@@ -33,7 +33,7 @@ public class RsvpDialog extends AlertDialog
 
         this.mEventURL = eventUrl;
 
-        FacebookProvider.getInstance().getEventStatus(mEventURL)
+        FacebookProvider.getEventStatus(mEventURL)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rsvpStatus -> {
                     mProgressBar.setVisibility(View.INVISIBLE);
@@ -49,7 +49,7 @@ public class RsvpDialog extends AlertDialog
         ((RadioButton) mRadioGroup.getChildAt(mSelection.ordinal())).setChecked(true);
         mRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             mSelection = RSVP_STATUS.values()[mRadioGroup.indexOfChild(findViewById(checkedId))];
-            Logger.d(mSelection.toString() + " selected.");
+            Timber.d(mSelection.toString() + " selected.");
         });
     }
 
@@ -65,12 +65,12 @@ public class RsvpDialog extends AlertDialog
     {
         //REVIEW magic strings
         super.setButton(BUTTON_NEGATIVE, "JUST OPEN IN FACEBOOK", (dialog, which) -> {
-            Logger.d("Should have opened in Facebook");
+            Timber.d("Should have opened in Facebook");
             getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mEventURL)));
         });
         super.setButton(BUTTON_POSITIVE, "OKAY", (dialog, which) -> {
-            Logger.d("Okay clicked");
-            FacebookProvider.getInstance().setRSVPStatus(mEventURL, mSelection)
+            Timber.d("Okay clicked");
+            FacebookProvider.setRSVPStatus(mEventURL, mSelection)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
         });

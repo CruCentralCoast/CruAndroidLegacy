@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
@@ -21,6 +19,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * RideSharingAdapter is a RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -110,7 +109,7 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         {
             Bundle b = new Bundle();
             b.putParcelable("ride", Parcels.wrap(rides.get(getAdapterPosition()).ride));
-            Logger.json(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
+            Timber.d(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);
             context.startActivity(intent);

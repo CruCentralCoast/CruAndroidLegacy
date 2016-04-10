@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
@@ -55,7 +55,7 @@ public class ResourcesFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
-                Logger.e(e, "Resources failed to retrieve.");
+                Timber.e(e, "Resources failed to retrieve.");
             }
 
             @Override

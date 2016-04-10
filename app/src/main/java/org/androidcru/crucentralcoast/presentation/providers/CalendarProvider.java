@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.util.Pair;
 
-import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidcru.crucentralcoast.CruApplication;
@@ -23,6 +22,7 @@ import java.util.Calendar;
 import rx.Observable;
 import rx.Observer;
 import rx.observers.Observers;
+import timber.log.Timber;
 
 public final class CalendarProvider
 {
@@ -57,11 +57,11 @@ public final class CalendarProvider
                         }
                     } catch (SecurityException e)
                     {
-                        Logger.e(e, "Permission error");
+                        Timber.e(e, "Permission error");
                     }
                 } else
                 {
-                    Logger.d("Permission denied");
+                    Timber.d("Permission denied");
 
                 }
             });
@@ -103,7 +103,7 @@ public final class CalendarProvider
         };
 
         Cursor cursor = context.getContentResolver().query(calUri, columns, null, null, null);
-        Logger.d(DatabaseUtils.dumpCursorToString(cursor));
+        Timber.d(DatabaseUtils.dumpCursorToString(cursor));
         boolean status = cursor != null && cursor.getCount() != 0 && cursor.moveToFirst() && cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE)).equals(refEvent.name) &&
                 cursor.getString(cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION)).equals(refEvent.description) &&
                 cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART)) == refEvent.startDate.toInstant().toEpochMilli() &&

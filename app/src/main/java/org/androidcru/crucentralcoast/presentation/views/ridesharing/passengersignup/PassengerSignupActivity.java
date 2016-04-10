@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
@@ -12,6 +10,8 @@ import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragme
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 public class PassengerSignupActivity extends FormActivity
 {
@@ -28,8 +28,8 @@ public class PassengerSignupActivity extends FormActivity
         Bundle bundle = getIntent().getExtras();
         if(bundle == null || !bundle.containsKey(AppConstants.EVENT_KEY))
         {
-            Logger.e("PassengerSignupActivity requires that you pass an event");
-            Logger.e("Finishing activity...");
+            Timber.e("PassengerSignupActivity requires that you pass an event");
+            Timber.e("Finishing activity...");
             finish();
             return;
         }

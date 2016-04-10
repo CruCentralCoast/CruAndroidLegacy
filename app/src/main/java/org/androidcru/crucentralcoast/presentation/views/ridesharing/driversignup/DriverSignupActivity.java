@@ -7,7 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -44,8 +44,8 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         Bundle bundle = getIntent().getExtras();
         if(bundle == null || bundle.getString(AppConstants.EVENT_ID, "").isEmpty())
         {
-            Logger.e("DriverSignupActivity requires that you pass an event");
-            Logger.e("Finishing activity...");
+            Timber.e("DriverSignupActivity requires that you pass an event");
+            Timber.e("Finishing activity...");
             finish();
             return;
         }

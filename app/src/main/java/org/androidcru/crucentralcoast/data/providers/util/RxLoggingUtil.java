@@ -1,6 +1,6 @@
 package org.androidcru.crucentralcoast.data.providers.util;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import rx.Observable;
 
@@ -8,10 +8,10 @@ public class RxLoggingUtil
 {
     public static <T> Observable.Transformer<T, T> log(String tag) {
         return o -> o
-                .doOnNext(it -> Logger.t(tag, 0).d("onNext: %s", it))
-                .doOnError(it -> Logger.t(tag).e("onError: %s", it))
-                .doOnCompleted(() -> Logger.t(tag, 0).d("onCompleted"))
-                .doOnSubscribe(() -> Logger.t(tag, 0).d("onSubscribe"))
-                .doOnUnsubscribe(() -> Logger.t(tag, 0).d("onUnsubscribe"));
+                .doOnNext(it -> Timber.tag(tag).d("onNext: %s", it))
+                .doOnError(it -> Timber.tag(tag).e("onError: %s", it))
+                .doOnCompleted(() -> Timber.tag(tag).d("onCompleted"))
+                .doOnSubscribe(() -> Timber.tag(tag).d("onSubscribe"))
+                .doOnUnsubscribe(() -> Timber.tag(tag).d("onUnsubscribe"));
     }
 }

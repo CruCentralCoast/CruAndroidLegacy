@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
 import com.crashlytics.android.Crashlytics;
-import com.facebook.FacebookSdk;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.android.gms.common.ConnectionResult;
@@ -18,8 +18,8 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import com.orhanobut.logger.LogLevel;
-import com.orhanobut.logger.Logger;
+
+import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.converters.ResourceTypeConverter;
@@ -27,15 +27,15 @@ import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
+import org.androidcru.crucentralcoast.util.PrettyDebugTree;
 import org.threeten.bp.ZonedDateTime;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
+import timber.log.Timber;
 
 public class CruApplication extends MultiDexApplication
 {
-
-
     public static Gson gson;
     public static OkHttpClient okHttpClient;
     private static Context context;
@@ -52,19 +52,13 @@ public class CruApplication extends MultiDexApplication
         super.onCreate();
         context = this;
 
-        Fabric.with(this, new Crashlytics());
-
-        Logger.init().logLevel(LogLevel.values()[BuildConfig.LOG_LEVEL]);
-
-        Stetho.initializeWithDefaults(this);
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        FacebookSdk.sdkInitialize(context);
+        setupDebugConfig();
 
         setupDiskCache();
         setupGson();
-        setupOkHttpClient();
+        setupOkHttp();
 
         if (checkPlayServices())
         {
@@ -74,11 +68,38 @@ public class CruApplication extends MultiDexApplication
         }
     }
 
-    private void setupOkHttpClient()
+    /**
+     * Sets up Debug tools, only if the build is for debugging.
+     */
+    private void setupDebugConfig()
     {
-        okHttpClient = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new StethoInterceptor())
-                .build();
+        if(BuildConfig.DEBUG)
+        {
+            Timber.plant(new PrettyDebugTree());
+
+            Stetho.initializeWithDefaults(this);
+        }
+        else
+        {
+            Fabric.with(this, new Crashlytics());
+
+            //Send all Timber logs with a level of INFO or higher to Fabric.io
+            Timber.plant(new CrashlyticsLogTree(Log.INFO));
+        }
+    }
+
+    private void setupOkHttp()
+    {
+        if(BuildConfig.DEBUG)
+        {
+            okHttpClient = new OkHttpClient.Builder()
+                    .addNetworkInterceptor(new StethoInterceptor())
+                    .build();
+        }
+        else
+        {
+            okHttpClient = new OkHttpClient();
+        }
     }
 
     /**
@@ -112,7 +133,7 @@ public class CruApplication extends MultiDexApplication
             Reservoir.init(this, 10240, gson); //in bytes
         } catch (Exception e)
         {
-            Logger.e(e, "Not enough space for disk cache!");
+            Timber.e(e, "Not enough space for disk cache!");
         }
     }
 
@@ -124,6 +145,7 @@ public class CruApplication extends MultiDexApplication
         builder.registerTypeAdapter(Resource.ResourceType.class, new ResourceTypeConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
+        builder.setPrettyPrinting();
         gson = builder.create();
     }
 

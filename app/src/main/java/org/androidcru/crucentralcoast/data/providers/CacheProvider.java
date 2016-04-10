@@ -1,7 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import com.anupcowkur.reservoir.Reservoir;
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import rx.Observable;
 import rx.Observer;
@@ -21,13 +21,13 @@ public class CacheProvider<T>
         @Override
         public void onCompleted()
         {
-            Logger.d("Cache completed.");
+            Timber.d("Cache completed.");
         }
 
         @Override
         public void onError(Throwable e)
         {
-            Logger.e(e, "Cache RxJava onError");
+            Timber.e(e, "Cache RxJava onError");
         }
 
         @Override
@@ -38,12 +38,12 @@ public class CacheProvider<T>
                 Reservoir.put(mKey, t);
                 if(!Reservoir.contains(mKey))
                 {
-                    Logger.e("Cache write failed.");
+                    Timber.e("Cache write failed.");
                 }
             }
             catch(Exception e)
             {
-                Logger.e(e, "Reservoir error!");
+                Timber.e(e, "Reservoir error!");
             }
         }
     };
@@ -71,7 +71,7 @@ public class CacheProvider<T>
             }
             catch(Exception e)
             {
-                Logger.e(e, "Reservoir error!");
+                Timber.e(e, "Reservoir error!");
             }
             return Observable.empty();
         }).subscribeOn(Schedulers.io());
@@ -85,7 +85,7 @@ public class CacheProvider<T>
         }
         catch(Exception e)
         {
-            Logger.e(e, "Reservoir error!");
+            Timber.e(e, "Reservoir error!");
         }
         return false;
     }

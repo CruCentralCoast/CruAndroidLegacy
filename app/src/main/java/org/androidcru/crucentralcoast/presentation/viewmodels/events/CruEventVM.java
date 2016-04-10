@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.login.LoginResult;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -32,6 +31,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.Set;
 
 import rx.Observer;
+import timber.log.Timber;
 
 public class CruEventVM
 {
@@ -154,7 +154,7 @@ public class CruEventVM
 
                 @Override
                 public void onNext(LoginResult loginResult) {
-                    Set<String> grantedPermissions = FacebookProvider.getInstance().getPermissions();
+                    Set<String> grantedPermissions = FacebookProvider.getPermissions();
                     //REVIEW magic strings, AppConstants
                     if(grantedPermissions.contains("rsvp_event"))
                         rsvpDialog.show();
@@ -171,16 +171,16 @@ public class CruEventVM
                     })
                     .setPositiveButton(R.string.facebook_yes, (dialog, which) -> {
                         MainActivity.loginWithFacebook();
-                        FacebookProvider.getInstance().setupTokenCallback(loginResultObserver);
+                        FacebookProvider.setupTokenCallback(loginResultObserver);
                     })
                     .setMessage(R.string.facebook_reasoning)
                     .create();
 
             if(selectedEvent.url != null)
             {
-                if(FacebookProvider.getInstance().isTokenValid())
+                if(FacebookProvider.isTokenValid())
                 {
-                    if (!FacebookProvider.getInstance().getPermissions().contains("rsvp_event"))
+                    if (!FacebookProvider.getPermissions().contains("rsvp_event"))
                         loginDialog.show();
                     else
                         rsvpDialog.show();
@@ -192,7 +192,7 @@ public class CruEventVM
 
             }
             else
-                Logger.d("No Facebook URL set");
+                Timber.d("No Facebook URL set");
 
         };
     }

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
@@ -50,7 +50,7 @@ public class MyRidesDriverFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
-                Logger.e(e, "Rides failed to retrieve.");
+                Timber.e(e, "Rides failed to retrieve.");
             }
 
             @Override

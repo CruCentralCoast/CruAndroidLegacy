@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -113,7 +113,7 @@ public class EventsFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
-                Logger.e(e, "CruEvents failed to retrieve.");
+                Timber.e(e, "CruEvents failed to retrieve.");
             }
 
             @Override

@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -79,7 +79,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
         departureLoc.setText("Pickup Location:\n" + ride.location.toString());
         spotsRemaining.setText("Spots Open: " + (ride.carCapacity - ride.passengers.size()));
-        //Logger.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
+        //Timber.d((ride.passengers != null) + " " + (ride.passengers.size() > 0));
         passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ? "Your Passengers" : "No Passengers");
 //        editButton.setOnClickListener(onEditOfferingClicked());
         initAlertDialog();
@@ -188,14 +188,14 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
                 cancelMenuOption();
                 break;
             default:
-                Logger.d("Incorrect item selection for action bar");
+                Timber.d("Incorrect item selection for action bar");
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void updateRide()
     {
-        Logger.d("resetting ride");
+        Timber.d("resetting ride");
 
         Observer<Ride> observer = new Observer<Ride>()
         {
