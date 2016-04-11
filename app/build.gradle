@@ -9,6 +9,19 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    sourceSets {
+        String sharedResources = 'src/shared/resources/'
+        String sharedJava = 'src/shared/java/'
+        test {
+            resources.srcDirs += sharedResources
+            java.srcDirs += sharedJava
+        }
+        androidTest {
+            resources.srcDirs += sharedResources
+            java.srcDirs += sharedJava
+        }
+    }
+
     defaultConfig {
         applicationId "org.androidcru.crucentralcoast"
         testInstrumentationRunner applicationId + ".JUnitJacocoTestRunner"
@@ -156,10 +169,20 @@ dependencies {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
     androidTestCompile 'junit:junit:4.12'
-    testCompile 'org.powermock:powermock-module-junit4:1.6.4'
-    testCompile 'org.powermock:powermock-module-junit4-rule:1.6.4'
-    testCompile 'org.powermock:powermock-api-mockito:1.6.4'
+    androidTestCompile 'org.mockito:mockito-core:2.0.44-beta'
+    testCompile 'org.mockito:mockito-core:2.0.44-beta'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
+    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
+
+    //testCompile 'org.powermock:powermock-module-junit4:1.6.4'
+    //testCompile 'org.powermock:powermock-module-junit4-rule:1.6.4'
+    //testCompile 'org.powermock:powermock-api-mockito:1.6.4'
+    //testCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
+
+    //androidTestCompile 'org.powermock:powermock-module-junit4:1.6.4'
+    //androidTestCompile 'org.powermock:powermock-module-junit4-rule:1.6.4'
+    //androidTestCompile 'org.powermock:powermock-api-mockito:1.6.4'
+    //androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
 
 }
 

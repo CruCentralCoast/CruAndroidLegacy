@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.tests;
 
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.DrawerActions;
@@ -10,10 +9,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.common.RxIdlingResource;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -32,13 +29,6 @@ public class DriverSignupTests {
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class);
-
-    //call this so that Espresso will wait for network requests to complete before asserting UI stuff
-    @BeforeClass
-    public static void setup()
-    {
-        Espresso.registerIdlingResources(RxIdlingResource.get());
-    }
 
     private void switchToEvents()
     {

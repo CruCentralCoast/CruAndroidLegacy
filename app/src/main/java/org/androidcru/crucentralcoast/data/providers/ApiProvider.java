@@ -17,15 +17,22 @@ public class ApiProvider
     {
         if(service == null)
         {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BuildConfig.CRU_SERVER)
-                    .client(CruApplication.okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .build();
-
-            service = retrofit.create(CruApiService.class);
+            setBaseUrl(BuildConfig.CRU_SERVER);
         }
+
+        return service;
+    }
+
+    public static CruApiService setBaseUrl(String baseUrl)
+    {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(CruApplication.okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .build();
+
+        service = retrofit.create(CruApiService.class);
 
         return service;
     }
