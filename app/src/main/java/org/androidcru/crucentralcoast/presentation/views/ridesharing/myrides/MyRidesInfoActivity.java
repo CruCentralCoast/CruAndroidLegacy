@@ -77,7 +77,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ?
                 getString(R.string.myride_info_passenger_list_nonempty) :
                 getString(R.string.myride_info_passenger_list_empty));
-        initAlertDialog();
+//        initAlertDialog();
         eventList.setNestedScrollingEnabled(false);
     }
 
@@ -97,7 +97,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         eventList.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
 
         setAdapter();
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
     }
 
     //Adapter for RecyclerView
@@ -107,40 +107,40 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         eventList.setHasFixedSize(true);
     }
 
-    private void editMenuOption()
-    {
-        Intent intent = new Intent(this, DriverSignupActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString(AppConstants.RIDE_KEY, ride.id);
-        extras.putSerializable(AppConstants.EVENT_KEY, ride.time);
-        intent.putExtras(extras);
-        this.startActivity(intent);
-    }
+//    private void editMenuOption()
+//    {
+//        Intent intent = new Intent(this, DriverSignupActivity.class);
+//        Bundle extras = new Bundle();
+//        extras.putString(AppConstants.RIDE_KEY, ride.id);
+//        extras.putSerializable(AppConstants.EVENT_KEY, ride.time);
+//        intent.putExtras(extras);
+//        this.startActivity(intent);
+//    }
 
-    private void initAlertDialog() {
-        alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(getString(R.string.alert_dialog_title));
-        alertDialog.setMessage(getString(R.string.alert_dialog_driver_msg));
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                getString(R.string.alert_dialog_yes),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        RideProvider.dropRide(MyRidesInfoActivity.this, Observers.empty() , ride.id);
-                    }
-                });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                getString(R.string.alert_dialog_no),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                alertDialog.hide();
-            }
-                });
-    }
+//    private void initAlertDialog() {
+//        alertDialog = new AlertDialog.Builder(this).create();
+//        alertDialog.setTitle(getString(R.string.alert_dialog_title));
+//        alertDialog.setMessage(getString(R.string.alert_dialog_driver_msg));
+//        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+//                getString(R.string.alert_dialog_yes),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        RideProvider.dropRide(MyRidesInfoActivity.this, Observers.empty() , ride.id);
+//                    }
+//                });
+//        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+//                getString(R.string.alert_dialog_no),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                alertDialog.hide();
+//            }
+//                });
+//    }
 
-    private void cancelMenuOption()
-    {
-        alertDialog.show();
-    }
+//    private void cancelMenuOption()
+//    {
+//        alertDialog.show();
+//    }
 
     private void getEventData()
     {
@@ -153,21 +153,21 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String selected = (String) item.getTitle();
-        switch((String) item.getTitle()) {
-            case "Edit":
-                editMenuOption();
-                break;
-            case "Cancel":
-                cancelMenuOption();
-                break;
-            default:
-                Logger.d("Incorrect item selection for action bar");
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        String selected = (String) item.getTitle();
+//        switch((String) item.getTitle()) {
+//            case "Edit":
+//                editMenuOption();
+//                break;
+//            case "Cancel":
+//                cancelMenuOption();
+//                break;
+//            default:
+//                Logger.d("Incorrect item selection for action bar");
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void updateRide()
     {
