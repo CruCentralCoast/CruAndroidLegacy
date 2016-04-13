@@ -18,6 +18,7 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
@@ -54,6 +55,8 @@ public class CruApplication extends MultiDexApplication
         context = this;
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        AndroidThreeTen.init(this);
 
         setupDebugConfig();
 

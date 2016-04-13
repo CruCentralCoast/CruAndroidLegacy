@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import timber.log.Timber;
-
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -17,6 +15,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public final class RideProvider
 {
@@ -32,7 +31,20 @@ public final class RideProvider
         holder.addSubscription(s);
     }
 
-    public static void requestMyRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, String gcmId)
+    public static void requestMyRidesDriver(SubscriptionsHolder holder, Observer<List<Ride>> observer, String gcmId)
+    {
+        Subscription s = requestRides()
+                .compose(RxComposeUtil.ui())
+                .flatMap(rides -> Observable.from(rides))
+                .filter(ride -> {
+                    return ride.gcmID.equals(gcmId);
+                })
+                .toList()
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    public static void requestMyRidesPassenger(SubscriptionsHolder holder, Observer<List<Ride>> observer, String gcmId)
     {
         Subscription s = requestRides()
                 .compose(RxComposeUtil.ui())
@@ -46,7 +58,7 @@ public final class RideProvider
                             status = true;
                         }
                     }
-                    return status || ride.gcmID.equals(gcmId);
+                    return status;
                 })
                 .toList()
                 .subscribe(observer);

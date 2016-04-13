@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import timber.log.Timber;
-
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -24,6 +22,7 @@ import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class MyRidesDriverFragment extends ListFragment
 {
@@ -111,7 +110,7 @@ public class MyRidesDriverFragment extends ListFragment
     public void forceUpdate()
     {
         swipeRefreshLayout.setRefreshing(true);
-        RideProvider.requestMyRides(this, rideSubscriber, CruApplication.getGCMID());
+        RideProvider.requestMyRidesDriver(this, rideSubscriber, CruApplication.getGCMID());
     }
 
     /**
