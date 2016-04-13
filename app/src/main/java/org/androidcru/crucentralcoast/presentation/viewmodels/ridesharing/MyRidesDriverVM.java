@@ -59,7 +59,7 @@ public class MyRidesDriverVM {
         for (Passenger p : ride.passengers) {
             list.append(CruApplication.getContext().getString(R.string.myrides_passenger_list_name))
                     .append(p.name)
-                    .append("\n" + CruApplication.getContext().getString(R.string.myrides_passenger_list_name))
+                    .append("\n" + CruApplication.getContext().getString(R.string.myrides_passenger_list_name) + " ")
                     .append(p.phone)
                     .append("\n\n");
         }

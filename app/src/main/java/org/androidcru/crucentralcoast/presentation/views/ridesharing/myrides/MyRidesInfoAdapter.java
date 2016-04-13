@@ -80,7 +80,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View v) {
                     alertDialog.setMessage(CruApplication.getContext().getString(R.string.alert_dialog_kick_msg)
-                            + passengerName.getText().toString() + "?");
+                            + " " + passengerName.getText().toString() + "?");
 
                     String temp = passengerPhone.getText().toString();
                     for (int iter = 0; iter < passengers.size(); iter++) {
@@ -102,7 +102,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 CruApplication.getContext().getString(R.string.alert_dialog_yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.updateRide()), rideID, selectedPassengerID);
+                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
                     }
                 });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,

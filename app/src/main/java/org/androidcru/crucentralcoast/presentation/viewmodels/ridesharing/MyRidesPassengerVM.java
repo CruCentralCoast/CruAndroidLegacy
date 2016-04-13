@@ -43,9 +43,9 @@ public class MyRidesPassengerVM {
 
     public String getDriverInfo() {
         return CruApplication.getContext().getString(R.string.myrides_passenger_list_name)
-                + ride.driverName + "\n"
+                + " " + ride.driverName + "\n"
                 + CruApplication.getContext().getString(R.string.myrides_passenger_list_phone)
-                + ride.driverNumber;
+                + " " + ride.driverNumber;
     }
 
     private void initAlertDialog()

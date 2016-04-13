@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +32,8 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignu
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
@@ -46,7 +49,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
 
     //Injected Views
     @Bind(R.id.recyclerview) RecyclerView eventList;
-//    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.event_banner) ImageView eventBanner;
     @Bind(R.id.ride_type) TextView rideType;
@@ -98,9 +101,35 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         eventList.setLayoutManager(llm);
         eventList.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
 
+        //setup observer
+        observer = new Observer<Ride>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Timber.e(e, "Rides failed to retrieve.");
+            }
+
+            @Override
+            public void onNext(Ride newRide)
+            {
+                ride = newRide;
+                setAdapter();
+                spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+                swipeRefreshLayout.setRefreshing(false);
+//                updateRide();
+            }
+        };
+
         setAdapter();
 //        setSupportActionBar(toolbar);
-//        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     //Adapter for RecyclerView
@@ -136,18 +165,19 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
             @Override
             public void onNext(Ride ride)
             {
+                Timber.d("on next called");
                 setAdapter();
                 spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
-//                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
             }
         };
 
         RideProvider.requestRideByID(this, observer, ride.id);
     }
 
-//    public void forceUpdate()
-//    {
-//        swipeRefreshLayout.setRefreshing(true);
-//        RideProvider.requestRideByID(this, observer, ride.id);
-//    }
+    public void forceUpdate()
+    {
+        swipeRefreshLayout.setRefreshing(true);
+        RideProvider.requestRideByID(this, observer, ride.id);
+    }
 }
