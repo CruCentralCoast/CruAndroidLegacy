@@ -22,8 +22,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by main on 3/10/2016.
@@ -44,6 +46,13 @@ public class DriverSignupTests {
     {
         onView(ViewMatchers.withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withText(R.string.nav_events)).perform(click());
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
+    }
+
+    private void switchToMyRides()
+    {
+        onView(ViewMatchers.withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.nav_my_rides)).perform(click());
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
     }
 
@@ -89,5 +98,29 @@ public class DriverSignupTests {
         //check that the data was saved
         onView(withId(R.id.car_capacity_field))
                 .check(matches(withText(input)));
+    }
+
+    @Test
+    public void testingDisplayRideData() {
+        switchToMyRides();
+
+        onView(allOf(withId(R.id.recyclerview), isDisplayed()))
+            .perform(RecyclerViewActions.actionOnItemAtPosition(0, clickChildViewWithId(R.id.editOffering)));
+
+        //check the initial values
+        onView(withId(R.id.name_field))
+                .check(matches(withText("Daniel Toy")));
+        onView(withId(R.id.phone_field))
+                .check(matches(withText("(408) 207-3818")));
+        onView(withId(R.id.gender_view))
+                .check(matches(withText("Male")));
+        onView(withId(R.id.car_capacity_field))
+                .check(matches(withText("6")));
+        onView(withId(R.id.date_field))
+                .check(matches(withText("2016-10-16")));
+        onView(withId(R.id.time_field))
+                .check(matches(withText("14:00:00")));
+        onView(withId(R.id.radius_field))
+                .check(matches(withText("1.0")));
     }
 }

@@ -13,21 +13,21 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
+import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
-import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.Month;
-import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.temporal.ChronoUnit;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -47,11 +47,12 @@ public abstract class BaseRideVM extends BaseVM
     protected static Timepoint[] timepoints = hours.flatMap((h) -> minutes.map((m) -> new Timepoint(h, m)))
             .toList().toBlocking().first().toArray(new Timepoint[NUM_TIMES]);
 
-    protected LocalDate date;
-    protected LocalTime time;
+    protected LocalDate rideSetDate;
+    protected LocalTime rideSetTime;
+    protected GregorianCalendar eventEndDate;
     private String[] genders;
 
-    protected FragmentManager fm;
+    private FragmentManager fm;
 
     public BaseRideVM(BaseAppCompatActivity activity, FragmentManager fm)
     {
@@ -67,46 +68,6 @@ public abstract class BaseRideVM extends BaseVM
 
     protected abstract void placeSelected(LatLng precisePlace, String placeAddress);
 
-
-    private TimePickerDialog getTimeDialog()
-    {
-        ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-        Calendar c = DateTimeUtils.toGregorianCalendar(now);
-        TimePickerDialog tpd = TimePickerDialog.newInstance(
-                null,
-                c.get(Calendar.HOUR_OF_DAY),
-                c.get(Calendar.MINUTE),
-                false
-        );
-        tpd.vibrate(false);
-        tpd.setSelectableTimes(timepoints);
-        return tpd;
-    }
-
-    private DatePickerDialog getDateDialog()
-{
-    ZonedDateTime now = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-    Calendar c = DateTimeUtils.toGregorianCalendar(now);
-    DatePickerDialog dpd = DatePickerDialog.newInstance(
-            null,
-            c.get(Calendar.YEAR),
-            c.get(Calendar.MONTH),
-            c.get(Calendar.DAY_OF_MONTH)
-    );
-    dpd.vibrate(false);
-    return dpd;
-}
-
-    protected void onEventDateClicked(View v)
-    {
-        DatePickerDialog dpd = getDateDialog();
-        dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
-            date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
-            ((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        });
-        dpd.show(fm, "whatever");
-    }
-
     private DatePickerDialog getDateDialog(GregorianCalendar c)
     {
         DatePickerDialog dpd = DatePickerDialog.newInstance(
@@ -116,6 +77,7 @@ public abstract class BaseRideVM extends BaseVM
                 c.get(Calendar.DAY_OF_MONTH)
         );
         dpd.vibrate(false);
+        dpd.setMaxDate(eventEndDate);
         return dpd;
     }
 
@@ -134,57 +96,59 @@ public abstract class BaseRideVM extends BaseVM
 
     protected void onEventDateClicked(View v, GregorianCalendar gc)
     {
-        DatePickerDialog dpd = date == null ?
-                getDateDialog(gc) :
-                getDateDialog(new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth()));
+        DatePickerDialog dpd;
+        //use Ride's start time if editing a Ride
+        if (rideSetDate == null)
+            dpd = getDateDialog(gc);
+        else
+            dpd = getDateDialog(new GregorianCalendar(rideSetDate.getYear(), rideSetDate.getMonthValue() - 1, rideSetDate.getDayOfMonth()));
+        //sets the text of the DatePicker EditText
         dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
-            date = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
-            String yyyymmdd = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
-
-            //((EditText) v).setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            rideSetDate = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
+            String yyyymmdd = rideSetDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
             ((EditText) v).setText(convertToddMMyyyy(yyyymmdd));
-
-            // ((EditText) v).setText(DateUtils.getRelativeTimeSpanString(date
-            //       .atStartOfDay(ZoneId.systemDefault()).toEpochSecond()));
         });
 
-        dpd.show(fm, "whatever");
+        dpd.show(fm, AppConstants.SUPER_SPECIAL_STRING);
     }
 
     protected void onEventTimeClicked(View v, GregorianCalendar gc)
     {
-        TimePickerDialog tpd = time == null ?
-                getTimeDialog(gc) :
-                getTimeDialog(new GregorianCalendar(0, 0, 0, time.getHour(), time.getMinute()));
+        TimePickerDialog tpd;
+        if (rideSetTime == null)
+            tpd = getTimeDialog(gc);
+        else
+            tpd = getTimeDialog(new GregorianCalendar(0, 0, 0, rideSetTime.getHour(), rideSetTime.getMinute()));
+        //sets the text of the TimePicker EditText
         tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-            time = LocalTime.of(hourOfDay, minute, second);
-
-            String milTime = time.format(DateTimeFormatter.ISO_LOCAL_TIME);
+            rideSetTime = LocalTime.of(hourOfDay, minute, second);
+            String milTime = rideSetTime.format(DateTimeFormatter.ISO_LOCAL_TIME);
             ((EditText) v).setText(convertTo12Hour(milTime));
         });
-        tpd.show(fm, "whatever");
+        tpd.show(fm, AppConstants.SUPER_SPECIAL_STRING);
     }
 
     private String convertToddMMyyyy(String s)
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat(AppConstants.DATE_yyyyMMdd);
         Date d = null;
 
         try
         {
             d = sdf.parse(s);
-        } catch (ParseException e) {
+        }
+        catch (ParseException e) {
             e.printStackTrace();
         }
 
-        sdf.applyPattern("MMM dd, yyyy");
+        sdf.applyPattern(AppConstants.DATE_DISPLAY_PATTERN);
         return sdf.format(d);
     }
 
     private String convertTo12Hour(String t)
     {
-        DateFormat f1 = new SimpleDateFormat("HH:mm:ss");
-        DateFormat f2 = new SimpleDateFormat("h:mm a");
+        DateFormat f1 = new SimpleDateFormat(AppConstants.TIME_PARSE);
+        DateFormat f2 = new SimpleDateFormat(AppConstants.TIME_FORMAT);
         Date d = null;
 
         try
@@ -199,18 +163,7 @@ public abstract class BaseRideVM extends BaseVM
         return f2.format(d);
     }
 
-    protected void onEventTimeClicked(View v)
-    {
-        TimePickerDialog tpd = getTimeDialog();
-        tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
-            time = LocalTime.of(hourOfDay, minute, second);
-            ((EditText) v).setText(convertTo12Hour(time.format(DateTimeFormatter.ISO_LOCAL_TIME)));
-        });
-        tpd.show(fm, "whatever");
-    }
-
-
-    public PlaceSelectionListener onPlaceSelected()
+    public PlaceSelectionListener createPlaceSelectionListener()
     {
         return new PlaceSelectionListener() {
             @Override
@@ -228,30 +181,12 @@ public abstract class BaseRideVM extends BaseVM
     protected String[] directionsForSpinner(Ride.Direction[] directions)
     {
         String[] directionsForSpinner = new String[directions.length + 1];
-        directionsForSpinner[0] = "Select Direction";
+        directionsForSpinner[0] = context.getString(R.string.default_direction_op);
         for(int i = 0; i < directions.length; i++)
         {
             directionsForSpinner[i + 1] = directions[i].getValueDetailed();
         }
         return directionsForSpinner;
-    }
-
-    protected int getDirectionIndex(Ride.Direction d, Ride.Direction[] directions)
-    {
-        int index = 0;
-
-        if(d == null)
-            return index;
-
-        for(int i = 0; i < directions.length; i++)
-        {
-            if(d == directions[i])
-            {
-                index = i + 1;
-                break;
-            }
-        }
-        return index;
     }
 
     protected Ride.Direction retrieveDirection(Spinner tripTypeField, Ride.Direction[] directions)
@@ -277,20 +212,11 @@ public abstract class BaseRideVM extends BaseVM
         return index;
     }
 
-    protected String[] gendersForSpinner(String[] actualGenders)
+    protected String[] gendersForSpinner()
     {
-        genders = new String[actualGenders.length + 1];
-        genders[0] = "Select Gender";
-        System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
-        return genders;
-    }
-
-    protected String[] gendersForSpinner(int resourceId)
-    {
-        String[] actualGenders = context.getResources().getStringArray(resourceId);
-        genders = new String[actualGenders.length + 1];
-        genders[0] = "Select Gender";
-        System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
-        return genders;
+        ArrayList<String> genders = new ArrayList<>(Ride.Gender.getColloquials());
+        genders.add(0, context.getString(R.string.default_gender_op));
+        this.genders = genders.toArray(new String[genders.size()]);
+        return this.genders;
     }
 }

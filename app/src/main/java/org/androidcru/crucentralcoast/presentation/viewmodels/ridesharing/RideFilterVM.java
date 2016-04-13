@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.RideInfoFragment;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
@@ -43,6 +44,7 @@ public class RideFilterVM extends BaseRideVM
     {
         super(fragment, fm);
         this.event = event;
+        eventEndDate = DateTimeUtils.toGregorianCalendar(event.endDate);
         bindUI();
     }
 
@@ -54,6 +56,7 @@ public class RideFilterVM extends BaseRideVM
 
     public Query getQuery()
     {
+        //ride direction
         int selectedRadioIndex = directionGroup.indexOfChild(rootView.findViewById(directionGroup.getCheckedRadioButtonId()));
         Ride.Direction direction = Ride.Direction.ROUNDTRIP;
         switch (selectedRadioIndex)
@@ -65,15 +68,17 @@ public class RideFilterVM extends BaseRideVM
                 direction = Ride.Direction.ROUNDTRIP;
                 break;
         }
+        //ride gender
         String gender = (String) genderField.getSelectedItem();
-        if(gender.equals("Any"))
+        if(gender.equals(context.getString(R.string.any_gender)))
             gender = null;
 
-        ZonedDateTime dateTime = ZonedDateTime.of(date, time, ZoneId.systemDefault());
-
+        //ride time
+        ZonedDateTime dateTime = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
         ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
         ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
 
+        //build query
         Query query = new Query.Builder()
                 .setCondition(new ConditionsBuilder()
                         .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
@@ -101,7 +106,7 @@ public class RideFilterVM extends BaseRideVM
     private void bindUI()
     {
         roundTrip.setChecked(true);
-        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders_filter), null, 0);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(), null, 0);
     }
 
     @OnClick(R.id.time_field)

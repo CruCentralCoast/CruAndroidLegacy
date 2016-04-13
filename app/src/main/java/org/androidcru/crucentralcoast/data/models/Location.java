@@ -13,20 +13,21 @@ public class Location
     @SerializedName("suburb") String suburb;
     @SerializedName("street1") String street1;
     @SerializedName("country") String country;
-    public LatLng preciseLocation;
+    @SerializedName("geo") public double[] geo;
 
     /**
      * Required for Gson/RetroFit
      */
     public Location() {}
 
-    public Location(String postcode, String state, String suburb, String street1, String country)
+    public Location(String postcode, String state, String suburb, String street1, String country, double[] geo)
     {
         this.postcode = postcode;
         this.state = state;
         this.suburb = suburb;
         this.street1 = street1;
         this.country = country;
+        this.geo = geo;
     }
 
     public String getAsQuery()

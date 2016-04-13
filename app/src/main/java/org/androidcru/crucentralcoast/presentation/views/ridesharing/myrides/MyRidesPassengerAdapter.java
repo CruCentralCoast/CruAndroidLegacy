@@ -41,8 +41,6 @@ public class MyRidesPassengerAdapter extends RecyclerView.Adapter<MyRidesPasseng
         return new CruRideViewHolder(inflater.inflate(R.layout.card_myridespassenger, parent, false));
     }
 
-    //TODO support events spanning multiple days (fall retreat)
-
     /**
      * Invoked by the Adapter if a fresh view needs configuration or an old view needs to be recycled
      *

@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesDriverVM;
@@ -108,7 +111,8 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         public void onClick(View v)
         {
             Bundle b = new Bundle();
-            b.putParcelable("ride", Parcels.wrap(rides.get(getAdapterPosition()).ride));
+
+            b.putParcelable(AppConstants.MYRIDE_RIDE_KEY, Parcels.wrap(rides.get(getAdapterPosition()).ride));
             Timber.d(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);

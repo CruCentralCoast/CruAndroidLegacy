@@ -92,7 +92,7 @@ public class DriverResultsFragment extends FormContentFragment
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
 
-        formHolder.setTitle("Pick a Driver");
+        formHolder.setTitle(getString(R.string.passenger_pick_driver));
         query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
 
         formHolder.setNavigationVisibility(View.VISIBLE);
