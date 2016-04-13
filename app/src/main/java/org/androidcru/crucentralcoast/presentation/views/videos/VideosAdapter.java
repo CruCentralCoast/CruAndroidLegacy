@@ -99,20 +99,20 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         holder.videoThumb.setOnClickListener((View v) ->
         {
             // not sure what to do if player cant resolve video, so I make toast
-            if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context))
-            {
+            if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context)) {
                 context.startActivity(YouTubeIntents
                         .createPlayVideoIntentWithOptions(context, holder.vID, true, true));
-            }
-            else
-            {
-                Toast.makeText(context, AppConstants.VIDEO_PLAY_FAILED_MESSAGE, Toast.LENGTH_SHORT)
-                    .show();
+            } else {
+                Toast.makeText(context, AppConstants.VIDEO_PLAY_FAILED_MESSAGE,
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
         // Set the video description to the card's TextView
         holder.videoDescription.setText(searchResult.getSnippet().getDescription());
+        if(holder.videoDescription.getText().length() == 0)
+            holder.videoDescription.setText(AppConstants.NO_DESCRIPTION);
+
         holder.videoDescription.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
         // If the description is selected, retract the view
