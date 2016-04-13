@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
@@ -222,7 +223,9 @@ public class CruEventVM
                             Intent driverIntent = new Intent(eventFragment.getContext(),
                                     DriverSignupActivity.class);
 
-                            driverIntent.putExtra(AppConstants.EVENT_ID, cruEvent.id);
+//                            driverIntent.putExtra(AppConstants.EVENT_STARTDATE, cruEvent.startDate);
+                            Parcelable serializedEvent = Parcels.wrap(cruEvent);
+                            driverIntent.putExtra(AppConstants.EVENT_KEY, serializedEvent);
 
                             eventFragment.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
                         })

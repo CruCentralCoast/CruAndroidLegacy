@@ -32,7 +32,6 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
@@ -40,29 +39,26 @@ import org.androidcru.crucentralcoast.util.MathUtil;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.GregorianCalendar;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import rx.observers.Observers;
 
 public class DriverSignupVM extends BaseRideVM {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
-    private Ride ride;
+    protected Ride ride;
 
     public Double radius;
-    private GoogleMap map;
-    private Marker marker;
-    private Circle circle;
-    private LatLng center;
+    protected GoogleMap map;
+    protected Marker marker;
+    protected Circle circle;
+    protected LatLng center;
 
-    public boolean editing;
-    private GregorianCalendar eventStartDateTime;
-    private int minCapacity;
+    protected GregorianCalendar eventStartDateTime;
+    protected int minCapacity;
 
     @Bind(R.id.name_field) @NotEmpty public EditText nameField;
     @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX, messageResId = R.string.phone_number_error) public EditText phoneField;
@@ -82,79 +78,43 @@ public class DriverSignupVM extends BaseRideVM {
     @Bind(R.id.radius_field) @NotEmpty TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventID) {
+    private String eventId;
+
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventEndTime) {
         super(activity, fm);
-        this.editing = false;
+        this.eventId = eventId;
+        eventEndDate = DateTimeUtils.toGregorianCalendar(eventEndTime);
+    }
+
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventStartTime, ZonedDateTime eventEndTime) {
+        this(activity, fm, eventId, eventEndTime);
         this.ride = new Ride();
 
-        setEventTime(eventID);
+        eventStartDateTime = DateTimeUtils.toGregorianCalendar(eventStartTime);
         bindUI();
     }
 
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride) {
-        super(activity, fm);
-        this.editing = ride != null && !ride.isEmpty();
-        this.ride = ride != null ? ride : new Ride();
-
-        if (editing) {
-            date = this.ride.time.toLocalDate();
-            time = this.ride.time.toLocalTime();
-            setEventTime(this.ride.eventId);
-        }
-
-        bindUI();
-    }
-
-    private void bindUI() {
+    protected void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        if (editing) {
-            genderField.setVisibility(View.GONE);
-            genderView.setVisibility(View.VISIBLE);
-            genderView.setText(ride.gender);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(), null, 0);
+        directionGroup.check(roundTrip.getId());
+        rideTime.setOnKeyListener(null);
+        rideDate.setOnKeyListener(null);
+        minCapacity = 0;
 
-            carCapacity.setText(Integer.toString(ride.carCapacity));
-            minCapacity = ride.passengerIds.size();
-
-            nameField.setText(ride.driverName);
-            phoneField.setText(ride.driverNumber);
-
-            rideTime.setText(ride.time.toLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME));
-            rideDate.setText(ride.time.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
-
-            radiusField.setText(Double.toString(ride.radius));
-
-            switch (ride.direction)
-            {
-                case TO:
-                    directionGroup.check(toEvent.getId());
-                    break;
-                default:
-                    directionGroup.check(roundTrip.getId());
-            }
-
-        } else {
-            ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, ride.gender);
-            directionGroup.check(roundTrip.getId());
-            rideTime.setOnKeyListener(null);
-            rideDate.setOnKeyListener(null);
-            minCapacity = 0;
-
-            nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-            phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-
-        }
+        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
+        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
 
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
-
     }
 
-    private int retrieveCarCapacity() {
+    protected int retrieveCarCapacity() {
         return Integer.parseInt(carCapacity.getText().toString());
     }
 
 
-    private Ride.Direction retrieveDirection(RadioGroup radioGroup)
+    protected Ride.Direction retrieveDirection(RadioGroup radioGroup)
     {
         int selectedRadioIndex = radioGroup.indexOfChild(rootView.findViewById(radioGroup.getCheckedRadioButtonId()));
         Ride.Direction direction = Ride.Direction.ROUNDTRIP;
@@ -169,69 +129,61 @@ public class DriverSignupVM extends BaseRideVM {
         }
         return direction;
     }
-
+    //populates ride's fields with data from the view
     public Ride getRide() {
         ride.driverName = nameField.getText().toString();
         ride.driverNumber = phoneField.getText().toString();
-        ride.gender = getGenderIndex((String) genderField.getSelectedItem());
+        ride.gender = Ride.Gender.getFromColloquial((String) genderField.getSelectedItem());
         ride.carCapacity = retrieveCarCapacity();
         ride.direction = retrieveDirection(directionGroup);
-        ride.time = ZonedDateTime.of(date, time, ZoneId.systemDefault());
+        ride.time = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
+        ride.eventId = eventId;
         return ride;
-    }
-
-    private GregorianCalendar getDefaultEventTime() {
-        return eventStartDateTime;
     }
 
     @OnClick(R.id.time_field)
     public void onTimeClicked(View v) {
-        GregorianCalendar gc;
-        if (editing)
-            gc = DateTimeUtils.toGregorianCalendar(ride.time);
-        else {
-            gc = getDefaultEventTime();
-        }
-        onEventTimeClicked(v, gc);
+        onEventTimeClicked(v, eventStartDateTime);
     }
 
     @OnClick(R.id.date_field)
     public void onDateClicked(View v) {
-        GregorianCalendar gc;
-        if (editing)
-            gc = DateTimeUtils.toGregorianCalendar(ride.time);
-        else {
-            gc = getDefaultEventTime();
-        }
-        onEventDateClicked(v, gc);
+        onEventDateClicked(v, eventStartDateTime);
     }
 
     @Override
     protected void placeSelected(LatLng precisePlace, String placeAddress) {
+        updateMap(precisePlace);
+
+        if (placeAddress != null) {
+            String[] splitAddress = placeAddress.split("\\s*,\\s*"); //TODO: remove hardcoded string
+            String[] splitStateZip = splitAddress[2].split(" ");
+
+            ride.location = new Location(splitStateZip[1], splitStateZip[0],
+                    splitAddress[1], splitAddress[0], splitAddress[3],
+                    new double[] {precisePlace.longitude, precisePlace.latitude});
+        }
+    }
+
+    //updates the map on the bottom
+    protected void updateMap(LatLng precisePlace) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(precisePlace, 14.0f));
         center = precisePlace;
         setMarker(center);
 
         if (radius != null)
             setCircle(center, radius);
-
-        if (placeAddress != null) {
-            String[] splitAddress = placeAddress.split("\\s*,\\s*");
-            String[] splitStateZip = splitAddress[2].split(" ");
-            ride.location = new Location(splitStateZip[1], splitStateZip[0],
-                    splitAddress[1], splitAddress[0], splitAddress[3]);
-            ride.location.preciseLocation = precisePlace;
-        }
     }
 
     @OnTextChanged(R.id.radius_field)
     public void onRadiusChanged(CharSequence s) {
         if (!s.toString().isEmpty()) {
             try {
-                this.radius = Double.valueOf(s.toString());
+                this.radius = Double.parseDouble(s.toString());
                 setCircle(center, this.radius);
                 ride.radius = radius;
             } catch (NumberFormatException e) {
+                radiusField.setText("");
             }
         }
     }
@@ -240,8 +192,8 @@ public class DriverSignupVM extends BaseRideVM {
         return googleMap -> {
             if (map == null) {
                 map = googleMap;
-                if (ride.address != null)
-                    placeSelected(new LatLng(ride.address.getLatitude(), ride.address.getLongitude()), null);
+                if (ride != null && ride.location != null)
+                    updateMap(new LatLng(ride.location.geo[1], ride.location.geo[0]));
                 else
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
             } else {
@@ -250,7 +202,7 @@ public class DriverSignupVM extends BaseRideVM {
         };
     }
 
-    private void setMarker(LatLng latLng) {
+    protected void setMarker(LatLng latLng) {
         if (marker != null) {
             marker.remove();
         }
@@ -259,7 +211,7 @@ public class DriverSignupVM extends BaseRideVM {
                 .position(latLng));
     }
 
-    private void setCircle(LatLng center, double radius) {
+    protected void setCircle(LatLng center, double radius) {
         if (circle != null)
             circle.remove();
 
@@ -283,13 +235,7 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
-    //TODO @daniel somehow, avoid this network call
-    private void setEventTime(String eventID) {
-        EventProvider.requestCruEventByID(holder, Observers.create(event -> eventStartDateTime = DateTimeUtils.toGregorianCalendar(event.startDate)), eventID);
-    }
-
-
-    private TextWatcher createCarCapacityWatcher()
+    protected TextWatcher createCarCapacityWatcher()
     {
         return new TextWatcher() {
             @Override
@@ -310,6 +256,7 @@ public class DriverSignupVM extends BaseRideVM {
                     if (s == null || s.toString().equals("")) {
                         return;
                     }
+
                     //make sure is within bounds
                     int setTo = Integer.parseInt(s.toString());
                     if (setTo < minCapacity)
@@ -323,7 +270,7 @@ public class DriverSignupVM extends BaseRideVM {
                 }
                 catch (NumberFormatException nfe)
                 {
-
+                    carCapacity.setText("");
                 }
             }
         };

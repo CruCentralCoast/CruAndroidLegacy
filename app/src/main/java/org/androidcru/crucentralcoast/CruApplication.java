@@ -22,6 +22,7 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
+import org.androidcru.crucentralcoast.data.converters.GenderConverter;
 import org.androidcru.crucentralcoast.data.converters.ResourceTypeConverter;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.Resource;
@@ -72,6 +73,7 @@ public class CruApplication extends MultiDexApplication
             Intent service = new Intent(this, RegistrationIntentService.class);
             startService(service);
         }
+        Logger.d(getGCMID());
     }
 
     private void setupOkHttpClient()
@@ -121,6 +123,7 @@ public class CruApplication extends MultiDexApplication
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeConverter());
         builder.registerTypeAdapter(Ride.Direction.class, new DirectionConverter());
+        builder.registerTypeAdapter(Ride.Gender.class, new GenderConverter());
         builder.registerTypeAdapter(Resource.ResourceType.class, new ResourceTypeConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());

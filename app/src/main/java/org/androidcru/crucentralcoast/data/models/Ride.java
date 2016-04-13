@@ -9,6 +9,7 @@ import org.parceler.Parcel;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Parcel
@@ -29,7 +30,7 @@ public class Ride
 
     @SerializedName(serializedDriverName) public String driverName;
     @SerializedName(serializedDriverNumber) public String driverNumber;
-    @SerializedName(serializedGender) public int gender;
+    @SerializedName(serializedGender) public Gender gender;
     @SerializedName(serializedEvent) public String eventId;
     @SerializedName(serializedTime) public ZonedDateTime time;
     @SerializedName(serializedLocation) public Location location;
@@ -48,7 +49,7 @@ public class Ride
 
     // name, phone, gender, event id, car capacity, direction, time, location
     // need gcmID, radius
-    public Ride(String driverName, String driverNumber, int gender, String eventId,
+    public Ride(String driverName, String driverNumber, Gender gender, String eventId,
                 ZonedDateTime time, Location location, //ArrayList<String> passengerIds,
                 double radius, Direction direction, //String gcmID,
                 int carCapacity)
@@ -104,6 +105,84 @@ public class Ride
                 directionStr[i] = directions[i].getValueDetailed();
             }
             return directionStr;
+        }
+    }
+
+    public enum Gender
+    {
+        NOT_KNOWN(0, "Not Known"), MALE(1, "Male"), FEMALE(2, "Female"), NOT_APPLICABLE(9, "Not Applicable");
+
+        private int id;
+        private String colloquial;
+
+        Gender(int id, String colloquial)
+        {
+            this.id = id;
+            this.colloquial = colloquial;
+        }
+
+        public static int getAmount()
+        {
+            return 4;
+        }
+
+        public int getId()
+        {
+            return id;
+        }
+
+        public String getColloquial()
+        {
+            return colloquial;
+        }
+
+        public static List<String> getColloquials()
+        {
+            return Arrays.asList(NOT_KNOWN.colloquial, MALE.colloquial, FEMALE.colloquial, NOT_APPLICABLE.colloquial);
+        }
+
+        public static Gender getFromId(int id)
+        {
+            Gender toReturn;
+            switch (id)
+            {
+                case 0:
+                    toReturn = NOT_KNOWN;
+                    break;
+                case 1:
+                    toReturn = MALE;
+                    break;
+                case 2:
+                    toReturn = FEMALE;
+                    break;
+                default:
+                    toReturn = NOT_APPLICABLE;
+            }
+            return toReturn;
+        }
+
+        public static Gender getFromColloquial(String colloquial)
+        {
+            Gender toReturn = NOT_APPLICABLE;
+
+            if(colloquial != null)
+            {
+                switch (colloquial)
+                {
+                    case "Not Known":
+                        toReturn = Ride.Gender.NOT_KNOWN;
+                        break;
+                    case "Male":
+                        toReturn = Ride.Gender.MALE;
+                        break;
+                    case "Female":
+                        toReturn = Ride.Gender.FEMALE;
+                        break;
+                    default:
+                        toReturn = Ride.Gender.NOT_APPLICABLE;
+                }
+            }
+            return toReturn;
         }
     }
 }
