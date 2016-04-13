@@ -55,9 +55,6 @@ public class MyRidesDriverFragment extends ListFragment
             @Override
             public void onNext(List<Ride> rides)
             {
-//                Timber.d("printing out the onNExt list of rides");
-//                for (Ride r : rides)
-//                    Timber.d("ride is " + r.id);
                 setRides(rides);
             }
         };
