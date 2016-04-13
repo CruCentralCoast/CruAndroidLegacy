@@ -73,7 +73,6 @@ public class RideFilterVM extends BaseRideVM
         if(gender.equals(context.getString(R.string.any_gender)))
             gender = null;
 
-        //ride time
         ZonedDateTime dateTime = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
         ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
         ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);

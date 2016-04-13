@@ -97,7 +97,6 @@ public class DriverSignupVM extends BaseRideVM {
 
     protected void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-
         ViewUtil.setSpinner(genderField, gendersForSpinner(), null, 0);
         directionGroup.check(roundTrip.getId());
         rideTime.setOnKeyListener(null);
@@ -106,7 +105,6 @@ public class DriverSignupVM extends BaseRideVM {
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
     }
 
@@ -159,7 +157,6 @@ public class DriverSignupVM extends BaseRideVM {
         if (placeAddress != null) {
             String[] splitAddress = placeAddress.split("\\s*,\\s*"); //TODO: remove hardcoded string
             String[] splitStateZip = splitAddress[2].split(" ");
-
             ride.location = new Location(splitStateZip[1], splitStateZip[0],
                     splitAddress[1], splitAddress[0], splitAddress[3],
                     new double[] {precisePlace.longitude, precisePlace.latitude});

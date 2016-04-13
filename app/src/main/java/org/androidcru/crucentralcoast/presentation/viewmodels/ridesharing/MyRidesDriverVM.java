@@ -11,6 +11,7 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;

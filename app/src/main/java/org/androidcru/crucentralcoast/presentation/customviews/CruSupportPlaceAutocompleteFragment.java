@@ -2,9 +2,9 @@ package org.androidcru.crucentralcoast.presentation.customviews;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageButton;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 
 public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocompleteFragment
 {
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_button) AppCompatImageButton searchButton;
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) AppCompatEditText editText;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_button) ImageButton searchButton;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText editText;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)

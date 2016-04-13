@@ -44,10 +44,18 @@ public class AppConstants
     public static final String RIDE_KEY = "filled ride";
     public static final String MYRIDE_RIDE_KEY = "my ride ride";
     public static final String EVENT_KEY = "event";
+
+    public static final String EVENT_STARTDATE = "event_startdate";
+
     public static final String DATE_yyyyMMdd = "yyyy-MM-dd";
     public static final String DATE_DISPLAY_PATTERN = "MMM dd, yyyy";
     public static final String TIME_PARSE = "HH:mm:ss";
     public static final String TIME_FORMAT = "h:mm a";
+
+    public static final String INIT_DIRECTION_SPINNER_OPTION = "Select Direction";
+    public static final String INIT_GENDER_SPINNER_OPTION = "Select Gender";
+    public static final String AUTOCOMPLETE_HINT = "Pickup Location";
+
     public static final String SUPER_SPECIAL_STRING = "whatever";
 
     //Ministry Team

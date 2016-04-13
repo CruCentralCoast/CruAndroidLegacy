@@ -223,10 +223,8 @@ public class CruEventVM
                             Intent driverIntent = new Intent(eventFragment.getContext(),
                                     DriverSignupActivity.class);
 
-//                            driverIntent.putExtra(AppConstants.EVENT_STARTDATE, cruEvent.startDate);
                             Parcelable serializedEvent = Parcels.wrap(cruEvent);
                             driverIntent.putExtra(AppConstants.EVENT_KEY, serializedEvent);
-
                             eventFragment.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
                         })
                         .create();

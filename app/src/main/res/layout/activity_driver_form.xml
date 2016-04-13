@@ -162,7 +162,7 @@
 
             <include layout="@layout/ride_datetime"/>
 
-            <RelativeLayout
+            <org.androidcru.crucentralcoast.presentation.customviews.NoTouchRelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:id="@+id/autocomplete_layout">
@@ -174,7 +174,7 @@
                     android:layout_marginLeft="-8dp"
                     class="org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment"
                     android:layout_centerVertical="true"/>
-            </RelativeLayout>
+            </org.androidcru.crucentralcoast.presentation.customviews.NoTouchRelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
