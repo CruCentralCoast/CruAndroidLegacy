@@ -96,7 +96,7 @@ public class RideFilterVM extends BaseRideVM
         if(genderId > -1)
             conditions.addRestriction(new ConditionsBuilder()
                     .setField(Ride.serializedGender)
-                    .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender));
+                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, genderId));
 
         //build query
         Query query = new Query.Builder()

@@ -126,7 +126,7 @@ public final class ConditionsBuilder
 
     public enum OPERATOR
     {
-        EQUALS("$equals"), AND("$and"), OR("$or"), GTE("$gte"), GT("$gt"),
+        EQUALS("$eq"), AND("$and"), OR("$or"), GTE("$gte"), GT("$gt"),
         LTE("$lte"), LT("$lt"), IN("$in"), REGEX("$regex"), EXISTS("$exists"),
         NEAR("$near"), MAX_DISTANCE("$max_distance");
 
