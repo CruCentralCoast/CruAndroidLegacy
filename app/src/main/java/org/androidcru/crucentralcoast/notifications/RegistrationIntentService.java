@@ -9,13 +9,14 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 
 import java.io.IOException;
+
+import timber.log.Timber;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -79,7 +80,7 @@ public class RegistrationIntentService extends IntentService {
     private void sendRegistrationToServer(String token) {
         // Saves this locally
         CruApplication.saveGCMID(token);
-        Logger.d(token);
+        Timber.d(token);
     }
 
     public static void subscribeToMinistry(final String topic)
@@ -92,7 +93,7 @@ public class RegistrationIntentService extends IntentService {
             }
             catch (IOException e)
             {
-                Logger.e(e, e.getStackTrace().toString());
+                Timber.e(e, e.getStackTrace().toString());
             }
         }).start();
 
@@ -107,7 +108,7 @@ public class RegistrationIntentService extends IntentService {
             }
             catch (IOException e)
             {
-                Logger.e(e, e.getStackTrace().toString());
+                Timber.e(e, e.getStackTrace().toString());
             }
         }).start();
 

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="org.androidcru.crucentralcoast"
           xmlns:android="http://schemas.android.com/apk/res/android"> <!-- Necessary for GCM -->
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
@@ -19,9 +17,9 @@
 
     <uses-permission android:name="org.androidcru.crucentralcoast.permission.C2D_MESSAGE"/>
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!-- End -->
     <application
         android:name=".CruApplication"
@@ -53,19 +51,19 @@
         <activity
             android:name=".presentation.views.forms.FormActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".presentation.views.ridesharing.driversignup.DriverSignupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".presentation.views.ridesharing.passengersignup.PassengerSignupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".presentation.views.ministryteams.JoinMinistryTeamActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
@@ -127,6 +125,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4888bd22a151f7d8a66d294a295143d5f8805c0a"/>
 
     </application>
 

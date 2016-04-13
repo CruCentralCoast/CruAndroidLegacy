@@ -3,9 +3,6 @@ package org.androidcru.crucentralcoast.common;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
 
-import com.orhanobut.logger.LogLevel;
-import com.orhanobut.logger.Logger;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 import rx.Observable;
@@ -20,8 +17,6 @@ import rx.plugins.RxJavaObservableExecutionHook;
 public final class RxIdlingResource extends RxJavaObservableExecutionHook implements IdlingResource
 {
     public static final String TAG = "RxIdlingResource";
-
-    static LogLevel LOG_LEVEL = LogLevel.FULL;
 
     private final AtomicInteger subscriptions = new AtomicInteger(0);
 
@@ -41,11 +36,6 @@ public final class RxIdlingResource extends RxJavaObservableExecutionHook implem
         return INSTANCE;
     }
 
-    public static void setLogLevel(LogLevel logLevel)
-    {
-        LOG_LEVEL = logLevel;
-    }
-
     /* ======================== */
     /* IdlingResource Overrides */
     /* ======================== */
@@ -59,12 +49,6 @@ public final class RxIdlingResource extends RxJavaObservableExecutionHook implem
     public boolean isIdleNow() {
         int activeSubscriptionCount = subscriptions.get();
         boolean isIdle = activeSubscriptionCount == 0;
-
-        if (LOG_LEVEL == LogLevel.FULL)
-        {
-            Logger.t(TAG).i("activeSubscriptionCount: " + activeSubscriptionCount);
-            Logger.t(TAG).i("isIdleNow: " + isIdle);
-        }
 
         return isIdle;
     }
@@ -85,9 +69,6 @@ public final class RxIdlingResource extends RxJavaObservableExecutionHook implem
     public <T> Observable.OnSubscribe<T> onSubscribeStart(Observable<? extends T> observableInstance,
                                                           final Observable.OnSubscribe<T> onSubscribe) {
         int activeSubscriptionCount = subscriptions.incrementAndGet();
-        if (LOG_LEVEL == LogLevel.FULL) {
-            Logger.t(TAG).i(onSubscribe + " - onSubscribeStart: " + activeSubscriptionCount);
-        }
 
         onSubscribe.call(new Subscriber<T>() {
             @Override
@@ -113,11 +94,8 @@ public final class RxIdlingResource extends RxJavaObservableExecutionHook implem
 
     private <T> void onFinally(Observable.OnSubscribe<T> onSubscribe, final String finalizeCaller) {
         int activeSubscriptionCount = subscriptions.decrementAndGet();
-        if (LOG_LEVEL == LogLevel.FULL) {
-            Logger.t(TAG).i(onSubscribe + " - " + finalizeCaller + ": " + activeSubscriptionCount);
-        }
+
         if (activeSubscriptionCount == 0) {
-            Logger.t(TAG).i("onTransitionToIdle");
             resourceCallback.onTransitionToIdle();
         }
     }

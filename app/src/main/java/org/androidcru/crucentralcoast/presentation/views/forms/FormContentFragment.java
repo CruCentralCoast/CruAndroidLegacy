@@ -7,12 +7,9 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragmen
 public abstract class FormContentFragment extends BaseSupportFragment implements FormContent
 {
     protected FormHolder formHolder;
-    protected FormAdapter adapter;
-
-
 
     @Override
-    public void onAttach(Context context)
+    public final void onAttach(Context context)
     {
         super.onAttach(context);
         formHolder = (FormHolder) getActivity();
@@ -28,11 +25,5 @@ public abstract class FormContentFragment extends BaseSupportFragment implements
     public void onPrevious()
     {
         formHolder.prev();
-    }
-
-    @Override
-    public final void setNextDataObject(Object dataObject)
-    {
-        formHolder.addDataObject(dataObject);
     }
 }

@@ -50,6 +50,12 @@ public class BasicInfoFragment extends FormContentFragment {
         ButterKnife.bind(this, view);
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+        formHolder.setTitle(getString(R.string.passenger_contact_info));
+        ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
+
+        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
+        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
     }
 
     private Passenger getPassenger()
@@ -75,18 +81,10 @@ public class BasicInfoFragment extends FormContentFragment {
             passenger.direction = ride.direction;
             passenger.gcm_id = CruApplication.getGCMID();
             PassengerProvider.addPassenger(this, Observers.create(passenger1 -> RideProvider.addPassengerToRide(this, Observers.empty(), ride.id, passenger1.id)), passenger);
+
+            super.onNext();
         }
 
-    }
-
-    @Override
-    public void setupUI()
-    {
-        formHolder.setTitle(getString(R.string.passenger_contact_info));
-        ride = (Ride) formHolder.getDataObject();
-
-        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
     }
 }
 

@@ -6,11 +6,9 @@ import android.view.View;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesPassengerFragment;
 import org.threeten.bp.format.DateTimeFormatter;

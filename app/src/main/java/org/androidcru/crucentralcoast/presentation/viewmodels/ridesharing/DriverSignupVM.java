@@ -25,14 +25,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
@@ -40,7 +38,6 @@ import org.androidcru.crucentralcoast.util.MathUtil;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.GregorianCalendar;
 
@@ -48,6 +45,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import rx.observers.Observers;
+import timber.log.Timber;
 
 public class DriverSignupVM extends BaseRideVM {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
@@ -64,7 +62,7 @@ public class DriverSignupVM extends BaseRideVM {
     protected int minCapacity;
 
     @Bind(R.id.name_field) @NotEmpty public EditText nameField;
-    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) public EditText phoneField;
+    @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX, messageResId = R.string.phone_number_error) public EditText phoneField;
 
     @Bind(R.id.round_trip) RadioButton roundTrip;
     @Bind(R.id.to_event) RadioButton toEvent;
@@ -78,16 +76,19 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
 
-    @Bind(R.id.radius_field) TextView radiusField;
+    @Bind(R.id.radius_field) @NotEmpty TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventEndTime) {
+    private String eventId;
+
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventEndTime) {
         super(activity, fm);
+        this.eventId = eventId;
         eventEndDate = DateTimeUtils.toGregorianCalendar(eventEndTime);
     }
 
-    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, ZonedDateTime eventStartTime, ZonedDateTime eventEndTime) {
-        this(activity, fm, eventEndTime);
+    public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventStartTime, ZonedDateTime eventEndTime) {
+        this(activity, fm, eventId, eventEndTime);
         this.ride = new Ride();
 
         eventStartDateTime = DateTimeUtils.toGregorianCalendar(eventStartTime);
@@ -96,8 +97,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     protected void bindUI() {
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-
-        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders), null, getGenderIndex(ride.gender));
+        ViewUtil.setSpinner(genderField, gendersForSpinner(), null, 0);
         directionGroup.check(roundTrip.getId());
         rideTime.setOnKeyListener(null);
         rideDate.setOnKeyListener(null);
@@ -105,7 +105,6 @@ public class DriverSignupVM extends BaseRideVM {
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-
         carCapacity.addTextChangedListener(createCarCapacityWatcher());
     }
 
@@ -133,10 +132,11 @@ public class DriverSignupVM extends BaseRideVM {
     public Ride getRide() {
         ride.driverName = nameField.getText().toString();
         ride.driverNumber = phoneField.getText().toString();
-        ride.gender = (String) genderField.getSelectedItem();
+        ride.gender = Ride.Gender.getFromColloquial((String) genderField.getSelectedItem());
         ride.carCapacity = retrieveCarCapacity();
         ride.direction = retrieveDirection(directionGroup);
         ride.time = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
+        ride.eventId = eventId;
         return ride;
     }
 
@@ -196,7 +196,7 @@ public class DriverSignupVM extends BaseRideVM {
                 else
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
             } else {
-                Logger.d("Unable to display map....");
+                Timber.d("Unable to display map....");
             }
         };
     }

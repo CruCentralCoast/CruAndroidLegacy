@@ -71,6 +71,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
                     .fit()
                     .into(holder.eventBanner);
         }
+        else
+        {
+            //clear ImageView of it's old content
+            holder.eventBanner.setImageResource(android.R.color.transparent);
+        }
+
+
         holder.fbButton.setOnClickListener(cruEventVM.onFacebookClick());
         holder.fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_facebook_box_grey600_48dp, R.color.fbBlue));
         holder.mapButton.setOnClickListener(cruEventVM.onMapClick());

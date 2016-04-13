@@ -10,20 +10,13 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
-import org.androidcru.crucentralcoast.data.providers.ApiProvider;
-import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
-import org.androidcru.crucentralcoast.presentation.views.forms.FormState;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.schedulers.Schedulers;
 
 public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 {
-    private static CruApiService cruService = ApiProvider.getService();
     private MinistryTeam ministryTeam;
 
     @Bind(R.id.ministry_leader_info_text_view) TextView ministryTeamLeaderInfo;
@@ -45,12 +38,8 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
     {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-    }
 
-    @Override
-    public void setupUI()
-    {
-        ministryTeam = (MinistryTeam) formHolder.getDataObject();
+        ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
 
         formHolder.setTitle(ministryTeam.name);
 
@@ -63,6 +52,6 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
                             (user.phoneNumber != null ? user.phoneNumber + "\n" : "") + "\n");
         }
 
-        formHolder.setFormState(FormState.FINISH);
+        //formHolder.setFormState(FormState.FINISH);
     }
 }

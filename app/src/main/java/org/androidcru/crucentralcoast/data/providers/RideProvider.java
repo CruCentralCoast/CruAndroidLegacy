@@ -1,6 +1,6 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
@@ -58,7 +58,7 @@ public final class RideProvider
         return mCruService.getRides()
                 .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
-                    Logger.d("Rides found");
+                    Timber.d("Rides found");
                     return Observable.from(rides);
                 })
                 .map(ride -> {
@@ -190,7 +190,7 @@ public final class RideProvider
         return mCruService.findSingleRide(id)
                 .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
-                    Logger.d("Rides found");
+                    Timber.d("Rides found");
                     return Observable.from(rides);
                 })
                 .map(ride -> {

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
@@ -96,6 +96,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
     private void initAlertDialog() {
         alertDialog = new AlertDialog.Builder(parent).create();
+
         alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_kick_title));
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
                 CruApplication.getContext().getString(R.string.alert_dialog_yes),
@@ -108,7 +109,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 CruApplication.getContext().getString(R.string.alert_dialog_no),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                alertDialog.hide();
+                        alertDialog.hide();
             }
                 });
     }

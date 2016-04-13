@@ -36,13 +36,9 @@ public class RideInfoFragment extends FormContentFragment {
         super.onViewCreated(view, savedInstanceState);
 
         autocompleteFragment = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-    }
 
-    @Override
-    public void setupUI()
-    {
         formHolder.setTitle(getString(R.string.passenger_signup));
-        rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject());
+        rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT));
         validator = new BaseValidator(rideFilterVM);
         setupPlacesAutocomplete();
     }
@@ -72,7 +68,7 @@ public class RideInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            formHolder.addDataObject(rideFilterVM.getQuery());
+            formHolder.addDataObject(PassengerSignupActivity.QUERY, rideFilterVM.getQuery());
             super.onNext();
         }
     }

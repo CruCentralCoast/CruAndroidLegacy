@@ -2,7 +2,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
         android:id="@+id/date_layout">
         <ImageView
             android:layout_width="48dp"
@@ -31,7 +32,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
         android:id="@+id/time_layout">
         <ImageView
             android:layout_width="48dp"

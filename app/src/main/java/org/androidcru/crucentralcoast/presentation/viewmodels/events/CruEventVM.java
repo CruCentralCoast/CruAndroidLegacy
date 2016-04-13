@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.login.LoginResult;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -25,6 +23,7 @@ import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
+import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
 import org.parceler.Parcels;
@@ -33,10 +32,11 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.Set;
 
 import rx.Observer;
+import timber.log.Timber;
 
 public class CruEventVM
 {
-    private Fragment eventFragment;
+    private EventsFragment eventFragment;
     public CruEvent cruEvent;
     public boolean isExpanded;
     public boolean addedToCalendar;
@@ -46,7 +46,7 @@ public class CruEventVM
     public final static String DATE_FORMATTER = "EEEE MMMM d,";
     public final static String TIME_FORMATTER = "h:mm a";
 
-    public CruEventVM(Fragment eventFragment, CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
+    public CruEventVM(EventsFragment eventFragment, CruEvent cruEvent, boolean isExpanded, boolean addedToCalendar, long localEventId)
     {
         this.cruEvent = cruEvent;
         this.isExpanded = isExpanded;
@@ -83,18 +83,14 @@ public class CruEventVM
             {
                 String cruEventId = eventInfo.first;
                 long calendarId = eventInfo.second;
-                if (eventInfo.second > -1)
+                if (eventInfo.second > 0)
                 {
-                    /*Toast.makeText(getActivity(), "EventID: " + Long.toString(calendarId) + " added to default calendar",
-                            Toast.LENGTH_LONG).show();*/
                     sharedPreferences.edit().putLong(cruEventId, calendarId).commit();
-                } else
-                {
-                    sharedPreferences.edit().remove(cruEventId).commit();
                 }
 
                 addedToCalendar = sharedPreferences.contains(cruEvent.id);
                 localEventId = sharedPreferences.getLong(cruEvent.id, -1);
+                eventFragment.refreshAdapter();
             }
         };
 
@@ -109,9 +105,9 @@ public class CruEventVM
                     })
                     .setPositiveButton("SURE", (dialog, which) -> {
                         if (adding)
-                            CalendarProvider.getInstance().addEventToCalendar(v.getContext(), selectedEvent, onCalendarWrittenObserver);
+                            CalendarProvider.addEventToCalendar(v.getContext(), selectedEvent, onCalendarWrittenObserver);
                         else
-                            CalendarProvider.getInstance().removeEventFromCalendar(v.getContext(), selectedEvent, localEventId, onCalendarWrittenObserver);
+                            CalendarProvider.removeEventFromCalendar(v.getContext(), selectedEvent, localEventId, onCalendarWrittenObserver);
                     })
                     .create();
             confirmDialog.show();
@@ -159,7 +155,7 @@ public class CruEventVM
 
                 @Override
                 public void onNext(LoginResult loginResult) {
-                    Set<String> grantedPermissions = FacebookProvider.getInstance().getPermissions();
+                    Set<String> grantedPermissions = FacebookProvider.getPermissions();
                     //REVIEW magic strings, AppConstants
                     if(grantedPermissions.contains("rsvp_event"))
                         rsvpDialog.show();
@@ -176,16 +172,16 @@ public class CruEventVM
                     })
                     .setPositiveButton(R.string.facebook_yes, (dialog, which) -> {
                         MainActivity.loginWithFacebook();
-                        FacebookProvider.getInstance().setupTokenCallback(loginResultObserver);
+                        FacebookProvider.setupTokenCallback(loginResultObserver);
                     })
                     .setMessage(R.string.facebook_reasoning)
                     .create();
 
             if(selectedEvent.url != null)
             {
-                if(FacebookProvider.getInstance().isTokenValid())
+                if(FacebookProvider.isTokenValid())
                 {
-                    if (!FacebookProvider.getInstance().getPermissions().contains("rsvp_event"))
+                    if (!FacebookProvider.getPermissions().contains("rsvp_event"))
                         loginDialog.show();
                     else
                         rsvpDialog.show();
@@ -197,7 +193,7 @@ public class CruEventVM
 
             }
             else
-                Logger.d("No Facebook URL set");
+                Timber.d("No Facebook URL set");
 
         };
     }
@@ -227,10 +223,8 @@ public class CruEventVM
                             Intent driverIntent = new Intent(eventFragment.getContext(),
                                     DriverSignupActivity.class);
 
-//                            driverIntent.putExtra(AppConstants.EVENT_STARTDATE, cruEvent.startDate);
                             Parcelable serializedEvent = Parcels.wrap(cruEvent);
                             driverIntent.putExtra(AppConstants.EVENT_KEY, serializedEvent);
-
                             eventFragment.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
                         })
                         .create();

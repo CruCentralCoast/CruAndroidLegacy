@@ -11,13 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
+import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscription;
+import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
 public class EventsFragment extends ListFragment
@@ -111,7 +113,7 @@ public class EventsFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
-                Logger.e(e, "CruEvents failed to retrieve.");
+                Timber.e(e, "CruEvents failed to retrieve.");
             }
 
             @Override
@@ -156,9 +158,15 @@ public class EventsFragment extends ListFragment
                             sharedPreferences.contains(cruEvent.id),
                             sharedPreferences.getLong(cruEvent.id, -1));
                 })
+                .map(cruEventVM -> {
+                    if (CalendarProvider.hasCalendarPermission(getContext()))
+                    {
+                        CalendarProvider.updateEvent(getContext(), cruEventVM.cruEvent, sharedPreferences.getLong(cruEventVM.cruEvent.id, -1), Observers.empty());
+                    }
+                    return cruEventVM;
+                })
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(cruEventVMs::add);
-
         recyclerView.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
     }
 
@@ -184,5 +192,10 @@ public class EventsFragment extends ListFragment
             bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.PASSENGER_TAB);
             ((MainActivity) getActivity()).switchToMyRides(bundle);
         }
+    }
+
+    public void refreshAdapter()
+    {
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

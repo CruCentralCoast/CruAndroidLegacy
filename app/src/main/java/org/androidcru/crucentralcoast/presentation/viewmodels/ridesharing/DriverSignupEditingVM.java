@@ -21,7 +21,8 @@ import butterknife.OnClick;
 public class DriverSignupEditingVM extends DriverSignupVM {
 
     public DriverSignupEditingVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride, ZonedDateTime eventEndTime) {
-        super(activity, fm, eventEndTime);
+        super(activity, fm, ride.eventId, eventEndTime);
+
         this.ride = ride;
         //set time variables in the parent class
         rideSetDate = this.ride.time.toLocalDate();
@@ -36,7 +37,7 @@ public class DriverSignupEditingVM extends DriverSignupVM {
 
         genderField.setVisibility(View.GONE);
         genderView.setVisibility(View.VISIBLE);
-        genderView.setText(ride.gender);
+        genderView.setText(ride.gender.getColloquial());
 
         carCapacity.setText(Integer.toString(ride.carCapacity));
         minCapacity = ride.passengerIds.size();

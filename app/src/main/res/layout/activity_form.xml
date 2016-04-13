@@ -3,105 +3,98 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <include
-        layout="@layout/app_bar_main"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <org.androidcru.crucentralcoast.presentation.customviews.NonSwipeableViewPager
-            android:id="@+id/viewPager"
+        <FrameLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_above="@+id/bottom_bar"/>
 
+        <RelativeLayout
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/grey300"
+            android:layout_alignParentBottom="true">
+
             <RelativeLayout
-                android:id="@+id/bottom_bar"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                app:layout_anchor="@id/viewPager"
-                app:layout_anchorGravity="bottom|end"
-                android:background="@color/grey300"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentBottom="true">
+                android:id="@+id/prev"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentStart="true">
 
-                <RelativeLayout
-                    android:id="@+id/prev"
+                <TextView
+                    tools:text="PREVIOUS"
+                    android:id="@+id/prevText"
+                    android:text="@string/previous"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_alignParentStart="true">
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey600"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:drawablePadding="8dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/prevIcon"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"/>
 
-                    <TextView
-                        tools:text="PREVIOUS"
-                        android:id="@+id/prevText"
-                        android:text="@string/previous"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/grey600"
-                        android:textSize="16sp"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:drawablePadding="8dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/prevIcon"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"/>
+                <ImageView
+                    android:id="@+id/prevIcon"
+                    android:layout_width="36sp"
+                    android:layout_height="36sp"
+                    android:scaleType="fitCenter"
+                    android:drawablePadding="8sp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:src="@drawable/ic_chevron_left_grey600_48dp"/>
 
-                    <ImageView
-                        android:id="@+id/prevIcon"
-                        android:layout_width="36sp"
-                        android:layout_height="36sp"
-                        android:scaleType="fitCenter"
-                        android:drawablePadding="8sp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="4dp"
-                        android:src="@drawable/ic_chevron_left_grey600_48dp"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/next"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true">
-
-                    <TextView
-                        tools:text="NEXT"
-                        android:id="@+id/nextText"
-                        android:text="@string/next"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/grey600"
-                        android:textSize="16sp"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:drawablePadding="8dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginLeft="4dp"/>
-
-                    <ImageView
-                        android:id="@+id/nextIcon"
-                        android:layout_width="36sp"
-                        android:layout_height="36sp"
-                        android:scaleType="fitCenter"
-                        android:drawablePadding="8sp"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/nextText"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/ic_chevron_right_grey600_48dp"/>
-
-                </RelativeLayout>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/next"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    tools:text="NEXT"
+                    android:id="@+id/nextText"
+                    android:text="@string/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey600"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:drawablePadding="8dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"/>
+
+                <ImageView
+                    android:id="@+id/nextIcon"
+                    android:layout_width="36sp"
+                    android:layout_height="36sp"
+                    android:scaleType="fitCenter"
+                    android:drawablePadding="8sp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/nextText"
+                    android:layout_marginRight="4dp"
+                    android:src="@drawable/ic_chevron_right_grey600_48dp"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
+
 </LinearLayout>

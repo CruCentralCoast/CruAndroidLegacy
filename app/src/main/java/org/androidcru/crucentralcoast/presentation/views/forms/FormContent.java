@@ -4,6 +4,4 @@ public interface FormContent
 {
     void onNext();
     void onPrevious();
-    void setupUI();
-    void setNextDataObject(Object dataObject);
 }

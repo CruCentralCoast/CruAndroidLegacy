@@ -10,7 +10,6 @@ import android.widget.Spinner;
 import com.google.android.gms.maps.model.LatLng;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Select;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -28,6 +27,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class RideFilterVM extends BaseRideVM
 {
@@ -99,7 +99,7 @@ public class RideFilterVM extends BaseRideVM
                         .build())
                 .build();
 
-        Logger.json(CruApplication.gson.toJson(query));
+        Timber.d(CruApplication.gson.toJson(query));
 
         return query;
     }
@@ -107,7 +107,7 @@ public class RideFilterVM extends BaseRideVM
     private void bindUI()
     {
         roundTrip.setChecked(true);
-        ViewUtil.setSpinner(genderField, gendersForSpinner(R.array.genders_filter), null, 0);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(), null, 0);
     }
 
     @OnClick(R.id.time_field)

@@ -11,18 +11,15 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
 import org.parceler.Parcels;
-import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.observers.Observers;

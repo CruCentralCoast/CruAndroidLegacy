@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -72,12 +72,13 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         rideTime.setText(getString(R.string.myride_info_departure_time)
                 + "\n" + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
+
         departureLoc.setText(getString(R.string.myride_info_pickup_loc) + "\n" + ride.location.toString());
         spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
         passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ?
                 getString(R.string.myride_info_passenger_list_nonempty) :
                 getString(R.string.myride_info_passenger_list_empty));
-//        initAlertDialog();
+
         eventList.setNestedScrollingEnabled(false);
     }
 
@@ -107,41 +108,6 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         eventList.setHasFixedSize(true);
     }
 
-//    private void editMenuOption()
-//    {
-//        Intent intent = new Intent(this, DriverSignupActivity.class);
-//        Bundle extras = new Bundle();
-//        extras.putString(AppConstants.RIDE_KEY, ride.id);
-//        extras.putSerializable(AppConstants.EVENT_KEY, ride.time);
-//        intent.putExtras(extras);
-//        this.startActivity(intent);
-//    }
-
-//    private void initAlertDialog() {
-//        alertDialog = new AlertDialog.Builder(this).create();
-//        alertDialog.setTitle(getString(R.string.alert_dialog_title));
-//        alertDialog.setMessage(getString(R.string.alert_dialog_driver_msg));
-//        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-//                getString(R.string.alert_dialog_yes),
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        RideProvider.dropRide(MyRidesInfoActivity.this, Observers.empty() , ride.id);
-//                    }
-//                });
-//        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-//                getString(R.string.alert_dialog_no),
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                alertDialog.hide();
-//            }
-//                });
-//    }
-
-//    private void cancelMenuOption()
-//    {
-//        alertDialog.show();
-//    }
-
     private void getEventData()
     {
         EventProvider.requestCruEventByID(this, Observers.create(event -> setupUI(event.name, event.image)), ride.eventId);
@@ -153,25 +119,9 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        String selected = (String) item.getTitle();
-//        switch((String) item.getTitle()) {
-//            case "Edit":
-//                editMenuOption();
-//                break;
-//            case "Cancel":
-//                cancelMenuOption();
-//                break;
-//            default:
-//                Logger.d("Incorrect item selection for action bar");
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
     public void updateRide()
     {
-        Logger.d("resetting ride");
+        Timber.d("resetting ride");
 
         Observer<Ride> observer = new Observer<Ride>()
         {

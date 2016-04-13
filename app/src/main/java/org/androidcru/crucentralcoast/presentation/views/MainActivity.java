@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        FacebookProvider.getInstance().tokenReceived(requestCode, resultCode, data);
+        FacebookProvider.tokenReceived(requestCode, resultCode, data);
     }
 
     public static void loginWithFacebook()

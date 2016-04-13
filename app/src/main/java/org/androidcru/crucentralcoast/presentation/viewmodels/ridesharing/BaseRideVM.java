@@ -9,13 +9,12 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.orhanobut.logger.Logger;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
@@ -29,11 +28,13 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import rx.Observable;
+import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public abstract class BaseRideVM extends BaseVM
@@ -173,7 +174,7 @@ public abstract class BaseRideVM extends BaseVM
 
             @Override
             public void onError(Status status) {
-                Logger.i("ERROR:", "An error occurred: " + status);
+                Timber.i("ERROR:", "An error occurred: " + status);
             }
         };
     }
@@ -212,17 +213,11 @@ public abstract class BaseRideVM extends BaseVM
         return index;
     }
 
-    protected String[] gendersForSpinner(String[] actualGenders)
+    protected String[] gendersForSpinner()
     {
-        genders = new String[actualGenders.length + 1];
-        genders[0] = context.getString(R.string.default_gender_op);
-        System.arraycopy(actualGenders, 0, genders, 1, actualGenders.length);
-        return genders;
-    }
-
-    protected String[] gendersForSpinner(int resourceId)
-    {
-        String[] actualGenders = context.getResources().getStringArray(resourceId);
-        return gendersForSpinner(actualGenders);
+        ArrayList<String> genders = new ArrayList<>(Ride.Gender.getColloquials());
+        genders.add(0, context.getString(R.string.default_gender_op));
+        this.genders = genders.toArray(new String[genders.size()]);
+        return this.genders;
     }
 }

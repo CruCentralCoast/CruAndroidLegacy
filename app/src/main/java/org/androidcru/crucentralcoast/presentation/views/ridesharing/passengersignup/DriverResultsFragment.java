@@ -91,19 +91,16 @@ public class DriverResultsFragment extends FormContentFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
-    }
 
-    @Override
-    public void setupUI()
-    {
         formHolder.setTitle(getString(R.string.passenger_pick_driver));
-        query = (Query) formHolder.getDataObject();
+        query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
 
         formHolder.setNavigationVisibility(View.VISIBLE);
         formHolder.setNextVisibility(View.GONE);
         formHolder.setPreviousVisibility(View.VISIBLE);
         getRides();
     }
+
 
     private void getRides()
     {

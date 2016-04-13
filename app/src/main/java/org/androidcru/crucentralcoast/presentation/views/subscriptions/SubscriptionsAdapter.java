@@ -114,6 +114,10 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
                             .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
                             .into(ministrySubscriptionHolder.ministryImage);
                 }
+                else
+                {
+                    ministrySubscriptionHolder.ministryImage.setImageResource(R.drawable.default_box);
+                }
 
 
             }

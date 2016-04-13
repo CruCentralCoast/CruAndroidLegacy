@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
@@ -13,9 +11,16 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class PassengerSignupActivity extends FormActivity
 {
-    CruEvent event;
+    private CruEvent event;
+
+    public static final String CRU_EVENT = "CRU_EVENT";
+    public static final String SELECTED_RIDE = "SELECTED_RIDE";
+    public static final String QUERY = "QUERY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +28,8 @@ public class PassengerSignupActivity extends FormActivity
         Bundle bundle = getIntent().getExtras();
         if(bundle == null || !bundle.containsKey(AppConstants.EVENT_KEY))
         {
-            Logger.e("PassengerSignupActivity requires that you pass an event");
-            Logger.e("Finishing activity...");
+            Timber.e("PassengerSignupActivity requires that you pass an event");
+            Timber.e("Finishing activity...");
             finish();
             return;
         }
@@ -36,8 +41,8 @@ public class PassengerSignupActivity extends FormActivity
 
         ArrayList<FormContentFragment> fragments = setupForm(bundle);
 
-        setAdapter(new PassengerPagerAdapter(getSupportFragmentManager(), this, fragments));
-        setFirstDataObject(event);
+        addDataObject(CRU_EVENT, event);
+        setFormContent(fragments);
 
     }
 

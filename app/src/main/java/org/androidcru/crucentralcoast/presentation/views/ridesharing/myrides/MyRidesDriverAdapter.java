@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * RideSharingAdapter is a RecyclerView adapter binding the Event model to the Event RecyclerView
@@ -110,8 +111,9 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
         public void onClick(View v)
         {
             Bundle b = new Bundle();
+
             b.putParcelable(AppConstants.MYRIDE_RIDE_KEY, Parcels.wrap(rides.get(getAdapterPosition()).ride));
-            Logger.json(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
+            Timber.d(CruApplication.gson.toJson(rides.get(getAdapterPosition()).ride));
             Intent intent = new Intent(context, MyRidesInfoActivity.class);
             intent.putExtras(b);
             context.startActivity(intent);

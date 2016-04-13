@@ -3,11 +3,13 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversign
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
-import com.orhanobut.logger.Logger;
+import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -17,6 +19,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
+import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
@@ -25,6 +28,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.observers.Observers;
 
 public class DriverSignupActivity extends BaseAppCompatActivity
@@ -36,6 +40,8 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     @Bind(R.id.fab) FloatingActionButton fab;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
+
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
     private MapFragment mapFragment;
 
     private ZonedDateTime eventStartDate;
@@ -51,8 +57,8 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         event = (CruEvent)Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
         if(bundle == null || event == null)
         {
-            Logger.e("DriverSignupActivity requires that you pass an event");
-            Logger.e("Finishing activity...");
+            Timber.e("DriverSignupActivity requires that you pass an event");
+            Timber.e("Finishing activity...");
             finish();
             return;
         }
@@ -70,6 +76,14 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             requestRides(rideId);
         else
             bindNewRideVM(null);
+    }
+
+    @OnClick(R.id.autocomplete_layout)
+    public void onAutocompleteTouched(View v)
+    {
+        if(getCurrentFocus() != null)
+            getCurrentFocus().clearFocus();
+        searchInput.callOnClick();
     }
 
     //fill in fields that only the DriverSignupActivity has access to but DriverSignupVM doesn't
@@ -114,7 +128,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private void bindNewRideVM(Ride r) {
         //new ride
         if (r == null)
-            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), event.startDate, event.endDate);
+            driverSignupVM = new DriverSignupVM(this, getFragmentManager(), event.id, event.startDate, event.endDate);
         //editing an existing ride
         else
             driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r, event.endDate);

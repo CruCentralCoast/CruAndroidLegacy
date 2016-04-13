@@ -7,9 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/app_bar_main"/>
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -25,7 +22,8 @@
             <!-- name -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="wrap_content"
+                android:minHeight="72dp"
                 android:id="@+id/name_layout"
                 >
                 <ImageView
@@ -55,7 +53,8 @@
             <!-- phone -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="wrap_content"
+                android:minHeight="72dp"
                 android:id="@+id/phone_layout"
                 android:layout_below="@+id/name_layout">
                 <ImageView
@@ -115,7 +114,8 @@
             <!-- car capacity -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="wrap_content"
+                android:minHeight="72dp"
                 android:id="@+id/car_capacity_layout">
                 <ImageView
                     android:layout_width="48dp"
@@ -162,7 +162,7 @@
 
             <include layout="@layout/ride_datetime"/>
 
-            <RelativeLayout
+            <org.androidcru.crucentralcoast.presentation.customviews.NoTouchRelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:id="@+id/autocomplete_layout">
@@ -174,11 +174,12 @@
                     android:layout_marginLeft="-8dp"
                     class="org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment"
                     android:layout_centerVertical="true"/>
-            </RelativeLayout>
+            </org.androidcru.crucentralcoast.presentation.customviews.NoTouchRelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="wrap_content"
+                android:minHeight="72dp"
                 android:id="@+id/radius_layout">
                 <ImageView
                     android:layout_width="48dp"

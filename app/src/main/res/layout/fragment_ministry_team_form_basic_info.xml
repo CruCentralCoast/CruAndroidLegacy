@@ -7,7 +7,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
         android:id="@+id/name_layout"
         android:padding="8dp">
         <ImageView
@@ -38,7 +39,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
         android:id="@+id/phone_layout"
         android:padding="8dp"
         android:layout_below="@+id/name_layout">
@@ -70,6 +72,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:minHeight="72dp"
         android:id="@+id/email_layout"
         android:padding="8dp">
         <ImageView
