@@ -19,6 +19,7 @@ import timber.log.Timber;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruImage;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -45,7 +46,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
 
     //Injected Views
     @Bind(R.id.recyclerview) RecyclerView eventList;
-    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+//    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.event_banner) ImageView eventBanner;
     @Bind(R.id.ride_type) TextView rideType;
@@ -99,6 +100,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
 
         setAdapter();
 //        setSupportActionBar(toolbar);
+//        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     //Adapter for RecyclerView
@@ -136,9 +138,16 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
             {
                 setAdapter();
                 spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+//                swipeRefreshLayout.setRefreshing(false);
             }
         };
 
         RideProvider.requestRideByID(this, observer, ride.id);
     }
+
+//    public void forceUpdate()
+//    {
+//        swipeRefreshLayout.setRefreshing(true);
+//        RideProvider.requestRideByID(this, observer, ride.id);
+//    }
 }

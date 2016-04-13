@@ -106,7 +106,6 @@ public class DriverResultsFragment extends FormContentFragment
     {
         swipeRefreshLayout.setRefreshing(true);
         results.clear();
-        //TODO GeocoderProvider was used to obtain LatLng for rides at this point
         RideProvider.searchRides(this, rideResultsObserver, query);
     }
 
