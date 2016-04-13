@@ -9,9 +9,7 @@ import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Select;
 
-import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
@@ -36,7 +34,7 @@ public class RideFilterVM extends BaseRideVM
 
     @Bind(R.id.round_trip) RadioButton roundTrip;
     @Bind(R.id.direction) RadioGroup directionGroup;
-    @Bind(R.id.gender_field) @Select Spinner genderField;
+    @Bind(R.id.gender_field) Spinner genderField;
     @Bind(R.id.time_field) @NotEmpty EditText rideTime;
     @Bind(R.id.date_field) @NotEmpty EditText rideDate;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
@@ -71,29 +69,38 @@ public class RideFilterVM extends BaseRideVM
         }
         //ride gender
         String gender = (String) genderField.getSelectedItem();
-        if(gender.equals(context.getString(R.string.any_gender)))
-            gender = null;
+        int genderId = -1;
+
+        if(!gender.equals(context.getString(R.string.any_gender)))
+            genderId = Ride.Gender.getFromColloquial((String) genderField.getSelectedItem()).getId();
 
         //ride time
         ZonedDateTime dateTime = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
         ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
         ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
 
+
+
+        //conditions
+        ConditionsBuilder conditions = new ConditionsBuilder()
+            .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
+            .addRestriction(new ConditionsBuilder()
+                    .setField(Ride.serializedTime)
+                    .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
+                    .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
+            .addRestriction(new ConditionsBuilder()
+                    .setField(Ride.serializedDirection)
+                    .addRestriction(ConditionsBuilder.OPERATOR.REGEX, direction.getValue()));
+
+        //don't include gender if it was "Any"
+        if(genderId > -1)
+            conditions.addRestriction(new ConditionsBuilder()
+                    .setField(Ride.serializedGender)
+                    .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender));
+
         //build query
         Query query = new Query.Builder()
-                .setCondition(new ConditionsBuilder()
-                        .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
-                        .addRestriction(new ConditionsBuilder()
-                                .setField(Ride.serializedGender)
-                                .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender))
-                        .addRestriction(new ConditionsBuilder()
-                                .setField(Ride.serializedTime)
-                                .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
-                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
-                        .addRestriction(new ConditionsBuilder()
-                                .setField(Ride.serializedDirection)
-                                .addRestriction(ConditionsBuilder.OPERATOR.REGEX, direction.getValue()))
-                        .build())
+                .setCondition(conditions.build())
                 .setOptions(new OptionsBuilder()
                         .addOption(OptionsBuilder.OPTIONS.LIMIT, 5)
                         .build())
@@ -102,6 +109,14 @@ public class RideFilterVM extends BaseRideVM
         Timber.d(CruApplication.gson.toJson(query));
 
         return query;
+    }
+
+    @Override
+    protected String[] gendersForSpinner()
+    {
+        String[] genders = super.gendersForSpinner();
+        genders[0] = context.getString(R.string.any_gender);
+        return genders;
     }
 
     private void bindUI()
