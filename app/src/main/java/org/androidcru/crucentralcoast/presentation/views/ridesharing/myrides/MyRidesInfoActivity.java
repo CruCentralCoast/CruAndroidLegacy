@@ -1,18 +1,13 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +15,6 @@ import timber.log.Timber;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruImage;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -28,11 +22,8 @@ import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
-import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,8 +35,6 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
 {
 
     private Ride ride;
-
-    private  AlertDialog alertDialog;
 
     //Injected Views
     @Bind(R.id.recyclerview) RecyclerView eventList;
@@ -123,12 +112,10 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
                 setAdapter();
                 spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
                 swipeRefreshLayout.setRefreshing(false);
-//                updateRide();
             }
         };
 
         setAdapter();
-//        setSupportActionBar(toolbar);
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
@@ -148,31 +135,6 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_rides_info_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    public void updateRide()
-    {
-        Timber.d("resetting ride");
-
-        Observer<Ride> observer = new Observer<Ride>()
-        {
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(Ride ride)
-            {
-                Timber.d("on next called");
-                setAdapter();
-                spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        };
-
-        RideProvider.requestRideByID(this, observer, ride.id);
     }
 
     public void forceUpdate()
