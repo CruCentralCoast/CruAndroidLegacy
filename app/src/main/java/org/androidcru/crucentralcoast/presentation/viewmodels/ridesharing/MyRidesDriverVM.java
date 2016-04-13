@@ -87,7 +87,7 @@ public class MyRidesDriverVM {
                 CruApplication.getContext().getString(R.string.alert_dialog_yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        RideProvider.dropRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id);
+                        RideProvider.dropRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id);
                     }
                 });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,

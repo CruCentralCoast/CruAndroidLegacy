@@ -60,7 +60,7 @@ public class MyRidesPassengerVM {
                     public void onClick(DialogInterface dialog, int which) {
                         for (Passenger p : ride.passengers) {
                             if (p.gcm_id.equals(CruApplication.getGCMID())) {
-                                RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id, p.id);
+                                RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id, p.id);
                             }
                         }
                     }
