@@ -59,7 +59,7 @@ public class MyRidesDriverVM {
         for (Passenger p : ride.passengers) {
             list.append(CruApplication.getContext().getString(R.string.myrides_passenger_list_name))
                     .append(p.name)
-                    .append("\n" + CruApplication.getContext().getString(R.string.myrides_passenger_list_name))
+                    .append("\n" + CruApplication.getContext().getString(R.string.myrides_passenger_list_name) + " ")
                     .append(p.phone)
                     .append("\n\n");
         }
@@ -87,7 +87,7 @@ public class MyRidesDriverVM {
                 CruApplication.getContext().getString(R.string.alert_dialog_yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        RideProvider.dropRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id);
+                        RideProvider.dropRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id);
                     }
                 });
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
