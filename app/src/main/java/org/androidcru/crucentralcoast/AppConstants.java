@@ -85,7 +85,6 @@ public class AppConstants
     public static final String EXPANDED = "Hide Description";
     public static final String RETRACTED = "Show Description";
     public static final String VIDEO_PLAY_FAILED_MESSAGE = "Unable to play video";
-    public static final String NO_DESCRIPTION = "No video description available.";
     public static final long YOUTUBE_QUERY_NUM = 20l;
     public static final String SPACE_COMMA_ESCAPE = "\\s*,\\s*";
 

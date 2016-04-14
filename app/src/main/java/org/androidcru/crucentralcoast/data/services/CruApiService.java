@@ -21,6 +21,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -76,9 +77,8 @@ public interface CruApiService
     @POST("/api/rides")
     Observable<Ride> postRide(@Body Ride ride);
 
-    //@POST("/api/rides/update")
-    @POST("/api/rides/")
-    Observable<Ride> updateRide(@Body Ride ride);
+    @PATCH("/api/rides/{ride_id}")
+    Observable<Ride> updateRide(@Path("ride_id") String rideId, @Body Ride ride);
 
     @POST("/api/passengers")
     Observable<Passenger> createPassenger(@Body Passenger passenger);
@@ -90,9 +90,6 @@ public interface CruApiService
     @DELETE("/api/rides/{ride_id}/passengers/{passenger_id}")
     Observable<Void> dropPassenger(@Path("ride_id") String rideId, @Path("passenger_id") String passengerId);
 
-    //@FormUrlEncoded
-    //@BODY_DELETE("/api/rides/")
-    //@HTTP(method = "DELETE", path = "api/rides/", hasBody = true)
     @DELETE("/api/rides/{ride_id}")
     Observable<Void> dropRide(@Path("ride_id") String rideId);
 

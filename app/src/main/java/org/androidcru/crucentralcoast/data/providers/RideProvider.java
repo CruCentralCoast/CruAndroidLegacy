@@ -142,15 +142,15 @@ public final class RideProvider
 
     public static void updateRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
     {
-        Subscription s = updateRide(ride)
+        Subscription s = updateRide(ride.id, ride)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<Ride> updateRide(Ride ride)
+    protected static Observable<Ride> updateRide(String rideId, Ride ride)
     {
-        return mCruService.updateRide(ride)
+        return mCruService.updateRide(rideId, ride)
                 .compose(RxComposeUtil.network());
     }
 
