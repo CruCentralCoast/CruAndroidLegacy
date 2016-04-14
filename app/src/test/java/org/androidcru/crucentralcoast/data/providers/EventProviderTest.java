@@ -3,8 +3,8 @@ package org.androidcru.crucentralcoast.data.providers;
 import com.google.gson.reflect.TypeToken;
 
 import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
 import org.androidcru.crucentralcoast.mocking.ServerTest;
 import org.junit.Test;
 
