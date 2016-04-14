@@ -20,6 +20,7 @@ public class PassengerSignupActivity extends FormActivity
     public static final String CRU_EVENT = "CRU_EVENT";
     public static final String SELECTED_RIDE = "SELECTED_RIDE";
     public static final String QUERY = "QUERY";
+    public static final String LATLNG = "LATLNG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

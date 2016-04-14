@@ -21,4 +21,28 @@ public class CruImage
         this.width = width;
         this.height = height;
     }
+
+    //Auto-generated equals and hashcode
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CruImage cruImage = (CruImage) o;
+
+        if (width != cruImage.width) return false;
+        if (height != cruImage.height) return false;
+        return !(url != null ? !url.equals(cruImage.url) : cruImage.url != null);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + width;
+        result = 31 * result + height;
+        return result;
+    }
 }

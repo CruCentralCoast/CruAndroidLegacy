@@ -9,24 +9,31 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.schedulers.Schedulers;
 
-public final class ApiProvider
+public class ApiProvider
 {
     private static CruApiService service;
 
-    static
+    public static CruApiService getService()
+    {
+        if(service == null)
+        {
+            setBaseUrl(BuildConfig.CRU_SERVER);
+        }
+
+        return service;
+    }
+
+    public static CruApiService setBaseUrl(String baseUrl)
     {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.CRU_SERVER)
+                .baseUrl(baseUrl)
                 .client(CruApplication.okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
 
         service = retrofit.create(CruApiService.class);
-    }
 
-    public static CruApiService getService()
-    {
         return service;
     }
 }

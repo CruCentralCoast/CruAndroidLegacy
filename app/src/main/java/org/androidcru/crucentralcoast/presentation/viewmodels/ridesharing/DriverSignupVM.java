@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mobsandgeeks.saripaar.annotation.Min;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 import com.mobsandgeeks.saripaar.annotation.Select;
@@ -74,7 +75,7 @@ public class DriverSignupVM extends BaseRideVM {
     @Bind(R.id.time_field) @NotEmpty EditText rideTime;
     @Bind(R.id.date_field) @NotEmpty EditText rideDate;
 
-    @Bind(R.id.car_capacity_field) @NotEmpty EditText carCapacity;
+    @Bind(R.id.car_capacity_field) @NotEmpty @Min(value = 1) EditText carCapacity;
 
     @Bind(R.id.radius_field) @NotEmpty TextView radiusField;
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
@@ -157,11 +158,10 @@ public class DriverSignupVM extends BaseRideVM {
         if (placeAddress != null) {
             String[] splitAddress = placeAddress.split(AppConstants.SPACE_COMMA_ESCAPE);
             String[] splitStateZip = splitAddress[2].split(" ");
-            Location loc;
 
             if (splitStateZip.length == 2)
             {
-                loc = new Location(splitStateZip[1], splitStateZip[0],
+                ride.location = new Location(splitStateZip[1], splitStateZip[0],
                         splitAddress[1], splitAddress[0], splitAddress[3],
                         new double[] {precisePlace.longitude, precisePlace.latitude});
             }

@@ -13,11 +13,8 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
@@ -30,6 +27,7 @@ import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.util.PrettyDebugTree;
+import org.androidcru.crucentralcoast.util.SerializedNameExclusionStrategy;
 import org.threeten.bp.ZonedDateTime;
 
 import io.fabric.sdk.android.Fabric;
@@ -38,7 +36,8 @@ import timber.log.Timber;
 
 public class CruApplication extends MultiDexApplication
 {
-    public static Gson gson;
+    public static Gson gson = setupGson();
+
     public static OkHttpClient okHttpClient;
     private static Context context;
     private static SharedPreferences sharedPreferences;
@@ -142,7 +141,7 @@ public class CruApplication extends MultiDexApplication
         }
     }
 
-    private void setupGson()
+    public static Gson setupGson()
     {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeConverter());
@@ -152,7 +151,8 @@ public class CruApplication extends MultiDexApplication
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.setPrettyPrinting();
-        gson = builder.create();
+
+        return builder.create();
     }
 
     public static void saveGCMID(String key)
@@ -164,22 +164,6 @@ public class CruApplication extends MultiDexApplication
     public static String getGCMID()
     {
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
-    }
-
-    private class SerializedNameExclusionStrategy implements ExclusionStrategy
-    {
-
-        @Override
-        public boolean shouldSkipField(FieldAttributes f)
-        {
-            return f.getAnnotation(SerializedName.class) == null;
-        }
-
-        @Override
-        public boolean shouldSkipClass(Class<?> clazz)
-        {
-            return false;
-        }
     }
 
 }

@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
@@ -34,6 +37,7 @@ public class DriverResultsFragment extends FormContentFragment
 
     private Query query;
     private List<Ride> results;
+    private LatLng passengerLocation;
 
     private Subscription subscription;
     private Observer<List<Ride>> rideResultsObserver;
@@ -94,6 +98,7 @@ public class DriverResultsFragment extends FormContentFragment
 
         formHolder.setTitle(getString(R.string.passenger_pick_driver));
         query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
+        passengerLocation = (LatLng) formHolder.getDataObject(PassengerSignupActivity.LATLNG);
 
         formHolder.setNavigationVisibility(View.VISIBLE);
         formHolder.setNextVisibility(View.GONE);
@@ -106,8 +111,8 @@ public class DriverResultsFragment extends FormContentFragment
     {
         swipeRefreshLayout.setRefreshing(true);
         results.clear();
-        //TODO GeocoderProvider was used to obtain LatLng for rides at this point
-        RideProvider.searchRides(this, rideResultsObserver, query);
+        RideProvider.searchRides(this, rideResultsObserver, query,
+                new Double[]{passengerLocation.latitude, passengerLocation.longitude});
     }
 
     private void handleResults(List<Ride> results)

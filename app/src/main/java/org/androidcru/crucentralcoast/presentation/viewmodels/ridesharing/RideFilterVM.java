@@ -29,7 +29,7 @@ import timber.log.Timber;
 
 public class RideFilterVM extends BaseRideVM
 {
-    private LatLng precisePlace;
+    public LatLng precisePlace;
     private CruEvent event;
 
     @Bind(R.id.round_trip) RadioButton roundTrip;

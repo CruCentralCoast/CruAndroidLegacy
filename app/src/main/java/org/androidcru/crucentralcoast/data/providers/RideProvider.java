@@ -4,10 +4,12 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
+import org.androidcru.crucentralcoast.data.providers.util.LocationUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
+import org.androidcru.crucentralcoast.util.MathUtil;
 
 import java.util.List;
 
@@ -95,17 +97,28 @@ public final class RideProvider
 
 
 
-    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query)
+    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, Double[] latlng)
     {
-        Subscription s = searchRides(query)
+        Subscription s = searchRides(query, latlng)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Ride>> searchRides(Query query)
+    protected static Observable<List<Ride>> searchRides(Query query, Double[] latlng)
     {
         return mCruService.searchRides(query)
+                .flatMap(rides -> {
+                    return Observable.from(rides);
+                })
+                .compose(RxLoggingUtil.log("RIDES BEFORE LOC FILTER"))
+                .filter(ride -> {
+                    double distance = LocationUtil.distance(ride.location.geo[1], latlng[0], ride.location.geo[0], latlng[1]);
+                    Timber.d(Double.toString(distance));
+                    return distance <= MathUtil.convertMilesToMeters(ride.radius);
+                })
+                .compose(RxLoggingUtil.log("RIDES AFTER LOC FILTER"))
+                .toList()
                 .compose(RxComposeUtil.network());
     }
 
@@ -129,15 +142,15 @@ public final class RideProvider
 
     public static void updateRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
     {
-        Subscription s = updateRide(ride)
+        Subscription s = updateRide(ride.id, ride)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<Ride> updateRide(Ride ride)
+    protected static Observable<Ride> updateRide(String rideId, Ride ride)
     {
-        return mCruService.updateRide(ride)
+        return mCruService.updateRide(rideId, ride)
                 .compose(RxComposeUtil.network());
     }
 

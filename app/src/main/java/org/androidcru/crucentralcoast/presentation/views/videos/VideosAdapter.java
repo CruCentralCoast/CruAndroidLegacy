@@ -111,7 +111,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         // Set the video description to the card's TextView
         holder.videoDescription.setText(searchResult.getSnippet().getDescription());
         if(holder.videoDescription.getText().length() == 0)
-            holder.videoDescription.setText(AppConstants.NO_DESCRIPTION);
+            holder.videoDescription.setText(R.string.videos_no_description);
 
         holder.videoDescription.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 

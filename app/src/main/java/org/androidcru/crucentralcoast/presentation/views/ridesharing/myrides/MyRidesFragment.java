@@ -15,7 +15,9 @@ import org.androidcru.crucentralcoast.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
+/**
+ * MyRidesFragment launches the MyRides section of the application.
+ */
 public class MyRidesFragment extends Fragment
 {
     @Bind(R.id.sliding_tabs) TabLayout tabLayout;
