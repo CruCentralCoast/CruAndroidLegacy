@@ -3,21 +3,22 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 @Parcel
 public class CruImage
 {
-    @SerializedName("url") public String url;
-    @SerializedName("width") public int width;
-    @SerializedName("height") public int height;
+    public static final String sUrl = "url";
+    public static final String sWidth = "width";
+    public static final String sHeight = "height";
 
-    /**
-     * Required for Gson/RetroFit
-     */
-    public CruImage() {}
+    @SerializedName(sUrl) public String url;
+    @SerializedName(sWidth) public int width;
+    @SerializedName(sHeight) public int height;
 
-    public CruImage(String URL, int width, int height) {
-        this.url = URL;
+    @ParcelConstructor
+    public CruImage(String url, int width, int height) {
+        this.url = url;
         this.width = width;
         this.height = height;
     }

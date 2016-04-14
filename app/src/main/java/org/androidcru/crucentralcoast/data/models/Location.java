@@ -1,26 +1,31 @@
 package org.androidcru.crucentralcoast.data.models;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 @Parcel
 public class Location
 {
-    @SerializedName("postcode") String postcode;
-    @SerializedName("state") String state;
-    @SerializedName("suburb") String suburb;
-    @SerializedName("street1") String street1;
-    @SerializedName("country") String country;
-    @SerializedName("geo") public double[] geo;
+    public static final String sPostcode = "postcode";
+    public static final String sState = "state";
+    public static final String sSuburb = "suburb";
+    public static final String sStreet1 = "street1";
+    public static final String sCountry = "country";
+    public static final String sGeo = "geo";
 
-    /**
-     * Required for Gson/RetroFit
-     */
-    public Location() {}
+    @SerializedName(sPostcode) public String postcode;
+    @SerializedName(sState) public String state;
+    @SerializedName(sSuburb) public String suburb;
+    @SerializedName(sStreet1) public String street1;
+    @SerializedName(sCountry) public String country;
+    @SerializedName(sGeo) public double[] geo;
 
-    public Location(String postcode, String state, String suburb, String street1, String country, double[] geo)
+    @ParcelConstructor
+    public Location(String postcode, String state,
+                    String suburb, String street1,
+                    String country, double[] geo)
     {
         this.postcode = postcode;
         this.state = state;

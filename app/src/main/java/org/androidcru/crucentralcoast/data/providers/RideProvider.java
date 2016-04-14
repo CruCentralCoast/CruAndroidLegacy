@@ -55,7 +55,7 @@ public final class RideProvider
                     boolean status = false;
                     for (Passenger p : ride.passengers)
                     {
-                        if (p.gcm_id != null && p.gcm_id.equals(CruApplication.getGCMID()))
+                        if (p.gcmId != null && p.gcmId.equals(CruApplication.getGCMID()))
                         {
                             status = true;
                         }

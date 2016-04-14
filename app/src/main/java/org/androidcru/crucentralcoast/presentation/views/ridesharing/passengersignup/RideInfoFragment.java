@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragmen
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
@@ -68,8 +71,11 @@ public class RideInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            formHolder.addDataObject(PassengerSignupActivity.QUERY, rideFilterVM.getQuery());
+            Pair<Query, Ride.Direction> queryDirectionPair = rideFilterVM.getQuery();
+            formHolder.addDataObject(PassengerSignupActivity.QUERY, queryDirectionPair.first);
+            formHolder.addDataObject(PassengerSignupActivity.DIRECTION, queryDirectionPair.second);
             formHolder.addDataObject(PassengerSignupActivity.LATLNG, rideFilterVM.precisePlace);
+
             super.onNext();
         }
     }

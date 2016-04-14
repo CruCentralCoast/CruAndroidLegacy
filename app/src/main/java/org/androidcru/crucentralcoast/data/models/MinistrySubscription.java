@@ -3,22 +3,25 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 import java.util.ArrayList;
 
 @Parcel
 public class MinistrySubscription
 {
-    @SerializedName("image") public CruImage cruImage;
-    @SerializedName("_id") public String subscriptionId;
-    @SerializedName("campuses") public ArrayList<String> campusId;
+    public static final String sCruImage = "image";
+    public static final String sSubscriptionId = "Id";
+    public static final String sCampusId = "campuses";
 
-    /**
-     * Required for Gson/RetroFit
-     */
-    public MinistrySubscription() {}
+    @SerializedName(sCruImage) public CruImage cruImage;
+    @SerializedName(sSubscriptionId) public String subscriptionId;
+    @SerializedName(sCampusId) public ArrayList<String> campusId;
 
-    public MinistrySubscription(CruImage cruImage, String subscriptionId, ArrayList<String> campusId)
+    @ParcelConstructor
+    public MinistrySubscription(CruImage cruImage,
+                                String subscriptionId,
+                                ArrayList<String> campusId)
     {
         this.cruImage = cruImage;
         this.subscriptionId = subscriptionId;

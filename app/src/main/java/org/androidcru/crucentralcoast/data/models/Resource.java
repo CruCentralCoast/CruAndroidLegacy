@@ -4,6 +4,8 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,25 +13,33 @@ import java.util.List;
 @Parcel
 public class Resource
 {
-    @SerializedName("_id") public String id;
-    @SerializedName("title") public String title;
-    @SerializedName("url") public String url;
-    @SerializedName("type") public ResourceType resourceType;
-    @SerializedName("tags") public List<String> tagIds;
+    public static final String sId = "_id";
+    public static final String sTitle = "title";
+    public static final String sDate = "date";
+    public static final String sUrl = "url";
+    public static final String sResourceType = "type";
+    public static final String sTagIds = "tags";
+
+    @SerializedName(sId) public String id;
+    @SerializedName(sTitle) public String title;
+    @SerializedName(sUrl) public String url;
+    @SerializedName(sResourceType) public ResourceType resourceType;
+    @SerializedName(sDate) ZonedDateTime date;
+    @SerializedName(sTagIds) public List<String> tagIds;
+
     public ArrayList<ResourceTag> tags;
 
-    private final String delimiter = ", ";
+    public final String delimiter = ", ";
 
-    /**
-     * Required for Gson/RetroFit
-     */
-    public Resource() {}
-
-    public Resource(String title, String url, ResourceType resourceType, ArrayList<ResourceTag> tags)
+    @ParcelConstructor
+    public Resource(String id, String title, String url, ResourceType resourceType, ZonedDateTime date, List<String> tagIds, ArrayList<ResourceTag> tags)
     {
+        this.id = id;
         this.title = title;
         this.url = url;
         this.resourceType = resourceType;
+        this.date = date;
+        this.tagIds = tagIds;
         this.tags = tags;
     }
 

@@ -3,21 +3,21 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 /**
  * Java representation of the model from the server
  */
-@Parcel
+@Parcel()
 public class Campus
 {
-    @SerializedName("_id") public String id;
-    @SerializedName("name") public String campusName;
+    public static final String sId = "_id";
+    public static final String sName = "name";
 
-    /**
-     * Required for Gson/RetroFit
-     */
-    public Campus() {}
+    @SerializedName(sId) public String id;
+    @SerializedName(sName) public String campusName;
 
+    @ParcelConstructor
     public Campus(String id, String campusName)
     {
         this.id = id;
