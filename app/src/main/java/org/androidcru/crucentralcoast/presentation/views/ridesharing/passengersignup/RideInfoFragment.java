@@ -69,6 +69,7 @@ public class RideInfoFragment extends FormContentFragment {
         if(validator.validate())
         {
             formHolder.addDataObject(PassengerSignupActivity.QUERY, rideFilterVM.getQuery());
+            formHolder.addDataObject(PassengerSignupActivity.LATLNG, rideFilterVM.precisePlace);
             super.onNext();
         }
     }

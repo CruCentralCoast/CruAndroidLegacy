@@ -157,11 +157,10 @@ public class DriverSignupVM extends BaseRideVM {
         if (placeAddress != null) {
             String[] splitAddress = placeAddress.split(AppConstants.SPACE_COMMA_ESCAPE);
             String[] splitStateZip = splitAddress[2].split(" ");
-            Location loc;
 
             if (splitStateZip.length == 2)
             {
-                loc = new Location(splitStateZip[1], splitStateZip[0],
+                ride.location = new Location(splitStateZip[1], splitStateZip[0],
                         splitAddress[1], splitAddress[0], splitAddress[3],
                         new double[] {precisePlace.longitude, precisePlace.latitude});
             }
