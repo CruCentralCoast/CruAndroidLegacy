@@ -1,17 +1,18 @@
 package org.androidcru.crucentralcoast.tests;
 
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.common.RxIdlingResource;
+import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
+import org.androidcru.crucentralcoast.mocking.ServerTest;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+
+import okhttp3.mockwebserver.MockResponse;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -22,17 +23,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.androidcru.crucentralcoast.common.RecyclerViewUtils.withRecyclerView;
 import static org.hamcrest.core.IsNot.not;
 
-public class EventsTests {
-
+public class EventsTests extends ServerTest
+{
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class);
-
-    //call this so that Espresso will wait for network requests to complete before asserting UI stuff
-    @BeforeClass
-         public static void setup()
-    {
-        Espresso.registerIdlingResources(RxIdlingResource.get());
-    }
 
     private void switchEvents()
     {
@@ -43,6 +37,9 @@ public class EventsTests {
 
     @Test
     public void doNothing() {
+        String eventsJson = ResourcesUtil.getResourceAsString(getClass().getClassLoader(), "events.json");
+        server.enqueue(new MockResponse().setBody(eventsJson));
+
         switchEvents();
 
         //click on first item
