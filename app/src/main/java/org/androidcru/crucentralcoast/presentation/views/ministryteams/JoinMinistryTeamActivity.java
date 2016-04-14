@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class JoinMinistryTeamActivity extends FormActivity
 {
     public MinistryTeam ministryTeam;
-
     public static final String MINISTRY_TEAM = "MINISTRY_TEAM";
 
     @Override
@@ -40,10 +39,12 @@ public class JoinMinistryTeamActivity extends FormActivity
         MinistryTeamInformationFragment ministryTeamInformationFragment = new MinistryTeamInformationFragment();
         ministryTeamInformationFragment.setArguments(bundle);
 
+        // set up the form holder arraylist with the various fragments
         fragments.add(ministryTeamInformationFragment);
         fragments.add(new BasicInfoFragment());
         fragments.add(new MinistryTeamLeaderInformationFragment());
 
+        // adds the ministry team to the form holder so other fragments will have access to it
         addDataObject(MINISTRY_TEAM, ministryTeam);
         setFormContent(fragments);
     }

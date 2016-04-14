@@ -39,10 +39,13 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        // gets back the ministry team object from the form holder.
         ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
 
         formHolder.setTitle(ministryTeam.name);
 
+        // For each ministry team leader insert their information into the text view.
+        // This should be done with injecting custom views
         for (CruUser user : ministryTeam.ministryTeamLeaders)
         {
             ministryTeamLeaderInfo.setText(
@@ -51,7 +54,5 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
                             (user.email != null ? user.email + "\n    " : "")  +
                             (user.phoneNumber != null ? user.phoneNumber + "\n" : "") + "\n");
         }
-
-        //formHolder.setFormState(FormState.FINISH);
     }
 }

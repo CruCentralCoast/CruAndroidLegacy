@@ -1,6 +1,9 @@
 package org.androidcru.crucentralcoast.presentation.views;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,17 +12,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruUser;
+import org.androidcru.crucentralcoast.data.providers.UserProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
@@ -30,7 +38,10 @@ import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
 
 import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity
+import rx.Observer;
+import rx.observers.Observers;
+
+public class MainActivity extends BaseAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
     private static MainActivity self;
@@ -64,9 +75,40 @@ public class MainActivity extends AppCompatActivity
         }
 
         checkPlayServicesCode();
+        setupAutoFillData();
     }
 
+    /**
+     * If this is the first time the
+     */
+    private void setupAutoFillData()
+    {
+        if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))
+        {
+            RxPermissions.getInstance(this)
+                .request(Manifest.permission.READ_PHONE_STATE)
+                .subscribe(granted -> {
+                    if (granted)
+                    {
+                        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                        String userPhoneNumber = telephonyManager.getLine1Number();
+                        if (userPhoneNumber != null)
+                            userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
 
+                        CruApplication.getSharedPreferences().edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
+
+                        Observer<CruUser> observer = Observers.create(cruUser -> {
+                            SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
+                            userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
+                            userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+                        });
+
+                        UserProvider.requestCruUser(this, observer, userPhoneNumber);
+                    }
+                });
+        }
+        CruApplication.getSharedPreferences().edit().putBoolean(AppConstants.FIRST_LAUNCH, true).apply();
+    }
 
     private void checkPlayServicesCode()
     {

@@ -25,8 +25,8 @@ public class MinistryTeamsFragment extends BaseSupportFragment
 {
     @Bind(R.id.subscription_list) RecyclerView subscriptionList;
     @Bind(R.id.progress) ProgressBar progressBar;
-    private GridLayoutManager mLayoutManager;
-    private MinistryTeamsAdapter mMinistryTeamsAdapter;
+    private GridLayoutManager layoutManager;
+    private MinistryTeamsAdapter ministryTeamsAdapter;
     private Observer<List<MinistryTeam>> observer;
 
     public MinistryTeamsFragment()
@@ -43,14 +43,13 @@ public class MinistryTeamsFragment extends BaseSupportFragment
             @Override
             public void onError(Throwable e)
             {
-
             }
 
             @Override
             public void onNext(List<MinistryTeam> ministryTeams)
             {
-                mMinistryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), ministryTeams);
-                subscriptionList.setAdapter(mMinistryTeamsAdapter);
+                ministryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), ministryTeams);
+                subscriptionList.setAdapter(ministryTeamsAdapter);
             }
         };
     }
@@ -67,12 +66,12 @@ public class MinistryTeamsFragment extends BaseSupportFragment
     {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        mMinistryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), new ArrayList<>());
+        ministryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), new ArrayList<>());
         subscriptionList.setHasFixedSize(true);
-        subscriptionList.setAdapter(mMinistryTeamsAdapter);
+        subscriptionList.setAdapter(ministryTeamsAdapter);
 
-        mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        subscriptionList.setLayoutManager(mLayoutManager);
+        layoutManager = new GridLayoutManager(getActivity(), 2);
+        subscriptionList.setLayoutManager(layoutManager);
 
         getMinistryTeamsList();
     }

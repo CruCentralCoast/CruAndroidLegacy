@@ -41,9 +41,11 @@ public class MinistryTeamInformationFragment extends FormContentFragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        // retrieve the ministry team from the form holder
         ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
         formHolder.setTitle(ministryTeam.name);
 
+        // setup the image that is tied to this ministry team
         ViewUtil.setSource(ministryInfoImage, ministryTeam.teamImage != null ? ministryTeam.teamImage.url : null, 0, null, null);
         ministryTeamDescription.setText(ministryTeam.description);
     }

@@ -109,7 +109,7 @@ dependencies {
     //Rx
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.0'
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.6.1@aar'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
     compile 'com.artemzin.rxjava:proguard-rules:1.1.2.0'
 
 

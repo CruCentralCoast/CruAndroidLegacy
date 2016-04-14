@@ -12,16 +12,15 @@ import org.androidcru.crucentralcoast.R;
  */
 public class SubscriptionActivity extends AppCompatActivity
 {
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_startup);
 
-        //REVIEW magic strings
-        getSupportActionBar().setTitle("Subscriptions");
-        getSupportActionBar().setSubtitle("Select ministries of interest");
+        // sets up the Subscription Activity title, subtitle and view
+        getSupportActionBar().setTitle(R.string.subscriptions);
+        getSupportActionBar().setSubtitle(getString(R.string.subscription_subheader));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
     }
 }
