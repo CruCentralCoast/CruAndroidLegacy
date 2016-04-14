@@ -6,6 +6,8 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
+import org.androidcru.crucentralcoast.mocking.ServerTest;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.junit.Rule;
 import org.junit.Test;
