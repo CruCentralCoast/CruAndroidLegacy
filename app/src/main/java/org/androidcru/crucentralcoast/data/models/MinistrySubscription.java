@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MinistrySubscription
 {
     public static final String sCruImage = "image";
-    public static final String sSubscriptionId = "Id";
+    public static final String sSubscriptionId = "_id";
     public static final String sCampusId = "campuses";
 
     @SerializedName(sCruImage) public CruImage cruImage;
@@ -19,12 +19,5 @@ public class MinistrySubscription
     @SerializedName(sCampusId) public ArrayList<String> campusId;
 
     @ParcelConstructor
-    public MinistrySubscription(CruImage cruImage,
-                                String subscriptionId,
-                                ArrayList<String> campusId)
-    {
-        this.cruImage = cruImage;
-        this.subscriptionId = subscriptionId;
-        this.campusId = campusId;
-    }
+    protected MinistrySubscription() {}
 }

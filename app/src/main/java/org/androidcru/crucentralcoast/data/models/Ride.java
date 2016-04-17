@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.data.models;
 
-import android.location.Address;
-
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
@@ -41,10 +39,8 @@ public class Ride
     @SerializedName(sId) public String id;
     @SerializedName(sSeats) public int carCapacity;
 
-    public Address address;
     public List<Passenger> passengers;
     public CruEvent event;
-
 
     @ParcelConstructor
     public Ride(String driverName, String driverNumber, Gender gender, String eventId,
@@ -66,6 +62,24 @@ public class Ride
     public boolean isEmpty()
     {
         return id == null;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ride ride = (Ride) o;
+
+        return id.equals(ride.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 
     public enum Direction

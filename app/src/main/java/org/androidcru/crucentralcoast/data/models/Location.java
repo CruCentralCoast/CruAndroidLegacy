@@ -46,4 +46,32 @@ public class Location
     {
         return String.format("%s %s, %s, %s, %s", street1, suburb, state, postcode, country);
     }
+
+    //Auto-generated equals and hashcode
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Location location = (Location) o;
+
+        if (!postcode.equals(location.postcode)) return false;
+        if (!state.equals(location.state)) return false;
+        if (!suburb.equals(location.suburb)) return false;
+        if (!street1.equals(location.street1)) return false;
+        return country.equals(location.country);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = postcode.hashCode();
+        result = 31 * result + state.hashCode();
+        result = 31 * result + suburb.hashCode();
+        result = 31 * result + street1.hashCode();
+        result = 31 * result + country.hashCode();
+        return result;
+    }
 }

@@ -16,7 +16,9 @@ public class SummerMission
     public static final String sStartDate = "startDate";
     public static final String sEndDate = "endDate";
     public static final String sUrl = "url";
+    public static final String sId = "_id";
 
+    @SerializedName(sId) public String id;
     @SerializedName(sDescription) public String description;
     @SerializedName(sName) public String name;
     @SerializedName(sImage) public CruImage image;
@@ -26,17 +28,23 @@ public class SummerMission
     @SerializedName(sUrl) public String url;
 
     @ParcelConstructor
-    public SummerMission(String description, String name,
-                         CruImage image,String leaders,
-                         ZonedDateTime startDate, ZonedDateTime endDate,
-                         String url)
+    protected SummerMission() {}
+
+    @Override
+    public boolean equals(Object o)
     {
-        this.description = description;
-        this.name = name;
-        this.image = image;
-        this.leaders = leaders;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.url = url;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SummerMission that = (SummerMission) o;
+
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 }

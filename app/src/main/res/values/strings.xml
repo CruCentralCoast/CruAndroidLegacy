@@ -140,6 +140,8 @@
     <string name="ride_datetime_hint">Ride Time</string>
     <string name="ride_dir_to">To Event</string>
     <string name="ride_dir_roundtrip">Round-Trip</string>
+    <string name="subscription_subheader">Select ministries of interest</string>
+    <string name="subscriptions">Subscriptions</string>
     <string name="videos_no_description">No video description available.</string>
 
     <string-array name="myrides_titles">

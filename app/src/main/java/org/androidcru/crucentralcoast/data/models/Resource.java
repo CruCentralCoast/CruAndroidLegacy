@@ -29,19 +29,10 @@ public class Resource
 
     public ArrayList<ResourceTag> tags;
 
-    public final String delimiter = ", ";
+    private static final String delimiter = ", ";
 
     @ParcelConstructor
-    public Resource(String id, String title, String url, ResourceType resourceType, ZonedDateTime date, List<String> tagIds, ArrayList<ResourceTag> tags)
-    {
-        this.id = id;
-        this.title = title;
-        this.url = url;
-        this.resourceType = resourceType;
-        this.date = date;
-        this.tagIds = tagIds;
-        this.tags = tags;
-    }
+    protected Resource() {}
 
     public String formatTags()
     {
@@ -54,6 +45,24 @@ public class Resource
             result = result.substring(0, result.length() - delimiter.length());
 
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Resource resource = (Resource) o;
+
+        return id.equals(resource.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 
     public enum ResourceType

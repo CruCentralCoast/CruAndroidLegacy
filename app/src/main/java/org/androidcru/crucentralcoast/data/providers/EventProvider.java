@@ -11,7 +11,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 
-public final class EventProvider
+public class EventProvider
 {
     private static CruApiService cruService = ApiProvider.getService();
 
@@ -25,7 +25,6 @@ public final class EventProvider
 
     protected static Observable<ArrayList<CruEvent>> requestEvents()
     {
-
         return cruService.getEvents()
                 .compose(RxComposeUtil.network());
     }

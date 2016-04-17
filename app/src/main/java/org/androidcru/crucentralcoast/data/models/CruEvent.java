@@ -33,28 +33,24 @@ public class CruEvent
     @SerializedName(sUrl) public String url;
     @SerializedName(sParentMinistrySubscriptions) public ArrayList<String> parentMinistrySubscriptions;
 
-    public CruEvent(String name, Location location, ZonedDateTime endDate, ZonedDateTime startDate)
+    @ParcelConstructor
+    protected CruEvent() {}
+
+    @Override
+    public boolean equals(Object o)
     {
-        this.name = name;
-        this.location = location;
-        this.endDate = endDate;
-        this.startDate = startDate;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CruEvent cruEvent = (CruEvent) o;
+
+        return id != null ? id.equals(cruEvent.id) : cruEvent.id == null;
+
     }
 
-    @ParcelConstructor
-    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate,
-                    boolean rideSharingEnabled, Location location, CruImage image, String id,
-                    String url, ArrayList<String> parentMinistrySubscriptions)
+    @Override
+    public int hashCode()
     {
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.rideSharingEnabled = rideSharingEnabled;
-        this.location = location;
-        this.image = image;
-        this.id = id;
-        this.url = url;
-        this.parentMinistrySubscriptions = parentMinistrySubscriptions;
+        return id != null ? id.hashCode() : 0;
     }
 }

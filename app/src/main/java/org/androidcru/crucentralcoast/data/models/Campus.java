@@ -18,11 +18,7 @@ public class Campus
     @SerializedName(sName) public String campusName;
 
     @ParcelConstructor
-    public Campus(String id, String campusName)
-    {
-        this.id = id;
-        this.campusName = campusName;
-    }
+    protected Campus () {}
 
     @Override
     public boolean equals(Object o)

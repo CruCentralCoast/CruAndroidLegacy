@@ -43,8 +43,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
         MinistryTeamHolder ministryTeamHolder = (MinistryTeamHolder) holder;
-
-        //TODO temporary for now
+        // sets up the ministry team box logo for each ministry based on their position
         CruImage cruImage = ministryTeams.get(position).cruImage;
         if(cruImage != null)
             ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);

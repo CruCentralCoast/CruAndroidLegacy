@@ -43,9 +43,9 @@ public class MyRidesPassengerVM {
 
     public String getDriverInfo() {
         return CruApplication.getContext().getString(R.string.myrides_passenger_list_name)
-                + ride.driverName + "\n"
+                + " " + ride.driverName + "\n"
                 + CruApplication.getContext().getString(R.string.myrides_passenger_list_phone)
-                + ride.driverNumber;
+                + " " + ride.driverNumber;
     }
 
     private void initAlertDialog()
@@ -60,7 +60,7 @@ public class MyRidesPassengerVM {
                     public void onClick(DialogInterface dialog, int which) {
                         for (Passenger p : ride.passengers) {
                             if (p.gcmId.equals(CruApplication.getGCMID())) {
-                                RideProvider.dropPassengerFromRide(parent, Observers.create(v -> parent.forceUpdate()), ride.id, p.id);
+                                RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id, p.id);
                             }
                         }
                     }

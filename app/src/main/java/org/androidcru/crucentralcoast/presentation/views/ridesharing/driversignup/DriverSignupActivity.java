@@ -44,7 +44,6 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
     private MapFragment mapFragment;
 
-    private ZonedDateTime eventStartDate;
     private CruEvent event;
 
     @Override
@@ -53,7 +52,6 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         setContentView(R.layout.activity_driver_form);
         //get event from bundle
         Bundle bundle = getIntent().getExtras();
-//        eventStartDate = bundle.getString(AppConstants.EVENT_ID, "");
         event = (CruEvent)Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
         if(bundle == null || event == null)
         {
@@ -90,7 +88,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private Ride completeRide(Ride r)
     {
         r.gcmID = CruApplication.getGCMID();
-//        r.eventId = eventStartDate; //TODO: do we need this??
+        r.eventId = event.id;
         return r;
     }
 
@@ -116,7 +114,6 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     private void requestRides(String rideId)
     {
-        //TODO GeocodeProvider was used to populate the address of the Ride at this time
         RideProvider.requestRideByID(this,
                 Observers.create(
                         ride -> {

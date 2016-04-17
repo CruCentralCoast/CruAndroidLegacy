@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MinistryTeam
 {
 
-    public static final String sId = "Id";
+    public static final String sId = "_id";
     public static final String sCruImage = "image";
     public static final String sTeamImage = "teamImage";
     public static final String sDescription = "description";
@@ -27,17 +27,6 @@ public class MinistryTeam
 
     public ArrayList<CruUser> ministryTeamLeaders;
 
-
     @ParcelConstructor
-    public MinistryTeam(String id, CruImage cruImage,
-                        CruImage teamImage,String name,
-                        String description, String parentMinistryId)
-    {
-        this.id = id;
-        this.cruImage = cruImage;
-        this.teamImage = teamImage;
-        this.description = description;
-        this.name = name;
-        this.parentMinistryId = parentMinistryId;
-    }
+    protected MinistryTeam() {}
 }

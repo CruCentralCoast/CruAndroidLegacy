@@ -15,9 +15,23 @@ public class ResourceTag
     @SerializedName(sTitle) public String title;
 
     @ParcelConstructor
-    public ResourceTag(String id, String title)
+    protected ResourceTag() {}
+
+    @Override
+    public boolean equals(Object o)
     {
-        this.id = id;
-        this.title = title;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResourceTag that = (ResourceTag) o;
+
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 }

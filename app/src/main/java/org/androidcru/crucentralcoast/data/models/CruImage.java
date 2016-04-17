@@ -17,9 +17,5 @@ public class CruImage
     @SerializedName(sHeight) public int height;
 
     @ParcelConstructor
-    public CruImage(String url, int width, int height) {
-        this.url = url;
-        this.width = width;
-        this.height = height;
-    }
+    protected CruImage() {}
 }

@@ -49,6 +49,7 @@ public class BasicInfoFragment extends FormContentFragment
 
         formHolder.setTitle("Contact Information");
 
+        // Autofills the form if the information is available
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
         emailField.setText(sharedPreferences.getString(AppConstants.USER_EMAIL, null));
@@ -63,7 +64,6 @@ public class BasicInfoFragment extends FormContentFragment
             sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_EMAIL, emailField.getText().toString()).apply();
-
 
             super.onNext();
         }

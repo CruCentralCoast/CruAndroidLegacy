@@ -99,3 +99,11 @@
 # retrolambda
 
 -dontwarn java.lang.invoke.*
+
+# ThreeTenBP
+
+-dontwarn java.util.spi.LocaleServiceProvider
+-dontwarn sun.util.calendar.*
+-keep class org.threeten.bp.zone.*
+
+-keepclassmembers class org.threeten.bp.** { *; }

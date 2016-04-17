@@ -1,16 +1,13 @@
 package org.androidcru.crucentralcoast.tests;
 
 
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 
 import junit.framework.AssertionFailedError;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.common.RxIdlingResource;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,13 +23,6 @@ public class SubscriptionsTests
 {
     @Rule
     public ActivityTestRule<SubscriptionActivity> activityRule = new ActivityTestRule<SubscriptionActivity>(SubscriptionActivity.class);
-
-    //call this so that Espresso will wait for network requests to complete before asserting UI stuff
-    @BeforeClass
-    public static void setup()
-    {
-        Espresso.registerIdlingResources(RxIdlingResource.get());
-    }
 
     @Test
     public void testToggleMinistry()

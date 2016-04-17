@@ -97,7 +97,6 @@ public class SubscriptionsFragment extends BaseSupportFragment
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
-            CruApplication.getSharedPreferences().edit().putBoolean(AppConstants.FIRST_LAUNCH, true).apply();
             getActivity().finish();
         });
 
