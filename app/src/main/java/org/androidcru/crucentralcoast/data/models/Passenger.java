@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public class Passenger
+public final class Passenger
 {
     public static final String sName = "name";
     public static final String sPhone = "phone";

@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public class CruUser
+public final class CruUser
 {
     public static final String sId = "_id";
     public static final String sName = "name";
@@ -19,7 +19,7 @@ public class CruUser
     @SerializedName(sPhone) public String phone;
 
     @ParcelConstructor
-    protected CruUser() {}
+    CruUser() {}
 
     @Override
     public boolean equals(Object o)

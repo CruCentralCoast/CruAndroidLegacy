@@ -9,7 +9,7 @@ import org.threeten.bp.ZonedDateTime;
 import java.util.ArrayList;
 
 @Parcel
-public class CruEvent
+public final class CruEvent
 {
     public static final String sName = "name";
     public static final String sDescription = "description";
@@ -34,7 +34,7 @@ public class CruEvent
     @SerializedName(sParentMinistrySubscriptions) public ArrayList<String> parentMinistrySubscriptions;
 
     @ParcelConstructor
-    protected CruEvent() {}
+    CruEvent() {}
 
     @Override
     public boolean equals(Object o)

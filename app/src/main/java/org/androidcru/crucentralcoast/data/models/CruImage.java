@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public class CruImage
+public final class CruImage
 {
     public static final String sUrl = "url";
     public static final String sWidth = "width";
@@ -17,5 +17,5 @@ public class CruImage
     @SerializedName(sHeight) public int height;
 
     @ParcelConstructor
-    protected CruImage() {}
+    CruImage() {}
 }

@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public class ResourceTag
+public final class ResourceTag
 {
     public static final String sId = "_id";
     public static final String sTitle = "title";
@@ -15,7 +15,7 @@ public class ResourceTag
     @SerializedName(sTitle) public String title;
 
     @ParcelConstructor
-    protected ResourceTag() {}
+    ResourceTag() {}
 
     @Override
     public boolean equals(Object o)

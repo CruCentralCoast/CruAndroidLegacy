@@ -8,7 +8,7 @@ import org.parceler.ParcelConstructor;
 import java.util.ArrayList;
 
 @Parcel
-public class MinistryTeam
+public final class MinistryTeam
 {
 
     public static final String sId = "_id";
@@ -28,5 +28,5 @@ public class MinistryTeam
     public ArrayList<CruUser> ministryTeamLeaders;
 
     @ParcelConstructor
-    protected MinistryTeam() {}
+    MinistryTeam() {}
 }

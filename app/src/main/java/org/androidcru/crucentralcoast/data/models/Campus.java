@@ -9,7 +9,7 @@ import org.parceler.ParcelConstructor;
  * Java representation of the model from the server
  */
 @Parcel()
-public class Campus
+public final class Campus
 {
     public static final String sId = "_id";
     public static final String sName = "name";
@@ -18,7 +18,7 @@ public class Campus
     @SerializedName(sName) public String campusName;
 
     @ParcelConstructor
-    protected Campus () {}
+    Campus () {}
 
     @Override
     public boolean equals(Object o)

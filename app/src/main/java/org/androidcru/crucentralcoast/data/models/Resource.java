@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
-public class Resource
+public final class Resource
 {
     public static final String sId = "_id";
     public static final String sTitle = "title";
@@ -32,7 +32,7 @@ public class Resource
     private static final String delimiter = ", ";
 
     @ParcelConstructor
-    protected Resource() {}
+    Resource() {}
 
     public String formatTags()
     {

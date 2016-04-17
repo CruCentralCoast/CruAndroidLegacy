@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public class CruName
+public final class CruName
 {
     public static final String sLastName = "last";
     public static final String sFirstName = "first";

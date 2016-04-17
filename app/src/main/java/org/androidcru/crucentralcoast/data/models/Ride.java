@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Parcel
-public class Ride
+public final class Ride
 {
     public static final String sDriverName = "driverName";
     public static final String sDriverNumber = "driverNumber";

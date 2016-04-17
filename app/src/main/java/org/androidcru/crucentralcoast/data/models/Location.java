@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public class Location
+public final class Location
 {
     public static final String sPostcode = "postcode";
     public static final String sState = "state";

@@ -7,7 +7,7 @@ import org.parceler.ParcelConstructor;
 import org.threeten.bp.ZonedDateTime;
 
 @Parcel
-public class SummerMission
+public final class SummerMission
 {
     public static final String sDescription = "description";
     public static final String sName = "name";
@@ -28,7 +28,7 @@ public class SummerMission
     @SerializedName(sUrl) public String url;
 
     @ParcelConstructor
-    protected SummerMission() {}
+    SummerMission() {}
 
     @Override
     public boolean equals(Object o)

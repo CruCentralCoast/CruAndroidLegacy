@@ -8,7 +8,7 @@ import org.parceler.ParcelConstructor;
 import java.util.ArrayList;
 
 @Parcel
-public class MinistrySubscription
+public final class MinistrySubscription
 {
     public static final String sCruImage = "image";
     public static final String sSubscriptionId = "_id";
@@ -19,5 +19,5 @@ public class MinistrySubscription
     @SerializedName(sCampusId) public ArrayList<String> campusId;
 
     @ParcelConstructor
-    protected MinistrySubscription() {}
+    MinistrySubscription() {}
 }
