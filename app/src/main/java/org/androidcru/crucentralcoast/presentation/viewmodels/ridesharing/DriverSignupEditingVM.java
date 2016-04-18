@@ -4,6 +4,9 @@ import android.app.FragmentManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
@@ -15,10 +18,9 @@ import java.util.GregorianCalendar;
 
 import butterknife.OnClick;
 
-/**
- * Created by main on 4/7/2016.
- */
 public class DriverSignupEditingVM extends DriverSignupVM {
+
+    private Ride ride;
 
     public DriverSignupEditingVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride, ZonedDateTime eventEndTime) {
         super(activity, fm, ride.eventId, eventEndTime);
@@ -73,5 +75,15 @@ public class DriverSignupEditingVM extends DriverSignupVM {
     public void onDateClicked(View v) {
         GregorianCalendar gc = DateTimeUtils.toGregorianCalendar(ride.time);
         onEventDateClicked(v, gc);
+    }
+
+    @Override
+    public OnMapReadyCallback onMapReady()
+    {
+        return googleMap -> {
+            DriverSignupEditingVM.super.onMapReady().onMapReady(googleMap);
+            if (ride != null && ride.location != null)
+                updateMap(new LatLng(ride.location.geo[1], ride.location.geo[0]));
+        };
     }
 }

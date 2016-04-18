@@ -3,18 +3,35 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 @Parcel
-public class ResourceTag
+public final class ResourceTag
 {
-    @SerializedName("_id") public String id;
-    @SerializedName("title") public String title;
+    public static final String sId = "_id";
+    public static final String sTitle = "title";
 
-    public ResourceTag() {}
+    @SerializedName(sId) public String id;
+    @SerializedName(sTitle) public String title;
 
-    public ResourceTag(String id, String title)
+    @ParcelConstructor
+    ResourceTag() {}
+
+    @Override
+    public boolean equals(Object o)
     {
-        this.id = id;
-        this.title = title;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResourceTag that = (ResourceTag) o;
+
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 }

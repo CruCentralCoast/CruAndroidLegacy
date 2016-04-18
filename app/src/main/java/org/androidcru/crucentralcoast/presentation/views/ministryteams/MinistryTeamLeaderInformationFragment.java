@@ -52,7 +52,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
                     ministryTeamLeaderInfo.getText().toString() +
                             user.name.firstName + " " + user.name.lastName + "\n    " +
                             (user.email != null ? user.email + "\n    " : "")  +
-                            (user.phoneNumber != null ? user.phoneNumber + "\n" : "") + "\n");
+                            (user.phone != null ? user.phone + "\n" : "") + "\n");
         }
     }
 }

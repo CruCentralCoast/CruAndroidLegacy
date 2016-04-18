@@ -21,6 +21,7 @@ public class PassengerSignupActivity extends FormActivity
     public static final String SELECTED_RIDE = "SELECTED_RIDE";
     public static final String QUERY = "QUERY";
     public static final String LATLNG = "LATLNG";
+    public static final String DIRECTION = "DIRECTION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

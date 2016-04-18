@@ -3,44 +3,39 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 
 @Parcel
-public class CruEvent
+public final class CruEvent
 {
-    @SerializedName("name") public String name;
-    @SerializedName("description") public String description;
-    @SerializedName("startDate") public ZonedDateTime startDate;
-    @SerializedName("endDate") public ZonedDateTime endDate;
-    @SerializedName("rideSharingEnabled") public boolean rideSharingEnabled;
-    @SerializedName("location") public Location location;
-    @SerializedName("image") public CruImage image;
-    @SerializedName("_id") public String id;
-    @SerializedName("url") public String url;
-    @SerializedName("parentMinistries") public ArrayList<String> parentMinistrySubscriptions;
+    public static final String sName = "name";
+    public static final String sDescription = "description";
+    public static final String sStartDate = "startDate";
+    public static final String sEndDate = "endDate";
+    public static final String sRideSharingEnabled = "rideSharingEnabled";
+    public static final String sLocation = "location";
+    public static final String sImage = "image";
+    public static final String sId = "_id";
+    public static final String sUrl = "url";
+    public static final String sParentMinistrySubscriptions = "parentMinistries";
 
-    /**
-     * Required by GSON/RetroFit
-     */
-    public CruEvent() {}
+    @SerializedName(sName) public String name;
+    @SerializedName(sDescription) public String description;
+    @SerializedName(sStartDate) public ZonedDateTime startDate;
+    @SerializedName(sEndDate) public ZonedDateTime endDate;
+    @SerializedName(sRideSharingEnabled) public boolean rideSharingEnabled;
+    @SerializedName(sLocation) public Location location;
+    @SerializedName(sImage) public CruImage image;
+    @SerializedName(sId) public String id;
+    @SerializedName(sUrl) public String url;
+    @SerializedName(sParentMinistrySubscriptions) public ArrayList<String> parentMinistrySubscriptions;
 
-    public CruEvent(String name, String description, ZonedDateTime startDate, ZonedDateTime endDate,
-                    Location location, boolean rideSharingEnabled, String url, CruImage image, ArrayList<String> parentMinistrySubscriptions)
-    {
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.location = location;
-        this.rideSharingEnabled = rideSharingEnabled;
-        this.image = image;
-        this.url = url;
-        this.parentMinistrySubscriptions = parentMinistrySubscriptions;
-    }
+    @ParcelConstructor
+    CruEvent() {}
 
-    //Auto-generated equals and hashcode
     @Override
     public boolean equals(Object o)
     {
@@ -49,32 +44,13 @@ public class CruEvent
 
         CruEvent cruEvent = (CruEvent) o;
 
-        if (rideSharingEnabled != cruEvent.rideSharingEnabled) return false;
-        if (!name.equals(cruEvent.name)) return false;
-        if (description != null ? !description.equals(cruEvent.description) : cruEvent.description != null)
-            return false;
-        if (!startDate.equals(cruEvent.startDate)) return false;
-        if (!endDate.equals(cruEvent.endDate)) return false;
-        if (!location.equals(cruEvent.location)) return false;
-        if (image != null ? !image.equals(cruEvent.image) : cruEvent.image != null) return false;
-        if (id != null ? !id.equals(cruEvent.id) : cruEvent.id != null) return false;
-        return !(url != null ? !url.equals(cruEvent.url) : cruEvent.url != null) && !(parentMinistrySubscriptions != null ? !parentMinistrySubscriptions.equals(cruEvent.parentMinistrySubscriptions) : cruEvent.parentMinistrySubscriptions != null);
+        return id != null ? id.equals(cruEvent.id) : cruEvent.id == null;
 
     }
 
     @Override
     public int hashCode()
     {
-        int result = name.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + startDate.hashCode();
-        result = 31 * result + endDate.hashCode();
-        result = 31 * result + (rideSharingEnabled ? 1 : 0);
-        result = 31 * result + location.hashCode();
-        result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (parentMinistrySubscriptions != null ? parentMinistrySubscriptions.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

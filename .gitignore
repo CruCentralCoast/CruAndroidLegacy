@@ -12,6 +12,7 @@ local.properties
 
 # Signing files
 .signing/
+app/*.apk
 
 # User-specific configurations
 .idea/libraries/

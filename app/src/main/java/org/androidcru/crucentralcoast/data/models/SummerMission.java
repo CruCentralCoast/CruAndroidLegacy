@@ -3,29 +3,48 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 import org.threeten.bp.ZonedDateTime;
 
 @Parcel
-public class SummerMission
+public final class SummerMission
 {
-    @SerializedName("description") public String description;
-    @SerializedName("name") public String name;
-    @SerializedName("image") public CruImage image;
-    @SerializedName("leaders") public String leaders;
-    @SerializedName("startDate") public ZonedDateTime startDate;
-    @SerializedName("endDate") public ZonedDateTime endDate;
-    @SerializedName("url") public String url;
+    public static final String sDescription = "description";
+    public static final String sName = "name";
+    public static final String sImage = "image";
+    public static final String sLeaders = "leaders";
+    public static final String sStartDate = "startDate";
+    public static final String sEndDate = "endDate";
+    public static final String sUrl = "url";
+    public static final String sId = "_id";
 
-    public SummerMission() {}
+    @SerializedName(sId) public String id;
+    @SerializedName(sDescription) public String description;
+    @SerializedName(sName) public String name;
+    @SerializedName(sImage) public CruImage image;
+    @SerializedName(sLeaders) public String leaders;
+    @SerializedName(sStartDate) public ZonedDateTime startDate;
+    @SerializedName(sEndDate) public ZonedDateTime endDate;
+    @SerializedName(sUrl) public String url;
 
-    public SummerMission(String description, String name, CruImage image, String leaders, ZonedDateTime startDate, ZonedDateTime endDate, String url)
+    @ParcelConstructor
+    SummerMission() {}
+
+    @Override
+    public boolean equals(Object o)
     {
-        this.description = description;
-        this.name = name;
-        this.image = image;
-        this.leaders = leaders;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.url = url;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SummerMission that = (SummerMission) o;
+
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 }

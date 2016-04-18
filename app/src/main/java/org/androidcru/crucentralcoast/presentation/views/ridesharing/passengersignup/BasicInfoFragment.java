@@ -32,6 +32,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
     private Ride ride;
     private BaseValidator validator;
+    private Ride.Direction direction;
 
     @Bind(R.id.name_field) @NotEmpty EditText nameField;
     @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
@@ -53,6 +54,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
         formHolder.setTitle(getString(R.string.passenger_contact_info));
         ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
+        direction = (Ride.Direction) formHolder.getDataObject(PassengerSignupActivity.DIRECTION);
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
@@ -60,10 +62,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
     private Passenger getPassenger()
     {
-        Passenger passenger = new Passenger();
-        passenger.name = nameField.getText().toString();
-        passenger.phone = phoneField.getText().toString();
-        return passenger;
+        return new Passenger(nameField.getText().toString(), phoneField.getText().toString(), CruApplication.getGCMID(), direction);
     }
 
     @Override
@@ -78,8 +77,7 @@ public class BasicInfoFragment extends FormContentFragment {
             Passenger passenger = getPassenger();
             progressBar.setVisibility(View.VISIBLE);
             formHolder.setNavigationClickable(false);
-            passenger.direction = ride.direction;
-            passenger.gcm_id = CruApplication.getGCMID();
+
             PassengerProvider.addPassenger(this, Observers.create(passenger1 -> RideProvider.addPassengerToRide(this, Observers.empty(), ride.id, passenger1.id)), passenger);
 
             super.onNext();

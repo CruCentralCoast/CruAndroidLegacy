@@ -4,34 +4,35 @@ package org.androidcru.crucentralcoast.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
-public class Resource
+public final class Resource
 {
-    @SerializedName("_id") public String id;
-    @SerializedName("title") public String title;
-    @SerializedName("url") public String url;
-    @SerializedName("type") public ResourceType resourceType;
-    @SerializedName("tags") public List<String> tagIds;
+    public static final String sId = "_id";
+    public static final String sTitle = "title";
+    public static final String sDate = "date";
+    public static final String sUrl = "url";
+    public static final String sResourceType = "type";
+    public static final String sTagIds = "tags";
+
+    @SerializedName(sId) public String id;
+    @SerializedName(sTitle) public String title;
+    @SerializedName(sUrl) public String url;
+    @SerializedName(sResourceType) public ResourceType resourceType;
+    @SerializedName(sDate) ZonedDateTime date;
+    @SerializedName(sTagIds) public List<String> tagIds;
+
     public ArrayList<ResourceTag> tags;
 
-    private final String delimiter = ", ";
+    private static final String delimiter = ", ";
 
-    /**
-     * Required for Gson/RetroFit
-     */
-    public Resource() {}
-
-    public Resource(String title, String url, ResourceType resourceType, ArrayList<ResourceTag> tags)
-    {
-        this.title = title;
-        this.url = url;
-        this.resourceType = resourceType;
-        this.tags = tags;
-    }
+    @ParcelConstructor
+    Resource() {}
 
     public String formatTags()
     {
@@ -44,6 +45,24 @@ public class Resource
             result = result.substring(0, result.length() - delimiter.length());
 
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Resource resource = (Resource) o;
+
+        return id.equals(resource.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 
     public enum ResourceType

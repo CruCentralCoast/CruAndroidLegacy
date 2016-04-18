@@ -1,11 +1,9 @@
 package org.androidcru.crucentralcoast.data.models;
 
-import android.location.Address;
-
 import com.google.gson.annotations.SerializedName;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
@@ -13,46 +11,41 @@ import java.util.Arrays;
 import java.util.List;
 
 @Parcel
-public class Ride
+public final class Ride
 {
-    public static final String serializedDriverName = "driverName";
-    public static final String serializedDriverNumber = "driverNumber";
-    public static final String serializedGender = "gender";
-    public static final String serializedEvent = "event";
-    public static final String serializedTime = "time";
-    public static final String serializedLocation = "location";
-    public static final String serializedPassengers = "passengers";
-    public static final String serializedRadius = "radius";
-    public static final String serializedDirection = "direction";
-    public static final String serializedGcmId = "gcm_id";
-    public static final String serializedId = "_id";
-    public static final String serializedSeats = "seats";
+    public static final String sDriverName = "driverName";
+    public static final String sDriverNumber = "driverNumber";
+    public static final String sGender = "gender";
+    public static final String sEvent = "event";
+    public static final String sTime = "time";
+    public static final String sLocation = "location";
+    public static final String sPassengers = "passengers";
+    public static final String sRadius = "radius";
+    public static final String sDirection = "direction";
+    public static final String sGcmId = "gcm_id";
+    public static final String sId = "_id";
+    public static final String sSeats = "seats";
 
-    @SerializedName(serializedDriverName) public String driverName;
-    @SerializedName(serializedDriverNumber) public String driverNumber;
-    @SerializedName(serializedGender) public Gender gender;
-    @SerializedName(serializedEvent) public String eventId;
-    @SerializedName(serializedTime) public ZonedDateTime time;
-    @SerializedName(serializedLocation) public Location location;
-    @SerializedName(serializedPassengers) public ArrayList<String> passengerIds;
-    @SerializedName(serializedRadius) public double radius;
-    @SerializedName(serializedDirection) public Direction direction;
-    @SerializedName(serializedGcmId) public String gcmID;
-    @SerializedName(serializedId) public String id;
-    @SerializedName(serializedSeats) public int carCapacity;
+    @SerializedName(sDriverName) public String driverName;
+    @SerializedName(sDriverNumber) public String driverNumber;
+    @SerializedName(sGender) public Gender gender;
+    @SerializedName(sEvent) public String eventId;
+    @SerializedName(sTime) public ZonedDateTime time;
+    @SerializedName(sLocation) public Location location;
+    @SerializedName(sPassengers) public ArrayList<String> passengerIds;
+    @SerializedName(sRadius) public double radius;
+    @SerializedName(sDirection) public Direction direction;
+    @SerializedName(sGcmId) public String gcmID;
+    @SerializedName(sId) public String id;
+    @SerializedName(sSeats) public int carCapacity;
 
-    public Address address;
     public List<Passenger> passengers;
     public CruEvent event;
 
-    public Ride() {}
-
-    // name, phone, gender, event id, car capacity, direction, time, location
-    // need gcmID, radius
+    @ParcelConstructor
     public Ride(String driverName, String driverNumber, Gender gender, String eventId,
-                ZonedDateTime time, Location location, //ArrayList<String> passengerIds,
-                double radius, Direction direction, //String gcmID,
-                int carCapacity)
+                ZonedDateTime time, Location location, double radius, Direction direction,
+                String gcmID, int carCapacity)
     {
         this.driverName = driverName;
         this.driverNumber = driverNumber;
@@ -60,16 +53,33 @@ public class Ride
         this.eventId = eventId;
         this.time = time;
         this.location = location;
-        this.passengerIds = new ArrayList<>();
         this.radius = radius;
         this.direction = direction;
-        this.gcmID = CruApplication.getGCMID();//gcmID;
+        this.gcmID = gcmID;
         this.carCapacity = carCapacity;
     }
 
     public boolean isEmpty()
     {
         return id == null;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ride ride = (Ride) o;
+
+        return id.equals(ride.id);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
     }
 
     public enum Direction

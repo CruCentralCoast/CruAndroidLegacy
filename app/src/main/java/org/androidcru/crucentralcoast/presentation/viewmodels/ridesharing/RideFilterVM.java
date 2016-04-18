@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
+import android.support.v4.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -53,7 +54,7 @@ public class RideFilterVM extends BaseRideVM
         this.precisePlace = precisePlace;
     }
 
-    public Query getQuery()
+    public Pair<Query, Ride.Direction> getQuery()
     {
         //ride direction
         int selectedRadioIndex = directionGroup.indexOfChild(rootView.findViewById(directionGroup.getCheckedRadioButtonId()));
@@ -85,18 +86,18 @@ public class RideFilterVM extends BaseRideVM
         ConditionsBuilder conditions = new ConditionsBuilder()
             .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
             .addRestriction(new ConditionsBuilder()
-                    .setField(Ride.serializedTime)
+                    .setField(Ride.sTime)
                     .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
                     .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
             .addRestriction(new ConditionsBuilder()
-                    .setField(Ride.serializedDirection)
+                    .setField(Ride.sDirection)
                     .addRestriction(ConditionsBuilder.OPERATOR.REGEX, direction.getValue()));
 
         //don't include gender if it was "Any"
         if(genderId > -1)
             conditions.addRestriction(new ConditionsBuilder()
-                    .setField(Ride.serializedGender)
-                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, genderId));
+                    .setField(Ride.sGender)
+                    .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender));
 
         //build query
         Query query = new Query.Builder()
@@ -108,7 +109,7 @@ public class RideFilterVM extends BaseRideVM
 
         Timber.d(CruApplication.gson.toJson(query));
 
-        return query;
+        return new Pair<>(query, direction);
     }
 
     @Override

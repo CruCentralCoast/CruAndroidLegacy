@@ -45,13 +45,10 @@ import java.util.GregorianCalendar;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import rx.observers.Observers;
 import timber.log.Timber;
 
 public class DriverSignupVM extends BaseRideVM {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
-
-    protected Ride ride;
 
     public Double radius;
     protected GoogleMap map;
@@ -81,6 +78,7 @@ public class DriverSignupVM extends BaseRideVM {
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
     private String eventId;
+    private Location location;
 
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventEndTime) {
         super(activity, fm);
@@ -90,7 +88,6 @@ public class DriverSignupVM extends BaseRideVM {
 
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventStartTime, ZonedDateTime eventEndTime) {
         this(activity, fm, eventId, eventEndTime);
-        this.ride = new Ride();
 
         eventStartDateTime = DateTimeUtils.toGregorianCalendar(eventStartTime);
         bindUI();
@@ -131,14 +128,10 @@ public class DriverSignupVM extends BaseRideVM {
     }
     //populates ride's fields with data from the view
     public Ride getRide() {
-        ride.driverName = nameField.getText().toString();
-        ride.driverNumber = phoneField.getText().toString();
-        ride.gender = Ride.Gender.getFromColloquial((String) genderField.getSelectedItem());
-        ride.carCapacity = retrieveCarCapacity();
-        ride.direction = retrieveDirection(directionGroup);
-        ride.time = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
-        ride.eventId = eventId;
-        return ride;
+        return new Ride(nameField.getText().toString(), phoneField.getText().toString(),
+                Ride.Gender.getFromColloquial((String) genderField.getSelectedItem()), eventId,
+                ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault()), location,
+                radius, retrieveDirection(directionGroup), CruApplication.getGCMID(), retrieveCarCapacity());
     }
 
     @OnClick(R.id.time_field)
@@ -161,13 +154,13 @@ public class DriverSignupVM extends BaseRideVM {
 
             if (splitStateZip.length == 2)
             {
-                ride.location = new Location(splitStateZip[1], splitStateZip[0],
+                location = new Location(splitStateZip[1], splitStateZip[0],
                         splitAddress[1], splitAddress[0], splitAddress[3],
                         new double[] {precisePlace.longitude, precisePlace.latitude});
             }
             else
             {
-                ride.location = new Location(null, null,
+                location = new Location(null, null,
                         splitAddress[1], splitAddress[0], splitAddress[3],
                         new double[] {precisePlace.longitude, precisePlace.latitude});
             }
@@ -190,7 +183,6 @@ public class DriverSignupVM extends BaseRideVM {
             try {
                 this.radius = Double.parseDouble(s.toString());
                 setCircle(center, this.radius);
-                ride.radius = radius;
             } catch (NumberFormatException e) {
                 radiusField.setText("");
             }
@@ -201,10 +193,7 @@ public class DriverSignupVM extends BaseRideVM {
         return googleMap -> {
             if (map == null) {
                 map = googleMap;
-                if (ride != null && ride.location != null)
-                    updateMap(new LatLng(ride.location.geo[1], ride.location.geo[0]));
-                else
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
             } else {
                 Timber.d("Unable to display map....");
             }
