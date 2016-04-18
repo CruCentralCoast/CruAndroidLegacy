@@ -43,6 +43,9 @@ public interface CruApiService
     @GET("/api/ministryteams/")
     public Observable<ArrayList<MinistryTeam>> getMinistryTeams();
 
+    @POST("/api/ministryteams/{id}/join")
+    public Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);
+
     @FormUrlEncoded
     @POST("/api/users/find")
     public Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Field("ministryTeams") ArrayList<String> ministryId);

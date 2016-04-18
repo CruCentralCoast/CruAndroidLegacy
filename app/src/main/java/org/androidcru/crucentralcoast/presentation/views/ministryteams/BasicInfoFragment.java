@@ -16,11 +16,16 @@ import com.mobsandgeeks.saripaar.annotation.Pattern;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruName;
+import org.androidcru.crucentralcoast.data.models.CruUser;
+import org.androidcru.crucentralcoast.data.models.MinistryTeam;
+import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.observers.Observers;
 
 
 public class BasicInfoFragment extends FormContentFragment
@@ -64,6 +69,10 @@ public class BasicInfoFragment extends FormContentFragment
             sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_EMAIL, emailField.getText().toString()).apply();
+
+            // gets back the ministry team object from the form holder.
+            MinistryTeam ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
+            MinistryTeamProvider.joinMinistryTeam(Observers.empty(), ministryTeam.id, new CruUser(new CruName(nameField.getText().toString(), ""), emailField.getText().toString(), phoneField.getText().toString()));
 
             super.onNext();
         }

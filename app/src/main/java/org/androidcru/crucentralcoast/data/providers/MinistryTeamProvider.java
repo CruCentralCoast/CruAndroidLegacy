@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.data.providers;
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
@@ -15,7 +16,7 @@ import rx.Subscription;
 
 public final class MinistryTeamProvider
 {
-    private static CruApiService mCruService = ApiProvider.getService();
+    private static CruApiService cruService = ApiProvider.getService();
 
     public static void requestMinistryTeams(SubscriptionsHolder holder, Observer<List<MinistryTeam>> observer)
     {
@@ -31,7 +32,7 @@ public final class MinistryTeamProvider
      */
     protected static Observable<List<MinistryTeam>> requestMinistryTeams()
     {
-        return mCruService.getMinistryTeams()
+        return cruService.getMinistryTeams()
                 .compose(RxComposeUtil.network())
                 .flatMap(ministryTeams -> Observable.from(ministryTeams))
                 .map(ministryTeam -> {
@@ -61,8 +62,16 @@ public final class MinistryTeamProvider
         ArrayList<String> ministryTeamIdList = new ArrayList<>();
         ministryTeamIdList.add(ministryTeamId);
 
-        return mCruService.getMinistryTeamLeaders(ministryTeamIdList)
+        return cruService.getMinistryTeamLeaders(ministryTeamIdList)
                 .compose(RxComposeUtil.network());
+    }
+
+
+    public static void joinMinistryTeam(Observer<Void> observer, String id, CruUser user)
+    {
+        cruService.joinMinistryTeam(id, user)
+                .compose(RxComposeUtil.network())
+                .subscribe(observer);
     }
 
 }

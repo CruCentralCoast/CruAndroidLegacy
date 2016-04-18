@@ -64,7 +64,6 @@ public class SplashActivity extends BaseAppCompatActivity
         else
             intent.setClass(this, SubscriptionActivity.class);
 
-
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         //REVIEW should this be moved to AppConstants?
