@@ -19,9 +19,6 @@ public final class CruUser
     @SerializedName(sPhone) public String phone;
 
     @ParcelConstructor
-    CruUser() {}
-
-
     public CruUser(CruName name, String email, String phone)
     {
         this.name = name;
