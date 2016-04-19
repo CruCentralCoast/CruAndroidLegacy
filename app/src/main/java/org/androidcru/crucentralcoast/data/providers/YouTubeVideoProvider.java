@@ -2,17 +2,24 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.DatedVideo;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
+import org.threeten.bp.Duration;
+import org.threeten.bp.ZonedDateTime;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -87,5 +94,34 @@ public final class YouTubeVideoProvider
             }
         })
         .compose(RxComposeUtil.network());
+    }
+
+    protected Observable<List<DatedVideo>> requestVideosByDate(ZonedDateTime minDate)
+    {
+        return Observable.create(new Observable.OnSubscribe<List<DatedVideo>>() {
+            @Override
+            public void call(Subscriber<? super List<DatedVideo>> subscriber) {
+                try
+                {
+                    query.setPublishedAfter(new DateTime(minDate.toInstant().getEpochSecond(), (int) Duration.ofSeconds(minDate.getOffset().getTotalSeconds()).toHours()));
+                    SearchListResponse searchResponse = query.execute();
+
+                    if (!searchResponse.isEmpty()) {
+                        ArrayList<DatedVideo> datedVideos = new ArrayList<DatedVideo>();
+                        for(SearchResult searchResult : searchResponse.getItems())
+                        {
+                            datedVideos.add(new DatedVideo(searchResult));
+                        }
+                        subscriber.onNext(datedVideos);
+                    }
+                    subscriber.onCompleted();
+                }
+                catch (IOException e)
+                {
+                    subscriber.onError(e);
+                }
+            }
+        })
+                .compose(RxComposeUtil.network());
     }
 }

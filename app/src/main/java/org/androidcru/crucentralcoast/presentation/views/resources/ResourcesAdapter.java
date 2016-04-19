@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
@@ -18,10 +16,7 @@ import org.androidcru.crucentralcoast.presentation.views.webview.WebviewFallback
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.ArticleViewHolder>
+public class ResourcesAdapter extends RecyclerView.Adapter<ResourceViewHolder>
 {
     private Activity activity;
     private ArrayList<Resource> resources;
@@ -35,13 +30,13 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
     }
 
     @Override
-    public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public ResourceViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ArticleViewHolder(inflater.inflate(R.layout.item_resource, parent, false));
+        return new ResourceViewHolder(inflater.inflate(R.layout.item_resource, parent, false));
     }
 
-    public void onBindViewHolder(ArticleViewHolder holder, int position)
+    public void onBindViewHolder(ResourceViewHolder holder, int position)
     {
         Resource curResource = resources.get(position);
         holder.title.setText(curResource.title);
@@ -77,20 +72,5 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
     public int getItemCount()
     {
         return resources.size();
-    }
-
-
-    public class ArticleViewHolder extends RecyclerView.ViewHolder
-    {
-        @Bind(R.id.title) TextView title;
-        @Bind(R.id.tags) TextView tags;
-        @Bind(R.id.resource_icon) ImageView typeIcon;
-        View rootView;
-
-        public ArticleViewHolder(View rootView) {
-            super(rootView);
-            this.rootView = rootView;
-            ButterKnife.bind(this, rootView);
-        }
     }
 }

@@ -9,7 +9,7 @@ import org.threeten.bp.ZonedDateTime;
 import java.util.ArrayList;
 
 @Parcel
-public final class CruEvent
+public final class CruEvent implements Dateable
 {
     public static final String sName = "name";
     public static final String sDescription = "description";
@@ -52,5 +52,11 @@ public final class CruEvent
     public int hashCode()
     {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public ZonedDateTime getDate()
+    {
+        return startDate;
     }
 }

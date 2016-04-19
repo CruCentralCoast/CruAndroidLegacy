@@ -1,18 +1,15 @@
 package org.androidcru.crucentralcoast.presentation.views.videos;
 
 import android.content.Context;
-import android.text.format.DateUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.youtube.player.YouTubeIntents;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
@@ -24,10 +21,7 @@ import org.androidcru.crucentralcoast.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoViewHolder>
+public class VideosAdapter extends RecyclerView.Adapter<CruVideoViewHolder>
 {
     // Search results from Cru's YouTube channel
     private ArrayList<SearchResult> videos;
@@ -152,23 +146,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
         while (viewExpandedStates.size() < videos.size())
         {
             viewExpandedStates.add(false);
-        }
-    }
-
-    public class CruVideoViewHolder extends RecyclerView.ViewHolder
-    {
-        @Bind(R.id.video_title) TextView videoTitle;
-        @Bind(R.id.video_thumb) ImageView videoThumb;
-        @Bind(R.id.video_description) TextView videoDescription;
-        @Bind(R.id.video_chev) ImageView videoChev;
-        @Bind(R.id.video_id_and_views) TextView videoIdAndViews;
-        @Bind(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
-        String vID;
-
-        public CruVideoViewHolder(View rootView)
-        {
-            super(rootView);
-            ButterKnife.bind(this, rootView);
         }
     }
 }

@@ -7,26 +7,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * EventsAdapter is an RecyclerView adapter binding the Event model to the Event RecyclerView
  */
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventViewHolder>
+public class EventsAdapter extends RecyclerView.Adapter<CruEventViewHolder>
 {
     private ArrayList<CruEventVM> mEvents;
     private LinearLayoutManager mLayoutManager;
@@ -48,7 +42,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new CruEventViewHolder(inflater.inflate(R.layout.card_event, parent, false));
+        return new CruEventViewHolder(inflater.inflate(R.layout.card_event, parent, false), mLayoutManager, this);
     }
 
     //TODO support events spanning multiple days (fall retreat)
@@ -61,6 +55,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     public void onBindViewHolder(CruEventViewHolder holder, int position)
     {
         CruEventVM cruEventVM = mEvents.get(position);
+        holder.vm = cruEventVM;
+
         holder.eventName.setText(cruEventVM.cruEvent.name);
         holder.eventDate.setText(cruEventVM.getDateTime());
         Context context = holder.eventBanner.getContext();
@@ -112,55 +108,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
     public int getItemCount()
     {
         return mEvents.size();
-    }
-
-    /**
-     * CruEventViewHolder is a view representation of the model for the list
-     */
-    public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-        @Bind(R.id.eventName) TextView eventName;
-        @Bind(R.id.eventDate) TextView eventDate;
-        @Bind(R.id.event_banner) ImageView eventBanner;
-        @Bind(R.id.chevView) ImageView chevronView;
-        @Bind(R.id.fbButton) ImageButton fbButton;
-        @Bind(R.id.mapButton) ImageButton mapButton;
-        @Bind(R.id.calButton) ImageButton calButton;
-        @Bind(R.id.rideSharingButton) ImageButton rideSharingButton;
-        @Bind(R.id.eventDescription) TextView eventDescription;
-
-        public CruEventViewHolder(View rootView) {
-            super(rootView);
-            ButterKnife.bind(this, rootView);
-            rootView.setOnClickListener(this);
-        }
-
-        /**
-         * Invoked by Android if setOnClickListener() is called.
-         *
-         * Toggles the eventDescription Visibility if tapped, stores it in the view model so that
-         * RecycledViews will work properly
-         *
-         * @param v View that was clicked on
-         */
-        @Override
-        public void onClick(View v)
-        {
-            int visibility;
-            if(eventDescription.getVisibility() == View.VISIBLE)
-            {
-                visibility = View.GONE;
-            }
-            else
-            {
-                visibility = View.VISIBLE;
-            }
-            eventDescription.setVisibility(visibility);
-
-            mEvents.get(getAdapterPosition()).isExpanded = (View.VISIBLE == visibility);
-            notifyItemChanged(getAdapterPosition());
-            mLayoutManager.scrollToPosition(getAdapterPosition());
-        }
     }
 }
 

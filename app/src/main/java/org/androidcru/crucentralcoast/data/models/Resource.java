@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
-public final class Resource
+public final class Resource implements Dateable
 {
     public static final String sId = "_id";
     public static final String sTitle = "title";
@@ -63,6 +63,12 @@ public final class Resource
     public int hashCode()
     {
         return id.hashCode();
+    }
+
+    @Override
+    public ZonedDateTime getDate()
+    {
+        return date;
     }
 
     public enum ResourceType
