@@ -8,6 +8,8 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -101,5 +103,35 @@ public final class ResourceProvider
     {
         return cruApiService.getResourceTag()
                 .compose(RxComposeUtil.network());
+    }
+
+    protected static Observable<Resource> getPreviousResources(ZonedDateTime minDate)
+    {
+        Query query = new Query.Builder()
+                .setCondition(new ConditionsBuilder()
+                            .setField(Resource.sDate)
+                            .addRestriction(ConditionsBuilder.OPERATOR.GTE, minDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+                    .build())
+                .build();
+
+        return cruApiService.findResources(query.conditions)
+                .compose(RxComposeUtil.network())
+                .flatMap(resources -> Observable.from(resources))
+                .map(resource -> {
+
+                    Query tagQuery = new Query.Builder()
+                            .setCondition(new ConditionsBuilder()
+                                    .setField("_id")
+                                    .addRestriction(ConditionsBuilder.OPERATOR.IN, resource.tagIds.toArray(new String[resource.tagIds.size()]))
+                                    .build())
+                            .build();
+
+                    resource.tags = cruApiService.findResourceTag(tagQuery.conditions)
+                            .compose(RxComposeUtil.network())
+                            .toBlocking()
+                            .first();
+
+                    return resource;
+                });
     }
 }

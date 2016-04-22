@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.presentation.util;
+package org.androidcru.crucentralcoast.presentation.customtabs;
 
 import android.app.Activity;
 import android.content.ComponentName;

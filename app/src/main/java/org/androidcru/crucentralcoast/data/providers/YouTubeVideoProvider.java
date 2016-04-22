@@ -103,13 +103,22 @@ public final class YouTubeVideoProvider
             public void call(Subscriber<? super List<DatedVideo>> subscriber) {
                 try
                 {
-                    query.setPublishedAfter(new DateTime(minDate.toInstant().getEpochSecond(), (int) Duration.ofSeconds(minDate.getOffset().getTotalSeconds()).toHours()));
+                    long time = minDate.toInstant().getEpochSecond();
+                    int tzShift = (int) Duration.ofSeconds(minDate.getOffset().getTotalSeconds()).toHours();
+
+                    Timber.d("Time: %l", time);
+                    Timber.d("tzShift: %d", tzShift);
+
+                    query.setPublishedAfter(new DateTime(time, tzShift));
                     SearchListResponse searchResponse = query.execute();
 
                     if (!searchResponse.isEmpty()) {
                         ArrayList<DatedVideo> datedVideos = new ArrayList<DatedVideo>();
                         for(SearchResult searchResult : searchResponse.getItems())
                         {
+                            long videoTime = searchResult.getSnippet().getPublishedAt().getValue();
+                            Timber.d(Long.toString(videoTime));
+                            Timber.d(Boolean.toString(videoTime >= time));
                             datedVideos.add(new DatedVideo(searchResult));
                         }
                         subscriber.onNext(datedVideos);

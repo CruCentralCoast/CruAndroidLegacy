@@ -143,6 +143,7 @@
     <string name="subscription_subheader">Select ministries of interest</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="videos_no_description">No video description available.</string>
+    <string name="nav_feed">Feed</string>
 
     <string-array name="myrides_titles">
         <item>Driver</item>

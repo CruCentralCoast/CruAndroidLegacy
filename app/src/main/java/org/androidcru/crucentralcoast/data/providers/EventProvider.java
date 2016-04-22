@@ -1,9 +1,12 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 
@@ -44,5 +47,25 @@ public class EventProvider
                 .flatMap(cruevents -> {
                     return Observable.from(cruevents);
                 });
+    }
+
+    protected static Observable<CruEvent> getUpcomingEvents(ZonedDateTime fromDate)
+    {
+        Query query = new Query.Builder()
+                .setCondition(new ConditionsBuilder()
+                    .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
+                        .addRestriction(new ConditionsBuilder()
+                            .setField(CruEvent.sStartDate)
+                            .addRestriction(ConditionsBuilder.OPERATOR.GTE, fromDate.toString()))
+                        .addRestriction(new ConditionsBuilder()
+                            .setField(CruEvent.sStartDate)
+                            .addRestriction(ConditionsBuilder.OPERATOR.LT, fromDate.plusWeeks(1L).toString()))
+                    .build())
+                .build();
+
+
+        return cruService.searchEvents(query)
+                .compose(RxComposeUtil.network())
+                .flatMap(eventList -> Observable.from(eventList));
     }
 }

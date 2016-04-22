@@ -12,6 +12,11 @@ import java.util.Date;
 
 public class DatedVideo implements Dateable
 {
+    public SearchResult getVideo()
+    {
+        return video;
+    }
+
     private SearchResult video;
 
     public DatedVideo(SearchResult video)

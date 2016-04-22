@@ -34,6 +34,9 @@ public interface CruApiService
     @GET("/api/events/")
     public Observable<ArrayList<CruEvent>> getEvents();
 
+    @POST("/api/rides/search")
+    Observable<ArrayList<CruEvent>> searchEvents(@Body Query query);
+
     @GET("/api/ministries/")
     public Observable<ArrayList<MinistrySubscription>> getMinistries();
 

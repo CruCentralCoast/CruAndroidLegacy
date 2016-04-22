@@ -94,6 +94,7 @@ public class VideosFragment extends BaseSupportFragment
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+
         setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(layoutManager);
@@ -167,7 +168,7 @@ public class VideosFragment extends BaseSupportFragment
 
     private void forceUpdate()
     {
-        // Reset the Adapter and video-related state
+        // Reset the Adapter and video-related isExpanded
         videos.clear();
         curSize = 0;
         videosAdapter = null;

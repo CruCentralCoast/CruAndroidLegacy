@@ -19,7 +19,12 @@ public final class CruUser
     @SerializedName(sPhone) public String phone;
 
     @ParcelConstructor
-    CruUser() {}
+    public CruUser(CruName name, String email, String phone)
+    {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
 
     @Override
     public boolean equals(Object o)
