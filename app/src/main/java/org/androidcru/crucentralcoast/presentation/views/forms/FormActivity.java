@@ -19,7 +19,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FormActivity extends AppCompatActivity implements FormHolder
+public class    FormActivity extends AppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
     private HashMap<String, Object> dataObjects = new HashMap<>();

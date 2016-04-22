@@ -86,7 +86,7 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
                 : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
         holder.missionDescription.setText(summerMission.description);
         holder.missionDescription.setVisibility(isExpanded.get(position) ? View.VISIBLE : View.GONE);
-        holder.learnMore.setVisibility(summerMission.url != null ? View.VISIBLE : View.GONE);
+        holder.learnMore.setVisibility((summerMission.url != null && !summerMission.url.isEmpty()) ? View.VISIBLE : View.GONE);
         holder.learnMore.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(summerMission.url));
