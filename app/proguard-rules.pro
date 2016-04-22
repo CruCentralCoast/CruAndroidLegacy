@@ -107,3 +107,25 @@
 -keep class org.threeten.bp.zone.*
 
 -keepclassmembers class org.threeten.bp.** { *; }
+
+# YouTube Data API
+
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+# Needed by Guava
+# See https://groups.google.com/forum/#!topic/guava-discuss/YCZzeCiIVoI
+
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+
+# Needed by google-http-client-android when linking against an older platform version
+
+-dontwarn com.google.api.client.extensions.android.**
+
+# Needed by google-api-client-android when linking against an older platform version
+
+-dontwarn com.google.api.client.googleapis.extensions.android.**
