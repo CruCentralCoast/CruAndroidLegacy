@@ -27,9 +27,9 @@ public class FeedProvider
                 ResourceProvider.getPreviousResources(minDate),
                 YouTubeVideoProvider.getInstance().requestVideosByDate(minDate)
                     .flatMap(videoList -> Observable.from(videoList)))
-                    .toSortedList((Dateable d1, Dateable d2) -> {
-                        return d1.getDate().compareTo(d2.getDate());
-                    })
+                .toSortedList((Dateable d1, Dateable d2) -> {
+                    return d2.getDate().compareTo(d1.getDate());
+                })
                 .compose(RxComposeUtil.network());
     }
 }

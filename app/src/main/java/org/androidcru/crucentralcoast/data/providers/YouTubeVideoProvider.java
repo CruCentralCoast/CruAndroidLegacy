@@ -103,10 +103,10 @@ public final class YouTubeVideoProvider
             public void call(Subscriber<? super List<DatedVideo>> subscriber) {
                 try
                 {
-                    long time = minDate.toInstant().getEpochSecond();
+                    long time = minDate.toInstant().toEpochMilli();
                     int tzShift = (int) Duration.ofSeconds(minDate.getOffset().getTotalSeconds()).toHours();
 
-                    Timber.d("Time: %l", time);
+                    Timber.d("Time: %d", time);
                     Timber.d("tzShift: %d", tzShift);
 
                     query.setPublishedAfter(new DateTime(time, tzShift));

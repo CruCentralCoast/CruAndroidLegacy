@@ -25,11 +25,9 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
 
     private Resource model;
 
-    View rootView;
-
     public ResourceViewHolder(View rootView) {
         super(rootView);
-        this.rootView = rootView;
+        rootView.setOnClickListener(this);
 
         ButterKnife.bind(this, rootView);
     }

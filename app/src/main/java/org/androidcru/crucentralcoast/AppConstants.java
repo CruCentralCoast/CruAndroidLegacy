@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Used to store things like keys into various databases such as bundles,
  * disk caches, SharedPreferences.
@@ -81,7 +79,7 @@ public class AppConstants
     public static final double CALPOLY_LAT = 35.30021;
     public static final double CALPOLY_LNG = -120.66310;
 
-    public static final String CRU_YOUTUBE_CHANNEL_ID = "UCe-RJ-3Q3tUqJciItiZmjdg";
+    public static final String CRU_YOUTUBE_CHANNEL_ID = "UCBJycsmduvYEL83R_U4JriQ";
     public static final String EXPANDED = "Hide Description";
     public static final String RETRACTED = "Show Description";
     public static final String VIDEO_PLAY_FAILED_MESSAGE = "Unable to play video";
