@@ -78,8 +78,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
         }
 
 
-        holder.fbButton.setOnClickListener(cruEventVM.onFacebookClick());
-        holder.fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_facebook_box_grey600_48dp, R.color.fbBlue));
+        holder.fbButton.setEnabled(cruEventVM.cruEvent.url != null && !cruEventVM.cruEvent.url.isEmpty());
+        holder.fbButton.setSelected(holder.fbButton.isEnabled());
+        ViewUtil.setSelected(holder.fbButton, holder.fbButton.isEnabled(), R.drawable.ic_facebook_box_grey600_48dp, R.color.facebook_state);
+
         holder.mapButton.setOnClickListener(cruEventVM.onMapClick());
         holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
         holder.calButton.setOnClickListener(cruEventVM.onCalendarClick());

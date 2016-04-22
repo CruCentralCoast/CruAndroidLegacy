@@ -74,24 +74,24 @@ public class ViewUtil
     }
 
 
-    public static void setSelected(ImageView view, boolean selected, Drawable selectedDrawable, Drawable unselectedDrawable, ColorStateList selectionTint)
+    public static void setSelected(ImageView view, boolean selected, Drawable selectedDrawable, Drawable unselectedDrawable, ColorStateList colorStateList)
     {
         view.setSelected(selected);
-        view.setImageDrawable(DrawableUtil.getTintListedDrawable(view.getContext(), selected ? selectedDrawable : unselectedDrawable, selectionTint));
+        view.setImageDrawable(DrawableUtil.getTintListedDrawable(view.getContext(), selected ? selectedDrawable : unselectedDrawable, colorStateList));
     }
 
-    public static void setSelected(ImageView view, boolean selected, int selectedDrawableId, int unselectedDrawableId, int selectionTintId)
+    public static void setSelected(ImageView view, boolean selected, int selectedDrawableId, int unselectedDrawableId, int colorStateListId)
     {
         Drawable selectedDrawable = ContextCompat.getDrawable(view.getContext(), selectedDrawableId);
         Drawable unselectedDrawable = ContextCompat.getDrawable(view.getContext(), unselectedDrawableId);
-        ColorStateList colorStateList = ContextCompat.getColorStateList(view.getContext(), selectionTintId);
+        ColorStateList colorStateList = ContextCompat.getColorStateList(view.getContext(), colorStateListId);
 
         setSelected(view, selected, selectedDrawable, unselectedDrawable, colorStateList);
     }
 
-    public static void setSelected(ImageView view, boolean selected, int drawableId, int selectionTintId)
+    public static void setSelected(ImageView view, boolean selected, int drawableId, int colorStateListId)
     {
-        setSelected(view, selected, drawableId, drawableId, selectionTintId);
+        setSelected(view, selected, drawableId, drawableId, colorStateListId);
     }
 
 
