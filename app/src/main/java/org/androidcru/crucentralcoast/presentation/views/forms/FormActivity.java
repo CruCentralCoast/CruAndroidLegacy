@@ -15,9 +15,14 @@ import org.androidcru.crucentralcoast.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
+import rx.schedulers.Schedulers;
 
 public class    FormActivity extends AppCompatActivity implements FormHolder
 {
@@ -125,14 +130,26 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
 
     private void setupButtonListeners()
     {
+        Observable<Long> o500 = Observable.timer(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+
         prev.setOnClickListener(v -> {
             if (currentFormContent != null)
+            {
+                setNavigationClickable(false);
                 currentFormContent.onPrevious();
+                o500.subscribe(Observers.create(vo -> setNavigationClickable(true)));
+            }
         });
 
         next.setOnClickListener(v -> {
             if (currentFormContent != null)
+            {
+                setNavigationClickable(false);
                 currentFormContent.onNext();
+                o500.subscribe(Observers.create(vo -> setNavigationClickable(true)));
+            }
         });
     }
 
@@ -148,6 +165,7 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
     public void performTransaction(Fragment fragment) {
         fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
                 R.anim.slide_in_right, R.anim.slide_out_right).replace(R.id.content, fragment).addToBackStack(null).commit();
+        fm.executePendingTransactions();
     }
 
     private void clearUI()
@@ -225,8 +243,16 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void setNavigationClickable(boolean isClickable)
     {
-        prev.setClickable(isClickable);
-        next.setClickable(isClickable);
+        if(isClickable)
+        {
+            prev.setOnClickListener(null);
+            next.setOnClickListener(null);
+        }
+        else
+        {
+            setupButtonListeners();
+        }
+
     }
 
     @Override
