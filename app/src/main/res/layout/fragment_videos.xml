@@ -7,6 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="48dip"
+        android:queryHint="@string/video_search_hint"
+        android:id="@+id/video_search"
+        android:iconifiedByDefault="false">
+    </SearchView>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/video_information"
-            android:text="There are currently no videos to display"
+            android:text="@string/default_video"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textSize="18sp"

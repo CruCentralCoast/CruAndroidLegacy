@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
@@ -33,6 +35,7 @@ public class VideosFragment extends BaseSupportFragment
     @Bind(R.id.video_list) RecyclerView videoList;
     @Bind(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
+    //@Bind(R.id.video_search) SearchView videoSearch;
 
     private LinearLayoutManager layoutManager;
     private Observer<SearchListResponse> videoSubscriber;
@@ -50,6 +53,7 @@ public class VideosFragment extends BaseSupportFragment
         videos = new ArrayList<>();
         tempVideos = new ArrayList<>();
 
+        //videoSearch = new SearchView(getContext());
         // Display text notifying the user if there are no videos to load, else show the videos
         videoSubscriber = new Observer<SearchListResponse>()
         {

@@ -143,6 +143,8 @@
     <string name="subscription_subheader">Select ministries of interest</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="videos_no_description">No video description available.</string>
+    <string name="default_video">There are currently no videos to display</string>
+    <string name="video_search_hint">Search Cru Cal Poly SLO</string>
 
     <string-array name="myrides_titles">
         <item>Driver</item>
