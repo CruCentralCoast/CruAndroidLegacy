@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
@@ -9,6 +10,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolde
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -67,5 +69,17 @@ public class EventProvider
         return cruService.searchEvents(query)
                 .compose(RxComposeUtil.network())
                 .flatMap(eventList -> Observable.from(eventList));
+    }
+
+    protected static Observable<List<CruEvent>> getEventsPaginated(int page, int pageSize)
+    {
+        Query query = new Query.Builder()
+                .setOptions(new OptionsBuilder()
+                        .addOption(OptionsBuilder.OPTIONS.SKIP, page * pageSize)
+                        .build())
+                .build();
+
+        return cruService.searchEvents(query)
+                .compose(RxComposeUtil.network());
     }
 }

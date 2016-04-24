@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.DatedVideo;
+import org.androidcru.crucentralcoast.data.models.DatedVideo;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 
 import butterknife.Bind;

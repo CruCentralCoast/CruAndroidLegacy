@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.DatedVideo;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Dateable;
+import org.androidcru.crucentralcoast.data.models.DatedVideo;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 import org.androidcru.crucentralcoast.presentation.viewmodels.FeedState;
@@ -20,6 +20,7 @@ import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
+    private List<Dateable> rawItems;
     private List<FeedState<Dateable>> items;
 
     private final int CRU_EVENT = 0;
@@ -30,12 +31,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public FeedAdapter(List<Dateable> items, RecyclerView.LayoutManager layoutManager)
     {
+        this.rawItems = items;
         this.items = new ArrayList<>();
         for(Dateable d : items)
         {
             this.items.add(new FeedState<>(d));
         }
         this.layoutManager = layoutManager;
+
     }
 
     @Override
@@ -91,5 +94,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public int getItemCount()
     {
         return items.size();
+    }
+
+    public void syncItems()
+    {
+        int oldSize = items.size();
+        int newSize = rawItems.size();
+        for(int i = oldSize; i < newSize; i++)
+        {
+            this.items.add(new FeedState<>(rawItems.get(i)));
+        }
+        notifyItemRangeChanged(oldSize, newSize);
     }
 }

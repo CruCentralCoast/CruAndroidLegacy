@@ -1,9 +1,8 @@
-package org.androidcru.crucentralcoast.data;
+package org.androidcru.crucentralcoast.data.models;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.SearchResult;
 
-import org.androidcru.crucentralcoast.data.models.Dateable;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;

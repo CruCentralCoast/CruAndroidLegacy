@@ -79,11 +79,11 @@ public class AppConstants
     public static final double CALPOLY_LAT = 35.30021;
     public static final double CALPOLY_LNG = -120.66310;
 
-    public static final String CRU_YOUTUBE_CHANNEL_ID = "UCBJycsmduvYEL83R_U4JriQ";
+    public static final String CRU_YOUTUBE_CHANNEL_ID = "UCe-RJ-3Q3tUqJciItiZmjdg";
     public static final String EXPANDED = "Hide Description";
     public static final String RETRACTED = "Show Description";
     public static final String VIDEO_PLAY_FAILED_MESSAGE = "Unable to play video";
-    public static final long YOUTUBE_QUERY_NUM = 20l;
+    public static final long PAGE_SIZE = 20l;
     public static final String SPACE_COMMA_ESCAPE = "\\s*,\\s*";
 
     public static final int RETRY_ATTEMPTS = 5;

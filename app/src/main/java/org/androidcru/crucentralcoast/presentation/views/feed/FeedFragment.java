@@ -3,28 +3,36 @@ package org.androidcru.crucentralcoast.presentation.views.feed;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Dateable;
 import org.androidcru.crucentralcoast.data.providers.FeedProvider;
+import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
-import org.threeten.bp.ZonedDateTime;
+import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observer;
 
 public class FeedFragment extends ListFragment
 {
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private Observer<List<Dateable>> observer;
+    private List<Dateable> items;
+    private FeedAdapter adapter;
+
+    private YouTubeVideoProvider youTubeVideoProvider;
 
     public FeedFragment()
     {
+        youTubeVideoProvider = new YouTubeVideoProvider();
+        items = new ArrayList<>();
         observer = new Observer<List<Dateable>>()
         {
             @Override
@@ -42,7 +50,17 @@ public class FeedFragment extends ListFragment
             @Override
             public void onNext(List<Dateable> dateables)
             {
-                recyclerView.setAdapter(new FeedAdapter(dateables, layoutManager));
+                if(items == null || items.isEmpty())
+                {
+                    items = dateables;
+                    adapter = new FeedAdapter(dateables, layoutManager);
+                    recyclerView.setAdapter(adapter);
+                }
+                else
+                {
+                    items.addAll(dateables);
+                    adapter.syncItems();
+                }
             }
         };
     }
@@ -62,20 +80,34 @@ public class FeedFragment extends ListFragment
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+             @Override
+             public void onLoadMore(int page, int totalItemsCount)
+             {
+                 getMoreFeedItems(page);
+             }
+         });
 
-        swipeRefreshLayout.setOnRefreshListener(this::getSummerMissions);
+        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        getSummerMissions();
+        forceUpdate();
     }
 
-    private void getSummerMissions()
+    private void forceUpdate()
     {
-        swipeRefreshLayout.setRefreshing(true);
-        FeedProvider.getFeedItems(this, observer, ZonedDateTime.now().minusWeeks(1L));
+        items.clear();
+        adapter = null;
+
+        getMoreFeedItems(0);
+    }
+
+    private void getMoreFeedItems(int page)
+    {
+        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, page, (int) AppConstants.PAGE_SIZE);
     }
 }

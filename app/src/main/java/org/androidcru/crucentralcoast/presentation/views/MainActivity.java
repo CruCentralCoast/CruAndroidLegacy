@@ -71,7 +71,8 @@ public class MainActivity extends BaseAppCompatActivity
         constructionFragment = new ConstructionFragment();
         if(savedInstanceState == null)
         {
-            spawnConstructionFragment();
+            toolbar.setTitle(R.string.nav_feed);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
         }
 
         checkPlayServicesCode();

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 
 import org.androidcru.crucentralcoast.R;
@@ -25,7 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class VideosFragment extends BaseSupportFragment
@@ -35,12 +33,12 @@ public class VideosFragment extends BaseSupportFragment
     @Bind(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
 
     private LinearLayoutManager layoutManager;
-    private Observer<SearchListResponse> videoSubscriber;
+    private Observer<List<SearchResult>> videoSubscriber;
     private Subscription subscription;
     private List<SearchResult> videos;
     // used for filtering duplicate videos before being passed to the adapter
     private List<SearchResult> tempVideos;
-    private String nextPageToken;
+    private YouTubeVideoProvider youtubeProvider;
     private VideosAdapter videosAdapter;
     private int curSize;
 
@@ -49,9 +47,10 @@ public class VideosFragment extends BaseSupportFragment
         curSize = 0;
         videos = new ArrayList<>();
         tempVideos = new ArrayList<>();
+        youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
-        videoSubscriber = new Observer<SearchListResponse>()
+        videoSubscriber = new Observer<List<SearchResult>>()
         {
             @Override
             public void onCompleted() {
@@ -74,7 +73,7 @@ public class VideosFragment extends BaseSupportFragment
             }
 
             @Override
-            public void onNext(SearchListResponse searchResults)
+            public void onNext(List<SearchResult> searchResults)
             {
                 setVideos(searchResults);
             }
@@ -105,11 +104,7 @@ public class VideosFragment extends BaseSupportFragment
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
-                // Only query for more videos if I have more videos
-                if(nextPageToken != null)
-                {
-                    getCruVideos(nextPageToken);
-                }
+                getCruVideos();
             }
         });
 
@@ -117,18 +112,15 @@ public class VideosFragment extends BaseSupportFragment
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
-    private void getCruVideos(String nextPageToken)
+    private void getCruVideos()
     {
-        YouTubeVideoProvider.getInstance().requestChannelVideos(this, videoSubscriber, nextPageToken);
+        youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
     // Places the videos in the returned response into the Adapter's list of videos
-    public void setVideos (SearchListResponse cruVideosResponse)
+    public void setVideos (List<SearchResult> newVideos)
     {
-        List<SearchResult> cruVideos = cruVideosResponse.getItems();
-        rx.Observable.from(cruVideos)
-                .subscribeOn(Schedulers.immediate())
-                .subscribe(tempVideos::add);
+        tempVideos.addAll(newVideos);
 
         // Only set the Adapter once - on the first video request
         // Otherwise, the Adapter resets the scroll progression to the top of the list
@@ -156,12 +148,8 @@ public class VideosFragment extends BaseSupportFragment
         }
         videosAdapter.updateViewExpandedStates();
 
-        // Save the token of the next page of the query. This will be used to get the
-        // next set of 20 items.
-        nextPageToken = cruVideosResponse.getNextPageToken();
-
         // Used for keeping track of the user's scroll progression through the list of videos.
-        curSize += cruVideos.size();
+        curSize += newVideos.size();
         swipeRefreshLayout.setRefreshing(false);
         tempVideos.clear();
     }
@@ -173,7 +161,8 @@ public class VideosFragment extends BaseSupportFragment
         curSize = 0;
         videosAdapter = null;
 
-        YouTubeVideoProvider.getInstance().requestChannelVideos(this, videoSubscriber, "");
+        youtubeProvider.resetQuery();
+        youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
     @Override
@@ -181,6 +170,6 @@ public class VideosFragment extends BaseSupportFragment
     {
         // TODO this sets the user back at the top of the list. Should resume at the position of where the user left the activity.
         super.onResume();
-        getCruVideos("");
+        getCruVideos();
     }
 }
