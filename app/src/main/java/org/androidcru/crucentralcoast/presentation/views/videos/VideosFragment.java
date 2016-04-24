@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -35,7 +37,6 @@ public class VideosFragment extends BaseSupportFragment
     @Bind(R.id.video_list) RecyclerView videoList;
     @Bind(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
-    //@Bind(R.id.video_search) SearchView videoSearch;
 
     private LinearLayoutManager layoutManager;
     private Observer<SearchListResponse> videoSubscriber;
@@ -53,7 +54,6 @@ public class VideosFragment extends BaseSupportFragment
         videos = new ArrayList<>();
         tempVideos = new ArrayList<>();
 
-        //videoSearch = new SearchView(getContext());
         // Display text notifying the user if there are no videos to load, else show the videos
         videoSubscriber = new Observer<SearchListResponse>()
         {
@@ -90,7 +90,13 @@ public class VideosFragment extends BaseSupportFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_videos, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.youtube, menu);
     }
 
     @Override

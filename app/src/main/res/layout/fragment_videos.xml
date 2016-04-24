@@ -7,14 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="48dip"
-        android:queryHint="@string/video_search_hint"
-        android:id="@+id/video_search"
-        android:iconifiedByDefault="false">
-    </SearchView>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
