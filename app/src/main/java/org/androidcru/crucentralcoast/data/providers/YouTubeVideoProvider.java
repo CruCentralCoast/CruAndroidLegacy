@@ -102,7 +102,7 @@ public final class YouTubeVideoProvider
             @Override
             public void call(Subscriber<? super SearchListResponse> subscriber) {
                 try {
-
+                    query.setQ("");
                     query.setPageToken(nextPageToken);
                     SearchListResponse searchResponse = query.execute();
                     if (!searchResponse.isEmpty()) {

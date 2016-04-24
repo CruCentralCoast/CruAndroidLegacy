@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -49,6 +50,7 @@ public class VideosFragment extends BaseSupportFragment
     private String nextPageToken;
     private VideosAdapter videosAdapter;
     private int curSize;
+    private Menu menu;
 
     public VideosFragment()
     {
@@ -99,6 +101,7 @@ public class VideosFragment extends BaseSupportFragment
     // Inflate and set the query listener for the search bar
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        this.menu = menu;
         inflater.inflate(R.menu.youtube, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView =
@@ -113,6 +116,7 @@ public class VideosFragment extends BaseSupportFragment
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                forceUpdate();
                 return false;
             }
         });
@@ -209,6 +213,10 @@ public class VideosFragment extends BaseSupportFragment
         videos.clear();
         curSize = 0;
         videosAdapter = null;
+
+//        MenuItem searchItem = menu.findItem(R.id.action_search);
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        searchView.clearFocus();
 
         YouTubeVideoProvider.getInstance().requestChannelVideos(this, videoSubscriber, "");
     }
