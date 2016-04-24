@@ -58,6 +58,34 @@ public final class YouTubeVideoProvider
         return instance;
     }
 
+    public void requestVideoSearch(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String search)
+    {
+        Subscription s = requestVideoSearch(search)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
+
+    protected Observable<SearchListResponse> requestVideoSearch(String search) {
+        return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
+            @Override
+            public void call(Subscriber<? super SearchListResponse> subscriber) {
+                try {
+                    Timber.e("Got here");
+                    query.setQ(search);
+                    SearchListResponse searchResponse = query.execute();
+                    if (!searchResponse.isEmpty()) {
+                        subscriber.onNext(searchResponse);
+                    }
+                    subscriber.onCompleted();
+                } catch (IOException e) {
+                    subscriber.onError(e);
+                }
+            }
+        })
+                .compose(RxComposeUtil.network());
+    }
+
     public void requestChannelVideos(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String nextPageToken)
     {
         Subscription s = requestChannelVideos(nextPageToken)

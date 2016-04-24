@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.videos;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -94,9 +96,26 @@ public class VideosFragment extends BaseSupportFragment
         return inflater.inflate(R.layout.fragment_videos, container, false);
     }
 
+    // Inflate and set the query listener for the search bar
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.youtube, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView =
+                (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchVideos(query);
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -173,6 +192,15 @@ public class VideosFragment extends BaseSupportFragment
         curSize += cruVideos.size();
         swipeRefreshLayout.setRefreshing(false);
         tempVideos.clear();
+    }
+
+    // Search the youtube channel for a specific video
+    void searchVideos(String query) {
+        videos.clear();
+        curSize = 0;
+        videosAdapter = null;
+
+        YouTubeVideoProvider.getInstance().requestVideoSearch(this, videoSubscriber, query);
     }
 
     private void forceUpdate()
