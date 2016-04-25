@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,8 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
     @Bind(R.id.next) RelativeLayout next;
     @Bind(R.id.nextText) TextView nextText;
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -50,6 +53,7 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
         formState = FormState.PROGRESS;
 
         fm = getSupportFragmentManager();
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -181,13 +185,17 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
     @Override
     public void setTitle(String title)
     {
-        getSupportActionBar().setTitle(title);
+        toolbar.setTitle(title);
+        toolbar.requestLayout();
+        toolbar.invalidate();
     }
 
     @Override
     public void setSubtitle(String subtitle)
     {
-        getSupportActionBar().setSubtitle(subtitle);
+        toolbar.setSubtitle(subtitle);
+        toolbar.requestLayout();
+        toolbar.invalidate();
     }
 
     @Override
@@ -221,9 +229,9 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
         FormContentFragment nextFragment = currentIndex < fragments.size() ? fragments.get(currentIndex) : null;
         if(nextFragment != null)
         {
+            onPageChange();
             performTransaction(nextFragment);
         }
-        onPageChange();
     }
 
     @Override
@@ -236,14 +244,15 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
     public void prev()
     {
         currentIndex--;
-        fm.popBackStack();
         onPageChange();
+        fm.popBackStack();
+
     }
 
     @Override
     public void setNavigationClickable(boolean isClickable)
     {
-        if(isClickable)
+        if(!isClickable)
         {
             prev.setOnClickListener(null);
             next.setOnClickListener(null);
