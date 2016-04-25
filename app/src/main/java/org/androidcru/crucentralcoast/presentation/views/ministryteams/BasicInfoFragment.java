@@ -30,12 +30,12 @@ import rx.observers.Observers;
 
 public class BasicInfoFragment extends FormContentFragment
 {
-    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
-    private BaseValidator validator;
+    protected SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
+    protected BaseValidator validator;
 
-    @Bind(R.id.name_field) @NotEmpty EditText nameField;
-    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.email_field) @Email EditText emailField;
+    protected @Bind(R.id.name_field) @NotEmpty EditText nameField;
+    protected @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    protected @Bind(R.id.email_field) @Email EditText emailField;
 
 
     @Nullable
@@ -69,6 +69,7 @@ public class BasicInfoFragment extends FormContentFragment
             sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
             sharedPreferences.edit().putString(AppConstants.USER_EMAIL, emailField.getText().toString()).apply();
+
 
             // gets back the ministry team object from the form holder.
             MinistryTeam ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);

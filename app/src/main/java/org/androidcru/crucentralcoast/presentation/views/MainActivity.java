@@ -28,6 +28,7 @@ import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.providers.UserProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.presentation.views.communitygroups.CommunityGroupsFragment;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
@@ -208,7 +209,7 @@ public class MainActivity extends BaseAppCompatActivity
                 break;
             case R.id.nav_community_groups:
                 toolbar.setTitle(R.string.community_groups);
-                spawnConstructionFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new CommunityGroupsFragment()).commit();
                 break;
             case R.id.nav_ministry_teams:
                 toolbar.setTitle(R.string.ministry_teams);

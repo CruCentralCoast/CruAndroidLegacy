@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/community_groups"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="What's a Community Group?"
+    android:textStyle="bold"
+    android:textSize="20dp"
+    android:layout_margin="16dp"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="What's a Community Group?"
+        android:text="Community Groups take place every week in the dorms or off-campus. They exist to build your relationship with God and other students in a setting designed to deepen your knowledge of God’s truths, study the Bible, ask the hard questions, and live life together."
+        android:textSize="16dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Other Question Here?"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_margin="16dp"/>
@@ -15,7 +32,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Community Groups take place every week in the dorms or off-campus. They exist to build your relationship with God and other students in a setting designed to deepen your knowledge of God’s truths, study the Bible, ask the hard questions, and live life together."
+        android:text="They exist to build your relationship with God and other students in a setting designed to deepen your knowledge of God’s truths, study the Bible, ask the hard questions, and live life together."
         android:textSize="16dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="16dp"/>

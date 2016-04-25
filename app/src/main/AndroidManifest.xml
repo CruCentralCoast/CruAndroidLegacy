@@ -51,7 +51,7 @@
         <activity
             android:name=".presentation.views.forms.FormActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".presentation.views.ridesharing.driversignup.DriverSignupActivity"
             android:screenOrientation="portrait"
@@ -59,13 +59,15 @@
         <activity
             android:name=".presentation.views.ridesharing.passengersignup.PassengerSignupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".presentation.views.ministryteams.JoinMinistryTeamActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity android:name=".presentation.views.communitygroups.JoinCommunityGroupActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".presentation.views.ridesharing.myrides.MyRidesInfoActivity"
             android:screenOrientation="portrait"
