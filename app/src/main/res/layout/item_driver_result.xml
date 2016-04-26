@@ -10,7 +10,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:padding="8dp"
-        android:src="@drawable/ic_car_grey600_48dp"
+        android:src="@drawable/ic_car_grey600"
         android:layout_centerVertical="true"
         />
 

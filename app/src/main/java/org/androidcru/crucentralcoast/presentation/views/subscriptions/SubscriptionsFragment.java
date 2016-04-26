@@ -87,7 +87,7 @@ public class SubscriptionsFragment extends BaseSupportFragment
         ButterKnife.bind(this, view);
 
         // Sets the Floating Action Button's check icon to white
-        fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600, android.R.color.white));
 
         fab.setOnClickListener(v -> {
 

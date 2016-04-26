@@ -22,7 +22,7 @@
             android:layout_height="36dp"
             android:id="@+id/phone_icon"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_phone_grey600_48dp"
+            android:src="@drawable/ic_phone_grey600"
             android:layout_marginLeft="32dp"
             android:padding="8dp"/>
         <android.support.design.widget.TextInputLayout
@@ -52,7 +52,7 @@
             android:layout_height="36dp"
             android:id="@+id/email_icon"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_email_grey600_48dp"
+            android:src="@drawable/ic_email_grey600"
             android:layout_marginLeft="32dp"
             android:padding="8dp"/>
         <android.support.design.widget.TextInputLayout

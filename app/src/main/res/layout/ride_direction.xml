@@ -10,7 +10,7 @@
         android:layout_height="48dp"
         android:id="@+id/trip_type_icon"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_car_grey600_48dp"
+        android:src="@drawable/ic_car_grey600"
         android:padding="8dp"/>
 
     <RadioGroup

@@ -42,7 +42,7 @@
                     android:layout_height="36dp"
                     android:id="@+id/departure_time_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_clock_grey600_48dp"
+                    android:src="@drawable/ic_clock_grey600"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:padding="4dp"/>
@@ -67,7 +67,7 @@
                     android:layout_height="36dp"
                     android:id="@+id/departure_loc_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_map_marker_grey600_24dp"
+                    android:src="@drawable/ic_map_marker_grey600"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:padding="4dp"/>
@@ -92,7 +92,7 @@
                     android:layout_height="36dp"
                     android:id="@+id/ride_dir_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_car_grey600_48dp"
+                    android:src="@drawable/ic_car_grey600"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:padding="4dp"/>
@@ -117,7 +117,7 @@
                     android:layout_height="36dp"
                     android:id="@+id/spots_remaining_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_seat_recline_extra_grey600_48dp"
+                    android:src="@drawable/ic_seat_recline_extra_grey600"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:padding="4dp"/>

@@ -80,26 +80,26 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.CruEventVi
 
         holder.fbButton.setEnabled(cruEventVM.cruEvent.url != null && !cruEventVM.cruEvent.url.isEmpty());
         holder.fbButton.setSelected(holder.fbButton.isEnabled());
-        ViewUtil.setSelected(holder.fbButton, holder.fbButton.isEnabled(), R.drawable.ic_facebook_box_grey600_48dp, R.color.facebook_state);
+        ViewUtil.setSelected(holder.fbButton, holder.fbButton.isEnabled(), R.drawable.ic_facebook_box_grey600, R.color.facebook_state);
 
         holder.mapButton.setOnClickListener(cruEventVM.onMapClick());
-        holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600_48dp, R.color.red600));
+        holder.mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600, R.color.red600));
         holder.calButton.setOnClickListener(cruEventVM.onCalendarClick());
 
         ViewUtil.setSelected(holder.calButton,
                 cruEventVM.addedToCalendar,
-                R.drawable.ic_calendar_check_grey600_48dp,
-                R.drawable.ic_calendar_plus_grey600_48dp,
+                R.drawable.ic_calendar_check_grey600,
+                R.drawable.ic_calendar_plus_grey600,
                 R.color.cal_action);
 
         holder.rideSharingButton.setOnClickListener(cruEventVM.onRideShareSharing());
         ViewUtil.setSelected(holder.rideSharingButton, cruEventVM.cruEvent.rideSharingEnabled,
-                R.drawable.ic_car_grey600_48dp,
+                R.drawable.ic_car_grey600,
                 R.color.ride_sharing_state);
 
         holder.chevronView.setImageDrawable(cruEventVM.isExpanded
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         holder.eventDescription.setText(cruEventVM.cruEvent.description);
         holder.eventDescription.setVisibility(cruEventVM.isExpanded ? View.VISIBLE : View.GONE);
     }

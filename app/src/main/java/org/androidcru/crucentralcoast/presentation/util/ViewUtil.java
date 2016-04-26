@@ -41,7 +41,7 @@ public class ViewUtil
     {
         if(url == null || url.isEmpty())
         {
-            view.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.logo_grey));
+            view.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.cru_logo_grey600));
         }
         else
         {

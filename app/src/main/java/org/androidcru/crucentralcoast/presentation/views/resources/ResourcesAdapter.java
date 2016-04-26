@@ -63,11 +63,11 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourcesAdapter.Arti
         switch(type)
         {
             case ARTICLE:
-                return R.drawable.ic_note_outline_grey600_48dp;
+                return R.drawable.ic_note_outline_grey600;
             case AUDIO:
-                return R.drawable.ic_headphones_grey600_48dp;
+                return R.drawable.ic_headphones_grey600;
             case VIDEO:
-                return R.drawable.ic_video_collection;
+                return R.drawable.ic_video_collection_grey600;
         }
 
         return -1;
