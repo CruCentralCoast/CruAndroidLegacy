@@ -78,6 +78,7 @@ public abstract class BaseRideVM extends BaseVM
                 c.get(Calendar.DAY_OF_MONTH)
         );
         dpd.vibrate(false);
+        dpd.setMinDate(new GregorianCalendar(c.get(Calendar.YEAR) - 1, c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
         dpd.setMaxDate(eventEndDate);
         return dpd;
     }
@@ -174,7 +175,7 @@ public abstract class BaseRideVM extends BaseVM
 
             @Override
             public void onError(Status status) {
-                Timber.i("ERROR:", "An error occurred: " + status);
+                Timber.i("ERROR: An error occurred: " + status);
             }
         };
     }
