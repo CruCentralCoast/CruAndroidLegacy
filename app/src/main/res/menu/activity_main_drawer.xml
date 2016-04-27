@@ -39,10 +39,6 @@
             android:id="@+id/nav_videos"
             android:icon="@drawable/ic_youtube_play_grey600_24dp"
             android:title="@string/nav_videos"/>
-        <item
-            android:id="@+id/nav_tools"
-            android:icon="@android:drawable/ic_menu_compass"
-            android:title="@string/nav_tools"/>
     </group>
 
 </menu>
