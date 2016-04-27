@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,8 +91,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
 
         // Set the chevron to up or down depending on if the view is expanded or not
         holder.videoChev.setImageDrawable(isExpanded
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
 
         // Play the video when the video thumbnail is clicked.
         holder.videoThumb.setOnClickListener((View v) ->
@@ -138,8 +137,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.CruVideoVi
             holder.videoDescription.setVisibility(visibility);
 
             holder.videoChev.setImageDrawable(visibility == View.VISIBLE
-                    ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
-                    : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+                    ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                    : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
 
             viewExpandedStates.set(position, visibility == View.VISIBLE);
             notifyItemChanged(holder.getAdapterPosition());

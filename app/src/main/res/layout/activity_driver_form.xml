@@ -63,7 +63,7 @@
                     android:layout_height="48dp"
                     android:id="@+id/phone_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_phone_grey600_48dp"
+                    android:src="@drawable/ic_phone_grey600"
                     android:padding="8dp"/>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_phone"
@@ -91,7 +91,7 @@
                     android:layout_height="48dp"
                     android:id="@+id/gender_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_account_multiple_outline_grey600_48dp"
+                    android:src="@drawable/ic_account_multiple_outline_grey600"
                     android:padding="8dp"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -124,7 +124,7 @@
                     android:layout_height="48dp"
                     android:id="@+id/car_capacity_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_car_grey600_48dp"
+                    android:src="@drawable/ic_car_grey600"
                     android:padding="8dp"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -179,7 +179,7 @@
                     android:layout_height="48dp"
                     android:id="@+id/radius_icon"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_map_marker_radius_grey600_48dp"
+                    android:src="@drawable/ic_map_marker_radius_grey600"
                     android:padding="8dp"/>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_radius"

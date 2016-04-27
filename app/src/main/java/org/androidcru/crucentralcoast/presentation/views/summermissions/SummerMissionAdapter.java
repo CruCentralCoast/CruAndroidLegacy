@@ -72,7 +72,7 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         {
             Picasso.with(context)
                     .load(summerMission.image.url)
-                    .placeholder(R.drawable.logo_grey)
+                    .placeholder(R.drawable.cru_logo_grey600)
                     .fit()
                     .into(holder.missionBanner);
         }
@@ -82,8 +82,8 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         }
 
         holder.chevView.setImageDrawable(isExpanded.get(position)
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         holder.missionDescription.setText(summerMission.description);
         holder.missionDescription.setVisibility(isExpanded.get(position) ? View.VISIBLE : View.GONE);
         holder.learnMore.setVisibility((summerMission.url != null && !summerMission.url.isEmpty()) ? View.VISIBLE : View.GONE);

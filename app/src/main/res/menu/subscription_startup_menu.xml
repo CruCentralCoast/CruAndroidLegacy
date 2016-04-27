@@ -5,6 +5,6 @@
     <item android:id="@+id/action_done"
           android:title="@string/done"
           android:orderInCategory="100"
-          android:icon="@drawable/ic_check_grey600_48dp"
+          android:icon="@drawable/ic_check_grey600"
           app:showAsAction="always"/>
 </menu>

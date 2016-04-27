@@ -21,10 +21,8 @@ import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.parceler.Parcels;
-import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -136,7 +134,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     private void setupFab()
     {
-        fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600_48dp, android.R.color.white));
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
             //if fields are valid, update shared preferences and the Ride
             if(validator.validate())
