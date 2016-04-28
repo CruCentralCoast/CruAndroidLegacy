@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -38,6 +39,15 @@ public class FeedFragment extends ListFragment
             @Override
             public void onCompleted()
             {
+                if(items.isEmpty())
+                {
+                    emptyView.setVisibility(View.VISIBLE);
+                    ((TextView) (FeedFragment.this.getView().findViewById(R.id.informational_text))).setText(R.string.no_feed_items);
+                }
+                else
+                {
+                    emptyView.setVisibility(View.GONE);
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -76,6 +86,8 @@ public class FeedFragment extends ListFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        inflateEmptyView(R.layout.empty_with_alert);
+
         super.onViewCreated(view, savedInstanceState);
 
         layoutManager = new LinearLayoutManager(getContext());
