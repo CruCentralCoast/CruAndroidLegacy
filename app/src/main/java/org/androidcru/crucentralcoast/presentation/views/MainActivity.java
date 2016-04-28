@@ -71,8 +71,7 @@ public class MainActivity extends BaseAppCompatActivity
         constructionFragment = new ConstructionFragment();
         if(savedInstanceState == null)
         {
-            toolbar.setTitle(R.string.nav_feed);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
+            switchToFeed();
         }
 
         checkPlayServicesCode();
@@ -187,7 +186,7 @@ public class MainActivity extends BaseAppCompatActivity
 
         switch (id)
         {
-            case R.id.nav_home:
+            case R.id.nav_feed:
                 toolbar.setTitle(R.string.nav_feed);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
                 break;
@@ -241,6 +240,13 @@ public class MainActivity extends BaseAppCompatActivity
         navigationView.setCheckedItem(R.id.nav_events);
         toolbar.setTitle(R.string.nav_events);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+    }
+
+    public void switchToFeed()
+    {
+        navigationView.setCheckedItem(R.id.nav_feed);
+        toolbar.setTitle(R.string.nav_feed);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
     }
 
 
