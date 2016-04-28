@@ -9,7 +9,6 @@ import android.widget.EditText;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
-import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -28,6 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.observers.Observers;
+import timber.log.Timber;
 
 public class DriverSignupActivity extends BaseAppCompatActivity
 {
@@ -92,12 +92,12 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     private void createDriver()
     {
-        RideProvider.createRide(this, Observers.empty(), completeRide(driverSignupVM.getRide()));
+        RideProvider.createRide(Observers.empty(), completeRide(driverSignupVM.getRide()));
     }
 
     private void updateDriver()
     {
-        RideProvider.updateRide(this, Observers.empty(), completeRide(driverSignupVM.getRide()));
+        RideProvider.updateRide(Observers.empty(), completeRide(driverSignupVM.getRide()));
     }
 
     private void setupPlacesAutocomplete()

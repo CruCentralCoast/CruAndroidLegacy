@@ -25,7 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
-public class    FormActivity extends AppCompatActivity implements FormHolder
+public class FormActivity extends AppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
     private HashMap<String, Object> dataObjects = new HashMap<>();

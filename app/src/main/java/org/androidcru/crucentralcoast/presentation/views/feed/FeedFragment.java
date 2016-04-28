@@ -109,6 +109,7 @@ public class FeedFragment extends ListFragment
     public void onResume()
     {
         super.onResume();
+        swipeRefreshLayout.setRefreshing(true);
         forceUpdate();
     }
 
@@ -118,6 +119,7 @@ public class FeedFragment extends ListFragment
         adapter = null;
 
         getMoreFeedItems(0);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void getMoreFeedItems(int page)

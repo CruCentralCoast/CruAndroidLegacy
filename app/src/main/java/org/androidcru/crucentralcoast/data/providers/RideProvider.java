@@ -124,12 +124,11 @@ public final class RideProvider
 
 
 
-    public static void createRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
+    public static void createRide(Observer<Ride> observer, Ride ride)
     {
-        Subscription s = createRide(ride)
+        createRide(ride)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
-        holder.addSubscription(s);
     }
 
     protected static Observable<Ride> createRide(Ride ride)
@@ -140,12 +139,11 @@ public final class RideProvider
 
 
 
-    public static void updateRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
+    public static void updateRide(Observer<Ride> observer, Ride ride)
     {
-        Subscription s = updateRide(ride.id, ride)
+        updateRide(ride.id, ride)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
-        holder.addSubscription(s);
     }
 
     protected static Observable<Ride> updateRide(String rideId, Ride ride)
