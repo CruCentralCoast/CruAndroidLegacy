@@ -4,6 +4,7 @@ package org.androidcru.crucentralcoast.data.providers;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
@@ -18,6 +19,23 @@ import rx.Subscription;
 public final class ResourceProvider
 {
     private static CruApiService cruApiService = ApiProvider.getService();
+
+    private static Observable.Transformer<Resource, Resource> tagRetriever =
+        (Observable<Resource> o) -> o.map(resource -> {
+                Query tagQuery = new Query.Builder()
+                        .setCondition(new ConditionsBuilder()
+                                .setField("_id")
+                                .addRestriction(ConditionsBuilder.OPERATOR.IN, resource.tagIds.toArray(new String[resource.tagIds.size()]))
+                                .build())
+                        .build();
+
+                resource.tags = cruApiService.findResourceTag(tagQuery)
+                        .compose(RxComposeUtil.network())
+                        .toBlocking()
+                        .first();
+
+                return resource;
+            });
 
     public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, Resource.ResourceType[] types, ResourceTag[] tags)
     {
@@ -67,24 +85,9 @@ public final class ResourceProvider
 
 
 
-        return cruApiService.findResources(query.conditions)
+        return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
-                .map(resource -> {
-
-                    Query tagQuery = new Query.Builder()
-                            .setCondition(new ConditionsBuilder()
-                                    .setField("_id")
-                                    .addRestriction(ConditionsBuilder.OPERATOR.IN, resource.tagIds.toArray(new String[resource.tagIds.size()]))
-                                    .build())
-                            .build();
-
-                    resource.tags = cruApiService.findResourceTag(tagQuery.conditions)
-                        .compose(RxComposeUtil.network())
-                        .toBlocking()
-                        .first();
-
-                    return resource;
-                })
+                .compose(tagRetriever)
                 .toList()
                 .compose(RxComposeUtil.network());
     }
@@ -100,6 +103,28 @@ public final class ResourceProvider
     protected static Observable<List<ResourceTag>> getResourceTags()
     {
         return cruApiService.getResourceTag()
+                .compose(RxComposeUtil.network());
+    }
+
+    protected static Observable<Resource> getResources()
+    {
+        return cruApiService.getResources()
+                .flatMap(resources -> Observable.from(resources))
+                .compose(RxComposeUtil.network())
+                .compose(tagRetriever);
+    }
+
+    protected static Observable<Resource> getResourcesPaginated(int page, int pageSize)
+    {
+        Query query = new Query.Builder()
+                .setOptions(new OptionsBuilder()
+                        .addOption(OptionsBuilder.OPTIONS.SKIP, page * pageSize)
+                        .build())
+                .build();
+
+        return cruApiService.findResources(query)
+                .flatMap(resources -> Observable.from(resources))
+                .compose(tagRetriever)
                 .compose(RxComposeUtil.network());
     }
 }

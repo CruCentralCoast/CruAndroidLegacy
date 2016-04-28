@@ -43,7 +43,7 @@ public class SubscriptionsTests
         onView(withId(R.id.subscription_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
-        // asserts that the checkbox is in the opposite state of where it started
+        // asserts that the checkbox is in the opposite isExpanded of where it started
         onView(withRecyclerView(R.id.subscription_list)
                 .atPositionOnView(1, R.id.checkbox))
                 .check(matches(isChecked ? not(isChecked()) : isChecked()));

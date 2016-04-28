@@ -68,7 +68,7 @@ public class OptionsBuilder
 
     public enum OPTIONS
     {
-        SORT("sort"), LIMIT("limit");
+        SORT("sort"), LIMIT("limit"), SKIP("skip");
 
         private String serializedName;
 

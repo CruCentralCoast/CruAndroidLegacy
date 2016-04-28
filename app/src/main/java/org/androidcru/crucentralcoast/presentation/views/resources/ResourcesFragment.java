@@ -3,13 +3,10 @@ package org.androidcru.crucentralcoast.presentation.views.resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
@@ -22,6 +19,7 @@ import java.util.List;
 
 import rx.Observer;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class ResourcesFragment extends ListFragment
 {
@@ -89,7 +87,6 @@ public class ResourcesFragment extends ListFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
-        setupCustomTab();
 
         swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
@@ -105,17 +102,8 @@ public class ResourcesFragment extends ListFragment
     private void setResources(List<Resource> resources)
     {
         //Adapter for RecyclerView
-        ResourcesAdapter resourcesAdapter = new ResourcesAdapter(getActivity(), new ArrayList<>(resources), customTabsIntentBuilder);
+        ResourcesAdapter resourcesAdapter = new ResourcesAdapter(new ArrayList<>(resources), customTabsIntentBuilder);
         recyclerView.setAdapter(resourcesAdapter);
         this.resources = new ArrayList<>(resources);
-    }
-
-    private void setupCustomTab() {
-        customTabsIntentBuilder = new CustomTabsIntent.Builder();
-
-        int color = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-        customTabsIntentBuilder.setToolbarColor(color);
-
-        customTabsIntentBuilder.setShowTitle(true);
     }
 }

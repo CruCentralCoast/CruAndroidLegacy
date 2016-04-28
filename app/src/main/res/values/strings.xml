@@ -145,6 +145,9 @@
     <string name="videos_no_description">No video description available.</string>
     <string name="default_video">No videos were found</string>
     <string name="video_search_hint">Search Cru Cal Poly SLO</string>
+    <string name="nav_feed">Feed</string>
+    <string name="no_rides">No rides match your criteria!</string>
+    <string name="no_feed_items">No feed items at this time!</string>
 
     <string-array name="myrides_titles">
         <item>Driver</item>

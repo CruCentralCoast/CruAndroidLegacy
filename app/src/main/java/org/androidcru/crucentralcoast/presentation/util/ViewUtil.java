@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 
 import java.util.WeakHashMap;
@@ -24,6 +26,7 @@ public class ViewUtil
 {
 
     private static WeakHashMap<String, Typeface> fontCache = new WeakHashMap<>();
+    private static CustomTabsIntent intent;
     private static final String fontsDir = "fonts/";
 
 
@@ -105,5 +108,21 @@ public class ViewUtil
         spinner.setSelection(index);
         if(onItemSelected != null)
             spinner.setOnItemSelectedListener(onItemSelected);
+    }
+
+    public static CustomTabsIntent getCustomTabsIntent(Context context) {
+        if(intent == null)
+        {
+
+            CustomTabsIntent.Builder customTabsIntentBuilder = new CustomTabsIntent.Builder();
+
+            int color = ContextCompat.getColor(CruApplication.getContext(), R.color.colorPrimary);
+            customTabsIntentBuilder.setToolbarColor(color);
+
+            customTabsIntentBuilder.setShowTitle(true);
+
+            intent = customTabsIntentBuilder.build();
+        }
+        return intent;
     }
 }

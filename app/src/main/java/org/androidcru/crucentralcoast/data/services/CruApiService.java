@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.data.services;
 
-import com.google.gson.JsonObject;
-
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
@@ -15,6 +13,7 @@ import org.androidcru.crucentralcoast.data.models.SummerMission;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -33,6 +32,9 @@ public interface CruApiService
 
     @GET("/api/events/")
     public Observable<ArrayList<CruEvent>> getEvents();
+
+    @POST("/api/events/search")
+    Observable<List<CruEvent>> searchEvents(@Body Query query);
 
     @GET("/api/ministries/")
     public Observable<ArrayList<MinistrySubscription>> getMinistries();
@@ -56,13 +58,16 @@ public interface CruApiService
     @POST("/api/rides/search")
     Observable<ArrayList<Ride>> searchRides(@Body Query query);
 
-    @POST("api/resources/find")
-    Observable<ArrayList<Resource>> findResources(@Body JsonObject query);
+    @POST("api/resources/search")
+    Observable<ArrayList<Resource>> findResources(@Body Query query);
 
-    @POST("/api/resourcetags/find")
-    Observable<ArrayList<ResourceTag>> findResourceTag(@Body JsonObject query);
+    @GET("api/resources")
+    Observable<ArrayList<Resource>> getResources();
 
-    @GET("/api/resourcetags/")
+    @POST("/api/resourcetags/search")
+    Observable<ArrayList<ResourceTag>> findResourceTag(@Body Query query);
+
+    @GET("/api/resourcetags")
     Observable<ArrayList<ResourceTag>> getResourceTag();
 
     @FormUrlEncoded

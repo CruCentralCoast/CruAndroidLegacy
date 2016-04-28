@@ -4,6 +4,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.BuildConfig;
@@ -13,6 +14,7 @@ import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
 import java.io.IOException;
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -23,15 +25,13 @@ import timber.log.Timber;
 // Used to query the SLOCru YouTube channel for its videos
 public final class YouTubeVideoProvider
 {
-
-    private static YouTubeVideoProvider instance;
-
-    private YouTube youtube;
     private YouTube.Search.List query;
+    private boolean first = true;
+    private String nextPageToken;
 
-    private YouTubeVideoProvider()
+    public YouTubeVideoProvider()
     {
-        youtube = new YouTube.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), null)
+        YouTube youtube = new YouTube.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), null)
                 .setApplicationName(CruApplication.getContext().getString(R.string.app_name))
                 .build();
         try
@@ -44,21 +44,15 @@ public final class YouTubeVideoProvider
         {
             Timber.e(e, "YouTubeVideoProvider error");
         }
+
         query.setKey(BuildConfig.YOUTUBEBROWSERAPIKEY);
         query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
         query.setOrder("date");
-        query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
+        query.setMaxResults(AppConstants.PAGE_SIZE);
         query.setType("video");
     }
 
-    public static YouTubeVideoProvider getInstance()
-    {
-        if(instance == null)
-            instance = new YouTubeVideoProvider();
-        return instance;
-    }
-
-    public void requestVideoSearch(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String search)
+    public void requestVideoSearch(SubscriptionsHolder holder, Observer<List<SearchResult>> observer, String search)
     {
         Subscription s = requestVideoSearch(search)
                 .compose(RxComposeUtil.ui())
@@ -66,16 +60,23 @@ public final class YouTubeVideoProvider
         holder.addSubscription(s);
     }
 
-    protected Observable<SearchListResponse> requestVideoSearch(String search) {
-        return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
+    protected Observable<List<SearchResult>> requestVideoSearch(String search) {
+        if(!first && nextPageToken == null)
+            return Observable.empty();
+
+        return Observable.create(new Observable.OnSubscribe<List<SearchResult>>() {
             @Override
-            public void call(Subscriber<? super SearchListResponse> subscriber) {
+            public void call(Subscriber<? super List<SearchResult>> subscriber) {
                 try {
-                    Timber.e("Got here");
                     query.setQ(search);
+                    query.setPageToken(nextPageToken == null ? "" : nextPageToken);
+
                     SearchListResponse searchResponse = query.execute();
                     if (!searchResponse.isEmpty()) {
-                        subscriber.onNext(searchResponse);
+                        nextPageToken = searchResponse.getNextPageToken();
+                        first = false;
+
+                        subscriber.onNext(searchResponse.getItems());
                     }
                     subscriber.onCompleted();
                 } catch (IOException e) {
@@ -86,27 +87,48 @@ public final class YouTubeVideoProvider
                 .compose(RxComposeUtil.network());
     }
 
-    public void requestChannelVideos(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String nextPageToken)
+
+    public void requestChannelVideos(SubscriptionsHolder holder, Observer<List<SearchResult>> observer)
     {
-        Subscription s = requestChannelVideos(nextPageToken)
+        Subscription s = requestChannelVideos()
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
+    public void resetQuery()
+    {
+        first = true;
+        nextPageToken = null;
+    }
+
+    protected Observable<List<SearchResult>> refreshQuery()
+    {
+        resetQuery();
+        return requestChannelVideos();
+    }
+
     // Returns a video response to its observer. The response contains a list of 20 videos,
     // including the videos' ids and snippets.
-    protected Observable<SearchListResponse> requestChannelVideos(String nextPageToken)
+    protected Observable<List<SearchResult>> requestChannelVideos()
     {
-        return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
+        if(!first && nextPageToken == null)
+            return Observable.empty();
+
+        return Observable.create(new Observable.OnSubscribe<List<SearchResult>>() {
             @Override
-            public void call(Subscriber<? super SearchListResponse> subscriber) {
+            public void call(Subscriber<? super List<SearchResult>> subscriber) {
                 try {
                     query.setQ("");
-                    query.setPageToken(nextPageToken);
+                    query.setPageToken(nextPageToken == null ? "" : nextPageToken);
+
                     SearchListResponse searchResponse = query.execute();
                     if (!searchResponse.isEmpty()) {
-                        subscriber.onNext(searchResponse);
+                        // Save the token of the next page of the query. This will be used to get the
+                        // next set of 20 items.
+                        nextPageToken = searchResponse.getNextPageToken();
+                        first = false;
+                        subscriber.onNext(searchResponse.getItems());
                     }
                     subscriber.onCompleted();
                 } catch (IOException e) {

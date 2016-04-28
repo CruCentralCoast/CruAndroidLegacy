@@ -10,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
@@ -29,6 +28,7 @@ import org.androidcru.crucentralcoast.data.providers.UserProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.feed.FeedFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
@@ -71,7 +71,8 @@ public class MainActivity extends BaseAppCompatActivity
         constructionFragment = new ConstructionFragment();
         if(savedInstanceState == null)
         {
-            spawnConstructionFragment();
+            toolbar.setTitle(R.string.nav_feed);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
         }
 
         checkPlayServicesCode();
@@ -187,8 +188,8 @@ public class MainActivity extends BaseAppCompatActivity
         switch (id)
         {
             case R.id.nav_home:
-                toolbar.setTitle(R.string.app_name);
-                spawnConstructionFragment();
+                toolbar.setTitle(R.string.nav_feed);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
                 break;
             case R.id.nav_events:
                 toolbar.setTitle(R.string.nav_events);
