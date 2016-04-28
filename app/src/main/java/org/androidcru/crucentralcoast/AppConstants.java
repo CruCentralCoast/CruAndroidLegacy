@@ -90,4 +90,5 @@ public class AppConstants
     
     public static final float RADIUS_STROKE_WID = 5;
     public static final int MAX_CAR_CAPACITY = Integer.MAX_VALUE;
+    public static final double MAX_RADIUS = 25.0;
 }
