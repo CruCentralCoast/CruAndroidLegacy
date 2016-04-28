@@ -93,7 +93,7 @@ public class MainActivity extends BaseAppCompatActivity
                         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         String userPhoneNumber = telephonyManager.getLine1Number();
                         if (userPhoneNumber != null)
-                            userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
+                            userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
                         CruApplication.getSharedPreferences().edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
@@ -188,10 +188,6 @@ public class MainActivity extends BaseAppCompatActivity
         {
             case R.id.nav_home:
                 toolbar.setTitle(R.string.app_name);
-                spawnConstructionFragment();
-                break;
-            case R.id.nav_tools:
-                toolbar.setTitle(R.string.nav_tools);
                 spawnConstructionFragment();
                 break;
             case R.id.nav_events:
