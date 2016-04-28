@@ -11,7 +11,7 @@ buildscript {
         // in the individual module build.gradle files
 
         // Enables GCM
-        classpath 'com.google.gms:google-services:2.0.0-alpha3'
+        classpath 'com.google.gms:google-services:2.1.0'
 
         //Checks for DEX count
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.3.1'

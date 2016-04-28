@@ -169,7 +169,6 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
     public void performTransaction(Fragment fragment) {
         fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
                 R.anim.slide_in_right, R.anim.slide_out_right).replace(R.id.content, fragment).addToBackStack(null).commit();
-        fm.executePendingTransactions();
     }
 
     private void clearUI()
@@ -231,6 +230,8 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
         {
             onPageChange();
             performTransaction(nextFragment);
+            fm.executePendingTransactions();
+            currentFormContent = nextFragment;
         }
     }
 
@@ -246,6 +247,8 @@ public class    FormActivity extends AppCompatActivity implements FormHolder
         currentIndex--;
         onPageChange();
         fm.popBackStack();
+        fm.executePendingTransactions();
+        currentFormContent = (FormContent) fm.getFragments().get(currentIndex);
 
     }
 

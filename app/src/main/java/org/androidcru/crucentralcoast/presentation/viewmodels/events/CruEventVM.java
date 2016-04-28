@@ -230,6 +230,18 @@ public class CruEventVM
                         .create();
                 dialog.show();
             }
+            /*else if(cruEvent.status == CruEvent.DRIVER)
+            {
+                Bundle b = new Bundle();
+                b.putInt(AppConstants.MY_RIDES_TAB, AppConstants.DRIVER_TAB);
+                ((MainActivity) (eventFragment.getActivity())).switchToMyRides(b);
+            }
+            else if(cruEvent.status == CruEvent.PASSENGER)
+            {
+                Bundle b = new Bundle();
+                b.putInt(AppConstants.MY_RIDES_TAB, AppConstants.PASSENGER_TAB);
+                ((MainActivity) (eventFragment.getActivity())).switchToMyRides(b);
+            }*/
             else
             {
                 Snackbar.make(eventFragment.getView(), "Ride Sharing Unavailable!", Snackbar.LENGTH_SHORT)

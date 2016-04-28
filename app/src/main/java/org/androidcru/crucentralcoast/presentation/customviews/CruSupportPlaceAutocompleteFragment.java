@@ -1,11 +1,15 @@
 package org.androidcru.crucentralcoast.presentation.customviews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import org.androidcru.crucentralcoast.R;
@@ -17,7 +21,10 @@ import butterknife.ButterKnife;
 public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocompleteFragment
 {
     @Bind(com.google.android.gms.R.id.place_autocomplete_search_button) ImageButton searchButton;
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText editText;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) public EditText editText;
+    @Bind(com.google.android.gms.R.id.place_autocomplete_clear_button) ImageButton clear;
+    public Place place;
+    private PlaceSelectionListener listener;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
@@ -37,5 +44,39 @@ public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocomplet
 
         view.requestLayout();
         view.invalidate();
+    }
+
+    public boolean validate()
+    {
+        boolean result = !editText.getText().toString().isEmpty();
+        if(!result)
+            editText.setError("Enter a location");
+        else
+            editText.setError(null);
+        getView().requestLayout();
+        getView().invalidate();
+        return result;
+    }
+
+    @Override
+    public void setOnPlaceSelectedListener(PlaceSelectionListener listener)
+    {
+        super.setOnPlaceSelectedListener(listener);
+        this.listener = listener;
+    }
+
+    public void restore(String text, Place p)
+    {
+        place = p;
+        listener.onPlaceSelected(p);
+        editText.setText(text);
+        clear.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        place = PlaceAutocomplete.getPlace(getContext(), data);
     }
 }

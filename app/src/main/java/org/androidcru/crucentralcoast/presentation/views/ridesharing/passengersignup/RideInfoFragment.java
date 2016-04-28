@@ -3,33 +3,50 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.google.android.gms.location.places.Place;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
+import org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
+import java.util.List;
+
 public class RideInfoFragment extends FormContentFragment {
 
-    private SupportPlaceAutocompleteFragment autocompleteFragment;
+    private CruSupportPlaceAutocompleteFragment autocompleteFragment;
     private BaseValidator validator;
 
     private RideFilterVM rideFilterVM;
+
+    private String oldPlaceText;
+    private Place oldPlace;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        //very much a hack but getChildFragmentManager.beginTransaction().replace().commit() is not working as expected for some reason.
+        List<Fragment> fragmentList = getChildFragmentManager().getFragments();
+        if(fragmentList != null && !fragmentList.isEmpty())
+        {
+            CruSupportPlaceAutocompleteFragment oldFragment = ((CruSupportPlaceAutocompleteFragment) getChildFragmentManager().getFragments().get(0));
+            oldPlace = oldFragment.place;
+            oldPlaceText = oldFragment.editText.getText().toString();
+            getChildFragmentManager().beginTransaction().remove(fragmentList.get(0)).commit();
+            getChildFragmentManager().executePendingTransactions();
+        }
         return inflater.inflate(R.layout.passenger_form_ride_info, container, false);
     }
 
@@ -38,12 +55,20 @@ public class RideInfoFragment extends FormContentFragment {
     {
         super.onViewCreated(view, savedInstanceState);
 
-        autocompleteFragment = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
         formHolder.setTitle(getString(R.string.passenger_signup));
-        rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT));
+
+        if(rideFilterVM == null)
+            rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT));
+        else
+            rideFilterVM.bindUI(this);
+
         validator = new BaseValidator(rideFilterVM);
+
+        getChildFragmentManager().executePendingTransactions();
+        autocompleteFragment = (CruSupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         setupPlacesAutocomplete();
+        if(oldPlaceText != null && oldPlace != null)
+            autocompleteFragment.restore(oldPlaceText, oldPlace);
     }
 
     private void setupPlacesAutocomplete()
@@ -69,7 +94,7 @@ public class RideInfoFragment extends FormContentFragment {
     @Override
     public void onNext()
     {
-        if(validator.validate())
+        if(validator.validate() &&  autocompleteFragment.validate())
         {
             Pair<Query, Ride.Direction> queryDirectionPair = rideFilterVM.getQuery();
             formHolder.addDataObject(PassengerSignupActivity.QUERY, queryDirectionPair.first);
@@ -77,6 +102,11 @@ public class RideInfoFragment extends FormContentFragment {
             formHolder.addDataObject(PassengerSignupActivity.LATLNG, rideFilterVM.precisePlace);
 
             super.onNext();
+        }
+        else
+        {
+            //validate also sets error messages, make sure second gets called due to shortciruit
+            autocompleteFragment.validate();
         }
     }
 }

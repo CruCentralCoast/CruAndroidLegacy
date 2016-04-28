@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import timber.log.Timber;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
@@ -31,6 +29,7 @@ import rx.Observer;
 import rx.Subscription;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class EventsFragment extends ListFragment
 {

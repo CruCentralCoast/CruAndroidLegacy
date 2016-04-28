@@ -19,6 +19,7 @@ import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.RideInfoFragment;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
@@ -26,26 +27,28 @@ import org.threeten.bp.ZonedDateTime;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import timber.log.Timber;
 
 public class RideFilterVM extends BaseRideVM
 {
     public LatLng precisePlace;
     private CruEvent event;
+    private int genderSelected = 0;
+    private int directionSelected = Ride.Direction.ROUNDTRIP.ordinal();
 
     @Bind(R.id.round_trip) RadioButton roundTrip;
     @Bind(R.id.direction) RadioGroup directionGroup;
     @Bind(R.id.gender_field) Spinner genderField;
     @Bind(R.id.time_field) @NotEmpty EditText rideTime;
     @Bind(R.id.date_field) @NotEmpty EditText rideDate;
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
     public RideFilterVM(RideInfoFragment fragment, FragmentManager fm, CruEvent event)
     {
         super(fragment, fm);
         this.event = event;
         eventEndDate = DateTimeUtils.toGregorianCalendar(event.endDate);
-        bindUI();
+        bindUI(fragment);
     }
 
     @Override
@@ -120,10 +123,11 @@ public class RideFilterVM extends BaseRideVM
         return genders;
     }
 
-    private void bindUI()
+    public void bindUI(BaseSupportFragment fragment)
     {
-        roundTrip.setChecked(true);
-        ViewUtil.setSpinner(genderField, gendersForSpinner(), null, 0);
+        rebind(fragment);
+        directionGroup.check(directionSelected == Ride.Direction.TO.ordinal() ? R.id.to_event : R.id.round_trip);
+        ViewUtil.setSpinner(genderField, gendersForSpinner(), null, genderSelected);
     }
 
     @OnClick(R.id.time_field)
@@ -138,5 +142,23 @@ public class RideFilterVM extends BaseRideVM
         onEventDateClicked(v, org.threeten.bp.DateTimeUtils.toGregorianCalendar(event.startDate));
     }
 
+    @OnItemSelected(R.id.gender_field)
+    public void onGenderSelected(int position)
+    {
+        genderSelected = position;
+    }
 
+    @OnClick({R.id.to_event, R.id.round_trip})
+    public void onDirectionSelected(RadioButton button)
+    {
+        switch (button.getId())
+        {
+            case R.id.to_event:
+                directionSelected = Ride.Direction.TO.ordinal();
+                break;
+            case R.id.round_trip:
+                directionSelected = Ride.Direction.ROUNDTRIP.ordinal();
+                break;
+        }
+    }
 }

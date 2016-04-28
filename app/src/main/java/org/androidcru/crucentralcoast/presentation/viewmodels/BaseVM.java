@@ -17,18 +17,40 @@ public class BaseVM
 
     public BaseVM(BaseAppCompatActivity activity)
     {
+        setupWithActivity(activity);
+    }
+
+    public BaseVM(BaseSupportFragment fragment)
+    {
+        setupWithFragment(fragment);
+    }
+
+    private void setupWithFragment(BaseSupportFragment fragment)
+    {
+        this.rootView = fragment.getView();
+        this.context = fragment.getContext();
+        this.holder = fragment;
+        ButterKnife.bind(this, rootView);
+    }
+
+    private void setupWithActivity(BaseAppCompatActivity activity)
+    {
         this.rootView = activity.findViewById(android.R.id.content);
         this.holder = activity;
         this.context = activity;
         ButterKnife.bind(this, activity);
     }
 
-    public BaseVM(BaseSupportFragment fragment)
+    public void rebind(BaseSupportFragment fragment)
     {
-        this.rootView = fragment.getView();
-        this.context = fragment.getContext();
-        this.holder = fragment;
-        ButterKnife.bind(this, rootView);
+        ButterKnife.unbind(this);
+        setupWithFragment(fragment);
+    }
+
+    public void rebind(BaseAppCompatActivity activity)
+    {
+        ButterKnife.unbind(this);
+        setupWithActivity(activity);
     }
 
 }
