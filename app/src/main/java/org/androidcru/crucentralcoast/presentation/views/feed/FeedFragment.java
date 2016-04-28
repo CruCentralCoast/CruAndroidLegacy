@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Dateable;
 import org.androidcru.crucentralcoast.data.providers.FeedProvider;
@@ -121,6 +122,6 @@ public class FeedFragment extends ListFragment
 
     private void getMoreFeedItems(int page)
     {
-        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
+        FeedProvider.getFeedItems(this, observer, CruApplication.getSharedPreferences(), youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
     }
 }

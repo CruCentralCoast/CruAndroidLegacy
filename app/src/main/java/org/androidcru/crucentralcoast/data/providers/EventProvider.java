@@ -1,5 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
+import android.content.SharedPreferences;
+
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
@@ -20,9 +22,24 @@ public class EventProvider
 {
     private static CruApiService cruService = ApiProvider.getService();
 
-    public static void requestEvents(SubscriptionsHolder holder, Observer<ArrayList<CruEvent>> observer)
+    protected static Observable.Transformer<CruEvent, CruEvent> getSubscriptionFilter(SharedPreferences sharedPreferences)
+    {
+        return (Observable<CruEvent> o) -> o.filter(cruEvent -> {
+            for(String parentMinistry : cruEvent.parentMinistrySubscriptions)
+            {
+                if(sharedPreferences.getBoolean(parentMinistry, false))
+                    return true;
+            }
+            return false;
+        });
+    }
+
+    public static void requestEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer, SharedPreferences sharedPreferences)
     {
         Subscription s = requestEvents()
+                .flatMap(cruEvents -> Observable.from(cruEvents))
+                .compose(getSubscriptionFilter(sharedPreferences))
+                .toList()
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);

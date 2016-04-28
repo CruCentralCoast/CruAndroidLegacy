@@ -22,10 +22,10 @@ import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.OnClick;
 import rx.Observer;
-import rx.Subscription;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -34,8 +34,7 @@ public class EventsFragment extends ListFragment
 {
     private ArrayList<CruEvent> eventList;
     private LinearLayoutManager layoutManager;
-    private Observer<ArrayList<CruEvent>> eventSubscriber;
-    private Subscription subscription;
+    private Observer<List<CruEvent>> eventSubscriber;
     private SharedPreferences sharedPreferences;
 
     /**
@@ -91,7 +90,7 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = new Observer<ArrayList<CruEvent>>()
+        eventSubscriber = new Observer<List<CruEvent>>()
         {
             @Override
             public void onCompleted()
@@ -114,7 +113,7 @@ public class EventsFragment extends ListFragment
             }
 
             @Override
-            public void onNext(ArrayList<CruEvent> cruEvents)
+            public void onNext(List<CruEvent> cruEvents)
             {
                 setEvents(cruEvents);
             }
@@ -131,7 +130,7 @@ public class EventsFragment extends ListFragment
     private void getCruEvents()
     {
         swipeRefreshLayout.setRefreshing(true);
-        EventProvider.requestEvents(this, eventSubscriber);
+        EventProvider.requestEvents(this, eventSubscriber, sharedPreferences);
     }
 
 
@@ -140,16 +139,10 @@ public class EventsFragment extends ListFragment
      *
      * @param cruEvents List of new Events the UI should adhere to
      */
-    public void setEvents(ArrayList<CruEvent> cruEvents)
+    public void setEvents(List<CruEvent> cruEvents)
     {
         eventList.clear();
         rx.Observable.from(cruEvents)
-                .filter(cruEvent -> {
-                    for (String s : cruEvent.parentMinistrySubscriptions)
-                        if (sharedPreferences.getBoolean(s, false))
-                            return true;
-                    return false;
-                })
                 .map(cruEvent -> {
                     if (CalendarProvider.hasCalendarPermission(getContext()))
                     {
