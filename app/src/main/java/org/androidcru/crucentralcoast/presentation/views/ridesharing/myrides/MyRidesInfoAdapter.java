@@ -106,23 +106,5 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
                     }
                 });
-
-//        new AlertDialog.Builder(parent).create();
-//
-//        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_kick_title));
-//        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-//                CruApplication.getContext().getString(R.string.alert_dialog_yes),
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
-//                    }
-//                });
-//        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-//                CruApplication.getContext().getString(R.string.alert_dialog_no),
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        alertDialog.hide();
-//            }
-//                });
     }
 }
