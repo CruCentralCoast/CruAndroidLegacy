@@ -25,6 +25,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragmen
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -185,14 +186,7 @@ public class VideosFragment extends BaseSupportFragment
         else
         {
             // Don't add the video if it is already in the videos list
-            for(SearchResult sr : tempVideos)
-            {
-                if(!videos.contains(sr))
-                {
-                    videos.add(sr);
-                    ++curSize;
-                }
-            }
+            curSize += addIfNotDuplicated(videos, tempVideos);
 
             // Let the Adapter know that more videos have been added to its list.
             videosAdapter.notifyItemChanged(curSize, videosAdapter.getItemCount() - 1);
@@ -203,6 +197,25 @@ public class VideosFragment extends BaseSupportFragment
         curSize += newVideos.size();
         swipeRefreshLayout.setRefreshing(false);
         tempVideos.clear();
+    }
+
+    // Takes in 2 lists and appends the non-duplicated contents of the new list to the old list
+    // Returns the number of new items added to the new list
+    public static <T> int addIfNotDuplicated(List<T> old, List<T> newItems)
+    {
+        int count = 0;
+        Iterator<T> iterator = newItems.iterator();
+        while (iterator.hasNext())
+        {
+            T sr = iterator.next();
+            if(!old.contains(sr))
+            {
+                old.add(sr);
+                ++count;
+            }
+        }
+
+        return count;
     }
 
     // Search the youtube channel for a specific video
