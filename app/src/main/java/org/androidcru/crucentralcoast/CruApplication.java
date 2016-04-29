@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.multidex.BuildConfig;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
