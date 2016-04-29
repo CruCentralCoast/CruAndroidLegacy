@@ -15,6 +15,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.util.AlertDialogCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 {
     List<Passenger> passengers;
     private MyRidesInfoActivity parent;
-    private AlertDialog alertDialog;
+    private AlertDialogCreator alertDialog;
     private String rideID;
     private String selectedPassengerID;
 
@@ -75,19 +76,20 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             kickPassenger.setOnClickListener(kickPassengerButton());
         }
 
+        private void setSelectedPassenger(String phone) {
+            for (int iter = 0; iter < passengers.size(); iter++) {
+                if (phone.equals(passengers.get(iter).phone.toString()))
+                    selectedPassengerID = passengers.get(iter).id;
+            }
+        }
+
         private View.OnClickListener kickPassengerButton() {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     alertDialog.setMessage(CruApplication.getContext().getString(R.string.alert_dialog_kick_msg)
                             + " " + passengerName.getText().toString() + "?");
-
-                    String temp = passengerPhone.getText().toString();
-                    for (int iter = 0; iter < passengers.size(); iter++) {
-                        if (temp.equals(passengers.get(iter).phone.toString()))
-                            selectedPassengerID = passengers.get(iter).id;
-                    }
-
+                    setSelectedPassenger(passengerPhone.getText().toString());
                     alertDialog.show();
                 }
             };
@@ -95,22 +97,32 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
     private void initAlertDialog() {
-        alertDialog = new AlertDialog.Builder(parent).create();
 
-        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_kick_title));
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                CruApplication.getContext().getString(R.string.alert_dialog_yes),
+        alertDialog = new AlertDialogCreator(parent,
+                CruApplication.getContext().getString(R.string.alert_dialog_kick_title),
+                CruApplication.getContext().getString(R.string.alert_dialog_kick_msg),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
                     }
                 });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                CruApplication.getContext().getString(R.string.alert_dialog_no),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.hide();
-            }
-                });
+
+//        new AlertDialog.Builder(parent).create();
+//
+//        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_kick_title));
+//        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+//                CruApplication.getContext().getString(R.string.alert_dialog_yes),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
+//                    }
+//                });
+//        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+//                CruApplication.getContext().getString(R.string.alert_dialog_no),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        alertDialog.hide();
+//            }
+//                });
     }
 }

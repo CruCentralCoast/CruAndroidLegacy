@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.util.AlertDialogCreator;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
 import org.parceler.Parcels;
@@ -32,7 +33,7 @@ public class MyRidesDriverVM {
 
     public String passengerList;
     public CruEvent cruEvent;
-    private AlertDialog alertDialog;
+    private AlertDialogCreator alertDialog;
 
     public MyRidesDriverVM(MyRidesDriverFragment fragment, Ride ride, boolean isExpanded)
     {
@@ -80,21 +81,12 @@ public class MyRidesDriverVM {
     }
 
     private void initAlertDialog() {
-        alertDialog = new AlertDialog.Builder(parent.getContext()).create();
-        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_title));
-        alertDialog.setMessage(CruApplication.getContext().getString(R.string.alert_dialog_driver_msg));
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                CruApplication.getContext().getString(R.string.alert_dialog_yes),
+        alertDialog = new AlertDialogCreator(parent.getContext(),
+                CruApplication.getContext().getString(R.string.alert_dialog_title),
+                CruApplication.getContext().getString(R.string.alert_dialog_driver_msg),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         RideProvider.dropRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id);
-                    }
-                });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                CruApplication.getContext().getString(R.string.alert_dialog_no),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.hide();
                     }
                 });
     }
