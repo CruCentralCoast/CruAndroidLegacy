@@ -27,7 +27,7 @@ import rx.Observable;
 
 public interface CruApiService
 {
-    @GET("/api/users/phone/{phone}") // ask jon
+    @GET("/api/users/phone/{phone}")
     public Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
 
     @GET("/api/events/")
