@@ -113,7 +113,9 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         }
 
 
-        fbButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_facebook_box_grey600, R.color.fbBlue));
+        fbButton.setEnabled(cruEvent.url != null && !cruEvent.url.isEmpty());
+        fbButton.setSelected(fbButton.isEnabled());
+        ViewUtil.setSelected(fbButton, fbButton.isEnabled(), R.drawable.ic_facebook_box_grey600, R.color.facebook_state);
         mapButton.setImageDrawable(DrawableUtil.getTintedDrawable(context, R.drawable.ic_map_marker_grey600, R.color.red600));
 
         ViewUtil.setSelected(calButton,

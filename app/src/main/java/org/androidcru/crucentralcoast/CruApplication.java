@@ -16,6 +16,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.threetenabp.AndroidThreeTen;
+import com.squareup.leakcanary.LeakCanary;
 
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
@@ -56,6 +57,8 @@ public class CruApplication extends MultiDexApplication
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         AndroidThreeTen.init(this);
+        LeakCanary.install(this);
+
 
         setupDebugConfig();
 

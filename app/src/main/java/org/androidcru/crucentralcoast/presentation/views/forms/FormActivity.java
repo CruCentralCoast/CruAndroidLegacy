@@ -35,6 +35,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     private FragmentManager fm;
 
     public FormState formState;
+    private boolean isTransitioning = false;
 
     @Bind(R.id.bottom_bar) RelativeLayout bottomBar;
     @Bind(R.id.prev) RelativeLayout prev;
@@ -136,23 +137,25 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     {
         Observable<Long> o500 = Observable.timer(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.computation());
 
         prev.setOnClickListener(v -> {
             if (currentFormContent != null)
             {
+                boolean oldState = next.hasOnClickListeners();
                 setNavigationClickable(false);
                 currentFormContent.onPrevious();
-                o500.subscribe(Observers.create(vo -> setNavigationClickable(true)));
+                o500.subscribe(Observers.create(vo -> setNavigationClickable(oldState)));
             }
         });
 
         next.setOnClickListener(v -> {
             if (currentFormContent != null)
             {
+                boolean oldState = next.hasOnClickListeners();
                 setNavigationClickable(false);
                 currentFormContent.onNext();
-                o500.subscribe(Observers.create(vo -> setNavigationClickable(true)));
+                o500.subscribe(Observers.create(vo -> setNavigationClickable(oldState)));
             }
         });
     }
@@ -163,7 +166,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         if (formState == FormState.FINISH || currentIndex == 0)
             complete();
         else
-            currentFormContent.onPrevious();
+            prev.performClick();
     }
 
     public void performTransaction(Fragment fragment) {
@@ -177,7 +180,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         setNavigationVisibility(View.VISIBLE);
         setPreviousVisibility(View.VISIBLE);
         setNextVisibility(View.VISIBLE);
-        setNavigationClickable(true);
         setNextText("NEXT");
     }
 
@@ -230,7 +232,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         {
             onPageChange();
             performTransaction(nextFragment);
-            fm.executePendingTransactions();
             currentFormContent = nextFragment;
         }
     }
@@ -246,8 +247,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     {
         currentIndex--;
         onPageChange();
-        fm.popBackStack();
-        fm.executePendingTransactions();
+        fm.popBackStackImmediate();
         currentFormContent = (FormContent) fm.getFragments().get(currentIndex);
 
     }

@@ -88,7 +88,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
             // not sure what to do if player cant resolve video, so I make toast
             if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context)) {
                 context.startActivity(YouTubeIntents
-                        .createPlayVideoIntentWithOptions(context, model.getKind(), true, true));
+                        .createPlayVideoIntentWithOptions(context, model.getId().getVideoId(), true, true));
             } else {
                 Toast.makeText(context, AppConstants.VIDEO_PLAY_FAILED_MESSAGE,
                         Toast.LENGTH_SHORT).show();
