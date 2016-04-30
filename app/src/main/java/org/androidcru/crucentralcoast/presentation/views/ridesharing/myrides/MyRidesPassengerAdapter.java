@@ -12,7 +12,7 @@ import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRide
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -75,11 +75,11 @@ public class MyRidesPassengerAdapter extends RecyclerView.Adapter<MyRidesPasseng
     public class CruRideViewHolder extends RecyclerView.ViewHolder
     {
 
-        @Bind(R.id.eventName) TextView eventName;
-        @Bind(R.id.departureTime) TextView departureTime;
-        @Bind(R.id.departureLoc) TextView departureLoc;
-        @Bind(R.id.driverInfo) TextView driverInfo;
-        @Bind(R.id.cancelOffering) Button cancelOffering;
+        @BindView(R.id.eventName) TextView eventName;
+        @BindView(R.id.departureTime) TextView departureTime;
+        @BindView(R.id.departureLoc) TextView departureLoc;
+        @BindView(R.id.driverInfo) TextView driverInfo;
+        @BindView(R.id.cancelOffering) Button cancelOffering;
 
         public CruRideViewHolder(View itemView)
         {

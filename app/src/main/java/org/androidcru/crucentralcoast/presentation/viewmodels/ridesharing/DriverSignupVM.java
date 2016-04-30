@@ -42,7 +42,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import java.util.GregorianCalendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import timber.log.Timber;
@@ -59,23 +59,23 @@ public class DriverSignupVM extends BaseRideVM {
     protected GregorianCalendar eventStartDateTime;
     protected int minCapacity;
 
-    @Bind(R.id.name_field) @NotEmpty public EditText nameField;
-    @Bind(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX, messageResId = R.string.phone_number_error) public EditText phoneField;
+    @BindView(R.id.name_field) @NotEmpty public EditText nameField;
+    @BindView(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX, messageResId = R.string.phone_number_error) public EditText phoneField;
 
-    @Bind(R.id.round_trip) RadioButton roundTrip;
-    @Bind(R.id.to_event) RadioButton toEvent;
-    @Bind(R.id.direction) RadioGroup directionGroup;
+    @BindView(R.id.round_trip) RadioButton roundTrip;
+    @BindView(R.id.to_event) RadioButton toEvent;
+    @BindView(R.id.direction) RadioGroup directionGroup;
 
-    @Bind(R.id.gender_field) @Select Spinner genderField;
-    @Bind(R.id.gender_view) TextView genderView;
+    @BindView(R.id.gender_field) @Select Spinner genderField;
+    @BindView(R.id.gender_view) TextView genderView;
 
-    @Bind(R.id.time_field) @NotEmpty EditText rideTime;
-    @Bind(R.id.date_field) @NotEmpty EditText rideDate;
+    @BindView(R.id.time_field) @NotEmpty EditText rideTime;
+    @BindView(R.id.date_field) @NotEmpty EditText rideDate;
 
-    @Bind(R.id.car_capacity_field) @NotEmpty @Min(value = 1) EditText carCapacity;
+    @BindView(R.id.car_capacity_field) @NotEmpty @Min(value = 1) EditText carCapacity;
 
-    @Bind(R.id.radius_field) @NotEmpty TextView radiusField;
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
+    @BindView(R.id.radius_field) @NotEmpty TextView radiusField;
+    @BindView(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
 
     private String eventId;
     private Location location;

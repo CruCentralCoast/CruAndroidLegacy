@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,20 +11,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
-public class FormActivity extends AppCompatActivity implements FormHolder
+public class FormActivity extends BaseAppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
     private HashMap<String, Object> dataObjects = new HashMap<>();
@@ -37,12 +37,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     public FormState formState;
     private boolean isTransitioning = false;
 
-    @Bind(R.id.bottom_bar) RelativeLayout bottomBar;
-    @Bind(R.id.prev) RelativeLayout prev;
-    @Bind(R.id.next) RelativeLayout next;
-    @Bind(R.id.nextText) TextView nextText;
+    @BindView(R.id.bottom_bar) RelativeLayout bottomBar;
+    @BindView(R.id.prev) RelativeLayout prev;
+    @BindView(R.id.next) RelativeLayout next;
+    @BindView(R.id.nextText) TextView nextText;
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,7 +50,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         formState = FormState.PROGRESS;
 
         fm = getSupportFragmentManager();

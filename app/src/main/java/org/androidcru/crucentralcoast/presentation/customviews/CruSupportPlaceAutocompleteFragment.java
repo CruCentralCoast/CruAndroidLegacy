@@ -15,14 +15,17 @@ import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragmen
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocompleteFragment
 {
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_button) ImageButton searchButton;
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) public EditText editText;
-    @Bind(com.google.android.gms.R.id.place_autocomplete_clear_button) ImageButton clear;
+    private Unbinder unbinder;
+
+    @BindView(com.google.android.gms.R.id.place_autocomplete_search_button) ImageButton searchButton;
+    @BindView(com.google.android.gms.R.id.place_autocomplete_search_input) public EditText editText;
+    @BindView(com.google.android.gms.R.id.place_autocomplete_clear_button) ImageButton clear;
     public Place place;
     private PlaceSelectionListener listener;
 
@@ -30,7 +33,7 @@ public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocomplet
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         searchButton.setAdjustViewBounds(true);
         searchButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_map_marker_grey600));
@@ -78,5 +81,12 @@ public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocomplet
     {
         super.onActivityResult(requestCode, resultCode, data);
         place = PlaceAutocomplete.getPlace(getContext(), data);
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

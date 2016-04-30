@@ -20,7 +20,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -85,12 +85,12 @@ public class MyRidesDriverAdapter extends RecyclerView.Adapter<MyRidesDriverAdap
      */
     public class CruRideViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @Bind(R.id.eventName) TextView eventName;
-        @Bind(R.id.departureTime) TextView departureTime;
-        @Bind(R.id.departureLoc) TextView departureLoc;
-        @Bind(R.id.editOffering) Button editOffering;
-        @Bind(R.id.cancelOffering) Button cancelOffering;
-        @Bind(R.id.passengerList) TextView passengerList;
+        @BindView(R.id.eventName) TextView eventName;
+        @BindView(R.id.departureTime) TextView departureTime;
+        @BindView(R.id.departureLoc) TextView departureLoc;
+        @BindView(R.id.editOffering) Button editOffering;
+        @BindView(R.id.cancelOffering) Button cancelOffering;
+        @BindView(R.id.passengerList) TextView passengerList;
 
         public CruRideViewHolder(View rootView) {
             super(rootView);

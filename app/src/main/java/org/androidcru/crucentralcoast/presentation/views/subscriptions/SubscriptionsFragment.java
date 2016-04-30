@@ -26,7 +26,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragmen
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
@@ -44,9 +44,9 @@ public class SubscriptionsFragment extends BaseSupportFragment
     private GridLayoutManager layoutManager;
     private SubscriptionsAdapter subscriptionAdapter;
 
-    @Bind(R.id.subscription_list) RecyclerView subscriptionList;
-    @Bind(R.id.fab) FloatingActionButton fab;
-    @Bind(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.subscription_list) RecyclerView subscriptionList;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.progress) ProgressBar progressBar;
 
     private Subscription subscription;
     private Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer;
@@ -84,7 +84,7 @@ public class SubscriptionsFragment extends BaseSupportFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         // Sets the Floating Action Button's check icon to white
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600, android.R.color.white));

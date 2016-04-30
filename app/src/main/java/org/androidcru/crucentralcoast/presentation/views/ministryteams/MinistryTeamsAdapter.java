@@ -18,7 +18,7 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -63,7 +63,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class MinistryTeamHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.ministry_image) ImageView ministryImage;
+        @BindView(R.id.ministry_image) ImageView ministryImage;
 
         public MinistryTeamHolder(View itemView)
         {

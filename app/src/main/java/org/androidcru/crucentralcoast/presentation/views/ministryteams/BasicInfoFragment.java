@@ -23,7 +23,7 @@ import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.observers.Observers;
 
@@ -33,9 +33,9 @@ public class BasicInfoFragment extends FormContentFragment
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
     private BaseValidator validator;
 
-    @Bind(R.id.name_field) @NotEmpty EditText nameField;
-    @Bind(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @Bind(R.id.email_field) @Email EditText emailField;
+    @BindView(R.id.name_field) @NotEmpty EditText nameField;
+    @BindView(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    @BindView(R.id.email_field) @Email EditText emailField;
 
 
     @Nullable
@@ -48,7 +48,7 @@ public class BasicInfoFragment extends FormContentFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 

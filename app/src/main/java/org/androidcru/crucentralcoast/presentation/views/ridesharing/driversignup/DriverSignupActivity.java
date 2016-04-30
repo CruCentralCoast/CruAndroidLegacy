@@ -23,7 +23,7 @@ import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.Driver
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.parceler.Parcels;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.observers.Observers;
@@ -36,10 +36,10 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private DriverSignupVM driverSignupVM;
     private BaseValidator validator;
 
-    @Bind(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.fab) FloatingActionButton fab;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
 
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
+    @BindView(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
     private MapFragment mapFragment;
 
     private CruEvent event;
@@ -59,7 +59,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             return;
         }
 
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         setupFab();
 

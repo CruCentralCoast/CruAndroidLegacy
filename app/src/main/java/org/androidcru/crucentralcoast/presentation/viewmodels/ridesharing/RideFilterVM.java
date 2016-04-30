@@ -25,7 +25,7 @@ import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import timber.log.Timber;
@@ -37,11 +37,11 @@ public class RideFilterVM extends BaseRideVM
     private int genderSelected = 0;
     private int directionSelected = Ride.Direction.ROUNDTRIP.ordinal();
 
-    @Bind(R.id.round_trip) RadioButton roundTrip;
-    @Bind(R.id.direction) RadioGroup directionGroup;
-    @Bind(R.id.gender_field) Spinner genderField;
-    @Bind(R.id.time_field) @NotEmpty EditText rideTime;
-    @Bind(R.id.date_field) @NotEmpty EditText rideDate;
+    @BindView(R.id.round_trip) RadioButton roundTrip;
+    @BindView(R.id.direction) RadioGroup directionGroup;
+    @BindView(R.id.gender_field) Spinner genderField;
+    @BindView(R.id.time_field) @NotEmpty EditText rideTime;
+    @BindView(R.id.date_field) @NotEmpty EditText rideDate;
 
     public RideFilterVM(RideInfoFragment fragment, FragmentManager fm, CruEvent event)
     {

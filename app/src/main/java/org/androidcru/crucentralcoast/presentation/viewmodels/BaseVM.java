@@ -30,7 +30,7 @@ public class BaseVM
         this.rootView = fragment.getView();
         this.context = fragment.getContext();
         this.holder = fragment;
-        ButterKnife.bind(this, rootView);
+        fragment.unbinder = ButterKnife.bind(this, rootView);
     }
 
     private void setupWithActivity(BaseAppCompatActivity activity)
@@ -38,18 +38,18 @@ public class BaseVM
         this.rootView = activity.findViewById(android.R.id.content);
         this.holder = activity;
         this.context = activity;
-        ButterKnife.bind(this, activity);
+        activity.unbinder = ButterKnife.bind(this, activity);
     }
 
     public void rebind(BaseSupportFragment fragment)
     {
-        ButterKnife.unbind(this);
+        fragment.unbinder.unbind();
         setupWithFragment(fragment);
     }
 
     public void rebind(BaseAppCompatActivity activity)
     {
-        ButterKnife.unbind(this);
+        activity.unbinder.unbind();
         setupWithActivity(activity);
     }
 

@@ -41,7 +41,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
@@ -53,15 +53,15 @@ import timber.log.Timber;
  */
 public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @Bind(R.id.eventName) public TextView eventName;
-    @Bind(R.id.eventDate) public TextView eventDate;
-    @Bind(R.id.event_banner) public ImageView eventBanner;
-    @Bind(R.id.chevView) public ImageView chevronView;
-    @Bind(R.id.fbButton) public ImageButton fbButton;
-    @Bind(R.id.mapButton) public ImageButton mapButton;
-    @Bind(R.id.calButton) public ImageButton calButton;
-    @Bind(R.id.rideSharingButton) public ImageButton rideSharingButton;
-    @Bind(R.id.eventDescription) public TextView eventDescription;
+    @BindView(R.id.eventName) public TextView eventName;
+    @BindView(R.id.eventDate) public TextView eventDate;
+    @BindView(R.id.event_banner) public ImageView eventBanner;
+    @BindView(R.id.chevView) public ImageView chevronView;
+    @BindView(R.id.fbButton) public ImageButton fbButton;
+    @BindView(R.id.mapButton) public ImageButton mapButton;
+    @BindView(R.id.calButton) public ImageButton calButton;
+    @BindView(R.id.rideSharingButton) public ImageButton rideSharingButton;
+    @BindView(R.id.eventDescription) public TextView eventDescription;
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;

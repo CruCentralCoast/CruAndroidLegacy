@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdapter.SummerMissionVH>
@@ -96,14 +96,14 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
 
     protected class SummerMissionVH extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        @Bind(R.id.mission_name) TextView missionName;
-        @Bind(R.id.mission_start_date) TextView missionStartDate;
-        @Bind(R.id.mission_end_date) TextView missionEndDate;
-        @Bind(R.id.mission_leaders) TextView missionLeaders;
-        @Bind(R.id.mission_banner) ImageView missionBanner;
-        @Bind(R.id.chevView) ImageView chevView;
-        @Bind(R.id.learn_more) Button learnMore;
-        @Bind(R.id.mission_description) TextView missionDescription;
+        @BindView(R.id.mission_name) TextView missionName;
+        @BindView(R.id.mission_start_date) TextView missionStartDate;
+        @BindView(R.id.mission_end_date) TextView missionEndDate;
+        @BindView(R.id.mission_leaders) TextView missionLeaders;
+        @BindView(R.id.mission_banner) ImageView missionBanner;
+        @BindView(R.id.chevView) ImageView chevView;
+        @BindView(R.id.learn_more) Button learnMore;
+        @BindView(R.id.mission_description) TextView missionDescription;
 
         public SummerMissionVH(View itemView)
         {

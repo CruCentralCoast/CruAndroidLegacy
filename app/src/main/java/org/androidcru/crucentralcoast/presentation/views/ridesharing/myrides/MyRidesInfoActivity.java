@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import timber.log.Timber;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -25,10 +24,11 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActiv
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.observers.Observers;
+import timber.log.Timber;
 
 
 public class MyRidesInfoActivity extends BaseAppCompatActivity
@@ -37,16 +37,16 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     private Ride ride;
 
     //Injected Views
-    @Bind(R.id.recyclerview) RecyclerView eventList;
-    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recyclerview) RecyclerView eventList;
+    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Bind(R.id.event_banner) ImageView eventBanner;
-    @Bind(R.id.ride_type) TextView rideType;
-    @Bind(R.id.ride_time) TextView rideTime;
-    @Bind(R.id.departureLoc) TextView departureLoc;
-    @Bind(R.id.spots_remaining) TextView spotsRemaining;
-    @Bind(R.id.passenger_list_heading) TextView passengerListHeading;
-    @Bind(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.event_banner) ImageView eventBanner;
+    @BindView(R.id.ride_type) TextView rideType;
+    @BindView(R.id.ride_time) TextView rideTime;
+    @BindView(R.id.departureLoc) TextView departureLoc;
+    @BindView(R.id.spots_remaining) TextView spotsRemaining;
+    @BindView(R.id.passenger_list_heading) TextView passengerListHeading;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     private MyRidesInfoAdapter rideSharingAdapter;
     private Observer<Ride> observer;
@@ -80,7 +80,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rideinfo);
         //Let ButterKnife find all injected views and bind them to member variables
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         ride = Parcels.unwrap(getIntent().getExtras().getParcelable(AppConstants.MYRIDE_RIDE_KEY));
 
         getEventData();

@@ -20,17 +20,17 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.DatedVideo;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CruVideoViewHolder extends RecyclerView.ViewHolder
 {
-    @Bind(R.id.video_title) TextView videoTitle;
-    @Bind(R.id.video_thumb) ImageView videoThumb;
-    @Bind(R.id.video_description) TextView videoDescription;
-    @Bind(R.id.video_chev) ImageView videoChev;
-    @Bind(R.id.video_id_and_views) TextView videoIdAndViews;
-    @Bind(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
+    @BindView(R.id.video_title) TextView videoTitle;
+    @BindView(R.id.video_thumb) ImageView videoThumb;
+    @BindView(R.id.video_description) TextView videoDescription;
+    @BindView(R.id.video_chev) ImageView videoChev;
+    @BindView(R.id.video_id_and_views) TextView videoIdAndViews;
+    @BindView(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
 
     public SearchResult model;
 

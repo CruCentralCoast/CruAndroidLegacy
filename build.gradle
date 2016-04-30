@@ -15,7 +15,7 @@ buildscript {
 
         //Checks for DEX count
 
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'me.tatarka:gradle-retrolambda:3.3.0-beta4'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 

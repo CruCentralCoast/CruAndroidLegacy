@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.google.api.services.youtube.model.SearchResult;
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
@@ -28,17 +26,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.Subscription;
 import timber.log.Timber;
 
 public class VideosFragment extends BaseSupportFragment
 {
-    @Bind(R.id.video_list) RecyclerView videoList;
-    @Bind(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
+    @BindView(R.id.video_list) RecyclerView videoList;
+    @BindView(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
 
     private LinearLayoutManager layoutManager;
     private Observer<List<SearchResult>> videoSubscriber;
@@ -141,7 +138,7 @@ public class VideosFragment extends BaseSupportFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());

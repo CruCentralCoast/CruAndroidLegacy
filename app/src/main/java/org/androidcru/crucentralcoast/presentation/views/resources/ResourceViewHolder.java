@@ -14,14 +14,14 @@ import org.androidcru.crucentralcoast.presentation.customtabs.CustomTabActivityH
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.webview.WebviewFallback;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
-    @Bind(R.id.title) TextView title;
-    @Bind(R.id.tags) TextView tags;
-    @Bind(R.id.resource_icon) ImageView typeIcon;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.tags) TextView tags;
+    @BindView(R.id.resource_icon) ImageView typeIcon;
 
     private Resource model;
 

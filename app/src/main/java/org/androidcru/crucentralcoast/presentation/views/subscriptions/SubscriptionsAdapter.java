@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
@@ -145,7 +145,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.header) TextView header;
+        @BindView(R.id.header) TextView header;
 
         public HeaderHolder(View itemView)
         {
@@ -157,8 +157,8 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.ministry_image) ImageView ministryImage;
-        @Bind(R.id.checkbox) CheckBox checkBox;
+        @BindView(R.id.ministry_image) ImageView ministryImage;
+        @BindView(R.id.checkbox) CheckBox checkBox;
 
         public MinistrySubscriptionHolder(View itemView)
         {
