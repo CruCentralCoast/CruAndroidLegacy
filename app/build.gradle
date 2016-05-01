@@ -3,7 +3,7 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco'
-
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     compileSdkVersion 23
@@ -35,17 +35,6 @@ android {
         buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'
         buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
     }
-
-    /*productFlavors {
-        dev {
-            multiDexEnabled true
-        }
-
-        devFast {
-            multiDexEnabled true
-            minSdkVersion 21
-        }
-    }*/
 
     dexOptions {
         javaMaxHeapSize "4g"
