@@ -4,15 +4,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.google.android.youtube.player.YouTubeIntents;
-
-import com.google.api.services.youtube.model.SearchResult;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 
 import java.util.ArrayList;
@@ -21,12 +15,12 @@ import java.util.List;
 public class VideosAdapter extends RecyclerView.Adapter<CruVideoViewHolder>
 {
     // Search results from Cru's YouTube channel
-    private ArrayList<ExpandableState<SearchResult>> videosWithStates;
-    private List<SearchResult> videos;
+    private ArrayList<ExpandableState<Snippet>> videosWithStates;
+    private List<Snippet> videos;
 
     private LinearLayoutManager layoutManager;
 
-    public VideosAdapter(List<SearchResult> videos, LinearLayoutManager layoutManager)
+    public VideosAdapter(List<Snippet> videos, LinearLayoutManager layoutManager)
     {
         this.videos = videos;
 
@@ -34,7 +28,7 @@ public class VideosAdapter extends RecyclerView.Adapter<CruVideoViewHolder>
         this.videosWithStates = new ArrayList<>();
         for(int i = 0; i < videos.size(); ++i)
         {
-            this.videosWithStates.add(new ExpandableState<SearchResult>(videos.get(i)));
+            this.videosWithStates.add(new ExpandableState<Snippet>(videos.get(i)));
         }
 
         this.layoutManager = layoutManager;
@@ -56,7 +50,7 @@ public class VideosAdapter extends RecyclerView.Adapter<CruVideoViewHolder>
     @Override
     public void onBindViewHolder(CruVideoViewHolder holder, int position)
     {
-        holder.bindSearchResult(videosWithStates.get(position));
+        holder.bindSnippet(videosWithStates.get(position));
     }
 
     public void updateViewExpandedStates()

@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Dateable;
-import org.androidcru.crucentralcoast.data.models.DatedVideo;
 import org.androidcru.crucentralcoast.data.models.Resource;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 import org.androidcru.crucentralcoast.presentation.viewmodels.FeedState;
 import org.androidcru.crucentralcoast.presentation.views.events.CruEventViewHolder;
@@ -63,7 +63,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             return CRU_EVENT;
         }
-        if(items.get(position).model instanceof DatedVideo)
+        if(items.get(position).model instanceof Snippet)
         {
             return YOUTUBE_VIDEO;
         }

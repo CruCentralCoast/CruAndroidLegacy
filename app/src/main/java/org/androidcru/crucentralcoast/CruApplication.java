@@ -1,10 +1,10 @@
 package org.androidcru.crucentralcoast;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
@@ -35,7 +35,7 @@ import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
-public class CruApplication extends MultiDexApplication
+public class CruApplication extends Application
 {
     public static Gson gson = setupGson();
 

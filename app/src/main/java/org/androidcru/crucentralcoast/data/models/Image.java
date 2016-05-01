@@ -6,7 +6,10 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 @Parcel
-public final class CruImage
+/**
+ * Used both by the Cru server as well as by the YouTube API
+ */
+public final class Image
 {
     public static final String sUrl = "url";
     public static final String sWidth = "width";
@@ -17,5 +20,5 @@ public final class CruImage
     @SerializedName(sHeight) public int height;
 
     @ParcelConstructor
-    CruImage() {}
+    Image() {}
 }

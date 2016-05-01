@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.CruImage;
+import org.androidcru.crucentralcoast.data.models.Image;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
@@ -51,7 +51,7 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     private MyRidesInfoAdapter rideSharingAdapter;
     private Observer<Ride> observer;
 
-    private void setupUI(String theEventName, CruImage theImage) {
+    private void setupUI(String theEventName, Image theImage) {
         toolbar.setTitle(theEventName);
         Context context = eventBanner.getContext();
         if(theImage != null)

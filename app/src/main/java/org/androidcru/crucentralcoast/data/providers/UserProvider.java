@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruUser;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
@@ -11,7 +12,7 @@ import rx.Subscription;
 
 public class UserProvider
 {
-    private static CruApiService cruService = ApiProvider.getService();
+    private static CruApiService cruService = CruApiProvider.getService();
 
     public static void requestCruUser(SubscriptionsHolder holder, Observer<CruUser> observer, String phoneNumber)
     {

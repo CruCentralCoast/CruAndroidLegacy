@@ -6,6 +6,7 @@ import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
@@ -18,7 +19,7 @@ import rx.Subscription;
 
 public final class ResourceProvider
 {
-    private static CruApiService cruApiService = ApiProvider.getService();
+    private static CruApiService cruApiService = CruApiProvider.getService();
 
     private static Observable.Transformer<Resource, Resource> tagRetriever =
         (Observable<Resource> o) -> o.map(resource -> {

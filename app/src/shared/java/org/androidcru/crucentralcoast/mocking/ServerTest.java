@@ -1,6 +1,6 @@
 package org.androidcru.crucentralcoast.mocking;
 
-import org.androidcru.crucentralcoast.data.providers.ApiProvider;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -14,6 +14,6 @@ public class ServerTest
     @Before
     public void setUp()
     {
-        ApiProvider.setBaseUrl(server.url("/").toString());
+        CruApiProvider.setBaseUrl(server.url("/").toString());
     }
 }

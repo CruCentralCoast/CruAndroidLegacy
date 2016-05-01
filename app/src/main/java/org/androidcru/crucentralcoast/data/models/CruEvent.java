@@ -28,7 +28,7 @@ public final class CruEvent implements Dateable
     @SerializedName(sEndDate) public ZonedDateTime endDate;
     @SerializedName(sRideSharingEnabled) public boolean rideSharingEnabled;
     @SerializedName(sLocation) public Location location;
-    @SerializedName(sImage) public CruImage image;
+    @SerializedName(sImage) public Image image;
     @SerializedName(sId) public String id;
     @SerializedName(sUrl) public String url;
     @SerializedName(sParentMinistrySubscriptions) public ArrayList<String> parentMinistrySubscriptions;

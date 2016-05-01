@@ -36,7 +36,7 @@ android {
         buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
     }
 
-    productFlavors {
+    /*productFlavors {
         dev {
             multiDexEnabled true
         }
@@ -45,7 +45,7 @@ android {
             multiDexEnabled true
             minSdkVersion 21
         }
-    }
+    }*/
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -89,7 +89,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //UI Libraries
-    compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:cardview-v7:23.3.0'
@@ -145,16 +144,6 @@ dependencies {
     //Image Manipulation
     compile 'jp.wasabeef:picasso-transformations:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
-    compile ('com.google.apis:google-api-services-youtube:v3-rev163-1.21.0') {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }
-    compile ('com.google.api-client:google-api-client-android:1.19.0') {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient' //by both name and group
-    }
-    compile ('com.google.http-client:google-http-client-gson:1.19.0') {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient' //by both name and group
-    }
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;

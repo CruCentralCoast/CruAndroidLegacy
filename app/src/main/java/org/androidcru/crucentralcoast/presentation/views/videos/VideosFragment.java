@@ -15,9 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.google.api.services.youtube.model.SearchResult;
-
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
@@ -38,10 +37,10 @@ public class VideosFragment extends BaseSupportFragment
     @BindView(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
 
     private LinearLayoutManager layoutManager;
-    private Observer<List<SearchResult>> videoSubscriber;
-    private List<SearchResult> videos;
+    private Observer<List<Snippet>> videoSubscriber;
+    private List<Snippet> videos;
     // used for filtering duplicate videos before being passed to the adapter
-    private List<SearchResult> tempVideos;
+    private List<Snippet> tempVideos;
     private YouTubeVideoProvider youtubeProvider;
     private VideosAdapter videosAdapter;
     private int curSize;
@@ -56,7 +55,7 @@ public class VideosFragment extends BaseSupportFragment
         youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
-        videoSubscriber = new Observer<List<SearchResult>>()
+        videoSubscriber = new Observer<List<Snippet>>()
         {
             @Override
             public void onCompleted() {
@@ -79,7 +78,7 @@ public class VideosFragment extends BaseSupportFragment
             }
 
             @Override
-            public void onNext(List<SearchResult> searchResults)
+            public void onNext(List<Snippet> searchResults)
             {
                 setVideos(searchResults);
             }
@@ -167,7 +166,7 @@ public class VideosFragment extends BaseSupportFragment
     }
 
     // Places the videos in the returned response into the Adapter's list of videos
-    public void setVideos (List<SearchResult> newVideos)
+    public void setVideos (List<Snippet> newVideos)
     {
         tempVideos.addAll(newVideos);
 

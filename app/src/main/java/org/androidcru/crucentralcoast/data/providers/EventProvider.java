@@ -6,6 +6,7 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
@@ -20,7 +21,7 @@ import rx.Subscription;
 
 public class EventProvider
 {
-    private static CruApiService cruService = ApiProvider.getService();
+    private static CruApiService cruService = CruApiProvider.getService();
 
     protected static Observable.Transformer<CruEvent, CruEvent> getSubscriptionFilter(SharedPreferences sharedPreferences)
     {

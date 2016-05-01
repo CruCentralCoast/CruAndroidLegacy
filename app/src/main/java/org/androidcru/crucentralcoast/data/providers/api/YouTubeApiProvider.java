@@ -1,29 +1,29 @@
-package org.androidcru.crucentralcoast.data.providers;
+package org.androidcru.crucentralcoast.data.providers.api;
 
 import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.data.services.YouTubeDataService;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.schedulers.Schedulers;
 
-public class ApiProvider
+public class YouTubeApiProvider
 {
-    private static CruApiService service;
+    private static YouTubeDataService service;
 
-    public static CruApiService getService()
+    public static YouTubeDataService getService()
     {
         if(service == null)
         {
-            setBaseUrl(BuildConfig.CRU_SERVER);
+            setBaseUrl(BuildConfig.YOUTUBEBASEURL);
         }
 
         return service;
     }
 
-    public static CruApiService setBaseUrl(String baseUrl)
+    public static YouTubeDataService setBaseUrl(String baseUrl)
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -32,7 +32,7 @@ public class ApiProvider
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
 
-        service = retrofit.create(CruApiService.class);
+        service = retrofit.create(YouTubeDataService.class);
 
         return service;
     }

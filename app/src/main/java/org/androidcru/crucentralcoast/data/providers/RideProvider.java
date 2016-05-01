@@ -4,6 +4,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.LocationUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
@@ -21,7 +22,7 @@ import timber.log.Timber;
 
 public final class RideProvider
 {
-    private static CruApiService mCruService = ApiProvider.getService();
+    private static CruApiService mCruService = CruApiProvider.getService();
 
 
 

@@ -11,13 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeIntents;
-import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.DatedVideo;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 
 import butterknife.BindView;
@@ -32,7 +30,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
     @BindView(R.id.video_id_and_views) TextView videoIdAndViews;
     @BindView(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
 
-    public SearchResult model;
+    public Snippet model;
 
     public RecyclerView.Adapter adapter;
     public RecyclerView.LayoutManager layoutManager;
@@ -46,34 +44,32 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
         ButterKnife.bind(this, rootView);
     }
     
-    public void bindSearchResult(ExpandableState<SearchResult> state)
+    public void bindSnippet(ExpandableState<Snippet> state)
     {
         this.model = state.model;
         bindUI(state);
     }
     
-    public void bindDatedVideo(ExpandableState<DatedVideo> state)
+    public void bindDatedVideo(ExpandableState<Snippet> state)
     {
-        this.model = state.model.getVideo();
+        this.model = state.model;
         bindUI(state);
     }
 
     private void bindUI(ExpandableState state)
     {
-        SearchResultSnippet snippet = model.getSnippet();
-
         // Set the card title to the video title
-        videoTitle.setText(snippet.getTitle());
+        videoTitle.setText(model.title);
 
         // Set this video's date and number of views
         videoIdAndViews.setText(
-                DateUtils.getRelativeTimeSpanString(snippet.getPublishedAt().getValue()));
+                DateUtils.getRelativeTimeSpanString(model.getDate().toInstant().toEpochMilli()));
 
         Context context = videoThumb.getContext();
 
         // Set the video thumbnail with the thumbnail URL
         Picasso.with(context)
-                .load(model.getSnippet().getThumbnails().getHigh().getUrl())
+                .load(model.getHigh().url)
                 .fit()
                 .into(videoThumb);
 
@@ -88,7 +84,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
             // not sure what to do if player cant resolve video, so I make toast
             if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context)) {
                 context.startActivity(YouTubeIntents
-                        .createPlayVideoIntentWithOptions(context, model.getId().getVideoId(), true, true));
+                        .createPlayVideoIntentWithOptions(context, model.getVideoId(), true, true));
             } else {
                 Toast.makeText(context, AppConstants.VIDEO_PLAY_FAILED_MESSAGE,
                         Toast.LENGTH_SHORT).show();
@@ -96,7 +92,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
         });
 
         // Set the video description to the card's TextView
-        videoDescription.setText(model.getSnippet().getDescription());
+        videoDescription.setText(model.description);
         if(videoDescription.getText().length() == 0)
             videoDescription.setText(R.string.videos_no_description);
 

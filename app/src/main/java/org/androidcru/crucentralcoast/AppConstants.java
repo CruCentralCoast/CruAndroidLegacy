@@ -80,6 +80,7 @@ public class AppConstants
     public static final double CALPOLY_LNG = -120.66310;
 
     public static final String CRU_YOUTUBE_CHANNEL_ID = "UCe-RJ-3Q3tUqJciItiZmjdg";
+    public static final String CRU_YOUTUBE_UPLOADS_ID = "UUe-RJ-3Q3tUqJciItiZmjdg";
     public static final String EXPANDED = "Hide Description";
     public static final String RETRACTED = "Show Description";
     public static final String VIDEO_PLAY_FAILED_MESSAGE = "Unable to play video";
