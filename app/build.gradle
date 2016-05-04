@@ -27,8 +27,8 @@ android {
         testInstrumentationRunner applicationId + ".JUnitJacocoTestRunner"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 7
-        versionName "1.1.3"
+        versionCode 8
+        versionName "1.1.4"
         vectorDrawables.useSupportLibrary = true
 
         buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'

@@ -119,7 +119,6 @@ public class FeedFragment extends ListFragment
         adapter = null;
 
         getMoreFeedItems(0);
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void getMoreFeedItems(int page)
