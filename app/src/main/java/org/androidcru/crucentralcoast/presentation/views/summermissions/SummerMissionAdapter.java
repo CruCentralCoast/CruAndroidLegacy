@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.summermissions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -82,8 +82,8 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         }
 
         holder.chevView.setImageDrawable(isExpanded.get(position)
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
+                ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         holder.missionDescription.setText(summerMission.description);
         holder.missionDescription.setVisibility(isExpanded.get(position) ? View.VISIBLE : View.GONE);
         holder.learnMore.setVisibility((summerMission.url != null && !summerMission.url.isEmpty()) ? View.VISIBLE : View.GONE);

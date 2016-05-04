@@ -21,7 +21,7 @@
             android:layout_height="48dp"
             android:id="@+id/name_icon"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_account_grey600_48dp"
+            app:srcCompat="@drawable/ic_account_grey600_48dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:padding="8dp"/>
@@ -54,7 +54,7 @@
             android:layout_height="48dp"
             android:id="@+id/phone_icon"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_phone_grey600"
+            app:srcCompat="@drawable/ic_phone_grey600"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:padding="8dp"/>

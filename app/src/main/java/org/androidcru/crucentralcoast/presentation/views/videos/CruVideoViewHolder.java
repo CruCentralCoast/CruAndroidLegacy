@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.videos;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -16,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 
 import butterknife.BindView;
@@ -75,8 +75,8 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
 
         // Set the chevron to up or down depending on if the view is expanded or not
         videoChev.setImageDrawable(state.isExpanded
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
+                ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
 
         // Play the video when the video thumbnail is clicked.
         videoThumb.setOnClickListener((View v) ->
@@ -121,8 +121,8 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
             videoDescription.setVisibility(visibility);
 
             videoChev.setImageDrawable(visibility == View.VISIBLE
-                    ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
-                    : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
+                    ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                    : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
 
             state.isExpanded = visibility == View.VISIBLE;
             adapter.notifyItemChanged(getAdapterPosition());

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -129,8 +128,8 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
                 R.color.ride_sharing_state);
 
         chevronView.setImageDrawable(state.isExpanded
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600));
+                ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         eventDescription.setText(cruEvent.description);
         eventDescription.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
     }
