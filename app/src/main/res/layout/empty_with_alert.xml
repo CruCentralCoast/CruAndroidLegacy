@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:visibility="gone"
     android:id="@+id/empty_list"
     android:orientation="horizontal"
@@ -12,7 +13,7 @@
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_alert_circle_outline_grey600"
+        app:srcCompat="@drawable/ic_alert_circle_outline_grey600"
         android:layout_gravity="center"
         android:layout_marginLeft="12dp"/>
 

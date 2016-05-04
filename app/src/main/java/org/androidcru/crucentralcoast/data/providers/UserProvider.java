@@ -24,6 +24,7 @@ public class UserProvider
     protected static Observable<CruUser> requestCruUser(String phoneNumber)
     {
         return cruService.getCruUser(phoneNumber)
+                .filter(cruUser -> cruUser != null)
                 .compose(RxComposeUtil.network());
     }
 }

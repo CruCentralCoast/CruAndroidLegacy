@@ -13,6 +13,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 
 import butterknife.Bind;
@@ -33,7 +34,7 @@ public class CruSupportPlaceAutocompleteFragment extends SupportPlaceAutocomplet
         ButterKnife.bind(this, view);
 
         searchButton.setAdjustViewBounds(true);
-        searchButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_map_marker_grey600));
+        searchButton.setImageDrawable(DrawableUtil.getDrawable(getContext(), R.drawable.ic_map_marker_grey600));
         int dp48 = DisplayMetricsUtil.dpToPx(getContext(), 48);
         searchButton.getLayoutParams().width = dp48;
         searchButton.getLayoutParams().height = dp48;
