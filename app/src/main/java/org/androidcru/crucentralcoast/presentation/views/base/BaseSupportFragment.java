@@ -18,7 +18,8 @@ public class BaseSupportFragment extends Fragment implements SubscriptionsHolder
     {
         super.onDestroyView();
         clearSubscriptions();
-        unbinder.unbind();
+        if(unbinder != null)
+            unbinder.unbind();
     }
 
     @Override
