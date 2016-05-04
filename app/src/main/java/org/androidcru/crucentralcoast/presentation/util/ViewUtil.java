@@ -40,11 +40,21 @@ public class ViewUtil
         view.setTypeface(fontCache.get(fontFileName));
     }
 
-    public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, String scaleType)
+    public static void setSource(ImageView view, String url, SCALE_TYPE scaleType)
+    {
+        setSource(view, url, 0, null, null);
+    }
+
+    public static void setSource(ImageView view, String url, int tintColor, SCALE_TYPE scaleType)
+    {
+        setSource(view, url, tintColor, null, null);
+    }
+
+    public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, SCALE_TYPE scaleType)
     {
         if(url == null || url.isEmpty())
         {
-            view.setImageDrawable(DrawableUtil.getDrawable(view.getContext(), R.drawable.cru_logo_grey600));
+            view.setImageDrawable(placeholder != null ? placeholder : DrawableUtil.getDrawable(view.getContext(), R.drawable.cru_logo_grey600));
         }
         else
         {
@@ -54,13 +64,13 @@ public class ViewUtil
             {
                 switch (scaleType)
                 {
-                    case "fit":
+                    case FIT:
                         request.fit();
                         break;
-                    case "centerInside":
+                    case CENTER_INSIDE:
                         request.centerInside();
                         break;
-                    case "centerCrop":
+                    case CENTER_CROP:
                         request.centerCrop();
                         break;
                 }
@@ -74,6 +84,10 @@ public class ViewUtil
 
             request.into(view);
         }
+    }
+
+    public enum SCALE_TYPE {
+        FIT, CENTER_INSIDE, CENTER_CROP;
     }
 
 
