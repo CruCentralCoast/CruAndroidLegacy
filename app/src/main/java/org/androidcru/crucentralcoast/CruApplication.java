@@ -23,9 +23,11 @@ import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.converters.GenderConverter;
 import org.androidcru.crucentralcoast.data.converters.ResourceTypeConverter;
+import org.androidcru.crucentralcoast.data.converters.SnippetConverter;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.util.PrettyDebugTree;
 import org.androidcru.crucentralcoast.util.SerializedNameExclusionStrategy;
@@ -151,6 +153,7 @@ public class CruApplication extends Application
         builder.registerTypeAdapter(Ride.Direction.class, new DirectionConverter());
         builder.registerTypeAdapter(Ride.Gender.class, new GenderConverter());
         builder.registerTypeAdapter(Resource.ResourceType.class, new ResourceTypeConverter());
+        builder.registerTypeAdapter(Snippet.class, new SnippetConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.setPrettyPrinting();
@@ -168,5 +171,4 @@ public class CruApplication extends Application
     {
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
     }
-
 }

@@ -5,6 +5,7 @@ import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.data.providers.api.YouTubeApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.YouTubeDataService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
@@ -91,6 +92,7 @@ public final class YouTubeVideoProvider
                     else
                         return Observable.empty();
                 })
+                .compose(RxLoggingUtil.log("YOUTUBE_VIDEOS"))
                 .compose(RxComposeUtil.network());
     }
 }
