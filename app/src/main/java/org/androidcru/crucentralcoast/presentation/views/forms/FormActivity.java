@@ -234,6 +234,10 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
             performTransaction(nextFragment);
             currentFormContent = nextFragment;
         }
+        else if(formState == FormState.FINISH)
+        {
+            complete();
+        }
     }
 
     @Override
