@@ -16,6 +16,7 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 
 import butterknife.BindView;
@@ -67,11 +68,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
 
         Context context = videoThumb.getContext();
 
-        // Set the video thumbnail with the thumbnail URL
-        Picasso.with(context)
-                .load(model.getHigh().url)
-                .fit()
-                .into(videoThumb);
+        ViewUtil.setSource(videoThumb, model.getHigh().url, ViewUtil.SCALE_TYPE.FIT);
 
         // Set the chevron to up or down depending on if the view is expanded or not
         videoChev.setImageDrawable(state.isExpanded

@@ -11,12 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -70,11 +69,10 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         holder.missionLeaders.setVisibility(isExpanded.get(position) && summerMission.leaders != null ? View.VISIBLE : View.GONE);
         if(summerMission.image != null)
         {
-            Picasso.with(context)
-                    .load(summerMission.image.url)
-                    .placeholder(R.drawable.cru_logo_grey600)
-                    .fit()
-                    .into(holder.missionBanner);
+            ViewUtil.setSource(holder.missionBanner, summerMission.image.url,
+                    0,
+                    DrawableUtil.getDrawable(holder.missionBanner.getContext(), R.drawable.cru_logo_grey600),
+                    ViewUtil.SCALE_TYPE.FIT);
         }
         else
         {

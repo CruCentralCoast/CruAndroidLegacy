@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginResult;
-import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -100,10 +99,7 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         Context context = eventBanner.getContext();
         if(cruEvent.image != null)
         {
-            Picasso.with(context)
-                    .load(cruEvent.image.url)
-                    .fit()
-                    .into(eventBanner);
+            ViewUtil.setSource(eventBanner, cruEvent.image.url, ViewUtil.SCALE_TYPE.FIT);
         }
         else
         {

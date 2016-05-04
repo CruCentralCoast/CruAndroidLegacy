@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import timber.log.Timber;
+
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -20,6 +21,7 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -53,13 +55,10 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
 
     private void setupUI(String theEventName, Image theImage) {
         toolbar.setTitle(theEventName);
-        Context context = eventBanner.getContext();
+
         if(theImage != null)
         {
-            Picasso.with(context)
-                    .load(theImage.url)
-                    .fit()
-                    .into(eventBanner);
+            ViewUtil.setSource(eventBanner, theImage.url, ViewUtil.SCALE_TYPE.FIT);
         }
         rideType.setText(getString(R.string.myride_info_dir) + ride.direction.getValueDetailed());
         rideTime.setText(getString(R.string.myride_info_departure_time)
