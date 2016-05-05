@@ -18,6 +18,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class EventProvider
 {
@@ -77,6 +78,12 @@ public class EventProvider
 
     protected static Observable<List<CruEvent>> getEventsPaginated(ZonedDateTime fromDate, int page, int pageSize)
     {
+        if(fromDate == null || page < 0 || pageSize <= 0)
+        {
+            Timber.e("fromDate: %s, page: %i, pageSize: %i", fromDate, page, pageSize);
+            return Observable.error(new IllegalArgumentException("Invalid arguments"));
+        }
+
         Query query = new Query.Builder()
                 .setCondition(new ConditionsBuilder()
                         .setCombineOperator(ConditionsBuilder.OPERATOR.AND)

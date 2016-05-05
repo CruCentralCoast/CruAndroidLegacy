@@ -1,17 +1,14 @@
 package org.androidcru.crucentralcoast.mocking;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
 public class ResourcesUtil
 {
-    public static String getResourceAsString(ClassLoader classLoader, String resourceName) throws IOException
+    public static String getResourceAsString(ClassLoader classLoader, String resourceName)
     {
         InputStream is = classLoader.getResourceAsStream(resourceName);
-        String str = convertStreamToString(is);
-        is.close();
-        return str;
+        return convertStreamToString(is);
     }
 
     public static String convertStreamToString(InputStream is) {
