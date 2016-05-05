@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,7 @@ import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,45 +32,11 @@ import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
  */
 public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    private ArrayList<MinistrySubscriptionVM> ministries;
-    
-    public static final int MINISTRY_VIEW = 0;
-    public static final int HEADER_VIEW = 1;
-    public static final int FOOTER_VIEW = 2;
+    public ArrayList<MinistrySubscriptionVM> ministries;
 
     public SubscriptionsAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
     {
-        this.ministries = new ArrayList<>();
-
-        convertSubscriptions(campusMinistryMap);
-    }
-
-    private void convertSubscriptions(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
-    {
-        ArrayList<Pair<Campus, Integer>> sortableList = new ArrayList<>();
-        for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinistryMap.entrySet())
-        {
-            sortableList.add(new Pair(entry.getKey(), entry.getValue().size()));
-        }
-
-        // This sorts the subscription page so it shows the campus with the most to least ministries
-        Collections.sort(sortableList, new Comparator<Pair<Campus, Integer>>()
-        {
-            @Override
-            public int compare(Pair<Campus, Integer> lhs, Pair<Campus, Integer> rhs)
-            {
-                return rhs.second - lhs.second;
-            }
-        });
-
-        //adds each campus and each ministry in that campus to the ministries ArrayList in order
-        for (Pair<Campus, Integer> campusPair : sortableList)
-        {
-            ministries.add(new MinistrySubscriptionVM(campusPair.first.campusName, null));
-            for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
-                ministries.add(new MinistrySubscriptionVM(null, m));
-        }
-
+        this.ministries = SubscriptionsSorter.convertSubscriptions(campusMinistryMap);
     }
 
     @Override
@@ -83,10 +45,10 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType)
         {
-            case MINISTRY_VIEW:
+            case SubscriptionsSorter.MINISTRY_VIEW:
                 View tileView = inflater.inflate(R.layout.tile_subscription, parent, false);
                 return new MinistrySubscriptionHolder(tileView);
-            case HEADER_VIEW:
+            case SubscriptionsSorter.HEADER_VIEW:
                 View headerView = inflater.inflate(R.layout.subscription_header, parent, false);
                 return new HeaderHolder(headerView);
             default:
@@ -129,19 +91,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    @Override
-    public int getItemViewType(int position)
-    {
-        return position >= ministries.size() ? FOOTER_VIEW : (isHeader(position) ? HEADER_VIEW : MINISTRY_VIEW);
-    }
+
 
     @Override
     public int getItemCount() {return ministries.size() + 1;}
 
-    public boolean isHeader(int position)
-    {
-        return position >= ministries.size() || ministries.get(position).campusName != null;
-    }
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {

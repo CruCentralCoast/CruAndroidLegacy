@@ -20,11 +20,13 @@ import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +42,6 @@ import rx.Subscription;
  */
 public class SubscriptionsFragment extends BaseSupportFragment
 {
-
     private GridLayoutManager layoutManager;
     private SubscriptionsAdapter subscriptionAdapter;
 
@@ -112,7 +113,7 @@ public class SubscriptionsFragment extends BaseSupportFragment
             public int getSpanSize(int position)
             {
                 // if the element is a header, it should span the columns, otherwise it is a regular element
-                return subscriptionAdapter.isHeader(position) ? layoutManager.getSpanCount() : 1;
+                return SubscriptionsSorter.isHeader(position, subscriptionAdapter.ministries) ? layoutManager.getSpanCount() : 1;
             }
         });
         subscriptionList.setLayoutManager(layoutManager);
