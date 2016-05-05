@@ -12,13 +12,7 @@
     "parentMinistries": [
       "563b08df2930ae0300fbc0a0",
       "563b08fb2930ae0300fbc0a1",
-      "563b090b2930ae0300fbc0a2",
-      "563b091f2930ae0300fbc0a3",
-      "563b07402930ae0300fbc09b",
-      "563b08d62930ae0300fbc09f",
-      "563b08482930ae0300fbc09c",
-      "563b085d2930ae0300fbc09d",
-      "563b094e2930ae0300fbc0a5"
+      "563b090b2930ae0300fbc0a2"
     ],
     "rideSharingEnabled": true,
     "endDate": "2016-10-17T22:00:00.000Z",

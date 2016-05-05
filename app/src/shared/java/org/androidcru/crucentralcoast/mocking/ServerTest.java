@@ -1,19 +1,28 @@
 package org.androidcru.crucentralcoast.mocking;
 
+
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
+import java.io.IOException;
 
 import okhttp3.mockwebserver.MockWebServer;
 
 public class ServerTest
 {
-    @Rule
-    public MockWebServer server = new MockWebServer();
+    public static MockWebServer server = new MockWebServer();
 
-    @Before
-    public void setUp()
+    @BeforeClass
+    public static void setUp() throws IOException
     {
+        server.start();
         CruApiProvider.setBaseUrl(server.url("/").toString());
+    }
+
+    @AfterClass
+    public static void tearDown() throws IOException
+    {
+        server.shutdown();
     }
 }

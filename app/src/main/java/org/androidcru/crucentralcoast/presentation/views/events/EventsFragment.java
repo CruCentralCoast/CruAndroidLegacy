@@ -130,7 +130,7 @@ public class EventsFragment extends ListFragment
     private void getCruEvents()
     {
         swipeRefreshLayout.setRefreshing(true);
-        EventProvider.requestEvents(this, eventSubscriber, sharedPreferences);
+        EventProvider.requestUsersEvents(this, eventSubscriber, sharedPreferences);
     }
 
 

@@ -42,7 +42,7 @@ public final class RideProvider
                 .filter(ride -> {
                     return ride.gcmID.equals(gcmId);
                 })
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
@@ -63,7 +63,7 @@ public final class RideProvider
                     }
                     return status;
                 })
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
@@ -93,7 +93,7 @@ public final class RideProvider
                     ;
                     return ride;
                 })
-                .toList();
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
 
@@ -119,7 +119,7 @@ public final class RideProvider
                     return distance <= MathUtil.convertMilesToMeters(ride.radius);
                 })
                 .compose(RxLoggingUtil.log("RIDES AFTER LOC FILTER"))
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
 
