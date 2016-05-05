@@ -27,7 +27,7 @@ public class CruApiProvider
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(CruApplication.okHttpClient)
+                .client(CruApplication.setupOkHttp())
                 .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();

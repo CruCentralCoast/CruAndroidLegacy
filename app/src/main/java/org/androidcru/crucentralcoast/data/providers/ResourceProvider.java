@@ -89,7 +89,7 @@ public final class ResourceProvider
         return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
 

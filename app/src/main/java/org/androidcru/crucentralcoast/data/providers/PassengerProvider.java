@@ -51,7 +51,7 @@ public final class PassengerProvider
                             })
                             .subscribeOn(Schedulers.io());
                 })
-                .toList();
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
 }

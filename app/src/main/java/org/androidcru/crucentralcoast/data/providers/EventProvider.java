@@ -35,18 +35,24 @@ public class EventProvider
         });
     }
 
-    public static void requestEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer, SharedPreferences sharedPreferences)
+    public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer, SharedPreferences sharedPreferences)
     {
-        Subscription s = requestEvents()
-                .flatMap(cruEvents -> Observable.from(cruEvents))
-                .compose(getSubscriptionFilter(sharedPreferences))
-                .toList()
+        Subscription s = requestUsersEvents(sharedPreferences)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<ArrayList<CruEvent>> requestEvents()
+    protected static Observable<List<CruEvent>> requestUsersEvents(SharedPreferences sharedPreferences)
+    {
+        return requestAllEvents()
+                .flatMap(cruEvents -> Observable.from(cruEvents))
+                .compose(getSubscriptionFilter(sharedPreferences))
+                .compose(RxComposeUtil.toListOrEmpty())
+                .compose(RxComposeUtil.network());
+    }
+
+    protected static Observable<ArrayList<CruEvent>> requestAllEvents()
     {
         return cruService.getEvents()
                 .compose(RxComposeUtil.network());

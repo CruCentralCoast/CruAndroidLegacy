@@ -97,7 +97,7 @@ public class CruApplication extends Application
         }
     }
 
-    private void setupOkHttp()
+    public static OkHttpClient setupOkHttp()
     {
         if(BuildConfig.DEBUG)
         {
@@ -109,6 +109,7 @@ public class CruApplication extends Application
         {
             okHttpClient = new OkHttpClient();
         }
+        return okHttpClient;
     }
 
     /**

@@ -42,7 +42,7 @@ public final class MinistryTeamProvider
                             .first();
                     return ministryTeam;
                 })
-                .toList();
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
     public static void requestMinistryTeamLeaders(SubscriptionsHolder holder, Observer<ArrayList<CruUser>> observer, String ministryTeamId)
