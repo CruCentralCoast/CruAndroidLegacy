@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.presentation.util;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
@@ -48,5 +49,13 @@ public class AlertDialogCreator {
 
     public void show() {
         alertDialog.show();
+    }
+
+    public void hide() {
+        alertDialog.hide();
+    }
+
+    public void setView(View view) {
+        alertDialog.setView(view);
     }
 }
