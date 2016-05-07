@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observer;
+import timber.log.Timber;
 
 public class FeedFragment extends ListFragment
 {
@@ -56,7 +57,7 @@ public class FeedFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
-
+                Timber.e(e, "Feed Error");
             }
 
             @Override
@@ -123,6 +124,7 @@ public class FeedFragment extends ListFragment
 
     private void getMoreFeedItems(int page)
     {
+        swipeRefreshLayout.setRefreshing(true);
         FeedProvider.getFeedItems(this, observer, CruApplication.getSharedPreferences(), youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
     }
 }
