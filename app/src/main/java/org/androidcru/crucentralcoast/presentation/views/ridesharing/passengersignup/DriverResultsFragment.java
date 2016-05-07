@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.Subscription;
 
 public class DriverResultsFragment extends FormContentFragment
 {
@@ -40,7 +40,7 @@ public class DriverResultsFragment extends FormContentFragment
     private List<Ride> results;
     private LatLng passengerLocation;
 
-    private Subscription subscription;
+    private FormHolder formHolder;
     private Observer<List<Ride>> rideResultsObserver;
 
     public DriverResultsFragment()
@@ -55,10 +55,12 @@ public class DriverResultsFragment extends FormContentFragment
                 if (results.isEmpty())
                 {
                     emptyView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
                 else
                 {
                     emptyView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -98,15 +100,6 @@ public class DriverResultsFragment extends FormContentFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
-
-        formHolder.setTitle(getString(R.string.passenger_pick_driver));
-        query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
-        passengerLocation = (LatLng) formHolder.getDataObject(PassengerSignupActivity.LATLNG);
-
-        formHolder.setNavigationVisibility(View.VISIBLE);
-        formHolder.setNextVisibility(View.GONE);
-        formHolder.setPreviousVisibility(View.VISIBLE);
-        getRides();
     }
 
 
@@ -122,5 +115,19 @@ public class DriverResultsFragment extends FormContentFragment
     {
         this.results = results;
         recyclerView.setAdapter(new DriverResultsAdapter(this, formHolder, results));
+    }
+
+    @Override
+    public void setupData(FormHolder formHolder)
+    {
+        this.formHolder = formHolder;
+        formHolder.setTitle(getString(R.string.passenger_pick_driver));
+        query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
+        passengerLocation = (LatLng) formHolder.getDataObject(PassengerSignupActivity.LATLNG);
+
+        formHolder.setNavigationVisibility(View.VISIBLE);
+        formHolder.setNextVisibility(View.GONE);
+        formHolder.setPreviousVisibility(View.VISIBLE);
+        getRides();
     }
 }

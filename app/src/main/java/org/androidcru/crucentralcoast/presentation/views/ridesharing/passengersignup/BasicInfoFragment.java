@@ -22,6 +22,7 @@ import org.androidcru.crucentralcoast.data.providers.PassengerProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,10 +53,6 @@ public class BasicInfoFragment extends FormContentFragment {
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        formHolder.setTitle(getString(R.string.passenger_contact_info));
-        ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
-        direction = (Ride.Direction) formHolder.getDataObject(PassengerSignupActivity.DIRECTION);
-
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
     }
@@ -66,7 +63,7 @@ public class BasicInfoFragment extends FormContentFragment {
     }
 
     @Override
-    public void onNext()
+    public void onNext(FormHolder formHolder)
     {
         if(validator.validate())
         {
@@ -80,9 +77,17 @@ public class BasicInfoFragment extends FormContentFragment {
 
             PassengerProvider.addPassenger(this, Observers.create(passenger1 -> RideProvider.addPassengerToRide(this, Observers.empty(), ride.id, passenger1.id)), passenger);
 
-            super.onNext();
+            super.onNext(formHolder);
         }
 
+    }
+
+    @Override
+    public void setupData(FormHolder formHolder)
+    {
+        formHolder.setTitle(getString(R.string.passenger_contact_info));
+        ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
+        direction = (Ride.Direction) formHolder.getDataObject(PassengerSignupActivity.DIRECTION);
     }
 }
 

@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.passengers
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,7 @@ import org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAu
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.RideFilterVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
-
-import java.util.List;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 public class RideInfoFragment extends FormContentFragment {
 
@@ -37,38 +35,7 @@ public class RideInfoFragment extends FormContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        //very much a hack but getChildFragmentManager.beginTransaction().replace().commit() is not working as expected for some reason.
-        List<Fragment> fragmentList = getChildFragmentManager().getFragments();
-        if(fragmentList != null && !fragmentList.isEmpty())
-        {
-            CruSupportPlaceAutocompleteFragment oldFragment = ((CruSupportPlaceAutocompleteFragment) getChildFragmentManager().getFragments().get(0));
-            oldPlace = oldFragment.place;
-            oldPlaceText = oldFragment.editText.getText().toString();
-            getChildFragmentManager().beginTransaction().remove(fragmentList.get(0)).commit();
-            getChildFragmentManager().executePendingTransactions();
-        }
         return inflater.inflate(R.layout.passenger_form_ride_info, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-
-        formHolder.setTitle(getString(R.string.passenger_signup));
-
-        if(rideFilterVM == null)
-            rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT));
-        else
-            rideFilterVM.bindUI(this);
-
-        validator = new BaseValidator(rideFilterVM);
-
-        getChildFragmentManager().executePendingTransactions();
-        autocompleteFragment = (CruSupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        setupPlacesAutocomplete();
-        if(oldPlaceText != null && oldPlace != null)
-            autocompleteFragment.restore(oldPlaceText, oldPlace);
     }
 
     private void setupPlacesAutocomplete()
@@ -92,7 +59,7 @@ public class RideInfoFragment extends FormContentFragment {
     }
 
     @Override
-    public void onNext()
+    public void onNext(FormHolder formHolder)
     {
         if(validator.validate() &&  autocompleteFragment.validate())
         {
@@ -101,12 +68,28 @@ public class RideInfoFragment extends FormContentFragment {
             formHolder.addDataObject(PassengerSignupActivity.DIRECTION, queryDirectionPair.second);
             formHolder.addDataObject(PassengerSignupActivity.LATLNG, rideFilterVM.precisePlace);
 
-            super.onNext();
+            super.onNext(formHolder);
         }
         else
         {
             //validate also sets error messages, make sure second gets called due to shortciruit
             autocompleteFragment.validate();
         }
+    }
+
+    @Override
+    public void setupData(FormHolder formHolder)
+    {
+        formHolder.setTitle(getString(R.string.passenger_signup));
+
+        if(rideFilterVM == null)
+            rideFilterVM = new RideFilterVM(this, getActivity().getFragmentManager(), (CruEvent) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT));
+        else
+            rideFilterVM.bindUI(this);
+
+        validator = new BaseValidator(rideFilterVM);
+
+        autocompleteFragment = (CruSupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        setupPlacesAutocomplete();
     }
 }

@@ -6,23 +6,30 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragmen
 
 public abstract class FormContentFragment extends BaseSupportFragment implements FormContent
 {
-    protected FormHolder formHolder;
+    private FormHolder formHolder;
 
     @Override
-    public final void onAttach(Context context)
+    public void onAttach(Context context)
     {
         super.onAttach(context);
-        formHolder = (FormHolder) getActivity();
+        formHolder = (FormActivity) context;
     }
 
     @Override
-    public void onNext()
+    public void onResume()
+    {
+        super.onResume();
+        ((FragmentViewListener) formHolder).onFragmentViewInstantiated(this);
+    }
+
+    @Override
+    public void onNext(FormHolder formHolder)
     {
         formHolder.next();
     }
 
     @Override
-    public void onPrevious()
+    public void onPrevious(FormHolder formHolder)
     {
         formHolder.prev();
     }
