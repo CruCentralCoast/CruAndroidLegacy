@@ -1,21 +1,19 @@
 package org.androidcru.crucentralcoast.presentation.validator;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 public class BaseValidator implements Validator.ValidationListener
 {
-    protected Validator validator;
+    public Validator validator;
     protected Context context;
 
     private boolean isValid;
@@ -27,26 +25,17 @@ public class BaseValidator implements Validator.ValidationListener
         postInit();
     }
 
-    public BaseValidator(Activity activity)
+    public BaseValidator(BaseAppCompatActivity activity)
     {
         context = activity;
         validator = new Validator(activity);
-        ButterKnife.bind(this, activity);
         postInit();
     }
 
-    public BaseValidator(Fragment fragment)
+    public BaseValidator(BaseSupportFragment fragment)
     {
         context = fragment.getContext();
         validator = new Validator(fragment);
-        ButterKnife.bind(this, fragment.getView());
-        postInit();
-    }
-
-    public BaseValidator(Context context)
-    {
-        this.context = context;
-        validator = new Validator(this);
         postInit();
     }
 

@@ -21,6 +21,7 @@ import java.util.List;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscription;
+import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -123,7 +124,7 @@ public class MyRidesDriverFragment extends ListFragment
         rx.Observable.from(rides)
                 .map(ride -> new MyRidesDriverVM(this, ride, false))
                 .subscribeOn(Schedulers.immediate())
-                .subscribe(rideVMs::add);
+                .subscribe(Observers.create(vm -> rideVMs.add(vm), e -> Timber.e("Adding RideVM error", e)));
 
         recyclerView.setAdapter(new MyRidesDriverAdapter(rideVMs, getContext()));
         swipeRefreshLayout.setRefreshing(false);

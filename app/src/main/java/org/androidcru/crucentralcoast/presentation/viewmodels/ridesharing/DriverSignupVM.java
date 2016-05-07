@@ -3,8 +3,6 @@ package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -57,7 +55,6 @@ public class DriverSignupVM extends BaseRideVM {
     protected LatLng center;
 
     protected GregorianCalendar eventStartDateTime;
-    protected int minCapacity;
 
     @BindView(R.id.name_field) @NotEmpty public EditText nameField;
     @BindView(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX, messageResId = R.string.phone_number_error) public EditText phoneField;
@@ -99,11 +96,9 @@ public class DriverSignupVM extends BaseRideVM {
         directionGroup.check(roundTrip.getId());
         rideTime.setOnKeyListener(null);
         rideDate.setOnKeyListener(null);
-        minCapacity = 0;
 
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-        carCapacity.addTextChangedListener(createCarCapacityWatcher());
     }
 
     protected int retrieveCarCapacity() {
@@ -194,14 +189,19 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
+    protected void initMap(GoogleMap googleMap)
+    {
+        if (map == null) {
+            map = googleMap;
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
+        } else {
+            Timber.d("Unable to display map....");
+        }
+    }
+
     public OnMapReadyCallback onMapReady() {
         return googleMap -> {
-            if (map == null) {
-                map = googleMap;
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(AppConstants.CALPOLY_LAT, AppConstants.CALPOLY_LNG), 14.0f));
-            } else {
-                Timber.d("Unable to display map....");
-            }
+            initMap(googleMap);
         };
     }
 
@@ -238,7 +238,7 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
-    protected TextWatcher createCarCapacityWatcher()
+    /*protected TextWatcher createCarCapacityWatcher()
     {
         return new TextWatcher() {
             @Override
@@ -251,7 +251,6 @@ public class DriverSignupVM extends BaseRideVM {
 
             }
 
-            @OnTextChanged(R.id.car_capacity_field)
             @Override
             public void afterTextChanged(Editable s) {
                 try
@@ -277,5 +276,5 @@ public class DriverSignupVM extends BaseRideVM {
                 }
             }
         };
-    }
+    }*/
 }
