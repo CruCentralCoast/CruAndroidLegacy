@@ -24,5 +24,7 @@ public class JoinCommunityGroupActivity extends FormActivity
         fragments.add(new BasicInfoFragment());
 
         setFormContent(fragments);
+
+        // Set dynamic fragment here
     }
 }
