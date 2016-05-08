@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Used to store things like keys into various databases such as bundles,
  * disk caches, SharedPreferences.
@@ -60,6 +58,9 @@ public class AppConstants
 
     //Ministry Team
     public static final String MINISTRY_TEAM_KEY = "MINISTRY_TEAM";
+
+    //Login
+    public static final String LOGIN_KEY = "LOGIN_KEY";
 
 
     /**

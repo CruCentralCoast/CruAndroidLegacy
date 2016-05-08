@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
+import org.androidcru.crucentralcoast.data.models.LoginResponse;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.models.Passenger;
@@ -98,5 +99,14 @@ public interface CruApiService
 
     @GET("/api/summermissions/")
     Observable<ArrayList<SummerMission>> getSummerMissions();
+
+    @FormUrlEncoded
+    @POST("/api/signin")
+    Observable<LoginResponse> signin(@Field("username") String user,
+                                     @Field("password") String password,
+                                     @Field("gcmId") String gcmId);
+
+    @GET("/api/signout")
+    Observable<LoginResponse> signout();
 
 }
