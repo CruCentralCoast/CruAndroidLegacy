@@ -12,6 +12,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +41,11 @@ public class MinistryTeamInformationFragment extends FormContentFragment
     {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
+    }
 
+    @Override
+    public void setupData(FormHolder formHolder)
+    {
         // retrieve the ministry team from the form holder
         ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
         formHolder.setTitle(ministryTeam.name);

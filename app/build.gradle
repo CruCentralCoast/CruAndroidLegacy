@@ -39,6 +39,7 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
         jumboMode true
+        incremental true
     }
 
     compileOptions {
@@ -75,8 +76,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     //UI Libraries
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
@@ -103,10 +103,10 @@ dependencies {
         transitive = false
     }
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
-
 
     compile 'com.anupcowkur:reservoir:2.1'
     compile 'org.parceler:parceler-api:1.1.1'
@@ -114,57 +114,55 @@ dependencies {
 
 
     //Rx
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.3'
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.1.4'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
     compile 'com.artemzin.rxjava:proguard-rules:1.1.2.0'
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
-
-
     //Logging
     compile 'com.jakewharton.timber:timber:4.1.2'
-    compile ('net.ypresto.timbertreeutils:timbertreeutils:1.0.0') {
-        exclude group: 'com.crashlytics.sdk.android', module: 'crashlytics'
-        exclude group: 'com.jakewharton.timber', module: 'timber'
-    }
+    compile 'net.ypresto.timbertreeutils:timbertreeutils:1.0.0'
     compile 'com.github.orhanobut:logger:1.12'
-    compile 'com.facebook.stetho:stetho:1.3.1'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
-
     //Image Manipulation
     compile 'jp.wasabeef:picasso-transformations:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-
     androidTestCompile 'com.android.support:support-annotations:23.3.0'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
     // Set this dependency to use JUnit 4 rules
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile 'com.android.support.test:rules:0.5'
     // Set this dependency to build and run Espresso tests
-    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1') {
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
     }
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
     }
     // Espresso-web for WebView support
-    androidTestCompile ('com.android.support.test.espresso:espresso-web:2.2.1') {
+    androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
     }
     // Espresso-idling-resource for synchronization with background jobs
-    androidTestCompile ('com.android.support.test.espresso:espresso-idling-resource:2.2.1') {
+    androidTestCompile('com.android.support.test.espresso:espresso-idling-resource:2.2.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
     }
     androidTestCompile 'junit:junit:4.12'
 
@@ -179,10 +177,6 @@ dependencies {
     androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
 
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }
 
 apply plugin: 'com.google.gms.google-services'

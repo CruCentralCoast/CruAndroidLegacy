@@ -22,6 +22,7 @@ import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,8 +52,6 @@ public class BasicInfoFragment extends FormContentFragment
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        formHolder.setTitle("Contact Information");
-
         // Autofills the form if the information is available
         nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
         phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
@@ -60,7 +59,13 @@ public class BasicInfoFragment extends FormContentFragment
     }
 
     @Override
-    public void onNext()
+    public void setupData(FormHolder formHolder)
+    {
+        formHolder.setTitle("Contact Information");
+    }
+
+    @Override
+    public void onNext(FormHolder formHolder)
     {
         if(validator.validate())
         {
@@ -74,7 +79,7 @@ public class BasicInfoFragment extends FormContentFragment
             MinistryTeam ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
             MinistryTeamProvider.joinMinistryTeam(Observers.empty(), ministryTeam.id, new CruUser(new CruName(nameField.getText().toString(), ""), emailField.getText().toString(), phoneField.getText().toString()));
 
-            super.onNext();
+            super.onNext(formHolder);
         }
     }
 }

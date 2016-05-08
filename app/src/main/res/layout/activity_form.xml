@@ -10,22 +10,22 @@
     <include
         layout="@layout/app_bar_main"/>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/content"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/form_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_bar"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <RelativeLayout
             android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/grey300"
-            android:layout_alignParentBottom="true">
+            android:background="@color/grey300">
 
             <RelativeLayout
                 android:id="@+id/prev"
@@ -98,6 +98,6 @@
 
             </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
