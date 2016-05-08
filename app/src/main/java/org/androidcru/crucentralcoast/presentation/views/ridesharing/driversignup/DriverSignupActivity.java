@@ -9,7 +9,6 @@ import android.widget.EditText;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
-import timber.log.Timber;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
@@ -18,30 +17,27 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
-import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.parceler.Parcels;
-import org.threeten.bp.ZonedDateTime;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.observers.Observers;
+import timber.log.Timber;
 
 public class DriverSignupActivity extends BaseAppCompatActivity
 {
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     private DriverSignupVM driverSignupVM;
-    private BaseValidator validator;
 
-    @Bind(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.fab) FloatingActionButton fab;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
 
-    @Bind(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
+    @BindView(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
     private MapFragment mapFragment;
 
     private CruEvent event;
@@ -61,7 +57,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             return;
         }
 
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         setupFab();
 
@@ -94,12 +90,12 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
     private void createDriver()
     {
-        RideProvider.createRide(this, Observers.empty(), completeRide(driverSignupVM.getRide()));
+        RideProvider.createRide(Observers.empty(), completeRide(driverSignupVM.getRide()));
     }
 
     private void updateDriver()
     {
-        RideProvider.updateRide(this, Observers.empty(), completeRide(driverSignupVM.getRide()));
+        RideProvider.updateRide(Observers.empty(), completeRide(driverSignupVM.getRide()));
     }
 
     private void setupPlacesAutocomplete()
@@ -131,15 +127,14 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r, event.endDate);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());
         setupPlacesAutocomplete();
-        validator = new BaseValidator(driverSignupVM);
     }
 
     private void setupFab()
     {
-        fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600_48dp, android.R.color.white));
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
             //if fields are valid, update shared preferences and the Ride
-            if(validator.validate())
+            if(driverSignupVM.validator.validate())
             {
                 sharedPreferences.edit().putString(AppConstants.USER_NAME, driverSignupVM.nameField.getText().toString()).apply();
                 sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, driverSignupVM.phoneField.getText().toString()).apply();

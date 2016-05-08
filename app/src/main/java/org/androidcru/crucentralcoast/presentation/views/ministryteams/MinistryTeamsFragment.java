@@ -17,14 +17,14 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragmen
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 
 public class MinistryTeamsFragment extends BaseSupportFragment
 {
-    @Bind(R.id.subscription_list) RecyclerView subscriptionList;
-    @Bind(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.subscription_list) RecyclerView subscriptionList;
+    @BindView(R.id.progress) ProgressBar progressBar;
     private GridLayoutManager layoutManager;
     private MinistryTeamsAdapter ministryTeamsAdapter;
     private Observer<List<MinistryTeam>> observer;
@@ -65,7 +65,7 @@ public class MinistryTeamsFragment extends BaseSupportFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         ministryTeamsAdapter = new MinistryTeamsAdapter(getActivity(), new ArrayList<>());
         subscriptionList.setHasFixedSize(true);
         subscriptionList.setAdapter(ministryTeamsAdapter);

@@ -11,14 +11,14 @@ import android.widget.ImageView;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.CruImage;
+import org.androidcru.crucentralcoast.data.models.Image;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.parceler.Parcels;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -44,9 +44,9 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
     {
         MinistryTeamHolder ministryTeamHolder = (MinistryTeamHolder) holder;
         // sets up the ministry team box logo for each ministry based on their position
-        CruImage cruImage = ministryTeams.get(position).cruImage;
-        if(cruImage != null)
-            ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).cruImage.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
+        Image image = ministryTeams.get(position).image;
+        if(image != null)
+            ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).image.url, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
         else
             ministryTeamHolder.ministryImage.setImageResource(R.drawable.default_box);
 
@@ -63,7 +63,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class MinistryTeamHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.ministry_image) ImageView ministryImage;
+        @BindView(R.id.ministry_image) ImageView ministryImage;
 
         public MinistryTeamHolder(View itemView)
         {

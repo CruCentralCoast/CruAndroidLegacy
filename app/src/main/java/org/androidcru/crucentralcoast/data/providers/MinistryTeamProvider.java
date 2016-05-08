@@ -2,8 +2,8 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
@@ -16,7 +16,7 @@ import rx.Subscription;
 
 public final class MinistryTeamProvider
 {
-    private static CruApiService cruService = ApiProvider.getService();
+    private static CruApiService cruService = CruApiProvider.getService();
 
     public static void requestMinistryTeams(SubscriptionsHolder holder, Observer<List<MinistryTeam>> observer)
     {
@@ -42,7 +42,7 @@ public final class MinistryTeamProvider
                             .first();
                     return ministryTeam;
                 })
-                .toList();
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
     public static void requestMinistryTeamLeaders(SubscriptionsHolder holder, Observer<ArrayList<CruUser>> observer, String ministryTeamId)

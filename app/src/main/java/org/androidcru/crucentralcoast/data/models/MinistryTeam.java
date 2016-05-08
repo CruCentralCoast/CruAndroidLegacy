@@ -19,8 +19,8 @@ public final class MinistryTeam
     public static final String sParentMinistryId = "parentMinistry";
 
     @SerializedName(sId) public String id;
-    @SerializedName(sCruImage) public CruImage cruImage;
-    @SerializedName(sTeamImage) public CruImage teamImage;
+    @SerializedName(sCruImage) public Image image;
+    @SerializedName(sTeamImage) public Image teamImage;
     @SerializedName(sDescription) public String description;
     @SerializedName(sName) public String name;
     @SerializedName(sParentMinistryId) public String parentMinistryId;

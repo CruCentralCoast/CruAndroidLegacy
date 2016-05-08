@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
@@ -102,11 +102,11 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
             {
                 MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
 
-                if(ministrySubscriptionVM.ministry.cruImage != null)
+                if(ministrySubscriptionVM.ministry.image != null)
                 {
                     Context context = ministrySubscriptionHolder.ministryImage.getContext();
                     Picasso.with(context)
-                            .load(ministrySubscriptionVM.ministry.cruImage.url)
+                            .load(ministrySubscriptionVM.ministry.image.url)
                             .transform(new ColorFilterTransformation(ContextCompat.getColor(context, R.color.cruGray)))
                             .into(ministrySubscriptionHolder.ministryImage);
                 }
@@ -141,7 +141,7 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class HeaderHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.header)
+        @BindView(R.id.header)
         TextView header;
 
         public HeaderHolder(View itemView)
@@ -154,9 +154,9 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.ministry_image)
+        @BindView(R.id.ministry_image)
         ImageView ministryImage;
-        @Bind(R.id.checkbox)
+        @BindView(R.id.checkbox)
         CheckBox checkBox;
 
         public MinistrySubscriptionHolder(View itemView)

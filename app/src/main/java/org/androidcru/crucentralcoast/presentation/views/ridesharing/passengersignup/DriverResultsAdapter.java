@@ -15,7 +15,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder>
@@ -56,8 +56,8 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
     public class DriverResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
-        @Bind(R.id.driverName) TextView driverName;
-        @Bind(R.id.rideDateTime) TextView rideDateTime;
+        @BindView(R.id.driverName) TextView driverName;
+        @BindView(R.id.rideDateTime) TextView rideDateTime;
 
         public DriverResultViewHolder(View itemView)
         {

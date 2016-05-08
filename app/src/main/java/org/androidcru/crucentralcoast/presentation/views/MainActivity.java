@@ -10,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
@@ -30,6 +29,7 @@ import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.communitygroups.CommunityGroupsFragment;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
+import org.androidcru.crucentralcoast.presentation.views.feed.FeedFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
@@ -72,7 +72,7 @@ public class MainActivity extends BaseAppCompatActivity
         constructionFragment = new ConstructionFragment();
         if(savedInstanceState == null)
         {
-            spawnConstructionFragment();
+            switchToFeed();
         }
 
         checkPlayServicesCode();
@@ -94,7 +94,7 @@ public class MainActivity extends BaseAppCompatActivity
                         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         String userPhoneNumber = telephonyManager.getLine1Number();
                         if (userPhoneNumber != null)
-                            userPhoneNumber = userPhoneNumber.substring(2, userPhoneNumber.length());
+                            userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
                         CruApplication.getSharedPreferences().edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
 
@@ -187,13 +187,9 @@ public class MainActivity extends BaseAppCompatActivity
 
         switch (id)
         {
-            case R.id.nav_home:
-                toolbar.setTitle(R.string.app_name);
-                spawnConstructionFragment();
-                break;
-            case R.id.nav_tools:
-                toolbar.setTitle(R.string.nav_tools);
-                spawnConstructionFragment();
+            case R.id.nav_feed:
+                toolbar.setTitle(R.string.nav_feed);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
                 break;
             case R.id.nav_events:
                 toolbar.setTitle(R.string.nav_events);
@@ -245,6 +241,13 @@ public class MainActivity extends BaseAppCompatActivity
         navigationView.setCheckedItem(R.id.nav_events);
         toolbar.setTitle(R.string.nav_events);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+    }
+
+    public void switchToFeed()
+    {
+        navigationView.setCheckedItem(R.id.nav_feed);
+        toolbar.setTitle(R.string.nav_feed);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
     }
 
 

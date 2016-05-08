@@ -23,7 +23,8 @@
             android:layout_width="300dp"
             android:layout_height="184dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/logo_grey"/>
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/cru_logo_grey600"/>
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/central_coast"

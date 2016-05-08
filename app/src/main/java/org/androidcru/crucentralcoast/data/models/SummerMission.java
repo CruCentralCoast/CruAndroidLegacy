@@ -21,7 +21,7 @@ public final class SummerMission
     @SerializedName(sId) public String id;
     @SerializedName(sDescription) public String description;
     @SerializedName(sName) public String name;
-    @SerializedName(sImage) public CruImage image;
+    @SerializedName(sImage) public Image image;
     @SerializedName(sLeaders) public String leaders;
     @SerializedName(sStartDate) public ZonedDateTime startDate;
     @SerializedName(sEndDate) public ZonedDateTime endDate;

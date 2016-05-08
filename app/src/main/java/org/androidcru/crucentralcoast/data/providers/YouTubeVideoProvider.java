@@ -1,64 +1,33 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.SearchListResponse;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.BuildConfig;
-import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
+import org.androidcru.crucentralcoast.data.providers.api.YouTubeApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
+import org.androidcru.crucentralcoast.data.services.YouTubeDataService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
-import java.io.IOException;
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.Subscription;
-import timber.log.Timber;
 
 // Used to query the SLOCru YouTube channel for its videos
 public final class YouTubeVideoProvider
 {
+    private boolean first;
+    private String nextPageToken;
+    private YouTubeDataService youTubeDataService = YouTubeApiProvider.getService();
 
-    private static YouTubeVideoProvider instance;
-
-    private YouTube youtube;
-    private YouTube.Search.List query;
-
-    private YouTubeVideoProvider()
+    public YouTubeVideoProvider()
     {
-        youtube = new YouTube.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), null)
-                .setApplicationName(CruApplication.getContext().getString(R.string.app_name))
-                .build();
-        try
-        {
-            // Gets the video ids and the snippet.
-            // A snippit contains the details of a search result. E.g. description, length, title
-            query = youtube.search().list("id,snippet");
-        }
-        catch (IOException e)
-        {
-            Timber.e(e, "YouTubeVideoProvider error");
-        }
-        query.setKey(BuildConfig.YOUTUBEBROWSERAPIKEY);
-        query.setChannelId(AppConstants.CRU_YOUTUBE_CHANNEL_ID);
-        query.setOrder("date");
-        query.setMaxResults(AppConstants.YOUTUBE_QUERY_NUM);
-        query.setType("video");
+        resetQuery();
     }
 
-    public static YouTubeVideoProvider getInstance()
-    {
-        if(instance == null)
-            instance = new YouTubeVideoProvider();
-        return instance;
-    }
-
-    public void requestVideoSearch(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String search)
+    public void requestVideoSearch(SubscriptionsHolder holder, Observer<List<Snippet>> observer, String search)
     {
         Subscription s = requestVideoSearch(search)
                 .compose(RxComposeUtil.ui())
@@ -66,54 +35,64 @@ public final class YouTubeVideoProvider
         holder.addSubscription(s);
     }
 
-    protected Observable<SearchListResponse> requestVideoSearch(String search) {
-        return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
-            @Override
-            public void call(Subscriber<? super SearchListResponse> subscriber) {
-                try {
-                    Timber.e("Got here");
-                    query.setQ(search);
-                    SearchListResponse searchResponse = query.execute();
-                    if (!searchResponse.isEmpty()) {
-                        subscriber.onNext(searchResponse);
+    protected Observable<List<Snippet>> requestVideoSearch(String search) {
+        if(!first && nextPageToken == null)
+            return Observable.empty();
+
+        return youTubeDataService.getSearchResults(BuildConfig.YOUTUBEBROWSERAPIKEY, "snippet", search, AppConstants.CRU_YOUTUBE_UPLOADS_ID, AppConstants.PAGE_SIZE, nextPageToken)
+                .flatMap(response -> {
+                    if(!response.items.isEmpty())
+                    {
+                        nextPageToken = response.nextPageToken;
+                        first = false;
+                        return Observable.just(response.items);
                     }
-                    subscriber.onCompleted();
-                } catch (IOException e) {
-                    subscriber.onError(e);
-                }
-            }
-        })
+                    else
+                        return Observable.empty();
+                })
                 .compose(RxComposeUtil.network());
     }
 
-    public void requestChannelVideos(SubscriptionsHolder holder, Observer<SearchListResponse> observer, String nextPageToken)
+
+    public void requestChannelVideos(SubscriptionsHolder holder, Observer<List<Snippet>> observer)
     {
-        Subscription s = requestChannelVideos(nextPageToken)
+        Subscription s = requestChannelVideos()
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
+    public void resetQuery()
+    {
+        first = true;
+        nextPageToken = null;
+    }
+
+    protected Observable<List<Snippet>> refreshQuery()
+    {
+        resetQuery();
+        return requestChannelVideos();
+    }
+
     // Returns a video response to its observer. The response contains a list of 20 videos,
     // including the videos' ids and snippets.
-    protected Observable<SearchListResponse> requestChannelVideos(String nextPageToken)
+    protected Observable<List<Snippet>> requestChannelVideos()
     {
-        return Observable.create(new Observable.OnSubscribe<SearchListResponse>() {
-            @Override
-            public void call(Subscriber<? super SearchListResponse> subscriber) {
-                try {
-                    query.setQ("");
-                    query.setPageToken(nextPageToken);
-                    SearchListResponse searchResponse = query.execute();
-                    if (!searchResponse.isEmpty()) {
-                        subscriber.onNext(searchResponse);
+        if(!first && nextPageToken == null)
+            return Observable.empty();
+
+        return youTubeDataService.getPlaylistVideos(BuildConfig.YOUTUBEBROWSERAPIKEY, "snippet", AppConstants.CRU_YOUTUBE_UPLOADS_ID, AppConstants.PAGE_SIZE, nextPageToken)
+                .flatMap(response -> {
+                    if(!response.items.isEmpty())
+                    {
+                        nextPageToken = response.nextPageToken;
+                        first = false;
+                        return Observable.just(response.items);
                     }
-                    subscriber.onCompleted();
-                } catch (IOException e) {
-                    subscriber.onError(e);
-                }
-            }
-        })
-        .compose(RxComposeUtil.network());
+                    else
+                        return Observable.empty();
+                })
+                .compose(RxLoggingUtil.log("YOUTUBE_VIDEOS"))
+                .compose(RxComposeUtil.network());
     }
 }

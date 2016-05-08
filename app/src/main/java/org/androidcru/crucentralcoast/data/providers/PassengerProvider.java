@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.Passenger;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
@@ -15,7 +16,7 @@ import rx.schedulers.Schedulers;
 public final class PassengerProvider
 {
 
-    private static CruApiService mCruService = ApiProvider.getService();
+    private static CruApiService mCruService = CruApiProvider.getService();
 
     public static void addPassenger(SubscriptionsHolder holder, Observer<Passenger> observer, Passenger passenger)
     {
@@ -50,7 +51,7 @@ public final class PassengerProvider
                             })
                             .subscribeOn(Schedulers.io());
                 })
-                .toList();
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
 }

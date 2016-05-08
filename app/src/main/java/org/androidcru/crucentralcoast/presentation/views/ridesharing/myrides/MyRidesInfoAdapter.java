@@ -19,7 +19,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.observers.Observers;
 
@@ -64,9 +64,9 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class PassengerInfoHolder extends RecyclerView.ViewHolder
     {
-        @Bind(R.id.passengerName) TextView passengerName;
-        @Bind(R.id.passengerPhoneNum) TextView passengerPhone;
-        @Bind(R.id.kickPassenger) Button kickPassenger;
+        @BindView(R.id.passengerName) TextView passengerName;
+        @BindView(R.id.passengerPhoneNum) TextView passengerPhone;
+        @BindView(R.id.kickPassenger) Button kickPassenger;
 
         public PassengerInfoHolder(View itemView)
         {

@@ -19,7 +19,7 @@ import org.androidcru.crucentralcoast.presentation.views.subscriptions.Subscript
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
@@ -29,8 +29,8 @@ public class MinistrySelectionFragment extends FormContentFragment
     private GridLayoutManager layoutManager;
     private MinistrySelectionAdapter ministryAdapter;
 
-    @Bind(R.id.subscription_list) RecyclerView subscriptionList;
-    @Bind(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.subscription_list) RecyclerView subscriptionList;
+    @BindView(R.id.progress) ProgressBar progressBar;
 
     private Subscription subscription;
     private Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer;

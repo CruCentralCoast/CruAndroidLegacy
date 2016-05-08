@@ -1,0 +1,19 @@
+{
+  "conditions": {
+    "$and": [
+      {
+        "startDate": {
+          "$lt": "2016-05-11T08:00Z"
+        }
+      },
+      {
+        "startDate": {
+          "$gte": "2016-05-04T08:00Z"
+        }
+      }
+    ]
+  },
+  "options": {
+    "skip": 40
+  }
+}

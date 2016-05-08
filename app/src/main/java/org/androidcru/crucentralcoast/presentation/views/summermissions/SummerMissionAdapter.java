@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.summermissions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdapter.SummerMissionVH>
@@ -70,11 +69,10 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         holder.missionLeaders.setVisibility(isExpanded.get(position) && summerMission.leaders != null ? View.VISIBLE : View.GONE);
         if(summerMission.image != null)
         {
-            Picasso.with(context)
-                    .load(summerMission.image.url)
-                    .placeholder(R.drawable.logo_grey)
-                    .fit()
-                    .into(holder.missionBanner);
+            ViewUtil.setSource(holder.missionBanner, summerMission.image.url,
+                    0,
+                    DrawableUtil.getDrawable(holder.missionBanner.getContext(), R.drawable.cru_logo_grey600),
+                    ViewUtil.SCALE_TYPE.FIT);
         }
         else
         {
@@ -82,8 +80,8 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         }
 
         holder.chevView.setImageDrawable(isExpanded.get(position)
-                ? ContextCompat.getDrawable(context, R.drawable.ic_chevron_up_grey600_48dp)
-                : ContextCompat.getDrawable(context, R.drawable.ic_chevron_down_grey600_48dp));
+                ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         holder.missionDescription.setText(summerMission.description);
         holder.missionDescription.setVisibility(isExpanded.get(position) ? View.VISIBLE : View.GONE);
         holder.learnMore.setVisibility((summerMission.url != null && !summerMission.url.isEmpty()) ? View.VISIBLE : View.GONE);
@@ -96,14 +94,14 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
 
     protected class SummerMissionVH extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        @Bind(R.id.mission_name) TextView missionName;
-        @Bind(R.id.mission_start_date) TextView missionStartDate;
-        @Bind(R.id.mission_end_date) TextView missionEndDate;
-        @Bind(R.id.mission_leaders) TextView missionLeaders;
-        @Bind(R.id.mission_banner) ImageView missionBanner;
-        @Bind(R.id.chevView) ImageView chevView;
-        @Bind(R.id.learn_more) Button learnMore;
-        @Bind(R.id.mission_description) TextView missionDescription;
+        @BindView(R.id.mission_name) TextView missionName;
+        @BindView(R.id.mission_start_date) TextView missionStartDate;
+        @BindView(R.id.mission_end_date) TextView missionEndDate;
+        @BindView(R.id.mission_leaders) TextView missionLeaders;
+        @BindView(R.id.mission_banner) ImageView missionBanner;
+        @BindView(R.id.chevView) ImageView chevView;
+        @BindView(R.id.learn_more) Button learnMore;
+        @BindView(R.id.mission_description) TextView missionDescription;
 
         public SummerMissionVH(View itemView)
         {

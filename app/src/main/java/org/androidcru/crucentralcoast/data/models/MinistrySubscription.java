@@ -14,7 +14,7 @@ public final class MinistrySubscription
     public static final String sSubscriptionId = "_id";
     public static final String sCampusId = "campuses";
 
-    @SerializedName(sCruImage) public CruImage cruImage;
+    @SerializedName(sCruImage) public Image image;
     @SerializedName(sSubscriptionId) public String subscriptionId;
     @SerializedName(sCampusId) public ArrayList<String> campusId;
 

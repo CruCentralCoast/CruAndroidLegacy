@@ -12,7 +12,7 @@
         android:layout_height="48dp"
         android:id="@+id/person_icon"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_account_grey600_48dp"
+        app:srcCompat="@drawable/ic_account_grey600_48dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:padding="8dp"/>

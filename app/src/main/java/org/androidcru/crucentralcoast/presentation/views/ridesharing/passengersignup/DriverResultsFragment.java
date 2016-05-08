@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
@@ -24,15 +24,16 @@ import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragme
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
 
 public class DriverResultsFragment extends FormContentFragment
 {
-    @Bind(R.id.recyclerview) protected RecyclerView recyclerView;
-    @Bind(R.id.swipe_refresh_layout) protected SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recyclerview) protected RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh_layout) protected SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.informational_text) protected TextView informationalText;
     private View emptyView;
 
     private Query query;
@@ -84,10 +85,12 @@ public class DriverResultsFragment extends FormContentFragment
     {
         super.onViewCreated(view, savedInstanceState);
         ViewStub emptyViewStub = (ViewStub) view.findViewById(R.id.empty_view_stub);
-        emptyViewStub.setLayoutResource(R.layout.empty_driver_results);
+        emptyViewStub.setLayoutResource(R.layout.empty_with_alert);
         emptyView = emptyViewStub.inflate();
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
+
+        informationalText.setText(R.string.no_rides);
 
         ListFragment.setupSwipeRefreshLayout(swipeRefreshLayout);
 

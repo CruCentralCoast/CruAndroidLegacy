@@ -4,6 +4,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.LocationUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
@@ -11,6 +12,7 @@ import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -21,7 +23,7 @@ import timber.log.Timber;
 
 public final class RideProvider
 {
-    private static CruApiService mCruService = ApiProvider.getService();
+    private static CruApiService mCruService = CruApiProvider.getService();
 
 
 
@@ -41,7 +43,7 @@ public final class RideProvider
                 .filter(ride -> {
                     return ride.gcmID.equals(gcmId);
                 })
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
@@ -62,7 +64,7 @@ public final class RideProvider
                     }
                     return status;
                 })
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
@@ -81,6 +83,8 @@ public final class RideProvider
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
+                    if(ride.passengers == null)
+                        ride.passengers = new ArrayList<Passenger>();
                     return ride;
                 })
                 .map(ride -> {
@@ -89,10 +93,9 @@ public final class RideProvider
                             .map(theEvent -> ride.event = theEvent)
                             .toBlocking()
                             .subscribe();
-                    ;
                     return ride;
                 })
-                .toList();
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
 
@@ -118,18 +121,17 @@ public final class RideProvider
                     return distance <= MathUtil.convertMilesToMeters(ride.radius);
                 })
                 .compose(RxLoggingUtil.log("RIDES AFTER LOC FILTER"))
-                .toList()
+                .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
 
 
 
-    public static void createRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
+    public static void createRide(Observer<Ride> observer, Ride ride)
     {
-        Subscription s = createRide(ride)
+        createRide(ride)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
-        holder.addSubscription(s);
     }
 
     protected static Observable<Ride> createRide(Ride ride)
@@ -140,12 +142,11 @@ public final class RideProvider
 
 
 
-    public static void updateRide(SubscriptionsHolder holder, Observer<Ride> observer, Ride ride)
+    public static void updateRide(Observer<Ride> observer, Ride ride)
     {
-        Subscription s = updateRide(ride.id, ride)
+        updateRide(ride.id, ride)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
-        holder.addSubscription(s);
     }
 
     protected static Observable<Ride> updateRide(String rideId, Ride ride)

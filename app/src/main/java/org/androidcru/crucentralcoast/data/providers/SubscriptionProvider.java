@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
@@ -22,7 +23,7 @@ import rx.Subscription;
  */
 public final class SubscriptionProvider
 {
-    private static CruApiService mCruService = ApiProvider.getService();
+    private static CruApiService mCruService = CruApiProvider.getService();
 
     public static void requestMinistries(SubscriptionsHolder holder, Observer<ArrayList<MinistrySubscription>> observer)
     {

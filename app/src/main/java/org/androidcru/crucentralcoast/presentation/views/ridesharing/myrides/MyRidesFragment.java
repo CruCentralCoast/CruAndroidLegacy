@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +10,18 @@ import android.view.ViewGroup;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * MyRidesFragment launches the MyRides section of the application.
  */
-public class MyRidesFragment extends Fragment
+public class MyRidesFragment extends BaseSupportFragment
 {
-    @Bind(R.id.sliding_tabs) TabLayout tabLayout;
-    @Bind(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.sliding_tabs) TabLayout tabLayout;
+    @BindView(R.id.viewpager) ViewPager viewPager;
 
     @Nullable
     @Override
@@ -37,7 +37,7 @@ public class MyRidesFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         //Let ButterKnife find all injected views and bind them to member variables
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
     }
 
     public void switchToTab()

@@ -7,11 +7,14 @@ public class ResourcesUtil
 {
     public static String getResourceAsString(ClassLoader classLoader, String resourceName)
     {
-        return convertStreamToString(classLoader.getResourceAsStream(resourceName));
+        InputStream is = classLoader.getResourceAsStream(resourceName);
+        return convertStreamToString(is);
     }
 
     public static String convertStreamToString(InputStream is) {
         Scanner s = new Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
+        String str = s.hasNext() ? s.next() : "";
+        s.close();
+        return str;
     }
 }

@@ -3,12 +3,14 @@ package org.androidcru.crucentralcoast.presentation.views.base;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
+import butterknife.Unbinder;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 public class BaseAppCompatActivity extends AppCompatActivity implements SubscriptionsHolder
 {
     private CompositeSubscription subscriptions = new CompositeSubscription();
+    public Unbinder unbinder;
 
     @Override
     protected void onDestroy()

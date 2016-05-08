@@ -13,7 +13,6 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragmen
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 

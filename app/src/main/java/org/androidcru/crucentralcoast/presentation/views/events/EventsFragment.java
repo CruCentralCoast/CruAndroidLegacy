@@ -11,33 +11,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import timber.log.Timber;
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
-import org.androidcru.crucentralcoast.presentation.viewmodels.events.CruEventVM;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.OnClick;
 import rx.Observer;
-import rx.Subscription;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class EventsFragment extends ListFragment
 {
-    private ArrayList<CruEventVM> cruEventVMs;
+    private ArrayList<CruEvent> eventList;
     private LinearLayoutManager layoutManager;
-    private Observer<ArrayList<CruEvent>> eventSubscriber;
-    private Subscription subscription;
+    private Observer<List<CruEvent>> eventSubscriber;
     private SharedPreferences sharedPreferences;
 
     /**
@@ -71,8 +68,7 @@ public class EventsFragment extends ListFragment
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
-
-        cruEventVMs = new ArrayList<>();
+        eventList = new ArrayList<>();
 
         setupObserver();
 
@@ -94,13 +90,13 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = new Observer<ArrayList<CruEvent>>()
+        eventSubscriber = new Observer<List<CruEvent>>()
         {
             @Override
             public void onCompleted()
             {
                 swipeRefreshLayout.setRefreshing(false);
-                if (cruEventVMs.isEmpty())
+                if (eventList.isEmpty())
                 {
                     emptyView.setVisibility(View.VISIBLE);
                 }
@@ -117,7 +113,7 @@ public class EventsFragment extends ListFragment
             }
 
             @Override
-            public void onNext(ArrayList<CruEvent> cruEvents)
+            public void onNext(List<CruEvent> cruEvents)
             {
                 setEvents(cruEvents);
             }
@@ -134,7 +130,7 @@ public class EventsFragment extends ListFragment
     private void getCruEvents()
     {
         swipeRefreshLayout.setRefreshing(true);
-        EventProvider.requestEvents(this, eventSubscriber);
+        EventProvider.requestUsersEvents(this, eventSubscriber, sharedPreferences);
     }
 
 
@@ -143,31 +139,20 @@ public class EventsFragment extends ListFragment
      *
      * @param cruEvents List of new Events the UI should adhere to
      */
-    public void setEvents(ArrayList<CruEvent> cruEvents)
+    public void setEvents(List<CruEvent> cruEvents)
     {
-        cruEventVMs.clear();
+        eventList.clear();
         rx.Observable.from(cruEvents)
-                .filter(cruEvent -> {
-                    for (String s : cruEvent.parentMinistrySubscriptions)
-                        if (sharedPreferences.getBoolean(s, false))
-                            return true;
-                    return false;
-                })
                 .map(cruEvent -> {
-                    return new CruEventVM(this, cruEvent, false,
-                            sharedPreferences.contains(cruEvent.id),
-                            sharedPreferences.getLong(cruEvent.id, -1));
-                })
-                .map(cruEventVM -> {
                     if (CalendarProvider.hasCalendarPermission(getContext()))
                     {
-                        CalendarProvider.updateEvent(getContext(), cruEventVM.cruEvent, sharedPreferences.getLong(cruEventVM.cruEvent.id, -1), Observers.empty());
+                        CalendarProvider.updateEvent(getContext(), cruEvent, sharedPreferences.getLong(cruEvent.id, -1), Observers.empty());
                     }
-                    return cruEventVM;
+                    return cruEvent;
                 })
                 .subscribeOn(Schedulers.immediate())
-                .subscribe(cruEventVMs::add);
-        recyclerView.setAdapter(new EventsAdapter(cruEventVMs, layoutManager));
+                .subscribe(eventList::add);
+        recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
     }
 
     /**

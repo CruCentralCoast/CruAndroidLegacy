@@ -78,6 +78,7 @@ public abstract class BaseRideVM extends BaseVM
                 c.get(Calendar.DAY_OF_MONTH)
         );
         dpd.vibrate(false);
+        dpd.setMinDate(new GregorianCalendar(c.get(Calendar.YEAR) - 1, c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
         dpd.setMaxDate(eventEndDate);
         return dpd;
     }
@@ -123,10 +124,19 @@ public abstract class BaseRideVM extends BaseVM
         //sets the text of the TimePicker EditText
         tpd.setOnTimeSetListener((view, hourOfDay, minute, second) -> {
             rideSetTime = LocalTime.of(hourOfDay, minute, second);
-            String milTime = rideSetTime.format(DateTimeFormatter.ISO_LOCAL_TIME);
-            ((EditText) v).setText(convertTo12Hour(milTime));
+            ((EditText) v).setText(getTimeString(rideSetTime));
         });
         tpd.show(fm, AppConstants.SUPER_SPECIAL_STRING);
+    }
+
+    protected String getTimeString(LocalTime time)
+    {
+        return convertTo12Hour(rideSetTime.format(DateTimeFormatter.ISO_LOCAL_TIME));
+    }
+
+    protected String getDateString(LocalDate date)
+    {
+        return convertToddMMyyyy(rideSetDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
     }
 
     private String convertToddMMyyyy(String s)
@@ -174,7 +184,7 @@ public abstract class BaseRideVM extends BaseVM
 
             @Override
             public void onError(Status status) {
-                Timber.i("ERROR:", "An error occurred: " + status);
+                Timber.i("ERROR: An error occurred: " + status);
             }
         };
     }

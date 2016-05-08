@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,20 +11,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
-public class FormActivity extends AppCompatActivity implements FormHolder
+public class FormActivity extends BaseAppCompatActivity implements FormHolder
 {
     private FormContent currentFormContent;
     private HashMap<String, Object> dataObjects = new HashMap<>();
@@ -35,13 +35,14 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     private FragmentManager fm;
 
     public FormState formState;
+    private boolean isTransitioning = false;
 
-    @Bind(R.id.bottom_bar) RelativeLayout bottomBar;
-    @Bind(R.id.prev) RelativeLayout prev;
-    @Bind(R.id.next) RelativeLayout next;
-    @Bind(R.id.nextText) TextView nextText;
+    @BindView(R.id.bottom_bar) RelativeLayout bottomBar;
+    @BindView(R.id.prev) RelativeLayout prev;
+    @BindView(R.id.next) RelativeLayout next;
+    @BindView(R.id.nextText) TextView nextText;
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,7 +50,7 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         formState = FormState.PROGRESS;
 
         fm = getSupportFragmentManager();
@@ -136,23 +137,25 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     {
         Observable<Long> o500 = Observable.timer(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.computation());
 
         prev.setOnClickListener(v -> {
             if (currentFormContent != null)
             {
+                boolean oldState = next.hasOnClickListeners();
                 setNavigationClickable(false);
                 currentFormContent.onPrevious();
-                o500.subscribe(Observers.create(vo -> setNavigationClickable(true)));
+                o500.subscribe(Observers.create(vo -> setNavigationClickable(oldState)));
             }
         });
 
         next.setOnClickListener(v -> {
             if (currentFormContent != null)
             {
+                boolean oldState = next.hasOnClickListeners();
                 setNavigationClickable(false);
                 currentFormContent.onNext();
-                o500.subscribe(Observers.create(vo -> setNavigationClickable(true)));
+                o500.subscribe(Observers.create(vo -> setNavigationClickable(oldState)));
             }
         });
     }
@@ -163,13 +166,12 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         if (formState == FormState.FINISH || currentIndex == 0)
             complete();
         else
-            currentFormContent.onPrevious();
+            prev.performClick();
     }
 
     public void performTransaction(Fragment fragment) {
         fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
                 R.anim.slide_in_right, R.anim.slide_out_right).replace(R.id.content, fragment).addToBackStack(null).commit();
-        fm.executePendingTransactions();
     }
 
     private void clearUI()
@@ -178,7 +180,6 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         setNavigationVisibility(View.VISIBLE);
         setPreviousVisibility(View.VISIBLE);
         setNextVisibility(View.VISIBLE);
-        setNavigationClickable(true);
         setNextText("NEXT");
     }
 
@@ -230,9 +231,14 @@ public class FormActivity extends AppCompatActivity implements FormHolder
         onPageChange();
         if(nextFragment != null)
         {
+            onPageChange();
             performTransaction(nextFragment);
+            currentFormContent = nextFragment;
         }
-
+        else if(formState == FormState.FINISH)
+        {
+            complete();
+        }
     }
 
     @Override
@@ -246,8 +252,8 @@ public class FormActivity extends AppCompatActivity implements FormHolder
     {
         currentIndex--;
         onPageChange();
-        fm.popBackStack();
-        fm.executePendingTransactions();
+        fm.popBackStackImmediate();
+        currentFormContent = (FormContent) fm.getFragments().get(currentIndex);
     }
 
     @Override

@@ -20,13 +20,15 @@ import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
@@ -40,13 +42,12 @@ import rx.Subscription;
  */
 public class SubscriptionsFragment extends BaseSupportFragment
 {
-
     private GridLayoutManager layoutManager;
     private SubscriptionsAdapter subscriptionAdapter;
 
-    @Bind(R.id.subscription_list) RecyclerView subscriptionList;
-    @Bind(R.id.fab) FloatingActionButton fab;
-    @Bind(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.subscription_list) RecyclerView subscriptionList;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.progress) ProgressBar progressBar;
 
     private Subscription subscription;
     private Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer;
@@ -84,10 +85,10 @@ public class SubscriptionsFragment extends BaseSupportFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         // Sets the Floating Action Button's check icon to white
-        fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600_48dp, android.R.color.white));
+        fab.setImageDrawable(DrawableUtil.getTintedDrawable(getContext(), R.drawable.ic_check_grey600, android.R.color.white));
 
         fab.setOnClickListener(v -> {
 
@@ -112,7 +113,7 @@ public class SubscriptionsFragment extends BaseSupportFragment
             public int getSpanSize(int position)
             {
                 // if the element is a header, it should span the columns, otherwise it is a regular element
-                return subscriptionAdapter.isHeader(position) ? layoutManager.getSpanCount() : 1;
+                return SubscriptionsSorter.isHeader(position, subscriptionAdapter.ministries) ? layoutManager.getSpanCount() : 1;
             }
         });
         subscriptionList.setLayoutManager(layoutManager);

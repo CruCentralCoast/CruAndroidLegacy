@@ -1,10 +1,10 @@
 package org.androidcru.crucentralcoast;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
@@ -16,15 +16,18 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.threetenabp.AndroidThreeTen;
+import com.squareup.leakcanary.LeakCanary;
 
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.converters.GenderConverter;
 import org.androidcru.crucentralcoast.data.converters.ResourceTypeConverter;
+import org.androidcru.crucentralcoast.data.converters.SnippetConverter;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.util.PrettyDebugTree;
 import org.androidcru.crucentralcoast.util.SerializedNameExclusionStrategy;
@@ -34,7 +37,7 @@ import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
-public class CruApplication extends MultiDexApplication
+public class CruApplication extends Application
 {
     public static Gson gson = setupGson();
 
@@ -56,6 +59,8 @@ public class CruApplication extends MultiDexApplication
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         AndroidThreeTen.init(this);
+        LeakCanary.install(this);
+
 
         setupDebugConfig();
 
@@ -92,7 +97,7 @@ public class CruApplication extends MultiDexApplication
         }
     }
 
-    private void setupOkHttp()
+    public static OkHttpClient setupOkHttp()
     {
         if(BuildConfig.DEBUG)
         {
@@ -104,6 +109,7 @@ public class CruApplication extends MultiDexApplication
         {
             okHttpClient = new OkHttpClient();
         }
+        return okHttpClient;
     }
 
     /**
@@ -148,6 +154,7 @@ public class CruApplication extends MultiDexApplication
         builder.registerTypeAdapter(Ride.Direction.class, new DirectionConverter());
         builder.registerTypeAdapter(Ride.Gender.class, new GenderConverter());
         builder.registerTypeAdapter(Resource.ResourceType.class, new ResourceTypeConverter());
+        builder.registerTypeAdapter(Snippet.class, new SnippetConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.setPrettyPrinting();
@@ -165,5 +172,4 @@ public class CruApplication extends MultiDexApplication
     {
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
     }
-
 }

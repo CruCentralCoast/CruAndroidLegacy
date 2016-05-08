@@ -10,7 +10,7 @@ public final class Passenger
 {
     public static final String sName = "name";
     public static final String sPhone = "phone";
-    public static final String sGcmId = "gcmId";
+    public static final String sGcmId = "gcm_id";
     public static final String sDirection = "direction";
     public static final String sId = "_id";
 

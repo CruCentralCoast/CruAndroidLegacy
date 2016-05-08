@@ -1,12 +1,16 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.mobsandgeeks.saripaar.QuickRule;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
@@ -21,6 +25,7 @@ import butterknife.OnClick;
 public class DriverSignupEditingVM extends DriverSignupVM {
 
     private Ride ride;
+    protected int minCapacity;
 
     public DriverSignupEditingVM(BaseAppCompatActivity activity, FragmentManager fm, Ride ride, ZonedDateTime eventEndTime) {
         super(activity, fm, ride.eventId, eventEndTime);
@@ -60,7 +65,29 @@ public class DriverSignupEditingVM extends DriverSignupVM {
             default:
                 directionGroup.check(roundTrip.getId());
         }
-        carCapacity.addTextChangedListener(createCarCapacityWatcher());
+
+        validator.validator.put(carCapacity, new QuickRule<EditText>()
+        {
+            @Override
+            public boolean isValid(EditText view)
+            {
+                try
+                {
+                    int i = Integer.valueOf(view.getText().toString());
+                    return i >= ride.carCapacity && i <= AppConstants.MAX_CAR_CAPACITY;
+                }
+                catch (NumberFormatException e)
+                {
+                    return false;
+                }
+            }
+
+            @Override
+            public String getMessage(Context context)
+            {
+                return context.getString(R.string.car_capacity_error);
+            }
+        });
     }
 
     @Override
@@ -81,7 +108,7 @@ public class DriverSignupEditingVM extends DriverSignupVM {
     public OnMapReadyCallback onMapReady()
     {
         return googleMap -> {
-            DriverSignupEditingVM.super.onMapReady().onMapReady(googleMap);
+            initMap(googleMap);
             if (ride != null && ride.location != null)
                 updateMap(new LatLng(ride.location.geo[1], ride.location.geo[0]));
         };

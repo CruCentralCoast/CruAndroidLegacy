@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
-import org.androidcru.crucentralcoast.presentation.util.CustomTabActivityHelper;
+import org.androidcru.crucentralcoast.presentation.customtabs.CustomTabActivityHelper;
 
 /**
  * A Fallback that opens a Webview when Custom Tabs is not available
