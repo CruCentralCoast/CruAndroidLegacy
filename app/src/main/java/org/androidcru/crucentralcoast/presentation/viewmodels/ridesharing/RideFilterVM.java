@@ -94,13 +94,13 @@ public class RideFilterVM extends BaseRideVM
                     .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
             .addRestriction(new ConditionsBuilder()
                     .setField(Ride.sDirection)
-                    .addRestriction(ConditionsBuilder.OPERATOR.REGEX, direction.getValue()));
+                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, direction.getValue()));
 
         //don't include gender if it was "Any"
         if(genderId > -1)
             conditions.addRestriction(new ConditionsBuilder()
                     .setField(Ride.sGender)
-                    .addRestriction(ConditionsBuilder.OPERATOR.REGEX, gender));
+                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, genderId));
 
         //build query
         Query query = new Query.Builder()

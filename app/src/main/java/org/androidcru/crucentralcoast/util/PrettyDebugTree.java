@@ -19,7 +19,7 @@ public class PrettyDebugTree extends Timber.Tree
     protected void log(int priority, String tag, String message, Throwable t) {
         switch (priority) {
             case Log.VERBOSE:
-                Logger.v(message);
+                Log.v(tag, message);
                 break;
             case Log.DEBUG:
                 Logger.d(message);
