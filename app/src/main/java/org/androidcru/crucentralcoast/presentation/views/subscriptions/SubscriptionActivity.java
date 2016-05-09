@@ -17,18 +17,6 @@ public class SubscriptionActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        SharedPreferences pref = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        String themeName = pref.getString("CruGoldTheme", "YES");
-        if (themeName != null && themeName.equals("YES")) {
-            setTheme(R.style.CruGoldIsBest);
-        }
-        else {
-            System.out.println("THE THEME WAS " + themeName);
-            setTheme(R.style.AppTheme);
-        }
-        //end special theme
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_startup);
 

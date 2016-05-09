@@ -33,7 +33,7 @@ public class MyRidesDriverVM {
 
     public String passengerList;
     public CruEvent cruEvent;
-    private AlertDialogCreator alertDialog;
+    private AlertDialog alertDialog;
 
     public MyRidesDriverVM(MyRidesDriverFragment fragment, Ride ride, boolean isExpanded)
     {
@@ -81,14 +81,24 @@ public class MyRidesDriverVM {
     }
 
     private void initAlertDialog() {
-        alertDialog = new AlertDialogCreator(parent.getContext(),
-                CruApplication.getContext().getString(R.string.alert_dialog_title),
-                CruApplication.getContext().getString(R.string.alert_dialog_driver_msg),
+        alertDialog = new AlertDialog.Builder(parent.getContext()).create();
+        alertDialog.setTitle(CruApplication.getContext().getString(R.string.alert_dialog_title));
+        alertDialog.setMessage(CruApplication.getContext().getString(R.string.alert_dialog_driver_msg));
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                CruApplication.getContext().getString(R.string.alert_dialog_yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         RideProvider.dropRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id);
                     }
                 });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                CruApplication.getContext().getString(R.string.alert_dialog_no),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                    }
+                });
+
     }
 
     public View.OnClickListener onCancelOfferingClicked()

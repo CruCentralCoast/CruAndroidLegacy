@@ -61,6 +61,7 @@ public class AppConstants
 
     //Login
     public static final String LOGIN_KEY = "LOGIN_KEY";
+    public static final String USERNAME_KEY = "USERNAME_KEY";
 
 
     /**

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -45,15 +46,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     private Preference cruGoldIsTheBest;
 
     //login
-    private AlertDialog alertDialog;
-    private View alertDialogView;
-    @NotEmpty EditText loginName;
+    private AlertDialog loginDialog;
+    private View loginView;
+    @NotEmpty @Email(message = "Please Check and Enter a valid Email Address")EditText loginName;
     @NotEmpty EditText loginPassword;
-    private BaseValidator validator;
-    private ProgressBar progress;
+    private BaseValidator loginValidator;
+    private ProgressBar loginProgress;
     private TextView loginFailed;
 
-    private Observer<LoginResponse> observer;
+    //logout
+    private AlertDialog logoutDialog;
+
+    private Observer<LoginResponse> loginObserver;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -72,16 +76,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
         //login button
         LayoutInflater factory = LayoutInflater.from(getContext());
-        alertDialogView = factory.inflate(R.layout.login_alert, null);
-        loginName = (EditText)alertDialogView.findViewById(R.id.username_field);
-        loginPassword = (EditText)alertDialogView.findViewById(R.id.password_field);
-        progress = (ProgressBar) alertDialogView.findViewById(R.id.progress);
-        loginFailed = (TextView) alertDialogView.findViewById(R.id.login_failed);
-        validator = new BaseValidator(this);
+        loginView = factory.inflate(R.layout.login_alert, null);
+        loginName = (EditText) loginView.findViewById(R.id.username_field);
+        loginPassword = (EditText) loginView.findViewById(R.id.password_field);
+        loginProgress = (ProgressBar) loginView.findViewById(R.id.progress);
+        loginFailed = (TextView) loginView.findViewById(R.id.login_failed);
+        loginValidator = new BaseValidator(this);
 
-        observer = Observers.create(response -> {
+        loginObserver = Observers.create(response -> {
             if(response.success)
             {
+                sharedPreferences.edit().putString(AppConstants.USERNAME_KEY, loginName.getText().toString()).commit();
                 loginName.setText("");
                 loginName.setError("");
 
@@ -91,47 +96,68 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                 loginFailed.setVisibility(View.GONE);
                 sharedPreferences.edit().putString(AppConstants.LOGIN_KEY, response.leaderAPIKey).commit();
                 Timber.d("LOGIN SUCCEEDED");
-                alertDialog.dismiss();
+                setLoginButtonTitle();
+                loginDialog.dismiss();
             }
             else
                 loginFailed.setVisibility(View.VISIBLE);
-            progress.setVisibility(View.GONE);
+            loginProgress.setVisibility(View.GONE);
         });
 
-        alertDialog = new AlertDialog.Builder(getContext())
-                .setTitle("Community Group Leader Login")
+        loginDialog = new AlertDialog.Builder(getContext())
+                .setTitle(R.string.login_button_title)
                 .setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {
-                    alertDialog.dismiss();
+                    loginDialog.dismiss();
                 })
                 .create();
 
-        alertDialog.setOnShowListener(dialog -> {
-            Button posButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        loginDialog.setOnShowListener(dialog -> {
+            Button posButton = loginDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             posButton.setOnClickListener(view -> {
-                if(validator.validate())
+                if(loginValidator.validate())
                 {
                     //login api call
                     String name = loginName.getText().toString();
                     String password = loginPassword.getText().toString();
-                    progress.setVisibility(View.VISIBLE);
-                    LoginProvider.login(SettingsFragment.this, observer, name, password, CruApplication.getGCMID());
+                    loginProgress.setVisibility(View.VISIBLE);
+                    LoginProvider.login(SettingsFragment.this, loginObserver, name, password, CruApplication.getGCMID());
 
                     Timber.d("Logging in as " + name + " and pw: " + password);
                 }
             });
         });
 
-        alertDialog.setView(alertDialogView);
+        loginDialog.setView(loginView);
 
         loginButton = (Preference) getPreferenceManager().findPreference(getString(R.string.login_button_key));
+        setLoginButtonTitle();
         loginButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                alertDialog.show();
+                if (sharedPreferences.contains(AppConstants.LOGIN_KEY))
+                    logoutDialog.show();
+                else
+                    loginDialog.show();
                 return true;
             }
         });
+
+        //logout button
+        logoutDialog = new AlertDialog.Builder(getContext())
+                .setTitle(R.string.logout)
+                .setMessage(R.string.logout_dialog_text)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    sharedPreferences.edit().remove(AppConstants.USERNAME_KEY).commit();
+                    sharedPreferences.edit().remove(AppConstants.LOGIN_KEY).commit();
+                    Timber.d("LOGOUT SUCCEEDED");
+                    setLoginButtonTitle();
+                    logoutDialog.dismiss();
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                    logoutDialog.dismiss();
+                })
+                .create();
 
         //notification
         notificationCheckbox = (Preference) getPreferenceManager().findPreference(getString(R.string.notification_checkbox_key));
@@ -139,6 +165,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
 
+                //TODO: implement toggle notifications
 
                 return true;
             }
@@ -176,5 +203,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     public void clearSubscriptions()
     {
         subscription.clear();
+    }
+
+    private void setLoginButtonTitle() {
+        String str;
+        if (sharedPreferences.contains(AppConstants.LOGIN_KEY))
+            str = getString(R.string.logged_in) + " " + sharedPreferences.getString(AppConstants.USERNAME_KEY, "");
+        else
+            str = getString(R.string.login);
+        loginButton.setTitle(str);
     }
 }

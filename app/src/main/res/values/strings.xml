@@ -153,11 +153,16 @@
     <string name="subscription_button_key">Subscription Key</string>
     <string name="subscription_button_text">Change Subscriptions</string>
     <string name="login_button_key">Login Key</string>
-    <string name="login_button_text">Community Leader Login</string>
+    <string name="login_button_title">Leader Login</string>
+    <string name="logout_dialog_text">Are you sure you want to logout?</string>
     <string name="notification_checkbox_key">Notifications Key</string>
     <string name="notification_checkbox_text">Enable Notifications</string>
     <string name="Cru_Gold_is_the_best">Cru Gold is the best</string>
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="logged_in">Logged in as</string>
+    <string name="logout">Logout</string>
+    <string name="notification">Notifications</string>
 
 </resources>
