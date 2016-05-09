@@ -3,9 +3,7 @@ package org.androidcru.crucentralcoast.presentation.views.videos;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,34 +11,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
-import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
+import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 import timber.log.Timber;
 
-public class VideosFragment extends BaseSupportFragment
+public class VideosFragment extends ListFragment
 {
-    @BindView(R.id.video_list) RecyclerView videoList;
-    @BindView(R.id.video_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.empty_videos_view) RelativeLayout emptyVideoLayout;
-
     private LinearLayoutManager layoutManager;
     private Observer<List<Snippet>> videoSubscriber;
     private List<Snippet> videos;
-    // used for filtering duplicate videos before being passed to the adapter
-    private List<Snippet> tempVideos;
     private YouTubeVideoProvider youtubeProvider;
     private VideosAdapter videosAdapter;
     private int curSize;
@@ -51,7 +40,6 @@ public class VideosFragment extends BaseSupportFragment
     {
         curSize = 0;
         videos = new ArrayList<>();
-        tempVideos = new ArrayList<>();
         youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
@@ -59,15 +47,14 @@ public class VideosFragment extends BaseSupportFragment
         {
             @Override
             public void onCompleted() {
+                swipeRefreshLayout.setRefreshing(false);
                 if(videos.isEmpty())
                 {
-                    swipeRefreshLayout.setVisibility(View.GONE);
-                    emptyVideoLayout.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.VISIBLE);
                 }
                 else
                 {
-                    swipeRefreshLayout.setVisibility(View.VISIBLE);
-                    emptyVideoLayout.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.GONE);
                 }
             }
 
@@ -91,7 +78,7 @@ public class VideosFragment extends BaseSupportFragment
     {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_videos, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     // Inflate and set the query listener for the search bar
@@ -135,17 +122,18 @@ public class VideosFragment extends BaseSupportFragment
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        inflateEmptyView(R.layout.empty_events_view);
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
 
         setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());
-        videoList.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         // Set the Recycler View to scroll so long as there are more videos that
         // can be returned by the provider.
-        videoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
@@ -162,56 +150,30 @@ public class VideosFragment extends BaseSupportFragment
 
     private void getCruVideos()
     {
+        swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
     // Places the videos in the returned response into the Adapter's list of videos
     public void setVideos (List<Snippet> newVideos)
     {
-        tempVideos.addAll(newVideos);
-
         // Only set the Adapter once - on the first video request
         // Otherwise, the Adapter resets the scroll progression to the top of the list
         if(videosAdapter == null)
         {
             videosAdapter = new VideosAdapter(videos, layoutManager);
-            videoList.setAdapter(videosAdapter);
-            videos.addAll(tempVideos);
-            curSize += tempVideos.size();
+            recyclerView.setAdapter(videosAdapter);
         }
-        else
-        {
-            // Don't add the video if it is already in the videos list
-            curSize += addIfNotDuplicated(videos, tempVideos);
+        videos.addAll(newVideos);
 
-            // Let the Adapter know that more videos have been added to its list.
-            videosAdapter.notifyItemChanged(curSize, videosAdapter.getItemCount() - 1);
-        }
+        // Let the Adapter know that more videos have been added to its list.
         videosAdapter.updateViewExpandedStates();
+        videosAdapter.notifyItemRangeChanged(curSize, videosAdapter.getItemCount() - 1);
+        curSize += newVideos.size();
 
         // Used for keeping track of the user's scroll progression through the list of videos.
         curSize += newVideos.size();
         swipeRefreshLayout.setRefreshing(false);
-        tempVideos.clear();
-    }
-
-    // Takes in 2 lists and appends the non-duplicated contents of the new list to the old list
-    // Returns the number of new items added to the new list
-    public static <T> int addIfNotDuplicated(List<T> old, List<T> newItems)
-    {
-        int count = 0;
-        Iterator<T> iterator = newItems.iterator();
-        while (iterator.hasNext())
-        {
-            T sr = iterator.next();
-            if(!old.contains(sr))
-            {
-                old.add(sr);
-                ++count;
-            }
-        }
-
-        return count;
     }
 
     // Search the youtube channel for a specific video
@@ -229,13 +191,12 @@ public class VideosFragment extends BaseSupportFragment
         videos.clear();
         curSize = 0;
         videosAdapter = null;
-
+        swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.resetQuery();
         if(searchEnabled)
             youtubeProvider.requestVideoSearch(this, videoSubscriber, searchQuery);
         else
             youtubeProvider.requestChannelVideos(this, videoSubscriber);
-
     }
 
     @Override
