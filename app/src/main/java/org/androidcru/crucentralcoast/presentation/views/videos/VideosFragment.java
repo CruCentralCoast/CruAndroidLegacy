@@ -51,6 +51,7 @@ public class VideosFragment extends ListFragment
                 if(videos.isEmpty())
                 {
                     emptyView.setVisibility(View.VISIBLE);
+                    setVideos(new ArrayList<>());
                 }
                 else
                 {
@@ -122,7 +123,7 @@ public class VideosFragment extends ListFragment
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        inflateEmptyView(R.layout.empty_events_view);
+        inflateEmptyView(R.layout.empty_videos);
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
