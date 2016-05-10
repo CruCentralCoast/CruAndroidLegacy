@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.RelativeLayout;
-
-import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
@@ -23,15 +20,11 @@ import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
-
-import butterknife.BindView;
 import timber.log.Timber;
 
-/**
- * Created by mitch on 5/7/16.
- */
 public class MinistryQuestionsFragment extends FormContentFragment
 {
     @BindView(R.id.recyclerview) RecyclerView questionsList;
@@ -92,7 +85,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
                 {
                     for(MinistryQuestion m : questions)
                     {
-                        Logger.d(m.question);
+                        Timber.d(m.question);
                     }
                 }
             }
@@ -112,8 +105,9 @@ public class MinistryQuestionsFragment extends FormContentFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        ButterKnife.bind(this, view);
-        //emptyView = emptyViewStub.inflate();
+        unbinder = ButterKnife.bind(this, view);
+        emptyViewStub.setLayoutResource(R.layout.empty_with_alert);
+        emptyView = emptyViewStub.inflate();
 
         questionsList.setHasFixedSize(true);
 
@@ -143,7 +137,6 @@ public class MinistryQuestionsFragment extends FormContentFragment
     public void onResume()
     {
         super.onResume();
-        swipeRefreshLayout.setRefreshing(true);
         forceUpdate();
     }
 
@@ -151,7 +144,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
     {
         questions.clear();
         adapter = null;
-
+        swipeRefreshLayout.setRefreshing(true);
         getQuestions(removeThisString);
     }
 
