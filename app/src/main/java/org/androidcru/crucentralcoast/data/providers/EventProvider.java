@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import android.content.SharedPreferences;
 
+import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
@@ -89,15 +90,18 @@ public class EventProvider
                         .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
                         .addRestriction(new ConditionsBuilder()
                                 .setField(CruEvent.sStartDate)
-                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, fromDate.toString()))
+                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, ZonedDateTimeConverter.format(fromDate)))
                         .addRestriction(new ConditionsBuilder()
                                 .setField(CruEvent.sStartDate)
-                                .addRestriction(ConditionsBuilder.OPERATOR.LT, fromDate.plusWeeks(1L).toString()))
+                                .addRestriction(ConditionsBuilder.OPERATOR.LT, ZonedDateTimeConverter.format(fromDate.plusWeeks(1L))))
                         .build())
                 .setOptions(new OptionsBuilder()
                         .addOption(OptionsBuilder.OPTIONS.SKIP, page * pageSize)
                         .build())
                 .build();
+
+        Timber.i(query.conditions.toString());
+        Timber.i(query.options.toString());
 
         return cruService.searchEvents(query)
                 .compose(RxComposeUtil.network());
