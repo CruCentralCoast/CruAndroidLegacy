@@ -1,19 +1,15 @@
 package org.androidcru.crucentralcoast.tests;
 
 
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
-import android.view.View;
 
 import junit.framework.AssertionFailedError;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
-import org.androidcru.crucentralcoast.mocking.ServerTest;
+import org.androidcru.crucentralcoast.mocking.ServerInstrumentationTest;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
-import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -25,36 +21,39 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.androidcru.crucentralcoast.common.RecyclerViewUtils.withRecyclerView;
 import static org.hamcrest.core.IsNot.not;
 
-public class SubscriptionsTests extends ServerTest
+public class SubscriptionsTests extends ServerInstrumentationTest
 {
     @Rule
-    public ActivityTestRule<SubscriptionActivity> activityRule = new ActivityTestRule<SubscriptionActivity>(SubscriptionActivity.class);
+    public ActivityTestRule<SubscriptionActivity> activityRule = new ActivityTestRule<SubscriptionActivity>(SubscriptionActivity.class, true, false);
 
     private Dispatcher getNewDispatcher() {
-        Dispatcher dispatch = new Dispatcher() {
+        return new Dispatcher() {
             @Override
             public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
                 System.out.println(request.getPath() + " " + request.getMethod());
 
-                if (request.getPath().equals("/api/ministries/"))
-                    return new MockResponse().setResponseCode(200).setBody(ResourcesUtil.getResourceAsString(getClass().getClassLoader(), "ministries.json"));
-                else if (request.getPath().equals("/api/campuses/"))
-                    return new MockResponse().setResponseCode(200).setBody(ResourcesUtil.getResourceAsString(getClass().getClassLoader(), "campuses.json"));
-                else
-                    return new MockResponse().setResponseCode(404);
+                switch (request.getPath())
+                {
+                    case "/api/ministries/":
+                        return new MockResponse().setResponseCode(200).setBody(ResourcesUtil.getResourceAsString(getClass().getClassLoader(), "ministries.json"));
+                    case "/api/campuses/":
+                        return new MockResponse().setResponseCode(200).setBody(ResourcesUtil.getResourceAsString(getClass().getClassLoader(), "campuses.json"));
+                    default:
+                        return new MockResponse().setResponseCode(404);
+                }
             }
         };
-        return dispatch;
     }
 
     @Test
     public void testToggleMinistry()
     {
         server.setDispatcher(getNewDispatcher());
+
+        activityRule.launchActivity(new Intent());
 
         Boolean isChecked = false;
         try

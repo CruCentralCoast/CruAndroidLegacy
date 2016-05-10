@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mitch on 4/28/16.
@@ -25,7 +25,7 @@ public class TestVideoDuplicateChecking {
         intListTwo.add(3);
         intListTwo.add(4);
 
-        count = VideosFragment.addIfNotDuplicated(intListOne, intListTwo);
+        //count = VideosFragment.addIfNotDuplicated(intListOne, intListTwo);
         assertEquals(1, count);
         assertEquals(4, intListOne.size());
     }

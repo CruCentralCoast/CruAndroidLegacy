@@ -168,7 +168,7 @@ public class VideosFragment extends ListFragment
 
         // Let the Adapter know that more videos have been added to its list.
         videosAdapter.updateViewExpandedStates();
-        videosAdapter.notifyItemRangeChanged(curSize, videosAdapter.getItemCount() - 1);
+        videosAdapter.notifyDataSetChanged();
         curSize += newVideos.size();
 
         // Used for keeping track of the user's scroll progression through the list of videos.

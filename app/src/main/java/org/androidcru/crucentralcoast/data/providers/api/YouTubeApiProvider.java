@@ -4,6 +4,7 @@ import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.services.YouTubeDataService;
 
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,7 +30,7 @@ public class YouTubeApiProvider
                 .baseUrl(baseUrl)
                 .client(CruApplication.okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR)))
                 .build();
 
         service = retrofit.create(YouTubeDataService.class);
