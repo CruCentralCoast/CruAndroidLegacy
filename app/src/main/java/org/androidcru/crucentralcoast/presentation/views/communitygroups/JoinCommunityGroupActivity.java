@@ -20,11 +20,9 @@ public class JoinCommunityGroupActivity extends FormActivity
 
         // there are multiple basic info fragments, same name, but I'm importing it from the community group package
         fragments.add(new MinistrySelectionFragment());
-
         fragments.add(new BasicInfoFragment());
+        fragments.add(new MinistryQuestionsFragment());
 
         setFormContent(fragments);
-
-        // Set dynamic fragment here
     }
 }

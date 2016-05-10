@@ -14,6 +14,7 @@ import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsAdapter;
 
 import java.util.ArrayList;
@@ -32,30 +33,7 @@ public class MinistrySelectionFragment extends FormContentFragment
     @BindView(R.id.subscription_list) RecyclerView subscriptionList;
     @BindView(R.id.progress) ProgressBar progressBar;
 
-    private Subscription subscription;
     private Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer;
-
-    public MinistrySelectionFragment()
-    {
-        observer = new Observer<HashMap<Campus, ArrayList<MinistrySubscription>>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                toggleProgessBar(false);
-            }
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
-            {
-                ministryAdapter = new MinistrySelectionAdapter(campusMinistryMap, formHolder);
-                subscriptionList.setAdapter(ministryAdapter);
-            }
-        };
-    }
 
     @Nullable
     @Override
@@ -70,10 +48,6 @@ public class MinistrySelectionFragment extends FormContentFragment
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        formHolder.setTitle("Join a Community Group");
-        formHolder.setSubtitle("Select a ministry");
-
-        ministryAdapter = new MinistrySelectionAdapter(new HashMap<>(), formHolder);
         subscriptionList.setHasFixedSize(true);
         subscriptionList.setAdapter(ministryAdapter);
 
@@ -108,5 +82,33 @@ public class MinistrySelectionFragment extends FormContentFragment
     {
         toggleProgessBar(true);
         SubscriptionProvider.requestCampusMinistryMap(this, observer);
+    }
+
+    @Override
+    public void setupData(FormHolder formHolder)
+    {
+        formHolder.setTitle("Join a Community Group");
+        formHolder.setSubtitle("Select a ministry");
+
+        ministryAdapter = new MinistrySelectionAdapter(new HashMap<>(), formHolder);
+
+        observer = new Observer<HashMap<Campus, ArrayList<MinistrySubscription>>>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                toggleProgessBar(false);
+            }
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onNext(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
+            {
+                ministryAdapter = new MinistrySelectionAdapter(campusMinistryMap, formHolder);
+                subscriptionList.setAdapter(ministryAdapter);
+            }
+        };
     }
 }

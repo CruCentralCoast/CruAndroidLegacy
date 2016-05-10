@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 import android.content.Context;
 
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
+import org.androidcru.crucentralcoast.presentation.views.base.FormListFragment;
 
 public abstract class FormContentFragment extends BaseSupportFragment implements FormContent
 {
