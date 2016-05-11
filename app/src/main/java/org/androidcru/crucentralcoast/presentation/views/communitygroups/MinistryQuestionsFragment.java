@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.TextView;
+
+import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
@@ -51,7 +54,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
                 {
                     //swipeRefreshLayout.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
-                    // set some textview text here
+                    ((TextView)(MinistryQuestionsFragment.this.getView().findViewById(R.id.informational_text))).setText("No ministry questions were found");
                 }
                 else
                 {
@@ -70,6 +73,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
             @Override
             public void onNext(List<MinistryQuestion> ministryQuestions)
             {
+                Logger.e("In on next\n");
                 if(questions == null || questions.isEmpty())
                 {
                     questions = ministryQuestions;

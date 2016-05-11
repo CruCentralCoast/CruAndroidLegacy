@@ -12,9 +12,6 @@ import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 
 import java.util.List;
 
-/**
- * Created by mitch on 5/8/16.
- */
 public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     List<MinistryQuestion> questions;
@@ -45,7 +42,6 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
         MinistryQuestionsTextHolder viewHolder = (MinistryQuestionsTextHolder) holder;
-        Logger.d("Got here!!");
         viewHolder.bindQuestion((MinistryQuestion) questions.get(position));
     }
 

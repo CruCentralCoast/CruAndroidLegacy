@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;

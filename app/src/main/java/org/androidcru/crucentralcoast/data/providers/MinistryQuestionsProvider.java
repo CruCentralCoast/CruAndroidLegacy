@@ -28,7 +28,7 @@ public final class MinistryQuestionsProvider {
     }
 
     protected static Observable<List<MinistryQuestion>> getMinistryQuestions(String ministryId) {
-        return cruApiService.getMinistryQuestions()
+        return cruApiService.getMinistryQuestions("")
                 .compose(RxComposeUtil.network());
     }
 }

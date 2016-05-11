@@ -50,7 +50,7 @@ public interface CruApiService
     public Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);
 
     @GET("/api/ministryquestions/")
-    public Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
+    public Observable<ArrayList<MinistryQuestion>> getMinistryQuestions(@Path("id") String id);
 
     @FormUrlEncoded
     @POST("/api/users/find")
