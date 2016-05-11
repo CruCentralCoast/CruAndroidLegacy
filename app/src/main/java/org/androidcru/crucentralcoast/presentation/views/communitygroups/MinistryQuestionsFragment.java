@@ -44,22 +44,18 @@ public class MinistryQuestionsFragment extends FormContentFragment
 
     public MinistryQuestionsFragment()
     {
-        questions = new ArrayList<>();
-
         observer = new Observer<List<MinistryQuestion>>()
         {
             @Override
             public void onCompleted() {
                 if(questions.isEmpty())
                 {
-                    //swipeRefreshLayout.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
                     ((TextView)(MinistryQuestionsFragment.this.getView().findViewById(R.id.informational_text))).setText("No ministry questions were found");
                 }
                 else
                 {
                     emptyView.setVisibility(View.GONE);
-                    //swipeRefreshLayout.setVisibility(View.VISIBLE);
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -73,7 +69,6 @@ public class MinistryQuestionsFragment extends FormContentFragment
             @Override
             public void onNext(List<MinistryQuestion> ministryQuestions)
             {
-                Logger.e("In on next\n");
                 if(questions == null || questions.isEmpty())
                 {
                     questions = ministryQuestions;
@@ -89,7 +84,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
                 {
                     for(MinistryQuestion m : questions)
                     {
-                        Timber.d(m.question);
+                        Logger.e(m.question + " " + m.ministry);
                     }
                 }
             }
@@ -108,8 +103,9 @@ public class MinistryQuestionsFragment extends FormContentFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
         unbinder = ButterKnife.bind(this, view);
+
+        questions = new ArrayList<>();
         emptyViewStub.setLayoutResource(R.layout.empty_with_alert);
         emptyView = emptyViewStub.inflate();
 
@@ -160,6 +156,8 @@ public class MinistryQuestionsFragment extends FormContentFragment
 
     @Override
     public void setupData(FormHolder formHolder) {
-
+        formHolder.setTitle("Join a Community Group");
+        formHolder.setSubtitle("");
+        getQuestions("");
     }
 }

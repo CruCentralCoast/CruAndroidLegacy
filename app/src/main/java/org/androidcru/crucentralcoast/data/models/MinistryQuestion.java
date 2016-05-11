@@ -5,10 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.ParcelConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by mitch on 5/7/16.
- */
 public final class MinistryQuestion {
     public static final String sId = "_id";
     public static final String sMinistryId = "ministry";
@@ -17,10 +15,10 @@ public final class MinistryQuestion {
     public static final String sSelectOptions = "selectOptions";
 
     @SerializedName(sId) public String id;
-    @SerializedName(sMinistryId) public String ministryId;
+    @SerializedName(sMinistryId) public String ministry;
     @SerializedName(sQuestion) public String question;
     @SerializedName(sType) public String type;
-    @SerializedName(sSelectOptions) public ArrayList<String> selectedOptions;
+    //@SerializedName(sSelectOptions) public ArrayList<String> selectOptions;
 
     @ParcelConstructor
     MinistryQuestion() {}
