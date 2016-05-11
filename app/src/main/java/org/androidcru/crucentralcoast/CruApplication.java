@@ -19,9 +19,11 @@ import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.converters.GenderConverter;
+import org.androidcru.crucentralcoast.data.converters.QuestionTypeConverter;
 import org.androidcru.crucentralcoast.data.converters.ResourceTypeConverter;
 import org.androidcru.crucentralcoast.data.converters.SnippetConverter;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
+import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
@@ -151,6 +153,7 @@ public class CruApplication extends Application
         builder.registerTypeAdapter(Ride.Gender.class, new GenderConverter());
         builder.registerTypeAdapter(Resource.ResourceType.class, new ResourceTypeConverter());
         builder.registerTypeAdapter(Snippet.class, new SnippetConverter());
+        builder.registerTypeAdapter(MinistryQuestion.Type.class, new QuestionTypeConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.setPrettyPrinting();

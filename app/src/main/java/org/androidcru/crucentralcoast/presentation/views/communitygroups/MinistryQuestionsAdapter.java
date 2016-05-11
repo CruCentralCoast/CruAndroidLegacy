@@ -4,16 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.Dateable;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
-import org.androidcru.crucentralcoast.data.models.Resource;
-import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
-import org.androidcru.crucentralcoast.presentation.views.events.CruEventViewHolder;
-import org.androidcru.crucentralcoast.presentation.views.resources.ResourceViewHolder;
-import org.androidcru.crucentralcoast.presentation.views.videos.CruVideoViewHolder;
 
 import java.util.List;
 
@@ -34,7 +26,7 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext()); // not sure what this does
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType)
         {
             case TEXT:
@@ -74,17 +66,16 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemViewType(int position)
     {
-        if(questions.get(position).type.equals("text"))
+        //switch cases are the enums, the return values are ints declared at the top
+        //of this file
+        switch (questions.get(position).type)
         {
-            return TEXT;
-        }
-        else if(questions.get(position).type.equals("select"))
-        {
-            return SELECT;
-        }
-        else
-        {
-            return DATETIME;
+            case TEXT:
+                return TEXT;
+            case SELECT:
+                return SELECT;
+            default:
+                return DATETIME;
         }
     }
 }

@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 
@@ -17,7 +19,7 @@ import butterknife.ButterKnife;
 public class MinistryQuestionsTextHolder extends RecyclerView.ViewHolder
 {
     @BindView(R.id.cgq_text_text) TextView textDescription;
-    @BindView(R.id.cgq_text) EditText testEntry;
+    @BindView(R.id.cgq_text) @NotEmpty EditText textEntry;
 
     public MinistryQuestion question;
     public RecyclerView.Adapter adapter;
@@ -32,17 +34,16 @@ public class MinistryQuestionsTextHolder extends RecyclerView.ViewHolder
         ButterKnife.bind(this, rootView);
     }
 
-    public void bindQuestion(MinistryQuestion question)
+    public void bindQuestion(MinistryQuestion questionState)
     {
-        this.question = question;
-        bindUI(question);
+        this.question = questionState;
+        bindUI();
     }
 
-    private void bindUI(MinistryQuestion question)
+    private void bindUI()
     {
+        //TODO too many questions
         textDescription.setText(this.question.question);
         //TODO Set text entry hint?
-
-
     }
 }

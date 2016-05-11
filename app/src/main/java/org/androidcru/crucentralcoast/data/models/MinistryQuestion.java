@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.ParcelConstructor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class MinistryQuestion {
     public static final String sId = "_id";
@@ -17,9 +16,30 @@ public final class MinistryQuestion {
     @SerializedName(sId) public String id;
     @SerializedName(sMinistryId) public String ministry;
     @SerializedName(sQuestion) public String question;
-    @SerializedName(sType) public String type;
-    //@SerializedName(sSelectOptions) public ArrayList<String> selectOptions;
+    @SerializedName(sType) public Type type;
+    @SerializedName(sSelectOptions) public ArrayList<Selection> selectOptions;
 
     @ParcelConstructor
     MinistryQuestion() {}
+
+    public String[] getSelectionOptions()
+    {
+        String[] options = new String[selectOptions.size()];
+        for(int i = 0; i < selectOptions.size(); i++)
+        {
+            options[i] = selectOptions.get(i).value;
+        }
+        return options;
+    }
+
+    public enum Type {
+        SELECT("select"), DATETIME("datetime"), TEXT("text");
+
+        public String value;
+
+        Type(String string)
+        {
+            this.value = string;
+        }
+    }
 }
