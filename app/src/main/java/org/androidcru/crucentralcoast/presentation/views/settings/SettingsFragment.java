@@ -99,8 +99,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                 setLoginButtonTitle();
                 loginDialog.dismiss();
             }
-            else
+            else {
                 loginFailed.setVisibility(View.VISIBLE);
+            }
             loginProgress.setVisibility(View.GONE);
         });
 
@@ -167,21 +168,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
                 //TODO: implement toggle notifications
 
-                return true;
-            }
-        });
-
-        //important functionality
-        cruGoldIsTheBest = (Preference) getPreferenceManager().findPreference(getString(R.string.Cru_Gold_is_the_best));
-        cruGoldIsTheBest.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                boolean newValue = o.toString().equals("true");
-                System.out.println("object value is " + o + " " + o.toString());
-                SharedPreferences.Editor e = sharedPreferences.edit();
-                e.putString("CruGoldTheme", newValue ? "YES" : "NO");
-                e.commit();
-                getActivity().recreate();
                 return true;
             }
         });

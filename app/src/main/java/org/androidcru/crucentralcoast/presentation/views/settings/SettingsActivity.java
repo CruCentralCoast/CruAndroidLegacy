@@ -16,18 +16,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //start
-        SharedPreferences pref = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        String themeName = pref.getString("CruGoldTheme", "YES");
-        if (themeName != null && themeName.equals("YES")) {
-            setTheme(R.style.CruGoldIsBest);
-        }
-        else {
-            System.out.println("THE THEME WAS " + themeName);
-            setTheme(R.style.AppTheme);
-        }
-        //end
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 

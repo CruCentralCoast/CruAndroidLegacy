@@ -31,15 +31,4 @@
             android:title="@string/notification_checkbox_text"/>
 
     </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="'Gold' Plating">
-
-        <CheckBoxPreference
-            android:key="@string/Cru_Gold_is_the_best"
-            android:title="YES, I agree Cru Gold is the best color"
-            android:defaultValue="default value of checkbox"/>
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

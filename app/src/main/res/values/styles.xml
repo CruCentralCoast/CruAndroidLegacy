@@ -37,19 +37,4 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
-
-    <style name="CruGoldIsBest" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/cruGold</item>
-        <item name="colorPrimaryDark">@color/cruGold</item>
-        <item name="colorAccent">@color/cruGold</item>
-    </style>
-
-    <style name="CruGoldIsBestNoAction">
-        <item name="colorPrimary">@color/cruGold</item>
-        <item name="colorPrimaryDark">@color/cruGold</item>
-        <item name="colorAccent">@color/cruGold</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:fitsSystemWindows">true</item>
-    </style>
 </resources>
