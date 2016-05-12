@@ -50,7 +50,7 @@ public class EventProvider
         return requestAllEvents()
                 .flatMap(cruEvents -> Observable.from(cruEvents))
                 .compose(getSubscriptionFilter(sharedPreferences))
-                .compose(RxComposeUtil.toListOrEmpty())
+                .toList()
                 .compose(RxComposeUtil.network());
     }
 
