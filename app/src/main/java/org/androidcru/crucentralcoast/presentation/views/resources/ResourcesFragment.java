@@ -4,11 +4,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,22 +14,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.providers.ResourceProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
-import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import rx.Observer;
 import rx.Subscription;
-import rx.observers.Observers;
 import timber.log.Timber;
 
 
@@ -48,14 +41,19 @@ public class ResourcesFragment extends ListFragment
 
     //holds all tags
     private ArrayList<ResourceTag> filterTagsList;
-    //holds selected options
-    private boolean[] selected;
+    private ArrayList<Resource.ResourceType> filterTypesList;
+    //holds selectedTags options
+    private boolean[] selectedTags;
+    private boolean[] selectedTypes;
 
-    private AlertDialog dialog;
+    private AlertDialog tagDialog;
+    private AlertDialog typeDialog;
 
     public ResourcesFragment()
     {
         resources = new ArrayList<>();
+        filterTypesList =  new ArrayList<Resource.ResourceType>(Arrays.asList(Resource.ResourceType.values()));
+        selectedTypes = new boolean[filterTypesList.size()];
         setupResourceObserver();
         setupResourceTagObserver();
     }
@@ -79,10 +77,8 @@ public class ResourcesFragment extends ListFragment
             @Override
             public void onNext(List<ResourceTag> resourceTags)
             {
-                Timber.d("resourceTag onNext() called with: " + "resourceTags = [" + resourceTags + "]");
-//                filterTags = (ResourceTag[]) new ArrayList<>(resourceTags).toArray();
                 filterTagsList = new ArrayList<>(resourceTags);
-                selected = new boolean[filterTagsList.size()];
+                selectedTags = new boolean[filterTagsList.size()];
                 setHasOptionsMenu(true);
             }
 
@@ -141,22 +137,22 @@ public class ResourcesFragment extends ListFragment
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
-        //Update the list of resources by pulling from the server
-        forceUpdate(null);
+        //Update the list of resources/tags by pulling from the server
+        forceUpdate(filterTypesList, null);
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(filterTagsList));
+        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(filterTypesList, filterTagsList));
     }
 
-    private void forceUpdate(List<ResourceTag> tags)
+    private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)
     {
         swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        ResourceProvider.findResources(this, resourceSubscriber, Arrays.asList(Resource.ResourceType.values()), tags);
+        ResourceProvider.findResources(this, resourceSubscriber, types, tags);
     }
 
     private void setResources(List<Resource> resources)
@@ -167,46 +163,110 @@ public class ResourcesFragment extends ListFragment
         this.resources = new ArrayList<>(resources);
     }
 
-    private void displayFilterAlertDialog() {
+    //Display dialog for filtering resources by tag
+    private void displayFilterTagAlertDialog() {
         String[] tagStrings = getResourceTagStrings(filterTagsList);
-        if(dialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMultiChoiceItems(tagStrings, selected,
+
+        if(tagDialog == null)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMultiChoiceItems(tagStrings, selectedTags,
                     new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            selected[which] = isChecked;
+                            selectedTags[which] = isChecked;
                         }
                     });
+
             builder.setTitle("Filter Tags");
-            //alertDialog.
+
             builder.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            forceUpdate(getFilteredTags());
+                            forceUpdate(filterTypesList, getFilteredTags());
                         }
                     });
+
             builder.setNegativeButton("Cancel",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     });
-            dialog = builder.create();
+
+            tagDialog = builder.create();
         }
 
-        dialog.show();
+        tagDialog.show();
     }
 
+
+    //Display dialog for filtering resources by type
+    private void displayFilterTypeAlertDialog() {
+        if(typeDialog == null)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMultiChoiceItems(
+                    getResourceTypeStrings(Resource.ResourceType.values()), selectedTypes,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            selectedTypes[which] = isChecked;
+                        }
+                    });
+            builder.setTitle("Filter Types");
+
+            builder.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            List<Resource.ResourceType> types = getFilteredTypes();
+                            //If all boxes unchecked, display all options
+                            if (types.isEmpty())
+                                types = filterTypesList;
+                            forceUpdate(types, getFilteredTags());
+                        }
+                    });
+
+            builder.setNegativeButton("Cancel",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+            typeDialog = builder.create();
+        }
+
+        typeDialog.show();
+    }
+
+    //Todo: make two generic methods out of these four
+    //Extract String field from list of ResourceType
+    private String[] getResourceTypeStrings(Resource.ResourceType[] types)
+    {
+        ArrayList<String> strings = new ArrayList<>();
+        for (Resource.ResourceType type : types)
+            strings.add(type.toString());
+        return strings.toArray(new String[types.length]);
+    }
+
+    //Generate list of ResourceTags from tags selected in dialog
     private List<ResourceTag> getFilteredTags()
     {
         ArrayList<ResourceTag> toReturn = new ArrayList<>();
-        for(int i = 0; i < selected.length; i++)
-        {
-            if(selected[i])
+        for(int i = 0; i < selectedTags.length; i++)
+            if(selectedTags[i])
                 toReturn.add(filterTagsList.get(i));
-        }
         return toReturn;
     }
 
+    //Generate list of ResourceTypes from tags selected in dialog
+    private List<Resource.ResourceType> getFilteredTypes()
+    {
+        ArrayList<Resource.ResourceType> toReturn = new ArrayList<>();
+        for(int i = 0; i < selectedTypes.length; i++)
+            if(selectedTypes[i])
+                toReturn.add(filterTypesList.get(i));
+        return toReturn;
+    }
+
+    //Extract String field from list of ResourceTags
     private String[] getResourceTagStrings(List<ResourceTag> tags)
     {
         ArrayList<String> strings = new ArrayList<>();
@@ -218,13 +278,22 @@ public class ResourcesFragment extends ListFragment
     // Inflate and set the query listener for the search bar
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.resource_filter, menu);
-        MenuItem searchItem = menu.findItem(R.id.filter_by_tag);
-
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        //Resource type filter menu item
+        inflater.inflate(R.menu.resource_type_filter, menu);
+        menu.findItem(R.id.filter_by_type).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                displayFilterAlertDialog();
+                displayFilterTypeAlertDialog();
+                return false;
+            }
+        });
+
+        //Resource tag filter menu item
+        inflater.inflate(R.menu.resource_tag_filter, menu);
+        menu.findItem(R.id.filter_by_tag).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                displayFilterTagAlertDialog();
                 return false;
             }
         });
