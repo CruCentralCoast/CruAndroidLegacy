@@ -54,6 +54,7 @@ public class ResourcesFragment extends ListFragment
         resources = new ArrayList<>();
         filterTypesList =  new ArrayList<Resource.ResourceType>(Arrays.asList(Resource.ResourceType.values()));
         selectedTypes = new boolean[filterTypesList.size()];
+        Arrays.fill(selectedTypes, true);
         setupResourceObserver();
         setupResourceTagObserver();
     }
@@ -79,6 +80,7 @@ public class ResourcesFragment extends ListFragment
             {
                 filterTagsList = new ArrayList<>(resourceTags);
                 selectedTags = new boolean[filterTagsList.size()];
+                Arrays.fill(selectedTags, true);
                 setHasOptionsMenu(true);
             }
 
@@ -144,17 +146,7 @@ public class ResourcesFragment extends ListFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            List<Resource.ResourceType> types = areAllFalse(selectedTypes) ? getFilteredTypes() : filterTypesList;
-            List<ResourceTag> tags = areAllFalse(selectedTags) ? getFilteredTags() : filterTagsList;
-            forceUpdate(types, tags);
-        });
-    }
-
-    public static boolean areAllFalse(boolean[] array)
-    {
-        for(boolean b : array) if(b) return false;
-        return true;
+        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
     }
 
     private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)
