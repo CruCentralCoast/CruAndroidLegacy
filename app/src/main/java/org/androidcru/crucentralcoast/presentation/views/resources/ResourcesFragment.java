@@ -144,7 +144,17 @@ public class ResourcesFragment extends ListFragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(filterTypesList, filterTagsList));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            List<Resource.ResourceType> types = areAllFalse(selectedTypes) ? getFilteredTypes() : filterTypesList;
+            List<ResourceTag> tags = areAllFalse(selectedTags) ? getFilteredTags() : filterTagsList;
+            forceUpdate(types, tags);
+        });
+    }
+
+    public static boolean areAllFalse(boolean[] array)
+    {
+        for(boolean b : array) if(b) return false;
+        return true;
     }
 
     private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)

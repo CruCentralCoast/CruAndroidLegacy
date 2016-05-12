@@ -15,8 +15,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.picasso.Picasso;
 
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
@@ -33,7 +35,10 @@ import org.androidcru.crucentralcoast.util.PrettyDebugTree;
 import org.androidcru.crucentralcoast.util.SerializedNameExclusionStrategy;
 import org.threeten.bp.ZonedDateTime;
 
+import java.io.File;
+
 import io.fabric.sdk.android.Fabric;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
@@ -67,6 +72,14 @@ public class CruApplication extends Application
         setupDiskCache();
         setupGson();
         setupOkHttp();
+
+        Picasso picasso = new Picasso.Builder(context)
+                .downloader(new OkHttp3Downloader(okHttpClient))
+                .indicatorsEnabled(true)
+                .build();
+
+        Picasso.setSingletonInstance(picasso);
+
 
         if (checkPlayServices())
         {
@@ -103,6 +116,8 @@ public class CruApplication extends Application
         {
             okHttpClient = new OkHttpClient.Builder()
                     .addNetworkInterceptor(new StethoInterceptor())
+                    //10MB cache
+                    .cache(new Cache(new File(context.getCacheDir(), "HttpResponseCache"), 10 * 1024 * 1024))
                     .build();
         }
         else
