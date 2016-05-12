@@ -138,8 +138,6 @@ public class VideosFragment extends BaseSupportFragment
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
-
-        setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());
         videoList.setLayoutManager(layoutManager);
 
