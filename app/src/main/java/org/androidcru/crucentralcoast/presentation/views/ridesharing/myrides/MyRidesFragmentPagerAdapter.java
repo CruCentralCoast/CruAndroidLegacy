@@ -29,10 +29,10 @@ public class MyRidesFragmentPagerAdapter extends FragmentStatePagerAdapter
 
         switch (position) {
             case 0:
-                frag = new MyRidesDriverFragment();
+                frag = new MyRidesPassengerFragment();
                 break;
             case 1:
-                frag = new MyRidesPassengerFragment();
+                frag = new MyRidesDriverFragment();
                 break;
         }
 
