@@ -70,8 +70,8 @@ public class MyRidesPassengerVM {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                alertDialog.hide();
-            }
+                        alertDialog.dismiss();
+                    }
                 });
     }
 

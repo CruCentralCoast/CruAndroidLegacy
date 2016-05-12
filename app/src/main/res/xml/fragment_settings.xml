@@ -14,34 +14,21 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Login">
+            android:title="@string/login_button_title">
 
         <Preference
-            android:title="@string/login_button_text"
             android:key="@string/login_button_key"
             android:id="@+id/login_button"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Notifications">
+        android:title="@string/notification">
 
         <CheckBoxPreference
             android:key="@string/notification_checkbox_key"
             android:id="@+id/notification_checkbox"
-            android:title="@string/notification_checkbox_text"
-            android:defaultValue="default value of checkbox"/>
+            android:title="@string/notification_checkbox_text"/>
 
     </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="'Gold' Plating">
-
-        <CheckBoxPreference
-            android:key="@string/Cru_Gold_is_the_best"
-            android:title="YES, I agree Cru Gold is the best color"
-            android:defaultValue="default value of checkbox"/>
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

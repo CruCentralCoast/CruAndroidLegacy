@@ -22,47 +22,6 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
     private CompositeSubscription subscriptions = new CompositeSubscription();
     public Unbinder unbinder;
 
-    //temporary
-    protected void onCreate(Bundle savedInstance) {
-        SharedPreferences pref = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        String themeName = pref.getString("CruGoldTheme", "YES");
-
-        PackageInfo packageInfo;
-        try
-        {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_META_DATA);
-            int themeResId = packageInfo.applicationInfo.theme;
-            String resName = this.getResources().getResourceEntryName(themeResId);
-
-            System.out.println("resname is " + resName);
-
-            if (!(this instanceof MainActivity) && (resName.equals("CruGoldIsBest") || resName.equals("AppTheme"))) {
-                if (themeName != null && themeName.equals("YES")) {
-                    setTheme(R.style.CruGoldIsBest);
-                } else {
-                    System.out.println("THE THEME WAS " + themeName);
-                    setTheme(R.style.AppTheme);
-                }
-            }
-//            else {
-//                if (themeName != null && themeName.equals("YES")) {
-//                    setTheme(R.style.CruGoldIsBestNoAction);
-//                } else {
-//                    System.out.println("THE THEME WAS " + themeName);
-//                    setTheme(R.style.AppTheme_NoActionBar);
-//                }
-//            }
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
-
-        }
-
-        super.onCreate(savedInstance);
-    }
-    //temporary
-
     @Override
     protected void onDestroy()
     {

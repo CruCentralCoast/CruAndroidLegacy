@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
@@ -35,6 +36,19 @@ public final class Location
         this.geo = geo;
     }
 
+    public Location(String loc, double[] geo) {
+        this.geo = geo;
+
+        String[] splitAddress = loc.split(AppConstants.SPACE_COMMA_ESCAPE);
+        String[] splitStateZip = splitAddress[2].split(" ");
+
+        this.postcode = splitStateZip.length == 2 ? splitStateZip[1] : null;
+        this.state = splitStateZip.length == 2 ? splitStateZip[0] : splitAddress[2];
+        this.street1 = splitAddress[0];
+        this.suburb = splitAddress[1];
+        this.country = splitAddress[3];
+    }
+
     public String getAsQuery()
     {
         String locString = String.format("%s %s, %s, %s, %s", street1, suburb, state, postcode, country);
@@ -44,7 +58,12 @@ public final class Location
 
     public String toString()
     {
-        return String.format("%s %s, %s, %s, %s", street1, suburb, state, postcode, country);
+        return String.format("%s%s%s%s%s",
+                street1 == null ? "" : street1,
+                suburb == null ? "" : " " + suburb,
+                state == null ? "" : ", " + state,
+                postcode == null ? "" : ", " + postcode,
+                country == null ? "" : ", " + country);
     }
 
     //Auto-generated equals and hashcode
