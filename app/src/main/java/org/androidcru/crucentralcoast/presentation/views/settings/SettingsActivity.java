@@ -1,22 +1,22 @@
-package org.androidcru.crucentralcoast.presentation.views.subscriptions;
+package org.androidcru.crucentralcoast.presentation.views.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 
+import com.google.api.client.googleapis.util.Utils;
+
 import org.androidcru.crucentralcoast.R;
 
 /**
- * @author Connor Batch
- *
- * Manage Subscriptions Activity
+ * Created by main on 5/4/2016.
  */
-public class SubscriptionActivity extends AppCompatActivity
-{
+public class SettingsActivity extends AppCompatActivity {
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
+        //start
         SharedPreferences pref = PreferenceManager
                 .getDefaultSharedPreferences(this);
         String themeName = pref.getString("CruGoldTheme", "YES");
@@ -27,14 +27,12 @@ public class SubscriptionActivity extends AppCompatActivity
             System.out.println("THE THEME WAS " + themeName);
             setTheme(R.style.AppTheme);
         }
-        //end special theme
-
+        //end
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subscription_startup);
+        setContentView(R.layout.activity_settings);
 
-        // sets up the Subscription Activity title, subtitle and view
-        getSupportActionBar().setTitle(R.string.subscriptions);
-        getSupportActionBar().setSubtitle(getString(R.string.subscription_subheader));
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new SubscriptionsFragment()).commit();
+        // sets up the SettingS Activity title and view
+        getSupportActionBar().setTitle("Settings");
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new SettingsFragment()).commit();
     }
 }
