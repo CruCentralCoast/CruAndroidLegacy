@@ -150,8 +150,8 @@
     <string name="no_feed_items">No feed items at this time!</string>
 
     <string-array name="myrides_titles">
-        <item>Driver</item>
         <item>Passenger</item>
+        <item>Driver</item>
     </string-array>
 
 </resources>
