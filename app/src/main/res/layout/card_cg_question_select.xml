@@ -8,33 +8,28 @@
     card_view:cardCornerRadius="4dp"
     card_view:cardPreventCornerOverlap="true"
     card_view:cardUseCompatPadding="true"
-    android:layout_margin="4dp">
-    <!--android:foreground="?android:attr/selectableItemBackground">-->
+    android:layout_margin="2dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="86dp"
-        android:id="@+id/video_expand_description_layout">
+        android:layout_height="wrap_content">
 
         <TextView
         android:id="@+id/cgq_select_text"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:text="Hello there"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/cgq_select"/>
+        android:paddingBottom="4dp"
+        android:textSize="20sp"/>
 
         <Spinner
         android:id="@+id/cgq_select"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        android:paddingLeft="5dp"
-        android:gravity="left"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="40dp"
+        android:layout_width="wrap_content"
         android:spinnerMode="dropdown"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

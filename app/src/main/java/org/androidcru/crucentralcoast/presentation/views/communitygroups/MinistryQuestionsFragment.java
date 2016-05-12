@@ -79,14 +79,6 @@ public class MinistryQuestionsFragment extends FormContentFragment
                 {
                     questions.addAll(ministryQuestions);
                 }
-
-                if(questions != null)
-                {
-                    for(MinistryQuestion m : questions)
-                    {
-                        Logger.e(m.question + " " + m.ministry);
-                    }
-                }
             }
         };
     }
@@ -158,6 +150,6 @@ public class MinistryQuestionsFragment extends FormContentFragment
     public void setupData(FormHolder formHolder) {
         formHolder.setTitle("Join a Community Group");
         formHolder.setSubtitle("");
-        getQuestions("");
+        forceUpdate();
     }
 }

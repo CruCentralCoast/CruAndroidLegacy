@@ -34,7 +34,7 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
             case SELECT:
                 return new MinistryQuestionsSelectHolder(inflater.inflate(R.layout.card_cg_question_select, parent, false), this, layoutManager);
             default:
-                return new MinistryQuestionsToggleHolder(inflater.inflate(R.layout.card_cg_question_toggle, parent, false), this, layoutManager);
+                return new MinistryQuestionsDateTimeHolder(inflater.inflate(R.layout.card_cg_question_datetime, parent, false), this, layoutManager);
         }
     }
 
@@ -53,7 +53,7 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
         }
         else
         {
-            MinistryQuestionsToggleHolder viewHolder = (MinistryQuestionsToggleHolder) holder;
+            MinistryQuestionsDateTimeHolder viewHolder = (MinistryQuestionsDateTimeHolder) holder;
             viewHolder.bindQuestion(questions.get(position));
         }
     }
