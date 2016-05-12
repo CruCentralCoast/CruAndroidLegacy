@@ -72,7 +72,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
                 if(questions == null || questions.isEmpty())
                 {
                     questions = ministryQuestions;
-                    adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager);
+                    adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager, getActivity().getFragmentManager());
                     questionsList.setAdapter(adapter);
                 }
                 else

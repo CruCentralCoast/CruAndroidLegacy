@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.communitygroups;
 
+import android.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     List<MinistryQuestion> questions;
     RecyclerView.LayoutManager layoutManager;
+    private FragmentManager fm;
 
-    public MinistryQuestionsAdapter(List<MinistryQuestion> questions, RecyclerView.LayoutManager layoutManager)
+    public MinistryQuestionsAdapter(List<MinistryQuestion> questions, RecyclerView.LayoutManager layoutManager, FragmentManager fm)
     {
         this.questions = questions;
         this.layoutManager = layoutManager;
+        this.fm = fm;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
             case SELECT:
                 return new MinistryQuestionsSelectHolder(inflater.inflate(R.layout.card_cg_question_select, parent, false), this, layoutManager);
             default:
-                return new MinistryQuestionsDateTimeHolder(inflater.inflate(R.layout.card_cg_question_datetime, parent, false), this, layoutManager);
+                return new MinistryQuestionsDateTimeHolder(inflater.inflate(R.layout.card_cg_question_datetime, parent, false), this, layoutManager, fm);
         }
     }
 
