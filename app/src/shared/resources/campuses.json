@@ -1,0 +1,75 @@
+[
+  {
+    "_id": "563b04112930ae0300fbc096",
+    "slug": "cal-poly",
+    "name": "Cal Poly",
+    "__v": 0,
+    "url": "calpoly.edu",
+    "location": {
+      "postcode": "93407",
+      "state": "California",
+      "suburb": "San Luis Obispo",
+      "street2": null,
+      "street1": "1 Grand Ave",
+      "name": null,
+      "number": null,
+      "country": "United States"
+    }
+  },
+  {
+    "_id": "563b04532930ae0300fbc097",
+    "slug": "cuesta",
+    "name": "Cuesta",
+    "__v": 0,
+    "url": "cuesta.edu",
+    "location": {
+      "postcode": "93403",
+      "state": "California",
+      "suburb": "San Luis Obispo",
+      "street1": "CA-1",
+      "country": "United States"
+    }
+  },
+  {
+    "_id": "563b048d2930ae0300fbc098",
+    "slug": "cuesta-north",
+    "name": "Cuesta North",
+    "__v": 0,
+    "url": "cuesta.edu/student/findingway/northcountycampus/",
+    "location": {
+      "postcode": "93446",
+      "state": "CA",
+      "suburb": "Paso Robles",
+      "street1": "2800 Buena Vista Dr",
+      "country": "United States"
+    }
+  },
+  {
+    "_id": "563b04c52930ae0300fbc099",
+    "slug": "allan-hancock",
+    "name": "Allan Hancock",
+    "__v": 0,
+    "url": "hancockcollege.edu",
+    "location": {
+      "postcode": "93454",
+      "state": "CA",
+      "suburb": "Santa Maria",
+      "street1": "800 S College Dr",
+      "country": "United States"
+    }
+  },
+  {
+    "_id": "563b05382930ae0300fbc09a",
+    "slug": "slo-high",
+    "name": "SLO High",
+    "__v": 0,
+    "url": "http://slohs.slcusd.org/",
+    "location": {
+      "postcode": "93401",
+      "state": "California",
+      "suburb": "San Luis Obispo",
+      "street1": "1499 San Luis Dr.",
+      "country": "United States"
+    }
+  }
+]

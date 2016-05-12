@@ -1,18 +1,18 @@
 package org.androidcru.crucentralcoast.data.providers.util;
 
 import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 
 import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class RxComposeUtil
 {
     public static <T> Observable.Transformer<T, T> network() {
         return o -> o
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(CruApiProvider.getNetworkScheduler())
                 .retry(AppConstants.RETRY_ATTEMPTS)
                 .onErrorResumeNext(Observable.empty());
     }

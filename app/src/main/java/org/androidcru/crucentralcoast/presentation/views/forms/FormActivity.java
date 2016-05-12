@@ -2,7 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.forms;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,17 +25,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
-public class FormActivity extends BaseAppCompatActivity implements FormHolder
+public class FormActivity extends BaseAppCompatActivity implements FormHolder, FragmentViewListener
 {
     private FormContent currentFormContent;
     private HashMap<String, Object> dataObjects = new HashMap<>();
     private ArrayList<FormContentFragment> fragments = new ArrayList<>();
     private int currentIndex = 0;
-
-    private FragmentManager fm;
-
     public FormState formState;
-    private boolean isTransitioning = false;
 
     @BindView(R.id.bottom_bar) RelativeLayout bottomBar;
     @BindView(R.id.prev) RelativeLayout prev;
@@ -43,7 +39,7 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
     @BindView(R.id.nextText) TextView nextText;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-
+    @BindView(R.id.form_pager) ViewPager formPager;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -53,7 +49,6 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
         unbinder = ButterKnife.bind(this);
         formState = FormState.PROGRESS;
 
-        fm = getSupportFragmentManager();
         setSupportActionBar(toolbar);
     }
 
@@ -87,10 +82,6 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
             throw new RuntimeException("Only " + FormContentFragment.class.getSimpleName()
                     + " are allowed to be attached to this Activity.");
         }
-        else
-        {
-            currentFormContent = (FormContentFragment) fragment;
-        }
     }
 
     private void onPageChange()
@@ -119,6 +110,7 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
             formState = FormState.PROGRESS;
             nextText.setText("NEXT");
         }
+        currentFormContent.setupData(this);
     }
 
     @Override
@@ -128,8 +120,10 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
         {
             setupButtonListeners();
             this.fragments = new ArrayList<>(fragments);
-            performTransaction(fragments.get(0));
-            onPageChange();
+            formPager.setAdapter(new FormPagerAdapter(getSupportFragmentManager(), fragments));
+            currentFormContent = fragments.get(0);
+            //getSupportFragmentManager().executePendingTransactions();
+            //onPageChange();
         }
     }
 
@@ -144,7 +138,7 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
             {
                 boolean oldState = next.hasOnClickListeners();
                 setNavigationClickable(false);
-                currentFormContent.onPrevious();
+                currentFormContent.onPrevious(this);
                 o500.subscribe(Observers.create(vo -> setNavigationClickable(oldState)));
             }
         });
@@ -154,7 +148,7 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
             {
                 boolean oldState = next.hasOnClickListeners();
                 setNavigationClickable(false);
-                currentFormContent.onNext();
+                currentFormContent.onNext(this);
                 o500.subscribe(Observers.create(vo -> setNavigationClickable(oldState)));
             }
         });
@@ -167,11 +161,6 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
             complete();
         else
             prev.performClick();
-    }
-
-    public void performTransaction(Fragment fragment) {
-        fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
-                R.anim.slide_in_right, R.anim.slide_out_right).replace(R.id.content, fragment).addToBackStack(null).commit();
     }
 
     private void clearUI()
@@ -230,9 +219,9 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
         FormContentFragment nextFragment = currentIndex < fragments.size() ? fragments.get(currentIndex) : null;
         if(nextFragment != null)
         {
-            onPageChange();
-            performTransaction(nextFragment);
             currentFormContent = nextFragment;
+            onPageChange();
+            formPager.setCurrentItem(currentIndex);
         }
         else if(formState == FormState.FINISH)
         {
@@ -250,9 +239,9 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
     public void prev()
     {
         currentIndex--;
+        currentFormContent = fragments.get(currentIndex);
         onPageChange();
-        fm.popBackStackImmediate();
-        currentFormContent = (FormContent) fm.getFragments().get(currentIndex);
+        formPager.setCurrentItem(currentIndex);
 
     }
 
@@ -283,6 +272,15 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder
         if(dataObjects.containsKey(key))
             return dataObjects.get(key);
         return null;
+    }
+
+    @Override
+    public void onFragmentViewInstantiated(Fragment fragment)
+    {
+        if(fragment == fragments.get(0))
+        {
+            onPageChange();
+        }
     }
 }
 

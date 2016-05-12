@@ -12,6 +12,7 @@ import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -82,6 +83,8 @@ public final class RideProvider
                             .map(passengers -> ride.passengers = passengers)
                             .toBlocking()
                             .subscribe();
+                    if(ride.passengers == null)
+                        ride.passengers = new ArrayList<Passenger>();
                     return ride;
                 })
                 .map(ride -> {
@@ -90,7 +93,6 @@ public final class RideProvider
                             .map(theEvent -> ride.event = theEvent)
                             .toBlocking()
                             .subscribe();
-                    ;
                     return ride;
                 })
                 .compose(RxComposeUtil.toListOrEmpty());

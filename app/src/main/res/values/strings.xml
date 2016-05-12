@@ -75,6 +75,7 @@
     <string name="resources">Resources</string>
     <string name="view_upcoming_events_driver">View Upcoming Events</string>
     <string name="phone_number_error">Input is not a phone number</string>
+    <string name="car_capacity_error">Value is below original car capacity</string>
 
 
     <string-array name="genders">

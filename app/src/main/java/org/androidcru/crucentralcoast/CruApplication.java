@@ -9,15 +9,12 @@ import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
 import com.crashlytics.android.Crashlytics;
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.squareup.leakcanary.LeakCanary;
 import com.squareup.picasso.Picasso;
 
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
@@ -40,6 +37,7 @@ import java.io.File;
 import io.fabric.sdk.android.Fabric;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
 public class CruApplication extends Application
@@ -64,8 +62,6 @@ public class CruApplication extends Application
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         AndroidThreeTen.init(this);
-        LeakCanary.install(this);
-
 
         setupDebugConfig();
 
@@ -98,8 +94,6 @@ public class CruApplication extends Application
         if(BuildConfig.DEBUG)
         {
             Timber.plant(new PrettyDebugTree());
-
-            Stetho.initializeWithDefaults(this);
         }
         else
         {
@@ -114,10 +108,12 @@ public class CruApplication extends Application
     {
         if(BuildConfig.DEBUG)
         {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").v(message));
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             okHttpClient = new OkHttpClient.Builder()
-                    .addNetworkInterceptor(new StethoInterceptor())
                     //10MB cache
                     .cache(new Cache(new File(context.getCacheDir(), "HttpResponseCache"), 10 * 1024 * 1024))
+                    .addInterceptor(interceptor)
                     .build();
         }
         else

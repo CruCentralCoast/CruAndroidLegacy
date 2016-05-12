@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.presentation.viewmodels;
 import android.content.Context;
 import android.view.View;
 
+import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
@@ -14,15 +15,18 @@ public class BaseVM
     protected View rootView;
     protected SubscriptionsHolder holder;
     public Context context;
+    public BaseValidator validator;
 
     public BaseVM(BaseAppCompatActivity activity)
     {
         setupWithActivity(activity);
+        validator = new BaseValidator(this);
     }
 
     public BaseVM(BaseSupportFragment fragment)
     {
         setupWithFragment(fragment);
+        validator = new BaseValidator(this);
     }
 
     private void setupWithFragment(BaseSupportFragment fragment)

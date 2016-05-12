@@ -42,12 +42,12 @@ public class ViewUtil
 
     public static void setSource(ImageView view, String url, SCALE_TYPE scaleType)
     {
-        setSource(view, url, 0, null, null);
+        setSource(view, url, 0, null, scaleType);
     }
 
     public static void setSource(ImageView view, String url, int tintColor, SCALE_TYPE scaleType)
     {
-        setSource(view, url, tintColor, null, null);
+        setSource(view, url, tintColor, null, scaleType);
     }
 
     public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, SCALE_TYPE scaleType)

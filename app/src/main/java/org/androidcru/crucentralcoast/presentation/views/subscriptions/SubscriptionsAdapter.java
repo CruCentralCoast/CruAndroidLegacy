@@ -91,7 +91,14 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-
+    @Override
+    public int getItemViewType(int position)
+    {
+        return position >= ministries.size() ? SubscriptionsSorter.FOOTER_VIEW
+                : (SubscriptionsSorter.isHeader(position, ministries)
+                    ? SubscriptionsSorter.HEADER_VIEW
+                    : SubscriptionsSorter.MINISTRY_VIEW);
+    }
 
     @Override
     public int getItemCount() {return ministries.size() + 1;}

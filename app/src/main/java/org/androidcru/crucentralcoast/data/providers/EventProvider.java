@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import android.content.SharedPreferences;
 
+import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
 import org.androidcru.crucentralcoast.data.models.queries.OptionsBuilder;
@@ -18,6 +19,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class EventProvider
 {
@@ -77,20 +79,29 @@ public class EventProvider
 
     protected static Observable<List<CruEvent>> getEventsPaginated(ZonedDateTime fromDate, int page, int pageSize)
     {
+        if(fromDate == null || page < 0 || pageSize <= 0)
+        {
+            Timber.e("fromDate: %s, page: %i, pageSize: %i", fromDate, page, pageSize);
+            return Observable.error(new IllegalArgumentException("Invalid arguments"));
+        }
+
         Query query = new Query.Builder()
                 .setCondition(new ConditionsBuilder()
                         .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
                         .addRestriction(new ConditionsBuilder()
                                 .setField(CruEvent.sStartDate)
-                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, fromDate.toString()))
+                                .addRestriction(ConditionsBuilder.OPERATOR.GTE, ZonedDateTimeConverter.format(fromDate)))
                         .addRestriction(new ConditionsBuilder()
                                 .setField(CruEvent.sStartDate)
-                                .addRestriction(ConditionsBuilder.OPERATOR.LT, fromDate.plusWeeks(1L).toString()))
+                                .addRestriction(ConditionsBuilder.OPERATOR.LT, ZonedDateTimeConverter.format(fromDate.plusWeeks(1L))))
                         .build())
                 .setOptions(new OptionsBuilder()
                         .addOption(OptionsBuilder.OPTIONS.SKIP, page * pageSize)
                         .build())
                 .build();
+
+        Timber.i(query.conditions.toString());
+        Timber.i(query.options.toString());
 
         return cruService.searchEvents(query)
                 .compose(RxComposeUtil.network());

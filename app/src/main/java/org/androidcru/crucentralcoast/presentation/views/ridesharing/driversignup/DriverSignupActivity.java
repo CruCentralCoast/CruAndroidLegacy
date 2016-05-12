@@ -17,7 +17,6 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
-import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
@@ -34,7 +33,6 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     private DriverSignupVM driverSignupVM;
-    private BaseValidator validator;
 
     @BindView(R.id.fab) FloatingActionButton fab;
     private SupportPlaceAutocompleteFragment autocompleteFragment;
@@ -129,7 +127,6 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r, event.endDate);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());
         setupPlacesAutocomplete();
-        validator = new BaseValidator(driverSignupVM);
     }
 
     private void setupFab()
@@ -137,7 +134,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
             //if fields are valid, update shared preferences and the Ride
-            if(validator.validate())
+            if(driverSignupVM.validator.validate())
             {
                 sharedPreferences.edit().putString(AppConstants.USER_NAME, driverSignupVM.nameField.getText().toString()).apply();
                 sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, driverSignupVM.phoneField.getText().toString()).apply();

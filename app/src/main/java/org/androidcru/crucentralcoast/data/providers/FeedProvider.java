@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 
 import org.androidcru.crucentralcoast.data.models.Dateable;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.threeten.bp.ZonedDateTime;
 
@@ -36,7 +35,7 @@ public class FeedProvider
                 ResourceProvider.getResourcesPaginated(page, pageSize),
                 //youtube videos
                 (page == 0
-                        ? youTubeVideoProvider.refreshQuery().compose(RxLoggingUtil.log("YOUTUBE_VIDEOS"))
+                        ? youTubeVideoProvider.refreshQuery()
                         : youTubeVideoProvider.requestChannelVideos())
                     .flatMap(videoList -> Observable.from(videoList)))
                 //sort everything
