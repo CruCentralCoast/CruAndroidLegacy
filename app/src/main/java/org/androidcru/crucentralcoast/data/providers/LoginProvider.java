@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.LoginResponse;
+import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
@@ -10,7 +11,7 @@ import rx.Observer;
 
 public class LoginProvider
 {
-    private static CruApiService service = ApiProvider.getService();
+    private static CruApiService service = CruApiProvider.getService();
 
     public static void login(SubscriptionsHolder holder, Observer<LoginResponse> observer,
                              String username, String password, String gcmId)

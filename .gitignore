@@ -29,6 +29,7 @@ app/*.apk
 .idea/gradle.xml
 *.iml
 
+*.hprof
 # OS-specific files
 .DS_Store
 .DS_Store?

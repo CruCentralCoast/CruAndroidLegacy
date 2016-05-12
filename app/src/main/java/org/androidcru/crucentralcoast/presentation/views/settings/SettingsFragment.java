@@ -60,7 +60,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     private Observer<LoginResponse> loginObserver;
 
     @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
+    {
         sharedPreferences = CruApplication.getSharedPreferences();
         addPreferencesFromResource(R.xml.fragment_settings);
 

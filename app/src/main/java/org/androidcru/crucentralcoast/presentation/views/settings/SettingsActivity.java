@@ -1,11 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.settings;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
-
-import com.google.api.client.googleapis.util.Utils;
 
 import org.androidcru.crucentralcoast.R;
 
