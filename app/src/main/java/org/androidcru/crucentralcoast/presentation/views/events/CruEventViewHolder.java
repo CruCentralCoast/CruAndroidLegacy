@@ -87,8 +87,8 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         this.state = state;
         this.cruEvent = state.model;
 
-        addedToCalendar = SharedPreferencesUtil.containsKey(CruApplication.getContext(), cruEvent.id);
-        localEventId = SharedPreferencesUtil.getCalendarEventId(CruApplication.getContext(), cruEvent.id);
+        addedToCalendar = SharedPreferencesUtil.containsKey(cruEvent.id);
+        localEventId = SharedPreferencesUtil.getCalendarEventId(cruEvent.id);
 
         bindUI();
     }
@@ -174,7 +174,7 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
             long calendarId = eventInfo.second;
             if (eventInfo.second > 0)
             {
-                SharedPreferencesUtil.writeCalendarID(CruApplication.getContext(), cruEventId, calendarId);
+                SharedPreferencesUtil.writeCalendarID(cruEventId, calendarId);
             }
             
             //TODO

@@ -97,8 +97,8 @@ public class DriverSignupVM extends BaseRideVM {
         rideTime.setOnKeyListener(null);
         rideDate.setOnKeyListener(null);
 
-        nameField.setText(SharedPreferencesUtil.getUserName(context));
-        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber(context));
+        nameField.setText(SharedPreferencesUtil.getUserName());
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
     }
 
     protected int retrieveCarCapacity() {

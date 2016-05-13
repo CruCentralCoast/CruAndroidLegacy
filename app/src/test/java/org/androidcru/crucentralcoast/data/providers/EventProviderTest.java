@@ -71,7 +71,7 @@ public class EventProviderTest extends ServerTest
         server.setDispatcher(dispatcher);
 
         TestObserver<List<CruEvent>> observer = new TestObserver<>();
-        EventProvider.requestUsersEvents(sharedPreferences)
+        EventProvider.requestUsersEvents()
                 .toBlocking()
                 .subscribe(observer);
         observer.assertTerminalEvent();
@@ -90,7 +90,7 @@ public class EventProviderTest extends ServerTest
         server.setDispatcher(dispatcher);
 
         TestObserver<List<CruEvent>> observer = new TestObserver<>();
-        EventProvider.requestUsersEvents(sharedPreferences)
+        EventProvider.requestUsersEvents()
                 .subscribeOn(Schedulers.immediate())
                 .toBlocking()
                 .subscribe(observer);

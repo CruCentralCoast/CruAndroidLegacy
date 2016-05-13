@@ -144,7 +144,7 @@ public class EventsFragment extends ListFragment
                 .map(cruEvent -> {
                     if (CalendarProvider.hasCalendarPermission(getContext()))
                     {
-                        CalendarProvider.updateEvent(getContext(), cruEvent, SharedPreferencesUtil.getCalendarEventId(getContext(), cruEvent.id), Observers.empty());
+                        CalendarProvider.updateEvent(getContext(), cruEvent, SharedPreferencesUtil.getCalendarEventId(cruEvent.id), Observers.empty());
                     }
                     return cruEvent;
                 })

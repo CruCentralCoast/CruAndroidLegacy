@@ -140,7 +140,7 @@ public class CruApplication extends Application
     {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        SharedPreferencesUtil.writePlayServicesCode(context, resultCode);
+        SharedPreferencesUtil.writePlayServicesCode(resultCode);
         return resultCode == ConnectionResult.SUCCESS;
     }
 

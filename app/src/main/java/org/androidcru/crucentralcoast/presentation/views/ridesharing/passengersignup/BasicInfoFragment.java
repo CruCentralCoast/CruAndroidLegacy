@@ -53,8 +53,8 @@ public class BasicInfoFragment extends FormContentFragment {
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        nameField.setText(SharedPreferencesUtil.getUserName(getContext()));
-        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber(getContext()));
+        nameField.setText(SharedPreferencesUtil.getUserName());
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
     }
 
     private Passenger getPassenger()
@@ -67,7 +67,7 @@ public class BasicInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            SharedPreferencesUtil.writeBasicInfo(getContext(), nameField.getText().toString(), null, phoneField.getText().toString());
+            SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), null, phoneField.getText().toString());
 
             Passenger passenger = getPassenger();
             progressBar.setVisibility(View.VISIBLE);

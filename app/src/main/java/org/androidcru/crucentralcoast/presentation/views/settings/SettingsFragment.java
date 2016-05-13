@@ -85,7 +85,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         loginObserver = Observers.create(response -> {
             if(response.success)
             {
-                SharedPreferencesUtil.writeLoginInformation(getContext(), loginName.getText().toString(), response.leaderAPIKey);
+                SharedPreferencesUtil.writeLoginInformation(loginName.getText().toString(), response.leaderAPIKey);
                 loginName.setText("");
                 loginName.setError("");
 
@@ -134,7 +134,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         loginButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (SharedPreferencesUtil.containsKey(getContext(), AppConstants.LOGIN_KEY))
+                if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
                     logoutDialog.show();
                 else
                     loginDialog.show();
@@ -147,8 +147,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                 .setTitle(R.string.logout)
                 .setMessage(R.string.logout_dialog_text)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    SharedPreferencesUtil.removeKey(getContext(), AppConstants.USERNAME_KEY);
-                    SharedPreferencesUtil.removeKey(getContext(), AppConstants.LOGIN_KEY);
+                    SharedPreferencesUtil.removeKey(AppConstants.USERNAME_KEY);
+                    SharedPreferencesUtil.removeKey(AppConstants.LOGIN_KEY);
                     Timber.d("LOGOUT SUCCEEDED");
                     setLoginButtonTitle();
                     logoutDialog.dismiss();
@@ -191,8 +191,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
     private void setLoginButtonTitle() {
         String str;
-        if (SharedPreferencesUtil.containsKey(getContext(), AppConstants.LOGIN_KEY))
-            str = getString(R.string.logged_in) + " " + SharedPreferencesUtil.getLoginUsername(getContext());
+        if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
+            str = getString(R.string.logged_in) + " " + SharedPreferencesUtil.getLoginUsername();
         else
             str = getString(R.string.login);
         loginButton.setTitle(str);

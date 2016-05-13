@@ -32,7 +32,7 @@ public class EventProvider
         return (Observable<CruEvent> o) -> o.filter(cruEvent -> {
             for(String parentMinistry : cruEvent.parentMinistrySubscriptions)
             {
-                if(SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(CruApplication.getContext(), parentMinistry))
+                if(SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(parentMinistry))
                     return true;
             }
             return false;

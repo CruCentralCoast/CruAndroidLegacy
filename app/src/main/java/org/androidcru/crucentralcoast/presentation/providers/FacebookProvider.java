@@ -48,7 +48,7 @@ public final class FacebookProvider
                     @Override
                     public void onSuccess(LoginResult loginResult)
                     {
-                        SharedPreferencesUtil.writeFBAccessToken(CruApplication.getContext(), loginResult.getAccessToken().getToken());
+                        SharedPreferencesUtil.writeFBAccessToken(loginResult.getAccessToken().getToken());
                         subscriber.onNext(loginResult);
                     }
 
@@ -80,7 +80,7 @@ public final class FacebookProvider
 
     public static void invalidate()
     {
-        SharedPreferencesUtil.removeFBTokenKey(CruApplication.getContext());
+        SharedPreferencesUtil.removeFBTokenKey();
     }
 
     public static String getEventId(String eventURL)

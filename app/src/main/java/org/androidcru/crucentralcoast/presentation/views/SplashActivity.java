@@ -42,7 +42,7 @@ public class SplashActivity extends BaseAppCompatActivity
         final Intent intent = new Intent(this, MainActivity.class);
 
         // Determine if the app has launched before.
-        if (SharedPreferencesUtil.isFirstLaunch(getContext()))
+        if (SharedPreferencesUtil.isFirstLaunch())
             intent.setClass(this, MainActivity.class);
         else
             intent.setClass(this, SubscriptionActivity.class);

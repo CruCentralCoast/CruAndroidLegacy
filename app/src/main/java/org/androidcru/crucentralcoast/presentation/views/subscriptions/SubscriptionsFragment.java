@@ -93,7 +93,7 @@ public class SubscriptionsFragment extends BaseSupportFragment
 
         fab.setOnClickListener(v -> {
 
-            if (!SharedPreferencesUtil.isFirstLaunch(getContext()))
+            if (!SharedPreferencesUtil.isFirstLaunch())
             {
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

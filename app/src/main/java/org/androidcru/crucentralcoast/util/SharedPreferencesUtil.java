@@ -7,18 +7,23 @@ import android.preference.PreferenceManager;
 import com.google.android.gms.common.ConnectionResult;
 
 import org.androidcru.crucentralcoast.AppConstants;
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 
 public class SharedPreferencesUtil
 {
-    private static SharedPreferences getSharedPreferences(Context context)
+    private static SharedPreferences sharedPreferences = null;
+
+    private static SharedPreferences getSharedPreferences()
     {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences == null)
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CruApplication.getContext());
+        return sharedPreferences;
     }
 
-    public static void writeBasicInfo(Context context, String name, String email, String phoneNumber)
+    public static void writeBasicInfo(String name, String email, String phoneNumber)
     {
-        SharedPreferences preferences = getSharedPreferences(context);
+        SharedPreferences preferences = getSharedPreferences();
         if (name != null)
             preferences.edit().putString(AppConstants.USER_NAME, name).apply();
         if (email != null)
@@ -29,102 +34,102 @@ public class SharedPreferencesUtil
 
     public static void writeGCMID(Context context, String key)
     {
-        getSharedPreferences(context).edit().putString(context.getString(R.string.gcm_registration_id), key).apply();
+        getSharedPreferences().edit().putString(context.getString(R.string.gcm_registration_id), key).apply();
     }
 
-    public static void writeSentTokenToServer(Context context, Boolean value)
+    public static void writeSentTokenToServer(Boolean value)
     {
-        getSharedPreferences(context).edit().putBoolean(AppConstants.SENT_TOKEN_TO_SERVER, value).apply();
+        getSharedPreferences().edit().putBoolean(AppConstants.SENT_TOKEN_TO_SERVER, value).apply();
     }
 
-    public static void writeCalendarID(Context context, String cruEventId, long eventId)
+    public static void writeCalendarID(String cruEventId, long eventId)
     {
-        getSharedPreferences(context).edit().putLong(cruEventId, eventId).commit();
+        getSharedPreferences().edit().putLong(cruEventId, eventId).commit();
     }
 
-    public static void writeFBAccessToken(Context context, String fbToken)
+    public static void writeFBAccessToken(String fbToken)
     {
-        getSharedPreferences(context).edit().putString(AppConstants.FB_TOKEN_KEY, fbToken).apply();
+        getSharedPreferences().edit().putString(AppConstants.FB_TOKEN_KEY, fbToken).apply();
     }
 
-    public static void writeMinistrySubscriptionIsSubscribed(Context context, String ministrySubscriptionId, Boolean isSubscribed)
+    public static void writeMinistrySubscriptionIsSubscribed(String ministrySubscriptionId, Boolean isSubscribed)
     {
-        getSharedPreferences(context).edit().putBoolean(ministrySubscriptionId, isSubscribed).commit();
+        getSharedPreferences().edit().putBoolean(ministrySubscriptionId, isSubscribed).commit();
     }
 
-    public static void writeFirstLaunch(Context context, Boolean firstLaunch)
+    public static void writeFirstLaunch(Boolean firstLaunch)
     {
-        getSharedPreferences(context).edit().putBoolean(AppConstants.FIRST_LAUNCH, firstLaunch).apply();
+        getSharedPreferences().edit().putBoolean(AppConstants.FIRST_LAUNCH, firstLaunch).apply();
     }
 
-    public static void removeFBTokenKey(Context context)
+    public static void removeFBTokenKey()
     {
-        getSharedPreferences(context).edit().remove(AppConstants.FB_TOKEN_KEY).apply();
+        getSharedPreferences().edit().remove(AppConstants.FB_TOKEN_KEY).apply();
     }
 
-    public static void removeKey(Context context, String key)
+    public static void removeKey(String key)
     {
-        getSharedPreferences(context).edit().remove(key).commit();
+        getSharedPreferences().edit().remove(key).commit();
     }
 
-    public static void writePlayServicesCode(Context context, int code)
+    public static void writePlayServicesCode(int code)
     {
-        getSharedPreferences(context).edit().putInt(AppConstants.PLAY_SERVICES, code).apply();
+        getSharedPreferences().edit().putInt(AppConstants.PLAY_SERVICES, code).apply();
     }
 
-    public static int getPlayServicesCode(Context context)
+    public static int getPlayServicesCode()
     {
-        return getSharedPreferences(context).getInt(AppConstants.PLAY_SERVICES, ConnectionResult.SUCCESS);
+        return getSharedPreferences().getInt(AppConstants.PLAY_SERVICES, ConnectionResult.SUCCESS);
     }
 
-    public static Boolean containsKey(Context context, String key)
+    public static Boolean containsKey(String key)
     {
-        return getSharedPreferences(context).contains(key);
+        return getSharedPreferences().contains(key);
     }
 
-    public static void writeLoginInformation(Context context, String loginName, String leaderApiKey)
+    public static void writeLoginInformation(String loginName, String leaderApiKey)
     {
-        getSharedPreferences(context).edit().putString(AppConstants.USERNAME_KEY, loginName).commit();
-        getSharedPreferences(context).edit().putString(AppConstants.LOGIN_KEY, leaderApiKey).commit();
+        getSharedPreferences().edit().putString(AppConstants.USERNAME_KEY, loginName).commit();
+        getSharedPreferences().edit().putString(AppConstants.LOGIN_KEY, leaderApiKey).commit();
     }
 
-    public static String getLoginUsername(Context context)
+    public static String getLoginUsername()
     {
-        return getSharedPreferences(context).getString(AppConstants.USERNAME_KEY, "");
+        return getSharedPreferences().getString(AppConstants.USERNAME_KEY, "");
     }
 
-    public static String getUserName(Context context)
+    public static String getUserName()
     {
-        return getSharedPreferences(context).getString(AppConstants.USER_NAME, null);
+        return getSharedPreferences().getString(AppConstants.USER_NAME, null);
     }
 
-    public static String getUserEmail(Context context)
+    public static String getUserEmail()
     {
-        return getSharedPreferences(context).getString(AppConstants.USER_EMAIL, null);
+        return getSharedPreferences().getString(AppConstants.USER_EMAIL, null);
     }
 
-    public static String getUserPhoneNumber(Context context)
+    public static String getUserPhoneNumber()
     {
-        return getSharedPreferences(context).getString(AppConstants.USER_PHONE_NUMBER, null);
+        return getSharedPreferences().getString(AppConstants.USER_PHONE_NUMBER, null);
     }
 
     public static String getGCMID(Context context)
     {
-        return getSharedPreferences(context).getString(context.getString(R.string.gcm_registration_id), "");
+        return getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
     }
 
-    public static Boolean getMinistrySubscriptionIsSubscribed(Context context, String ministrySubscriptionId)
+    public static Boolean getMinistrySubscriptionIsSubscribed(String ministrySubscriptionId)
     {
-        return getSharedPreferences(context).getBoolean(ministrySubscriptionId, false);
+        return getSharedPreferences().getBoolean(ministrySubscriptionId, false);
     }
 
-    public static long getCalendarEventId(Context context, String cruEventId)
+    public static long getCalendarEventId(String cruEventId)
     {
-        return getSharedPreferences(context).getLong(cruEventId, -1);
+        return getSharedPreferences().getLong(cruEventId, -1);
     }
 
-    public static Boolean isFirstLaunch(Context context)
+    public static Boolean isFirstLaunch()
     {
-        return getSharedPreferences(context).getBoolean(AppConstants.FIRST_LAUNCH, false);
+        return getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false);
     }
 }

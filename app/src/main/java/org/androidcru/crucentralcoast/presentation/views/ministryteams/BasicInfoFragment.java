@@ -54,9 +54,9 @@ public class BasicInfoFragment extends FormContentFragment
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         // Autofills the form if the information is available
-        nameField.setText(SharedPreferencesUtil.getUserName(getContext()));
-        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber(getContext()));
-        emailField.setText(SharedPreferencesUtil.getUserEmail(getContext()));
+        nameField.setText(SharedPreferencesUtil.getUserName());
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        emailField.setText(SharedPreferencesUtil.getUserEmail());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class BasicInfoFragment extends FormContentFragment
         if(validator.validate())
         {
             // gets the validated information and overwrites the user's information in shared preferences on a background thread
-            SharedPreferencesUtil.writeBasicInfo(getContext(), nameField.getText().toString(), emailField.getText().toString(), phoneField.getText().toString());
+            SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), emailField.getText().toString(), phoneField.getText().toString());
 
             // gets back the ministry team object from the form holder.
             MinistryTeam ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);

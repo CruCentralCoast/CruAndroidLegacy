@@ -52,7 +52,7 @@ public final class CalendarProvider
 
                         if (eventID > -1)
                         {
-                            SharedPreferencesUtil.writeCalendarID(context, cruEvent.id, eventID);
+                            SharedPreferencesUtil.writeCalendarID(cruEvent.id, eventID);
                             Observable.just(new Pair<>(cruEvent.id, eventID)).subscribe(parentSubscriber);
                         }
                     } catch (SecurityException e)
@@ -77,7 +77,7 @@ public final class CalendarProvider
                         ContentResolver cr = context.getContentResolver();
                         Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
                         cr.delete(deleteUri, null, null);
-                        SharedPreferencesUtil.removeKey(context, cruEvent.id);
+                        SharedPreferencesUtil.removeKey(cruEvent.id);
                         Observable.just(new Pair<>(cruEvent.id, -1l)).subscribe(parentSubscriber);
                     }
                 });

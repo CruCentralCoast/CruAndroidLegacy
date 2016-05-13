@@ -87,7 +87,7 @@ public class MainActivity extends BaseAppCompatActivity
      */
     private void setupAutoFillData()
     {
-        if (!SharedPreferencesUtil.isFirstLaunch(getContext()))
+        if (!SharedPreferencesUtil.isFirstLaunch())
         {
             RxPermissions.getInstance(this)
                 .request(Manifest.permission.READ_PHONE_STATE)
@@ -99,22 +99,22 @@ public class MainActivity extends BaseAppCompatActivity
                         if (userPhoneNumber != null)
                             userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
-                        SharedPreferencesUtil.writeBasicInfo(getContext(), null, null, userPhoneNumber);
+                        SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
 
                         Observer<CruUser> observer = Observers.create(cruUser -> {
-                            SharedPreferencesUtil.writeBasicInfo(getContext(), cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
+                            SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
                         });
 
                         UserProvider.requestCruUser(this, observer, userPhoneNumber);
                     }
                 });
         }
-        SharedPreferencesUtil.writeFirstLaunch(getContext(), true);
+        SharedPreferencesUtil.writeFirstLaunch(true);
     }
 
     private void checkPlayServicesCode()
     {
-        int playServicesCode = SharedPreferencesUtil.getPlayServicesCode(getContext());
+        int playServicesCode = SharedPreferencesUtil.getPlayServicesCode();
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         if(playServicesCode != ConnectionResult.SUCCESS)
         {

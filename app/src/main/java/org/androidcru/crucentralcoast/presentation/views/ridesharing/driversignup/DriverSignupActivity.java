@@ -135,7 +135,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             //if fields are valid, update shared preferences and the Ride
             if(driverSignupVM.validator.validate())
             {
-                SharedPreferencesUtil.writeBasicInfo(getContext(), driverSignupVM.nameField.getText().toString(), null, driverSignupVM.phoneField.getText().toString());
+                SharedPreferencesUtil.writeBasicInfo(driverSignupVM.nameField.getText().toString(), null, driverSignupVM.phoneField.getText().toString());
 
                 if(driverSignupVM instanceof DriverSignupEditingVM)
                     updateDriver();

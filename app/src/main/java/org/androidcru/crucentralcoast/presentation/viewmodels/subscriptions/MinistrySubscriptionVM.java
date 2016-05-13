@@ -26,7 +26,7 @@ public class MinistrySubscriptionVM
     public boolean getIsSubscribed()
     {
         if(isSubscribed == null)
-            isSubscribed = SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(CruApplication.getContext(), ministry.subscriptionId);
+            isSubscribed = SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(ministry.subscriptionId);
         return isSubscribed;
     }
 
@@ -38,6 +38,6 @@ public class MinistrySubscriptionVM
         else
             RegistrationIntentService.unsubscribeToMinistry(ministry.subscriptionId);
 
-        SharedPreferencesUtil.writeMinistrySubscriptionIsSubscribed(CruApplication.getContext(), ministry.subscriptionId, isSubscribed);
+        SharedPreferencesUtil.writeMinistrySubscriptionIsSubscribed(ministry.subscriptionId, isSubscribed);
     }
 }
