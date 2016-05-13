@@ -14,21 +14,22 @@
             android:id="@+id/nav_my_rides"
             android:icon="@drawable/ic_car_grey600"
             android:title="@string/nav_my_rides"/>
+
+        <item
+            android:id="@+id/nav_summer_missions"
+            android:icon="@drawable/ic_map_marker_grey600"
+            android:title="@string/nav_summer_missions"/>
     </group>
 
     <group android:checkableBehavior="single" android:id="@+id/get_involved">
-            <item
-                android:id="@+id/nav_summer_missions"
-                android:icon="@drawable/ic_map_marker_grey600"
-                android:title="@string/nav_summer_missions"/>
-            <item
-                android:id="@+id/nav_community_groups"
-                android:icon="@drawable/ic_group_add_grey600"
-                android:title="@string/nav_community_group"/>
-            <item
-                android:id="@+id/nav_ministry_teams"
-                android:icon="@drawable/ic_group_add_grey600"
-                android:title="@string/nav_ministry_team"/>
+        <item
+            android:id="@+id/nav_community_groups"
+            android:icon="@drawable/ic_group_add_grey600"
+            android:title="@string/nav_community_group"/>
+        <item
+            android:id="@+id/nav_ministry_teams"
+            android:icon="@drawable/ic_group_add_grey600"
+            android:title="@string/nav_ministry_team"/>
     </group>
     <group android:checkableBehavior="single" android:id="@+id/resources_options">
         <item

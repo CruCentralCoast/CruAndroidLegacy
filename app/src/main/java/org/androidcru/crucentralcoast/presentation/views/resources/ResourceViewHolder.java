@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.resources;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,11 +20,30 @@ import butterknife.ButterKnife;
 
 public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
+    @BindView(R.id.resource_card_view) CardView cardView;
+    @BindView(R.id.resource_divider) View divider;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.tags) TextView tags;
     @BindView(R.id.resource_icon) ImageView typeIcon;
 
     private Resource model;
+
+
+    public ResourceViewHolder(View rootView, Boolean isFeed)
+    {
+        this(rootView);
+
+        if (isFeed)
+        {
+            cardView.setUseCompatPadding(true);
+            divider.setVisibility(View.GONE);
+        }
+        else
+        {
+            cardView.setUseCompatPadding(false);
+            divider.setVisibility(View.VISIBLE);
+        }
+    }
 
     public ResourceViewHolder(View rootView) {
         super(rootView);
