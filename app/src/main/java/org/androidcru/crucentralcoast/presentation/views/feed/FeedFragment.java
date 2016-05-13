@@ -125,6 +125,6 @@ public class FeedFragment extends ListFragment
     private void getMoreFeedItems(int page)
     {
         swipeRefreshLayout.setRefreshing(true);
-        FeedProvider.getFeedItems(this, observer, CruApplication.getSharedPreferences(), youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
+        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
     }
 }

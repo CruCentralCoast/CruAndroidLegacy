@@ -34,6 +34,7 @@ import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
@@ -46,7 +47,6 @@ import butterknife.OnTextChanged;
 import timber.log.Timber;
 
 public class DriverSignupVM extends BaseRideVM {
-    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     public Double radius;
     protected GoogleMap map;
@@ -97,8 +97,8 @@ public class DriverSignupVM extends BaseRideVM {
         rideTime.setOnKeyListener(null);
         rideDate.setOnKeyListener(null);
 
-        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
+        nameField.setText(SharedPreferencesUtil.getUserName(context));
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber(context));
     }
 
     protected int retrieveCarCapacity() {

@@ -11,6 +11,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +23,6 @@ import rx.schedulers.Schedulers;
 
 public class SplashActivity extends BaseAppCompatActivity
 {
-    private SharedPreferences sharedPreferences;
     @BindView(R.id.central_coast) TextView centralCoast;
 
     @Override
@@ -34,7 +34,6 @@ public class SplashActivity extends BaseAppCompatActivity
         //REVIEW magic string, AppConstants
         ViewUtil.setFont(centralCoast, "FreigSanProLig.otf");
 
-        this.sharedPreferences = CruApplication.getSharedPreferences();
         switchToApp();
     }
 
@@ -43,7 +42,7 @@ public class SplashActivity extends BaseAppCompatActivity
         final Intent intent = new Intent(this, MainActivity.class);
 
         // Determine if the app has launched before.
-        if (sharedPreferences.getBoolean(AppConstants.FIRST_LAUNCH, false))
+        if (SharedPreferencesUtil.isFirstLaunch(getContext()))
             intent.setClass(this, MainActivity.class);
         else
             intent.setClass(this, SubscriptionActivity.class);

@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.Holder;
 import org.androidcru.crucentralcoast.data.models.facebook.FBGuestList;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public final class FacebookProvider
                     @Override
                     public void onSuccess(LoginResult loginResult)
                     {
-                        CruApplication.getSharedPreferences().edit().putString(AppConstants.FB_TOKEN_KEY, loginResult.getAccessToken().getToken()).apply();
+                        SharedPreferencesUtil.writeFBAccessToken(CruApplication.getContext(), loginResult.getAccessToken().getToken());
                         subscriber.onNext(loginResult);
                     }
 
@@ -79,7 +80,7 @@ public final class FacebookProvider
 
     public static void invalidate()
     {
-        CruApplication.getSharedPreferences().edit().remove(AppConstants.FB_TOKEN_KEY).apply();
+        SharedPreferencesUtil.removeFBTokenKey(CruApplication.getContext());
     }
 
     public static String getEventId(String eventURL)

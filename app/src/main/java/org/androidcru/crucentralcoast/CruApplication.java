@@ -28,6 +28,7 @@ import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.util.PrettyDebugTree;
 import org.androidcru.crucentralcoast.util.SerializedNameExclusionStrategy;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 
 import io.fabric.sdk.android.Fabric;
@@ -41,7 +42,6 @@ public class CruApplication extends Application
 
     public static OkHttpClient okHttpClient;
     private static Context context;
-    private static SharedPreferences sharedPreferences;
 
     public static Context getContext()
     {
@@ -53,8 +53,6 @@ public class CruApplication extends Application
     {
         super.onCreate();
         context = this;
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         AndroidThreeTen.init(this);
 
@@ -112,10 +110,10 @@ public class CruApplication extends Application
      * Important because it's essential that SharedPreferences doesn't get overwritten
      * @return
      */
-    public static SharedPreferences getSharedPreferences()
-    {
-        return sharedPreferences;
-    }
+//    public static SharedPreferences getSharedPreferences()
+//    {
+//        return sharedPreferences;
+//    }
 
 
     /**
@@ -128,7 +126,7 @@ public class CruApplication extends Application
     {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        sharedPreferences.edit().putInt(AppConstants.PLAY_SERVICES, resultCode).apply();
+        SharedPreferencesUtil.writePlayServicesCode(context, resultCode);
         return resultCode == ConnectionResult.SUCCESS;
     }
 
@@ -160,12 +158,12 @@ public class CruApplication extends Application
 
     public static void saveGCMID(String key)
     {
-        CruApplication.getSharedPreferences().edit().putString(context.getString(R.string.gcm_registration_id), key).apply();
+        SharedPreferencesUtil.writeGCMID(context, key);
     }
 
     //TODO apparently these can change.
     public static String getGCMID()
     {
-        return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
+        return SharedPreferencesUtil.getGCMID(context);
     }
 }

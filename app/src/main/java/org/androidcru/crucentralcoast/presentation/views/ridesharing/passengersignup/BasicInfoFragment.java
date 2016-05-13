@@ -23,13 +23,13 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.observers.Observers;
 
 public class BasicInfoFragment extends FormContentFragment {
-    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     private Ride ride;
     private BaseValidator validator;
@@ -53,8 +53,8 @@ public class BasicInfoFragment extends FormContentFragment {
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
+        nameField.setText(SharedPreferencesUtil.getUserName(getContext()));
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber(getContext()));
     }
 
     private Passenger getPassenger()
@@ -67,9 +67,7 @@ public class BasicInfoFragment extends FormContentFragment {
     {
         if(validator.validate())
         {
-            // gets the validated information and overwrites the user's information in shared preferences on a background thread
-            sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
-            sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
+            SharedPreferencesUtil.writeBasicInfo(getContext(), nameField.getText().toString(), null, phoneField.getText().toString());
 
             Passenger passenger = getPassenger();
             progressBar.setVisibility(View.VISIBLE);

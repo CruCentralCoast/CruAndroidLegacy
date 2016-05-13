@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ public class EventsFragment extends ListFragment
     private ArrayList<CruEvent> eventList;
     private LinearLayoutManager layoutManager;
     private Observer<List<CruEvent>> eventSubscriber;
-    private SharedPreferences sharedPreferences;
 
     /**
      * Invoked early on from the Android framework during rendering.
@@ -71,8 +71,6 @@ public class EventsFragment extends ListFragment
         eventList = new ArrayList<>();
 
         setupObserver();
-
-        sharedPreferences = CruApplication.getSharedPreferences();
 
         //setup RecyclerView
         layoutManager = new LinearLayoutManager(getContext());
@@ -130,7 +128,7 @@ public class EventsFragment extends ListFragment
     private void getCruEvents()
     {
         swipeRefreshLayout.setRefreshing(true);
-        EventProvider.requestUsersEvents(this, eventSubscriber, sharedPreferences);
+        EventProvider.requestUsersEvents(this, eventSubscriber);
     }
 
 
@@ -146,7 +144,7 @@ public class EventsFragment extends ListFragment
                 .map(cruEvent -> {
                     if (CalendarProvider.hasCalendarPermission(getContext()))
                     {
-                        CalendarProvider.updateEvent(getContext(), cruEvent, sharedPreferences.getLong(cruEvent.id, -1), Observers.empty());
+                        CalendarProvider.updateEvent(getContext(), cruEvent, SharedPreferencesUtil.getCalendarEventId(getContext(), cruEvent.id), Observers.empty());
                     }
                     return cruEvent;
                 })

@@ -39,7 +39,7 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
         jumboMode true
-        incremental true
+        incremental false
     }
 
     compileOptions {

@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import android.content.SharedPreferences;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
@@ -11,6 +12,7 @@ import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
@@ -25,31 +27,31 @@ public class EventProvider
 {
     private static CruApiService cruService = CruApiProvider.getService();
 
-    protected static Observable.Transformer<CruEvent, CruEvent> getSubscriptionFilter(SharedPreferences sharedPreferences)
+    protected static Observable.Transformer<CruEvent, CruEvent> getSubscriptionFilter()
     {
         return (Observable<CruEvent> o) -> o.filter(cruEvent -> {
             for(String parentMinistry : cruEvent.parentMinistrySubscriptions)
             {
-                if(sharedPreferences.getBoolean(parentMinistry, false))
+                if(SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(CruApplication.getContext(), parentMinistry))
                     return true;
             }
             return false;
         });
     }
 
-    public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer, SharedPreferences sharedPreferences)
+    public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer)
     {
-        Subscription s = requestUsersEvents(sharedPreferences)
+        Subscription s = requestUsersEvents()
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<CruEvent>> requestUsersEvents(SharedPreferences sharedPreferences)
+    protected static Observable<List<CruEvent>> requestUsersEvents()
     {
         return requestAllEvents()
                 .flatMap(cruEvents -> Observable.from(cruEvents))
-                .compose(getSubscriptionFilter(sharedPreferences))
+                .compose(getSubscriptionFilter())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }

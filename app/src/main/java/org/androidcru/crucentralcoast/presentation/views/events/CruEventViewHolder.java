@@ -34,6 +34,7 @@ import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.dialogs.RsvpDialog;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.passengersignup.PassengerSignupActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -86,8 +87,8 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         this.state = state;
         this.cruEvent = state.model;
 
-        addedToCalendar = CruApplication.getSharedPreferences().contains(cruEvent.id);
-        localEventId = CruApplication.getSharedPreferences().getLong(cruEvent.id, -1);
+        addedToCalendar = SharedPreferencesUtil.containsKey(CruApplication.getContext(), cruEvent.id);
+        localEventId = SharedPreferencesUtil.getCalendarEventId(CruApplication.getContext(), cruEvent.id);
 
         bindUI();
     }
@@ -168,14 +169,12 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
     @OnClick(R.id.calButton)
     public void onCalendarClick(View v)
     {
-        final SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
-        
         Observer<Pair<String, Long>> onCalendarWrittenObserver = Observers.create(eventInfo -> {
             String cruEventId = eventInfo.first;
             long calendarId = eventInfo.second;
             if (eventInfo.second > 0)
             {
-                sharedPreferences.edit().putLong(cruEventId, calendarId).commit();
+                SharedPreferencesUtil.writeCalendarID(CruApplication.getContext(), cruEventId, calendarId);
             }
             
             //TODO

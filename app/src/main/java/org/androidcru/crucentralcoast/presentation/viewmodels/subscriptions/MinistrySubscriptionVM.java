@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 /**
  * @author Connor Batch
@@ -14,7 +15,6 @@ public class MinistrySubscriptionVM
     public String campusName;
     public MinistrySubscription ministry;
     private Boolean isSubscribed;
-    private SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     public MinistrySubscriptionVM(String campusName, MinistrySubscription ministry)
     {
@@ -26,7 +26,7 @@ public class MinistrySubscriptionVM
     public boolean getIsSubscribed()
     {
         if(isSubscribed == null)
-            isSubscribed = sharedPreferences.getBoolean(ministry.subscriptionId, false);
+            isSubscribed = SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(CruApplication.getContext(), ministry.subscriptionId);
         return isSubscribed;
     }
 
@@ -37,6 +37,7 @@ public class MinistrySubscriptionVM
             RegistrationIntentService.subscribeToMinistry(ministry.subscriptionId);
         else
             RegistrationIntentService.unsubscribeToMinistry(ministry.subscriptionId);
-        sharedPreferences.edit().putBoolean(ministry.subscriptionId, isSubscribed).commit();
+
+        SharedPreferencesUtil.writeMinistrySubscriptionIsSubscribed(CruApplication.getContext(), ministry.subscriptionId, isSubscribed);
     }
 }

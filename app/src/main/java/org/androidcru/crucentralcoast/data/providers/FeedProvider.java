@@ -15,22 +15,22 @@ import rx.Subscription;
 
 public class FeedProvider
 {
-    public static void getFeedItems(SubscriptionsHolder holder, Observer<List<Dateable>> observer, SharedPreferences sharedPreferences,
+    public static void getFeedItems(SubscriptionsHolder holder, Observer<List<Dateable>> observer,
             YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, int page, int pageSize)
     {
-        Subscription s = getFeedItems(sharedPreferences, youTubeVideoProvider, fromDate, page, pageSize)
+        Subscription s = getFeedItems(youTubeVideoProvider, fromDate, page, pageSize)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Dateable>> getFeedItems(SharedPreferences sharedPreferences, YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, int page, int pageSize)
+    protected static Observable<List<Dateable>> getFeedItems(YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, int page, int pageSize)
     {
         return Observable.merge(
                 //events
                 EventProvider.getEventsPaginated(fromDate, page, pageSize)
                     .flatMap(events -> Observable.from(events))
-                    .compose(EventProvider.getSubscriptionFilter(sharedPreferences)),
+                    .compose(EventProvider.getSubscriptionFilter()),
                 //resources
                 ResourceProvider.getResourcesPaginated(page, pageSize),
                 //youtube videos

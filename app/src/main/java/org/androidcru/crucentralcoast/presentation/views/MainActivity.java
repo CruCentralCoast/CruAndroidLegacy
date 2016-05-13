@@ -35,6 +35,7 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyR
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.Collections;
 
@@ -83,7 +84,7 @@ public class MainActivity extends BaseAppCompatActivity
      */
     private void setupAutoFillData()
     {
-        if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))
+        if (!SharedPreferencesUtil.isFirstLaunch(getContext()))
         {
             RxPermissions.getInstance(this)
                 .request(Manifest.permission.READ_PHONE_STATE)
@@ -95,24 +96,22 @@ public class MainActivity extends BaseAppCompatActivity
                         if (userPhoneNumber != null)
                             userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
-                        CruApplication.getSharedPreferences().edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
+                        SharedPreferencesUtil.writeBasicInfo(getContext(), null, null, userPhoneNumber);
 
                         Observer<CruUser> observer = Observers.create(cruUser -> {
-                            SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
-                            userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
-                            userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
+                            SharedPreferencesUtil.writeBasicInfo(getContext(), cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
                         });
 
                         UserProvider.requestCruUser(this, observer, userPhoneNumber);
                     }
                 });
         }
-        CruApplication.getSharedPreferences().edit().putBoolean(AppConstants.FIRST_LAUNCH, true).apply();
+        SharedPreferencesUtil.writeFirstLaunch(getContext(), true);
     }
 
     private void checkPlayServicesCode()
     {
-        int playServicesCode = CruApplication.getSharedPreferences().getInt(AppConstants.PLAY_SERVICES, ConnectionResult.SUCCESS);
+        int playServicesCode = SharedPreferencesUtil.getPlayServicesCode(getContext());
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         if(playServicesCode != ConnectionResult.SUCCESS)
         {
