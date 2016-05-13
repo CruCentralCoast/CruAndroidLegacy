@@ -127,8 +127,6 @@ public class VideosFragment extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
-
-        setHasOptionsMenu(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 

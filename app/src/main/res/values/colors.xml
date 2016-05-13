@@ -3,6 +3,8 @@
     <color name="colorPrimary">@color/cruDarkBlue</color>
     <color name="colorPrimaryDark">@android:color/black</color>
     <color name="colorAccent">@color/cruOrange</color>
+    <!-- this is needed as preference_category_material layout uses this color as the text color -->
+    <color name="preference_fallback_accent_color">@color/colorAccent</color>
     <color name="colorConstruction">#00ade5</color>
 
     <color name="cruGray">#666062</color>

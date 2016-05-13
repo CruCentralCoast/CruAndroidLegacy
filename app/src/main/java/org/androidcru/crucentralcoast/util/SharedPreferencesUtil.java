@@ -82,15 +82,27 @@ public class SharedPreferencesUtil
         return getSharedPreferences(context).contains(key);
     }
 
+    public static void writeLoginInformation(Context context, String loginName, String leaderApiKey)
+    {
+        getSharedPreferences(context).edit().putString(AppConstants.USERNAME_KEY, loginName).commit();
+        getSharedPreferences(context).edit().putString(AppConstants.LOGIN_KEY, leaderApiKey).commit();
+    }
+
+    public static String getLoginUsername(Context context)
+    {
+        return getSharedPreferences(context).getString(AppConstants.USERNAME_KEY, "");
+    }
 
     public static String getUserName(Context context)
     {
         return getSharedPreferences(context).getString(AppConstants.USER_NAME, null);
     }
+
     public static String getUserEmail(Context context)
     {
         return getSharedPreferences(context).getString(AppConstants.USER_EMAIL, null);
     }
+
     public static String getUserPhoneNumber(Context context)
     {
         return getSharedPreferences(context).getString(AppConstants.USER_PHONE_NUMBER, null);

@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <!-- End -->
     <application
         android:name=".CruApplication"
@@ -73,6 +74,12 @@
             android:name=".presentation.views.ridesharing.myrides.MyRidesInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".presentation.views.settings.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/PreferenceTheme"/>
+
 
         <!-- [START gcm_receiver] -->
         <receiver

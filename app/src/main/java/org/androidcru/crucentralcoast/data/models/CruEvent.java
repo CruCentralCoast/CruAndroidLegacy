@@ -20,7 +20,7 @@ public final class CruEvent implements Dateable
     public static final String sImage = "image";
     public static final String sId = "_id";
     public static final String sUrl = "url";
-    public static final String sParentMinistrySubscriptions = "parentMinistries";
+    public static final String sParentMinistrySubscriptions = "ministries";
 
     @SerializedName(sName) public String name;
     @SerializedName(sDescription) public String description;

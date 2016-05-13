@@ -59,6 +59,10 @@ public class AppConstants
     //Ministry Team
     public static final String MINISTRY_TEAM_KEY = "MINISTRY_TEAM";
 
+    //Login
+    public static final String LOGIN_KEY = "LOGIN_KEY";
+    public static final String USERNAME_KEY = "USERNAME_KEY";
+
 
     /**
      * REGEX EXPRESSIONS & FORMATTERS
