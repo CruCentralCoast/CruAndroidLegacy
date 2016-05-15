@@ -45,6 +45,8 @@ public class ObserverUtil
             {
                 if(streamEmpty)
                     onEmpty();
+                //allows the observer to be reused
+                streamEmpty = true;
                 observer.onCompleted();
             }
 
@@ -57,9 +59,10 @@ public class ObserverUtil
                 {
                     if(!CruApplication.isOnline(holder.getContext()))
                         onNoNetwork();
-                    else
-                        observer.onError(e);
                 }
+                //allows the observer to be reused
+                streamEmpty = true;
+                observer.onError(e);
             }
 
             @Override

@@ -24,11 +24,11 @@ import org.androidcru.crucentralcoast.presentation.views.subscriptions.Subscript
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class EventsFragment extends ListFragment
 {
@@ -67,7 +67,7 @@ public class EventsFragment extends ListFragment
         inflateEmptyView(R.layout.empty_events_view);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
-
+        unbinder = ButterKnife.bind(this, view);
         eventList = new ArrayList<>();
 
         setupObserver();
@@ -90,38 +90,10 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = new Observer<List<CruEvent>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-                if (eventList.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "CruEvents failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<CruEvent> cruEvents)
-            {
-                setEvents(cruEvents);
-            }
-        };
+        eventSubscriber = createListObserver(R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
     }
 
     @OnClick(R.id.subscription_button)
-    @SuppressWarnings("unused")
     public void onManageSubscriptionsClicked()
     {
         startActivity(new Intent(getContext(), SubscriptionActivity.class));
@@ -153,6 +125,7 @@ public class EventsFragment extends ListFragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(eventList::add);
         recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
+        showContent();
     }
 
     /**

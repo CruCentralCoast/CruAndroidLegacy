@@ -11,8 +11,7 @@ public class RxComposeUtil
 {
     public static <T> Observable.Transformer<T, T> network() {
         return o -> o
-                .subscribeOn(CruApiProvider.getNetworkScheduler())
-                .onErrorResumeNext(Observable.empty());
+                .subscribeOn(CruApiProvider.getNetworkScheduler());
     }
 
     public static <T> Observable.Transformer<T, T> ui() {
