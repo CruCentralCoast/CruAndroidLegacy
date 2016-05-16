@@ -141,9 +141,8 @@ public class DriverSignupVM extends BaseRideVM {
 
     @Override
     protected void placeSelected(LatLng precisePlace, String placeAddress) {
-        updateMap(precisePlace);
-
         if (placeAddress != null) {
+            updateMap(precisePlace);
             location = new Location(placeAddress, new double[] {precisePlace.longitude, precisePlace.latitude});
         }
     }
@@ -223,44 +222,4 @@ public class DriverSignupVM extends BaseRideVM {
             map.animateCamera(cu);
         }
     }
-
-    /*protected TextWatcher createCarCapacityWatcher()
-    {
-        return new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                try
-                {
-                    if (s == null || s.toString().equals("")) {
-                        return;
-                    }
-
-                    //make sure is within bounds
-                    int setTo = Integer.parseInt(s.toString());
-                    if (setTo < minCapacity)
-                    {
-                        carCapacity.setText(Integer.toString(minCapacity));
-                    }
-                    else if (setTo > AppConstants.MAX_CAR_CAPACITY)
-                    {
-                        carCapacity.setText(Integer.toString(AppConstants.MAX_CAR_CAPACITY));
-                    }
-                }
-                catch (NumberFormatException nfe)
-                {
-                    carCapacity.setText("");
-                }
-            }
-        };
-    }*/
 }

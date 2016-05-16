@@ -16,6 +16,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
@@ -34,7 +35,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private DriverSignupVM driverSignupVM;
 
     @BindView(R.id.fab) FloatingActionButton fab;
-    private SupportPlaceAutocompleteFragment autocompleteFragment;
+    private CruSupportPlaceAutocompleteFragment autocompleteFragment;
 
     @BindView(com.google.android.gms.R.id.place_autocomplete_search_input) EditText searchInput;
     private MapFragment mapFragment;
@@ -60,7 +61,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
 
         setupFab();
 
-        autocompleteFragment = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (CruSupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
 
         String rideId = bundle.getString(AppConstants.RIDE_KEY, "");
@@ -133,7 +134,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
             //if fields are valid, update shared preferences and the Ride
-            if(driverSignupVM.validator.validate())
+            if(driverSignupVM.validator.validate() && autocompleteFragment.validate())
             {
                 SharedPreferencesUtil.writeBasicInfo(driverSignupVM.nameField.getText().toString(), null, driverSignupVM.phoneField.getText().toString());
 
