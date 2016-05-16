@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import rx.Observer;
-import rx.Subscription;
 import timber.log.Timber;
 
 
@@ -37,7 +36,7 @@ public class ResourcesFragment extends ListFragment
     private ArrayList<Resource> resources;
     private Observer<List<Resource>> resourceSubscriber;
     private Observer<List<ResourceTag>> resourceTagSubscriber;
-    private Subscription subscription;
+
 
     //holds all tags
     private ArrayList<ResourceTag> filterTagsList;
@@ -95,7 +94,7 @@ public class ResourcesFragment extends ListFragment
 
     void setupResourceObserver()
     {
-        resourceSubscriber = createListObserver(R.layout.empty_articles_view, resources -> setResources(resources));
+        resourceSubscriber = createListObserver(getContext(), R.layout.empty_articles_view, resources -> setResources(resources));
     }
 
     @Nullable
@@ -111,18 +110,18 @@ public class ResourcesFragment extends ListFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
     }
 
     private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
         ResourceProvider.findResources(this, resourceSubscriber, types, tags);
@@ -132,7 +131,7 @@ public class ResourcesFragment extends ListFragment
     {
         //Adapter for RecyclerView
         ResourcesAdapter resourcesAdapter = new ResourcesAdapter(new ArrayList<>(resources), customTabsIntentBuilder);
-        recyclerView.setAdapter(resourcesAdapter);
+        helper.recyclerView.setAdapter(resourcesAdapter);
         this.resources = new ArrayList<>(resources);
     }
 

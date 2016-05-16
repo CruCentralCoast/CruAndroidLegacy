@@ -20,18 +20,17 @@ import java.util.List;
 
 import butterknife.OnClick;
 import rx.Observer;
-import rx.Subscription;
 
 public class MyRidesPassengerFragment extends ListFragment
 {
     private ArrayList<MyRidesPassengerVM> rideVMs;
     private Observer<List<Ride>> rideSubscriber;
-    private Subscription subscription;
+
 
     public MyRidesPassengerFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = createListObserver(R.layout.empty_my_rides_passenger_view,
+        rideSubscriber = createListObserver(getContext(), R.layout.empty_my_rides_passenger_view,
                 rides -> setRides(rides));
     }
 
@@ -59,24 +58,24 @@ public class MyRidesPassengerFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        inflateEmptyView(R.layout.empty_my_rides_passenger_view);
+        inflateEmptyView(view, R.layout.empty_my_rides_passenger_view);
 
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
         //LayoutManager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
         //Set up SwipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
 
         forceUpdate();
     }
 
     public void forceUpdate()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         RideProvider.requestMyRidesPassenger(this, rideSubscriber, CruApplication.getGCMID());
     }
 
@@ -94,7 +93,7 @@ public class MyRidesPassengerFragment extends ListFragment
         for (Ride ride : rides)
             rideVMs.add(new MyRidesPassengerVM(this, ride, false));
 
-        recyclerView.setAdapter(new MyRidesPassengerAdapter(rideVMs));
+        helper.recyclerView.setAdapter(new MyRidesPassengerAdapter(rideVMs));
     }
 
     @OnClick(R.id.events_button)

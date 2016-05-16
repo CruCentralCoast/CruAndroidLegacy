@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:visibility="gone"
     android:id="@+id/empty_list"
     android:orientation="horizontal"
     android:layout_width="match_parent"

@@ -40,13 +40,13 @@ public class FeedFragment extends ListFragment
         youTubeVideoProvider = new YouTubeVideoProvider();
         items = new ArrayList<>();
 
-        observer = createListObserver(
+        observer = createListObserver(getContext(),
                 (dateables) -> {
                     if(items == null || items.isEmpty())
                     {
                         items = dateables;
                         adapter = new FeedAdapter(dateables, layoutManager);
-                        recyclerView.setAdapter(adapter);
+                        helper.recyclerView.setAdapter(adapter);
                     }
                     else
                     {
@@ -74,7 +74,7 @@ public class FeedFragment extends ListFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
-        inflateEmptyView(R.layout.empty_with_alert);
+        inflateEmptyView(view, R.layout.empty_with_alert);
 
         super.onViewCreated(view, savedInstanceState);
 
@@ -82,8 +82,8 @@ public class FeedFragment extends ListFragment
         informationalText.setText(R.string.no_feed_items);
 
         layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        helper.recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
              @Override
              public void onLoadMore(int page, int totalItemsCount)
              {
@@ -91,14 +91,14 @@ public class FeedFragment extends ListFragment
              }
          });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         forceUpdate();
     }
 
@@ -112,7 +112,7 @@ public class FeedFragment extends ListFragment
 
     private void getMoreFeedItems(int page)
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         FeedProvider.getFeedItems(this, observer, CruApplication.getSharedPreferences(), youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
     }
 }

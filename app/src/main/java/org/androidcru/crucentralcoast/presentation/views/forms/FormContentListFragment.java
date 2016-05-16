@@ -1,27 +1,50 @@
-package org.androidcru.crucentralcoast.presentation.views.base;
+package org.androidcru.crucentralcoast.presentation.views.forms;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
 import org.androidcru.crucentralcoast.data.providers.observer.CruObserver;
+import org.androidcru.crucentralcoast.presentation.views.base.ListHelper;
+import org.androidcru.crucentralcoast.presentation.views.base.ListHelperImpl;
 
 import rx.functions.Action0;
 import rx.functions.Action1;
 
-/**
- * Reusable class for Fragments with just a RecyclerView and emptyView for when that RecyclerView
- * is empty.
- *
- * Takes care of inflating a ViewStub when the time is right as well as a SwipeRefreshLayout workaround (see below)
- */
-public class ListFragment extends BaseSupportFragment implements ListHelper
+public abstract class FormContentListFragment extends FormContentFragment implements ListHelper
 {
+    private FormHolder formHolder;
     protected ListHelperImpl helper;
 
-    public ListFragment()
+    public FormContentListFragment()
     {
-        this.helper = new ListHelperImpl();
+        helper = new ListHelperImpl();
+    }
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        formHolder = (FormActivity) context;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        ((FragmentViewListener) formHolder).onFragmentViewInstantiated(this);
+    }
+
+    @Override
+    public void onNext(FormHolder formHolder)
+    {
+        formHolder.next();
+    }
+
+    @Override
+    public void onPrevious(FormHolder formHolder)
+    {
+        formHolder.prev();
     }
 
     @Override

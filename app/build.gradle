@@ -46,6 +46,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    testBuildType "staging"
+
     buildTypes {
         release {
             minifyEnabled true
@@ -53,8 +55,11 @@ android {
             buildConfigField "String", "CRU_SERVER", '"http://androidcru-prod.jonamireh.com"'
         }
         debug {
-            testCoverageEnabled = true
             buildConfigField "String", "CRU_SERVER", '"http://androidcru-dev.jonamireh.com"'
+        }
+        staging {
+            minifyEnabled true
+            testCoverageEnabled = true
         }
     }
 

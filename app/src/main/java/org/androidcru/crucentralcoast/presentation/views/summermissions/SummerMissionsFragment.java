@@ -28,8 +28,8 @@ public class SummerMissionsFragment extends ListFragment
 
     public SummerMissionsFragment()
     {
-        observer = createListObserver(R.layout.empty_with_alert, summerMissions -> {
-            recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
+        observer = createListObserver(getContext(), R.layout.empty_with_alert, summerMissions -> {
+            helper.recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
         });
     }
 
@@ -44,16 +44,16 @@ public class SummerMissionsFragment extends ListFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
-        inflateEmptyView(R.layout.empty_with_alert);
+        inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
         inforomationalText.setText(R.string.empty_summer_missions);
 
         layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(this::getSummerMissions);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::getSummerMissions);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class SummerMissionsFragment extends ListFragment
 
     private void getSummerMissions()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         SummerMissionProvider.requestSummerMissions(this, observer);
     }
 }

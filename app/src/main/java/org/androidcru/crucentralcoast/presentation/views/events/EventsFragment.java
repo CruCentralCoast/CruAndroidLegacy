@@ -64,7 +64,7 @@ public class EventsFragment extends ListFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
-        inflateEmptyView(R.layout.empty_events_view);
+        inflateEmptyView(view, R.layout.empty_events_view);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
@@ -76,9 +76,9 @@ public class EventsFragment extends ListFragment
 
         //setup RecyclerView
         layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = createListObserver(R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
+        eventSubscriber = createListObserver(getContext(), R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
     }
 
     @OnClick(R.id.subscription_button)
@@ -101,7 +101,7 @@ public class EventsFragment extends ListFragment
 
     private void getCruEvents()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         EventProvider.requestUsersEvents(this, eventSubscriber, sharedPreferences);
     }
 
@@ -124,8 +124,7 @@ public class EventsFragment extends ListFragment
                 })
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(eventList::add);
-        recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
-        showContent();
+        helper.recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
     }
 
     /**
@@ -154,6 +153,6 @@ public class EventsFragment extends ListFragment
 
     public void refreshAdapter()
     {
-        recyclerView.getAdapter().notifyDataSetChanged();
+        helper.recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

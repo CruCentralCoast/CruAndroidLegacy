@@ -42,7 +42,7 @@ public class VideosFragment extends ListFragment
         youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
-        videoSubscriber = createListObserver(searchResults -> setVideos(searchResults),
+        videoSubscriber = createListObserver(getContext(), searchResults -> setVideos(searchResults),
                 () -> {
                     if(videos == null || videos.isEmpty())
                     {
@@ -105,11 +105,11 @@ public class VideosFragment extends ListFragment
 
         unbinder = ButterKnife.bind(this, view);
         layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
         // Set the Recycler View to scroll so long as there are more videos that
         // can be returned by the provider.
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
@@ -120,13 +120,13 @@ public class VideosFragment extends ListFragment
             }
         });
 
-        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        helper.swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     private void getCruVideos()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
@@ -138,7 +138,7 @@ public class VideosFragment extends ListFragment
         if(videosAdapter == null)
         {
             videosAdapter = new VideosAdapter(videos, layoutManager);
-            recyclerView.setAdapter(videosAdapter);
+            helper.recyclerView.setAdapter(videosAdapter);
         }
         videos.addAll(newVideos);
 
@@ -149,7 +149,7 @@ public class VideosFragment extends ListFragment
 
         // Used for keeping track of the user's scroll progression through the list of videos.
         curSize += newVideos.size();
-        swipeRefreshLayout.setRefreshing(false);
+        helper.swipeRefreshLayout.setRefreshing(false);
     }
 
     // Search the youtube channel for a specific video
@@ -167,7 +167,7 @@ public class VideosFragment extends ListFragment
         videos.clear();
         curSize = 0;
         videosAdapter = null;
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.resetQuery();
         if(searchEnabled)
             youtubeProvider.requestVideoSearch(this, videoSubscriber, searchQuery);
