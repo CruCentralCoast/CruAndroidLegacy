@@ -123,17 +123,6 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
         // If the description is selected, retract the view
         rootView.setOnClickListener((View v) ->
         {
-            videoDescription.setVisibility(View.GONE);
-            state.isExpanded = false;
-            adapter.notifyItemChanged(getAdapterPosition());
-            layoutManager.scrollToPosition(getAdapterPosition());
-
-        });
-
-        // Toggle the expansion of a view on the selection of the video
-        // description toggle button
-        videoExpandDescriptionLayout.setOnClickListener((View v) ->
-        {
             int visibility;
             if (videoDescription.getVisibility() == View.VISIBLE) {
                 visibility = View.GONE;
