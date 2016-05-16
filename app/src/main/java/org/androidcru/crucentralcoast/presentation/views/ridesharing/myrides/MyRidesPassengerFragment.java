@@ -21,8 +21,6 @@ import java.util.List;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class MyRidesPassengerFragment extends ListFragment
 {
@@ -33,35 +31,8 @@ public class MyRidesPassengerFragment extends ListFragment
     public MyRidesPassengerFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = new Observer<List<Ride>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-
-                if (rideVMs.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Rides failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Ride> rides)
-            {
-                setRides(rides);
-            }
-        };
+        rideSubscriber = createListObserver(R.layout.empty_my_rides_passenger_view,
+                rides -> setRides(rides));
     }
 
     /**

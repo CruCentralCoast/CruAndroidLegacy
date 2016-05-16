@@ -10,6 +10,7 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.providers.observer.CruObserver;
 import org.androidcru.crucentralcoast.data.providers.observer.ObserverUtil;
 
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.observers.Observers;
 import timber.log.Timber;
@@ -37,7 +38,7 @@ public class ListFragment extends BaseSupportFragment
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-
+        emptyViewStub = (ViewStub) getView().findViewById(R.id.empty_view_stub);
         noNetworkViewStub = (ViewStub) getView().findViewById(R.id.no_network_view_stub);
         recyclerView.setHasFixedSize(true);
 
@@ -94,10 +95,24 @@ public class ListFragment extends BaseSupportFragment
 
     protected <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
     {
-        return ObserverUtil.create(this, Observers.create(onNext,
+        return ObserverUtil.create(this, Observers.create(t -> {
+                    onNext.call(t);
+                    showContent();
+                },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
                 () -> onEmpty(emptyLayoutId),
+                () -> onNoNetwork());
+    }
+
+    protected <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
+    {
+        return ObserverUtil.create(this, Observers.create(onNext,
+                e -> Timber.e(e, "Failed to retrieve."),
+                () -> swipeRefreshLayout.setRefreshing(false)),
+                () -> {
+                    onEmpty.call();
+                },
                 () -> onNoNetwork());
     }
 

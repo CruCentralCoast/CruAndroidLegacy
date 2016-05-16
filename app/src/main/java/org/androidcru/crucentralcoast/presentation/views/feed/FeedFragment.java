@@ -21,8 +21,9 @@ import org.threeten.bp.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.Observer;
-import timber.log.Timber;
 
 public class FeedFragment extends ListFragment
 {
@@ -32,50 +33,34 @@ public class FeedFragment extends ListFragment
     private FeedAdapter adapter;
 
     private YouTubeVideoProvider youTubeVideoProvider;
+    @BindView(R.id.informational_text) TextView informationalText;
 
     public FeedFragment()
     {
         youTubeVideoProvider = new YouTubeVideoProvider();
         items = new ArrayList<>();
-        observer = new Observer<List<Dateable>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                if(items.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                    ((TextView) (FeedFragment.this.getView().findViewById(R.id.informational_text))).setText(R.string.no_feed_items);
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-                swipeRefreshLayout.setRefreshing(false);
-            }
 
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Feed Error");
-            }
-
-            @Override
-            public void onNext(List<Dateable> dateables)
-            {
-                if(items == null || items.isEmpty())
-                {
-                    items = dateables;
-                    adapter = new FeedAdapter(dateables, layoutManager);
-                    recyclerView.setAdapter(adapter);
+        observer = createListObserver(
+                (dateables) -> {
+                    if(items == null || items.isEmpty())
+                    {
+                        items = dateables;
+                        adapter = new FeedAdapter(dateables, layoutManager);
+                        recyclerView.setAdapter(adapter);
+                    }
+                    else
+                    {
+                        items.addAll(dateables);
+                        adapter.syncItems();
+                    }
+                },
+                () -> {
+                    if(items == null || items.isEmpty())
+                    {
+                        onEmpty(R.layout.empty_with_alert);
+                    }
                 }
-                else
-                {
-                    items.addAll(dateables);
-                    adapter.syncItems();
-                }
-            }
-        };
+        );
     }
 
     @Nullable
@@ -92,6 +77,9 @@ public class FeedFragment extends ListFragment
         inflateEmptyView(R.layout.empty_with_alert);
 
         super.onViewCreated(view, savedInstanceState);
+
+        unbinder = ButterKnife.bind(this, view);
+        informationalText.setText(R.string.no_feed_items);
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);

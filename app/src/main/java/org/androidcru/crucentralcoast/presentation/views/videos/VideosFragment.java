@@ -23,7 +23,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import rx.Observer;
-import timber.log.Timber;
 
 public class VideosFragment extends ListFragment
 {
@@ -43,34 +42,13 @@ public class VideosFragment extends ListFragment
         youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
-        videoSubscriber = new Observer<List<Snippet>>()
-        {
-            @Override
-            public void onCompleted() {
-                swipeRefreshLayout.setRefreshing(false);
-                if(videos.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                    setVideos(new ArrayList<>());
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "videos failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Snippet> searchResults)
-            {
-                setVideos(searchResults);
-            }
-        };
+        videoSubscriber = createListObserver(searchResults -> setVideos(searchResults),
+                () -> {
+                    if(videos == null || videos.isEmpty())
+                    {
+                        onEmpty(R.layout.empty_videos);
+                    }
+                });
     }
 
     @Nullable
@@ -123,7 +101,6 @@ public class VideosFragment extends ListFragment
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        inflateEmptyView(R.layout.empty_videos);
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);

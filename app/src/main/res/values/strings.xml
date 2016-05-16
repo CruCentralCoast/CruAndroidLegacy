@@ -169,5 +169,6 @@
     <string name="logged_in">Logged in as</string>
     <string name="logout">Logout</string>
     <string name="notification">Notifications</string>
+    <string name="empty_summer_missions">There are no summer missions at this time!</string>
 
 </resources>

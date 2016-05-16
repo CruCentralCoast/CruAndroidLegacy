@@ -34,31 +34,9 @@ public class MyRidesDriverFragment extends ListFragment
     public MyRidesDriverFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = new Observer<List<Ride>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
 
-                if (rideVMs.isEmpty())
-                    emptyView.setVisibility(View.VISIBLE);
-                else
-                    emptyView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Rides failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Ride> rides)
-            {
-                setRides(rides);
-            }
-        };
+        rideSubscriber = createListObserver(R.layout.empty_my_rides_driver_view,
+                rides -> setRides(rides));
     }
 
     /**

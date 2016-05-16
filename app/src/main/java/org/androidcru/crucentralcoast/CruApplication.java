@@ -19,6 +19,7 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.picasso.Picasso;
 
+import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
@@ -102,6 +103,8 @@ public class CruApplication extends Application
 
             //Send all Timber logs with a level of INFO or higher to Fabric.io
             Timber.plant(new CrashlyticsLogTree(Log.INFO));
+            //If there's a Exception sent to Timber.e(), it gets sent to Crashlytics as a non-fatal crash
+            Timber.plant(new CrashlyticsLogExceptionTree());
         }
     }
 

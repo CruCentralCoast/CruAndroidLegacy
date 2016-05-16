@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,6 +81,8 @@ public class ResourcesFragment extends ListFragment
                 selectedTags = new boolean[filterTagsList.size()];
                 Arrays.fill(selectedTags, true);
                 setHasOptionsMenu(true);
+                //Update the list of resources/tags by pulling from the server
+                forceUpdate(filterTypesList, filterTagsList);
             }
 
         };
@@ -89,39 +90,7 @@ public class ResourcesFragment extends ListFragment
 
     void setupResourceObserver()
     {
-        resourceSubscriber = new Observer<List<Resource>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-                Log.d("eeks", "Resource onCompleted: HERE");
-
-                if (resources.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                }
-                else {
-                    emptyView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Resources failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Resource> resources)
-            {
-                setResources(resources);
-                Log.d("okes", "Resource onNext: IKES");
-
-            }
-
-        };
+        resourceSubscriber = createListObserver(R.layout.empty_articles_view, resources -> setResources(resources));
     }
 
     @Nullable
@@ -135,12 +104,9 @@ public class ResourcesFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        inflateEmptyView(R.layout.empty_articles_view);
-        //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
-        //Update the list of resources/tags by pulling from the server
-        forceUpdate(filterTypesList, null);
+        swipeRefreshLayout.setRefreshing(true);
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -184,7 +150,7 @@ public class ResourcesFragment extends ListFragment
             builder.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            forceUpdate(filterTypesList, getFilteredTags());
+                            forceUpdate(getFilteredTypes(), getFilteredTags());
                         }
                     });
 
@@ -218,11 +184,7 @@ public class ResourcesFragment extends ListFragment
             builder.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            List<Resource.ResourceType> types = getFilteredTypes();
-                            //If all boxes unchecked, display all options
-                            if (types.isEmpty())
-                                types = filterTypesList;
-                            forceUpdate(types, getFilteredTags());
+                            forceUpdate(getFilteredTypes(), getFilteredTags());
                         }
                     });
 
