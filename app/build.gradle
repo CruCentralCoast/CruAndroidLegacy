@@ -37,7 +37,6 @@ android {
     }
 
     dexOptions {
-        javaMaxHeapSize "2g"
         jumboMode true
         incremental false
     }

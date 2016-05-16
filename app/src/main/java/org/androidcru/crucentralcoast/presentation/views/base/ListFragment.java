@@ -107,7 +107,10 @@ public class ListFragment extends BaseSupportFragment
 
     protected <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
     {
-        return ObserverUtil.create(this, Observers.create(onNext,
+        return ObserverUtil.create(this, Observers.create(t -> {
+                    onNext.call(t);
+                    showContent();
+                },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
                 () -> {

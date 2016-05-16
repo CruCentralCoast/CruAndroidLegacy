@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
@@ -71,6 +72,10 @@ public class ResourcesFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
+                if(!CruApplication.isOnline(getContext()))
+                {
+                    onNoNetwork();
+                }
                 Timber.e(e, "Resource Tags failed to retrieve.");
             }
 
