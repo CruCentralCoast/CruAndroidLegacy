@@ -7,19 +7,15 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="0dp"
-    card_view:cardPreventCornerOverlap="true"
-    card_view:cardUseCompatPadding="true"
-    android:layout_margin="0dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    >
+    android:layout_marginTop="16dp"
+    card_view:cardElevation="0dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:animateLayoutChanges="true"
-        >
+        android:animateLayoutChanges="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:id="@+id/mission_banner"
             android:layout_marginTop="8dp"
             />

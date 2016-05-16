@@ -1,10 +1,12 @@
 package org.androidcru.crucentralcoast.presentation.views.videos;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +20,15 @@ import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
+import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CruVideoViewHolder extends RecyclerView.ViewHolder
 {
+    @BindView(R.id.card_video_view) CardView cardView;
+    @BindView(R.id.videos_divider) View divider;
     @BindView(R.id.video_title) TextView videoTitle;
     @BindView(R.id.video_thumb) ImageView videoThumb;
     @BindView(R.id.video_description) TextView videoDescription;
@@ -35,10 +40,30 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
 
     public RecyclerView.Adapter adapter;
     public RecyclerView.LayoutManager layoutManager;
+    public View rootView;
+
+    public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager, Boolean isFeed)
+    {
+        this(rootView, adapter, layoutManager);
+
+        if (isFeed)
+        {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            int topMargin = DisplayMetricsUtil.dpToPx(rootView.getContext(), 16);
+            params.setMargins(0, topMargin, 0, 0);
+            cardView.setLayoutParams(params);
+
+            divider.setVisibility(View.GONE);
+        }
+    }
 
     public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager)
     {
         super(rootView);
+        this.rootView = rootView;
         this.adapter = adapter;
         this.layoutManager = layoutManager;
 
@@ -68,7 +93,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
 
         Context context = videoThumb.getContext();
 
-        ViewUtil.setSource(videoThumb, model.getHigh().url, ViewUtil.SCALE_TYPE.FIT);
+        ViewUtil.setSource(videoThumb, model.getHigh().url, null);
 
         // Set the chevron to up or down depending on if the view is expanded or not
         videoChev.setImageDrawable(state.isExpanded
@@ -96,7 +121,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
         videoDescription.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
 
         // If the description is selected, retract the view
-        videoDescription.setOnClickListener((View v) ->
+        rootView.setOnClickListener((View v) ->
         {
             videoDescription.setVisibility(View.GONE);
             state.isExpanded = false;
