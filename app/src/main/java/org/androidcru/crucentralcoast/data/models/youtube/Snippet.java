@@ -15,7 +15,7 @@ public class Snippet implements Dateable {
 
     public static final String sPublishedAt = "publishedAt";
     public static final String sTitle = "title";
-    public static final String sDescription = "sDescription";
+    public static final String sDescription = "description";
     public static final String sThumbnails = "thumbnails";
     public static final String sResourceId = "resourceId";
 
