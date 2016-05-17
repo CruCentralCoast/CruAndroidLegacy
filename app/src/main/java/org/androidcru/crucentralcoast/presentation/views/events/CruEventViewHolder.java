@@ -175,10 +175,7 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
                 SharedPreferencesUtil.writeCalendarID(cruEventId, calendarId);
             }
             
-            //TODO
-            /*
-            eventFragment.refreshAdapter();
-             */
+            adapter.notifyItemChanged(getAdapterPosition());
         });
 
         final boolean adding = !addedToCalendar;
