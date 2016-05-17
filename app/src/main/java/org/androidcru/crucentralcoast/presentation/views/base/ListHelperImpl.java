@@ -1,7 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.base;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,8 +29,7 @@ public class ListHelperImpl implements ListHelper
     private View noNetworkView;
     private View emptyView;
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
+    public void onViewCreated(View view)
     {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -96,9 +93,9 @@ public class ListHelperImpl implements ListHelper
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    public <T> CruObserver<T> createListObserver(Context c, int emptyLayoutId, Action1<T> onNext)
+    public <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
     {
-        return ObserverUtil.create(c, Observers.create(t -> {
+        return ObserverUtil.create(Observers.create(t -> {
                     onNext.call(t);
                     showContent();
                 },
@@ -110,9 +107,9 @@ public class ListHelperImpl implements ListHelper
                 () -> onNoNetwork());
     }
 
-    public <T> CruObserver<T> createListObserver(Context c, Action1<T> onNext, Action0 onEmpty)
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
     {
-        return ObserverUtil.create(c, Observers.create(t -> {
+        return ObserverUtil.create(Observers.create(t -> {
                     onNext.call(t);
                     showContent();
                 },

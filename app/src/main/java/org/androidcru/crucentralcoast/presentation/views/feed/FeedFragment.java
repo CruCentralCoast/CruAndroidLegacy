@@ -40,7 +40,7 @@ public class FeedFragment extends ListFragment
         youTubeVideoProvider = new YouTubeVideoProvider();
         items = new ArrayList<>();
 
-        observer = createListObserver(getContext(),
+        observer = createListObserver(
                 (dateables) -> {
                     if(items == null || items.isEmpty())
                     {

@@ -51,7 +51,7 @@ public abstract class FormContentListFragment extends FormContentFragment implem
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        helper.onViewCreated(view, savedInstanceState);
+        helper.onViewCreated(view);
     }
 
     @Override
@@ -73,15 +73,15 @@ public abstract class FormContentListFragment extends FormContentFragment implem
     }
 
     @Override
-    public <T> CruObserver<T> createListObserver(Context c, int emptyLayoutId, Action1<T> onNext)
+    public <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
     {
-        return helper.createListObserver(c, emptyLayoutId, onNext);
+        return helper.createListObserver(emptyLayoutId, onNext);
     }
 
     @Override
-    public <T> CruObserver<T> createListObserver(Context c, Action1<T> onNext, Action0 onEmpty)
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
     {
-        return helper.createListObserver(c, onNext, onEmpty);
+        return helper.createListObserver(onNext, onEmpty);
     }
 
     @Override

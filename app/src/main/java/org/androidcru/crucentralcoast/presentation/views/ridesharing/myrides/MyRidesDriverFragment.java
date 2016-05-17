@@ -34,7 +34,7 @@ public class MyRidesDriverFragment extends ListFragment
     {
         rideVMs = new ArrayList<>();
 
-        rideSubscriber = createListObserver(getContext(), R.layout.empty_my_rides_driver_view,
+        rideSubscriber = createListObserver(R.layout.empty_my_rides_driver_view,
                 rides -> setRides(rides));
     }
 
@@ -57,10 +57,10 @@ public class MyRidesDriverFragment extends ListFragment
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
      * @param view Inflated View created by onCreateView()
-     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
+     *
      */
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
         inflateEmptyView(view, R.layout.empty_my_rides_driver_view);

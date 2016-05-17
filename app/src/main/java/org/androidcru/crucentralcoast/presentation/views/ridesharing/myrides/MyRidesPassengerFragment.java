@@ -30,7 +30,7 @@ public class MyRidesPassengerFragment extends ListFragment
     public MyRidesPassengerFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = createListObserver(getContext(), R.layout.empty_my_rides_passenger_view,
+        rideSubscriber = createListObserver(R.layout.empty_my_rides_passenger_view,
                 rides -> setRides(rides));
     }
 
@@ -53,10 +53,10 @@ public class MyRidesPassengerFragment extends ListFragment
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
      * @param view Inflated View created by onCreateView()
-     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
+     *
      */
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
         inflateEmptyView(view, R.layout.empty_my_rides_passenger_view);
 

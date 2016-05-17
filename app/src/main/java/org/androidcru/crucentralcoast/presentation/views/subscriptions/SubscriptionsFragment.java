@@ -48,7 +48,7 @@ public class SubscriptionsFragment extends ListFragment
 
     public SubscriptionsFragment()
     {
-        observer = createListObserver(getContext(),
+        observer = createListObserver(
                 campusMinistryMap -> {
                     subscriptionAdapter = new SubscriptionsAdapter(campusMinistryMap);
                     helper.recyclerView.setAdapter(subscriptionAdapter);
@@ -67,7 +67,7 @@ public class SubscriptionsFragment extends ListFragment
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
         inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);

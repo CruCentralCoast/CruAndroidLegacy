@@ -82,7 +82,7 @@ public class DriverResultsFragment extends FormContentListFragment
         query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
 
         results = new ArrayList<>();
-        rideResultsObserver = createListObserver(getContext(), R.layout.empty_with_alert,
+        rideResultsObserver = createListObserver(R.layout.empty_with_alert,
                 rides -> {
                     handleResults(rides);
                 });

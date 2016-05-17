@@ -42,7 +42,7 @@ public class VideosFragment extends ListFragment
         youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
-        videoSubscriber = createListObserver(getContext(), searchResults -> setVideos(searchResults),
+        videoSubscriber = createListObserver(searchResults -> setVideos(searchResults),
                 () -> {
                     if(videos == null || videos.isEmpty())
                     {

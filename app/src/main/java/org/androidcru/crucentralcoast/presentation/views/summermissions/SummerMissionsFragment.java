@@ -28,7 +28,7 @@ public class SummerMissionsFragment extends ListFragment
 
     public SummerMissionsFragment()
     {
-        observer = createListObserver(getContext(), R.layout.empty_with_alert, summerMissions -> {
+        observer = createListObserver(R.layout.empty_with_alert, summerMissions -> {
             helper.recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
         });
     }

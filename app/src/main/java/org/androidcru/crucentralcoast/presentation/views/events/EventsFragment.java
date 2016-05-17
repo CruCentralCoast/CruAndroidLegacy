@@ -56,12 +56,11 @@ public class EventsFragment extends ListFragment
     /**
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
+     *  @param view               Inflated View created by onCreateView()
      *
-     * @param view               Inflated View created by onCreateView()
-     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
      */
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
         inflateEmptyView(view, R.layout.empty_events_view);
@@ -90,7 +89,7 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = createListObserver(getContext(), R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
+        eventSubscriber = createListObserver(R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
     }
 
     @OnClick(R.id.subscription_button)

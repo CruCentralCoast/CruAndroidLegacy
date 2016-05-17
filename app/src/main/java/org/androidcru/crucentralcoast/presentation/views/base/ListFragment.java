@@ -1,7 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views.base;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.androidcru.crucentralcoast.data.providers.observer.CruObserver;
@@ -25,10 +25,10 @@ public class ListFragment extends BaseSupportFragment implements ListHelper
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        helper.onViewCreated(view, savedInstanceState);
+        helper.onViewCreated(view);
     }
 
     @Override
@@ -50,15 +50,15 @@ public class ListFragment extends BaseSupportFragment implements ListHelper
     }
 
     @Override
-    public <T> CruObserver<T> createListObserver(Context c, int emptyLayoutId, Action1<T> onNext)
+    public <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
     {
-        return helper.createListObserver(c, emptyLayoutId, onNext);
+        return helper.createListObserver(emptyLayoutId, onNext);
     }
 
     @Override
-    public <T> CruObserver<T> createListObserver(Context c, Action1<T> onNext, Action0 onEmpty)
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
     {
-        return helper.createListObserver(c, onNext, onEmpty);
+        return helper.createListObserver(onNext, onEmpty);
     }
 
     @Override

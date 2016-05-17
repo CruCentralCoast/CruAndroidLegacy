@@ -71,7 +71,7 @@ public class ResourcesFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
-                if(!CruApplication.isOnline(getContext()))
+                if(!CruApplication.isOnline())
                 {
                     onNoNetwork();
                 }
@@ -94,7 +94,7 @@ public class ResourcesFragment extends ListFragment
 
     void setupResourceObserver()
     {
-        resourceSubscriber = createListObserver(getContext(), R.layout.empty_articles_view, resources -> setResources(resources));
+        resourceSubscriber = createListObserver(R.layout.empty_articles_view, resources -> setResources(resources));
     }
 
     @Nullable

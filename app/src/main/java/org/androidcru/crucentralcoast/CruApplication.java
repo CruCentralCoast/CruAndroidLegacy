@@ -51,11 +51,6 @@ public class CruApplication extends Application
     private static Context context;
     private static SharedPreferences sharedPreferences;
 
-    public static Context getContext()
-    {
-        return context;
-    }
-
     @Override
     public void onCreate()
     {
@@ -86,6 +81,11 @@ public class CruApplication extends Application
             startService(service);
         }
         Timber.d(getGCMID());
+    }
+
+    public static Context getContext()
+    {
+        return context;
     }
 
     /**
@@ -188,7 +188,7 @@ public class CruApplication extends Application
         return CruApplication.getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
     }
 
-    public static boolean isOnline(Context context) {
+    public static boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
