@@ -51,8 +51,12 @@ public final class ResourceProvider
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
 
+        boolean hasTags = false;
+        boolean hasTypes = false;
+
         if(types != null && !types.isEmpty())
         {
+            hasTypes = true;
             String[] stringTypes = new String[types.size()];
             for (int i = 0; i < types.size(); i++)
             {
@@ -67,6 +71,7 @@ public final class ResourceProvider
 
         if(tags != null && !tags.isEmpty())
         {
+            hasTags = true;
             String[] stringTags = new String[tags.size()];
             for (int i = 0; i < tags.size(); i++)
             {
@@ -80,17 +85,23 @@ public final class ResourceProvider
 
         }
 
-        Query query = new Query.Builder()
-                .setCondition(conditionsBuilder.build())
-                .build();
+        if(hasTags && hasTypes)
+        {
+            Query query = new Query.Builder()
+                    .setCondition(conditionsBuilder.build())
+                    .build();
+            return cruApiService.findResources(query)
+                    .flatMap(resources -> Observable.from(resources))
+                    .compose(tagRetriever)
+                    .compose(RxComposeUtil.toListOrEmpty())
+                    .compose(RxComposeUtil.network());
+        }
+        else
+            return Observable.empty();
 
 
 
-        return cruApiService.findResources(query)
-                .flatMap(resources -> Observable.from(resources))
-                .compose(tagRetriever)
-                .compose(RxComposeUtil.toListOrEmpty())
-                .compose(RxComposeUtil.network());
+
     }
 
     public static void getResourceTags(SubscriptionsHolder holder, Observer<List<ResourceTag>> observer)

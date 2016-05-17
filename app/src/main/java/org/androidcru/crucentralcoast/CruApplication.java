@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -17,6 +19,7 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.picasso.Picasso;
 
+import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
@@ -48,11 +51,6 @@ public class CruApplication extends Application
     public static OkHttpClient okHttpClient;
     private static Context context;
 
-    public static Context getContext()
-    {
-        return context;
-    }
-
     @Override
     public void onCreate()
     {
@@ -83,6 +81,11 @@ public class CruApplication extends Application
         Timber.d(getGCMID());
     }
 
+    public static Context getContext()
+    {
+        return context;
+    }
+
     /**
      * Sets up Debug tools, only if the build is for debugging.
      */
@@ -98,6 +101,8 @@ public class CruApplication extends Application
 
             //Send all Timber logs with a level of INFO or higher to Fabric.io
             Timber.plant(new CrashlyticsLogTree(Log.INFO));
+            //If there's a Exception sent to Timber.e(), it gets sent to Crashlytics as a non-fatal crash
+            Timber.plant(new CrashlyticsLogExceptionTree());
         }
     }
 
@@ -179,5 +184,12 @@ public class CruApplication extends Application
     public static String getGCMID()
     {
         return SharedPreferencesUtil.getGCMID(context);
+    }
+
+    public static boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

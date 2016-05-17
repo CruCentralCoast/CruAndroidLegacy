@@ -2,45 +2,30 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import timber.log.Timber;
-
-
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.Image;
 import org.androidcru.crucentralcoast.data.models.Ride;
-import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
-import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatListActivity;
 import org.parceler.Parcels;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.observers.Observers;
-import timber.log.Timber;
 
 
-public class MyRidesInfoActivity extends BaseAppCompatActivity
+public class MyRidesInfoActivity extends BaseAppCompatListActivity
 {
-
     private Ride ride;
-
-    //Injected Views
-    @BindView(R.id.recyclerview) RecyclerView eventList;
-    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.event_banner) ImageView eventBanner;
     @BindView(R.id.ride_type) TextView rideType;
@@ -53,12 +38,45 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
     private MyRidesInfoAdapter rideSharingAdapter;
     private Observer<Ride> observer;
 
-    private void setupUI(String theEventName, Image theImage) {
-        toolbar.setTitle(theEventName);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.my_rides_info_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        if(theImage != null)
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rideinfo);
+        inflateEmptyView(findViewById(android.R.id.content), R.layout.empty_with_alert);
+        //Let ButterKnife find all injected views and bind them to member variables
+        unbinder = ButterKnife.bind(this);
+        ride = Parcels.unwrap(getIntent().getExtras().getParcelable(AppConstants.MYRIDE_RIDE_KEY));
+        setupUI();
+
+        //LayoutManager for RecyclerView
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        helper.recyclerView.setLayoutManager(llm);
+        helper.recyclerView.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
+
+        observer = helper.createListObserver(
+                newRide -> {
+                    ride = newRide;
+                    setupPassengers();
+                    setAdapter();
+                    spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+                },
+                () -> {});
+
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+    }
+
+    private void setupUI() {
+        toolbar.setTitle(ride.event.name);
+
+        if(ride.event.image != null)
         {
-            ViewUtil.setSource(eventBanner, theImage.url, ViewUtil.SCALE_TYPE.FIT);
+            ViewUtil.setSource(eventBanner, ride.event.image.url, ViewUtil.SCALE_TYPE.FIT);
         }
         rideType.setText(getString(R.string.myride_info_dir) + ride.direction.getValueDetailed());
         rideTime.setText(getString(R.string.myride_info_departure_time)
@@ -66,79 +84,29 @@ public class MyRidesInfoActivity extends BaseAppCompatActivity
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
 
         departureLoc.setText(getString(R.string.myride_info_pickup_loc) + "\n" + ride.location.toString());
+        setupPassengers();
         spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+
+        helper.recyclerView.setNestedScrollingEnabled(false);
+    }
+
+    private void setupPassengers()
+    {
         passengerListHeading.setText((ride.passengers != null && ride.passengers.size() > 0) ?
                 getString(R.string.myride_info_passenger_list_nonempty) :
                 getString(R.string.myride_info_passenger_list_empty));
-
-        eventList.setNestedScrollingEnabled(false);
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rideinfo);
-        //Let ButterKnife find all injected views and bind them to member variables
-        unbinder = ButterKnife.bind(this);
-        ride = Parcels.unwrap(getIntent().getExtras().getParcelable(AppConstants.MYRIDE_RIDE_KEY));
-
-        getEventData();
-
-        //LayoutManager for RecyclerView
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        eventList.setLayoutManager(llm);
-        eventList.addItemDecoration(new DividerItemDecoration(this, llm.getOrientation()));
-
-        //setup observer
-        observer = new Observer<Ride>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Rides failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(Ride newRide)
-            {
-                ride = newRide;
-                setAdapter();
-                spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        };
-
-        setAdapter();
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     //Adapter for RecyclerView
     private void setAdapter() {
         rideSharingAdapter = new MyRidesInfoAdapter(this, ride.passengers, ride.id);
-        eventList.setAdapter(rideSharingAdapter);
-        eventList.setHasFixedSize(true);
-    }
-
-    private void getEventData()
-    {
-        EventProvider.requestCruEventByID(this, Observers.create(event -> setupUI(event.name, event.image)), ride.eventId);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.my_rides_info_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        helper.recyclerView.setAdapter(rideSharingAdapter);
+        helper.recyclerView.setHasFixedSize(true);
     }
 
     public void forceUpdate()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         RideProvider.requestRideByID(this, observer, ride.id);
     }
 }

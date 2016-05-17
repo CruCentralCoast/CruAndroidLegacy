@@ -23,7 +23,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import rx.Observer;
-import timber.log.Timber;
 
 public class VideosFragment extends ListFragment
 {
@@ -43,34 +42,13 @@ public class VideosFragment extends ListFragment
         youtubeProvider = new YouTubeVideoProvider();
 
         // Display text notifying the user if there are no videos to load, else show the videos
-        videoSubscriber = new Observer<List<Snippet>>()
-        {
-            @Override
-            public void onCompleted() {
-                swipeRefreshLayout.setRefreshing(false);
-                if(videos.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                    setVideos(new ArrayList<>());
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "videos failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Snippet> searchResults)
-            {
-                setVideos(searchResults);
-            }
-        };
+        videoSubscriber = createListObserver(searchResults -> setVideos(searchResults),
+                () -> {
+                    if(videos == null || videos.isEmpty())
+                    {
+                        onEmpty(R.layout.empty_videos);
+                    }
+                });
     }
 
     @Nullable
@@ -123,16 +101,15 @@ public class VideosFragment extends ListFragment
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        inflateEmptyView(R.layout.empty_videos);
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
         layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
         // Set the Recycler View to scroll so long as there are more videos that
         // can be returned by the provider.
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
@@ -143,13 +120,13 @@ public class VideosFragment extends ListFragment
             }
         });
 
-        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        helper.swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     private void getCruVideos()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
@@ -161,7 +138,7 @@ public class VideosFragment extends ListFragment
         if(videosAdapter == null)
         {
             videosAdapter = new VideosAdapter(videos, layoutManager);
-            recyclerView.setAdapter(videosAdapter);
+            helper.recyclerView.setAdapter(videosAdapter);
         }
         videos.addAll(newVideos);
 
@@ -172,7 +149,7 @@ public class VideosFragment extends ListFragment
 
         // Used for keeping track of the user's scroll progression through the list of videos.
         curSize += newVideos.size();
-        swipeRefreshLayout.setRefreshing(false);
+        helper.swipeRefreshLayout.setRefreshing(false);
     }
 
     // Search the youtube channel for a specific video
@@ -181,6 +158,7 @@ public class VideosFragment extends ListFragment
         curSize = 0;
         videosAdapter = null;
         youtubeProvider.resetQuery();
+        helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.requestVideoSearch(this, videoSubscriber, query);
     }
 
@@ -190,7 +168,7 @@ public class VideosFragment extends ListFragment
         videos.clear();
         curSize = 0;
         videosAdapter = null;
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.resetQuery();
         if(searchEnabled)
             youtubeProvider.requestVideoSearch(this, videoSubscriber, searchQuery);

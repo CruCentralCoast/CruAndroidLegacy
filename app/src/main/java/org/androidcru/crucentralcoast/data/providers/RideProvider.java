@@ -18,14 +18,19 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public final class RideProvider
 {
     private static CruApiService mCruService = CruApiProvider.getService();
 
-
+    private static Observable.Transformer<Ride, Ride> attachEvent = rideObservable -> rideObservable.flatMap(ride -> {
+        return EventProvider.requestCruEventByID(ride.eventId)
+                .flatMap(event -> {
+                    ride.event = event;
+                    return Observable.just(ride);
+                });
+    });
 
     public static void requestRides(SubscriptionsHolder holder, Observer<List<Ride>> observer)
     {
@@ -72,7 +77,6 @@ public final class RideProvider
     protected static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
-                .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
                     Timber.d("Rides found");
                     return Observable.from(rides);
@@ -87,14 +91,8 @@ public final class RideProvider
                         ride.passengers = new ArrayList<Passenger>();
                     return ride;
                 })
-                .map(ride -> {
-                    EventProvider.requestCruEventByID(ride.eventId)
-                            .compose(RxLoggingUtil.log("EVENTS"))
-                            .map(theEvent -> ride.event = theEvent)
-                            .toBlocking()
-                            .subscribe();
-                    return ride;
-                })
+                .compose(attachEvent)
+                .compose(RxComposeUtil.network())
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 
@@ -120,6 +118,7 @@ public final class RideProvider
                     Timber.d(Double.toString(distance));
                     return distance <= MathUtil.convertMilesToMeters(ride.radius);
                 })
+                .compose(attachEvent)
                 .compose(RxLoggingUtil.log("RIDES AFTER LOC FILTER"))
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
@@ -137,6 +136,7 @@ public final class RideProvider
     protected static Observable<Ride> createRide(Ride ride)
     {
         return mCruService.postRide(ride)
+                .compose(attachEvent)
                 .compose(RxComposeUtil.network());
     }
 
@@ -152,6 +152,7 @@ public final class RideProvider
     protected static Observable<Ride> updateRide(String rideId, Ride ride)
     {
         return mCruService.updateRide(rideId, ride)
+                .compose(attachEvent)
                 .compose(RxComposeUtil.network());
     }
 
@@ -214,19 +215,19 @@ public final class RideProvider
     protected static Observable<Ride> requestRideByID(String id)
     {
         return mCruService.findSingleRide(id)
-                .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
                     Timber.d("Rides found");
                     return Observable.from(rides);
                 })
-                .map(ride -> {
-                    PassengerProvider.getPassengers(ride.passengerIds)
-                            .subscribeOn(Schedulers.io())
+                .take(1)
+                .flatMap(ride -> {
+                    return PassengerProvider.getPassengers(ride.passengerIds)
+                            .defaultIfEmpty(new ArrayList<>())
                             .map(passengers -> ride.passengers = passengers)
-                            .toBlocking()
-                            .subscribe();
-                    return ride;
-                });
+                            .flatMap(passengers1 -> Observable.just(ride));
+                })
+                .compose(attachEvent)
+                .compose(RxComposeUtil.network());
 
     }
 }

@@ -20,7 +20,6 @@ import java.util.List;
 
 import butterknife.OnClick;
 import rx.Observer;
-import rx.Subscription;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -29,36 +28,14 @@ public class MyRidesDriverFragment extends ListFragment
 {
     private ArrayList<MyRidesDriverVM> rideVMs;
     private Observer<List<Ride>> rideSubscriber;
-    private Subscription subscription;
+
 
     public MyRidesDriverFragment()
     {
         rideVMs = new ArrayList<>();
-        rideSubscriber = new Observer<List<Ride>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
 
-                if (rideVMs.isEmpty())
-                    emptyView.setVisibility(View.VISIBLE);
-                else
-                    emptyView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Rides failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Ride> rides)
-            {
-                setRides(rides);
-            }
-        };
+        rideSubscriber = createListObserver(R.layout.empty_my_rides_driver_view,
+                rides -> setRides(rides));
     }
 
     /**
@@ -80,13 +57,13 @@ public class MyRidesDriverFragment extends ListFragment
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
      * @param view Inflated View created by onCreateView()
-     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
+     *
      */
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
-        inflateEmptyView(R.layout.empty_my_rides_driver_view);
+        inflateEmptyView(view, R.layout.empty_my_rides_driver_view);
 
         super.onViewCreated(view, savedInstanceState);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
@@ -96,9 +73,9 @@ public class MyRidesDriverFragment extends ListFragment
 
         //LayoutManager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     @Override
@@ -110,7 +87,7 @@ public class MyRidesDriverFragment extends ListFragment
     //TODO better security than this
     public void forceUpdate()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         RideProvider.requestMyRidesDriver(this, rideSubscriber, CruApplication.getGCMID());
     }
 
@@ -126,8 +103,8 @@ public class MyRidesDriverFragment extends ListFragment
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(Observers.create(vm -> rideVMs.add(vm), e -> Timber.e("Adding RideVM error", e)));
 
-        recyclerView.setAdapter(new MyRidesDriverAdapter(rideVMs, getContext()));
-        swipeRefreshLayout.setRefreshing(false);
+        helper.recyclerView.setAdapter(new MyRidesDriverAdapter(rideVMs, getContext()));
+        helper.swipeRefreshLayout.setRefreshing(false);
     }
 
     @OnClick(R.id.events_button_driver)

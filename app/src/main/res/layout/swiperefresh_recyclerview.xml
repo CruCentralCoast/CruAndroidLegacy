@@ -10,18 +10,8 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:scrollbars="vertical"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <include
+            layout="@layout/list_with_empty_no_network"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <ViewStub
-        android:id="@+id/empty_view_stub"
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 </merge>
