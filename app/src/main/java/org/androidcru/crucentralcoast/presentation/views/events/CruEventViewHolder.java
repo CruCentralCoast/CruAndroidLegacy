@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.events;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.facebook.login.LoginResult;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Location;
@@ -186,8 +184,9 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         final boolean adding = !addedToCalendar;
         //REVIEW magic strings
         String operation = adding ? "Add " : "Remove ";
+        String toFrom = adding ? "to" : "from";
         AlertDialog confirmDialog = new AlertDialog.Builder(v.getContext())
-                .setTitle(operation + cruEvent.name + " to your calendar?")
+                .setTitle(operation + cruEvent.name + " " + toFrom + " your calendar?")
                 .setNegativeButton("NOPE", (dialog, which) -> {
                 })
                 .setPositiveButton("SURE", (dialog, which) -> {
