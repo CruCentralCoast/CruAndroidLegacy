@@ -93,6 +93,7 @@ public final class ResourceProvider
             return cruApiService.findResources(query)
                     .flatMap(resources -> Observable.from(resources))
                     .compose(tagRetriever)
+                    .compose(FeedProvider.getSortDateable())
                     .compose(RxComposeUtil.toListOrEmpty())
                     .compose(RxComposeUtil.network());
         }
@@ -122,8 +123,9 @@ public final class ResourceProvider
     {
         return cruApiService.getResources()
                 .flatMap(resources -> Observable.from(resources))
-                .compose(RxComposeUtil.network())
-                .compose(tagRetriever);
+                .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
+                .compose(RxComposeUtil.network());
     }
 
     protected static Observable<Resource> getResourcesPaginated(int page, int pageSize)
@@ -137,6 +139,7 @@ public final class ResourceProvider
         return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.network());
     }
 }
