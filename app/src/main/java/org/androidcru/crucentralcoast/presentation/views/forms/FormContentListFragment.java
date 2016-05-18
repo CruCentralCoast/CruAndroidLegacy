@@ -18,7 +18,7 @@ public abstract class FormContentListFragment extends FormContentFragment implem
 
     public FormContentListFragment()
     {
-        helper = new ListHelperImpl();
+        helper = new ListHelperImpl(this);
     }
 
     @Override

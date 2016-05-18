@@ -19,7 +19,7 @@ public class BaseAppCompatListActivity extends BaseAppCompatActivity implements 
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        helper = new ListHelperImpl();
+        helper = new ListHelperImpl(this);
     }
 
     @Override

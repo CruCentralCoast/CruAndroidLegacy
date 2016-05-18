@@ -21,7 +21,7 @@ public class ListFragment extends BaseSupportFragment implements ListHelper
 
     public ListFragment()
     {
-        this.helper = new ListHelperImpl();
+        this.helper = new ListHelperImpl(this);
     }
 
     @Override

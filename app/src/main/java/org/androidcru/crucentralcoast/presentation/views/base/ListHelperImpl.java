@@ -29,6 +29,13 @@ public class ListHelperImpl implements ListHelper
     private View noNetworkView;
     private View emptyView;
 
+    private ListHelper child;
+
+    public ListHelperImpl(ListHelper child)
+    {
+        this.child = child;
+    }
+
     public void onViewCreated(View view)
     {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
@@ -97,28 +104,28 @@ public class ListHelperImpl implements ListHelper
     {
         return ObserverUtil.create(Observers.create(t -> {
                     onNext.call(t);
-                    showContent();
+                    child.showContent();
                 },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
                 () -> {
-                    onEmpty(emptyLayoutId);
+                    child.onEmpty(emptyLayoutId);
                 },
-                () -> onNoNetwork());
+                () -> child.onNoNetwork());
     }
 
     public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
     {
         return ObserverUtil.create(Observers.create(t -> {
                     onNext.call(t);
-                    showContent();
+                    child.showContent();
                 },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
                 () -> {
                     onEmpty.call();
                 },
-                () -> onNoNetwork());
+                () -> child.onNoNetwork());
     }
 
     @Override
@@ -126,7 +133,7 @@ public class ListHelperImpl implements ListHelper
     {
         return ObserverUtil.create(Observers.create(t -> {
                     onNext.call(t);
-                    showContent();
+                    child.showContent();
                 },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
