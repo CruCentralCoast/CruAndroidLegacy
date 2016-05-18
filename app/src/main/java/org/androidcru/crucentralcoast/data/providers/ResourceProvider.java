@@ -51,12 +51,8 @@ public final class ResourceProvider
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
 
-        boolean hasTags = false;
-        boolean hasTypes = false;
-
-        if(types != null && !types.isEmpty())
+        if(types != null)
         {
-            hasTypes = true;
             String[] stringTypes = new String[types.size()];
             for (int i = 0; i < types.size(); i++)
             {
@@ -69,9 +65,8 @@ public final class ResourceProvider
                             .addRestriction(ConditionsBuilder.OPERATOR.IN, stringTypes));
         }
 
-        if(tags != null && !tags.isEmpty())
+        if(tags != null)
         {
-            hasTags = true;
             String[] stringTags = new String[tags.size()];
             for (int i = 0; i < tags.size(); i++)
             {
@@ -85,24 +80,15 @@ public final class ResourceProvider
 
         }
 
-        if(hasTags && hasTypes)
-        {
-            Query query = new Query.Builder()
-                    .setCondition(conditionsBuilder.build())
-                    .build();
-            return cruApiService.findResources(query)
-                    .flatMap(resources -> Observable.from(resources))
-                    .compose(tagRetriever)
-                    .compose(FeedProvider.getSortDateable())
-                    .compose(RxComposeUtil.toListOrEmpty())
-                    .compose(RxComposeUtil.network());
-        }
-        else
-            return Observable.empty();
-
-
-
-
+        Query query = new Query.Builder()
+                .setCondition(conditionsBuilder.build())
+                .build();
+        return cruApiService.findResources(query)
+                .flatMap(resources -> Observable.from(resources))
+                .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
+                .compose(RxComposeUtil.toListOrEmpty())
+                .compose(RxComposeUtil.network());
     }
 
     public static void getResourceTags(SubscriptionsHolder holder, Observer<List<ResourceTag>> observer)

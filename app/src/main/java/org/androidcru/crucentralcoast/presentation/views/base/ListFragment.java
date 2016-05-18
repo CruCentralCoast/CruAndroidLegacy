@@ -62,6 +62,12 @@ public class ListFragment extends BaseSupportFragment implements ListHelper
     }
 
     @Override
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty, Action0 onNoNetwork)
+    {
+        return helper.createListObserver(onNext, onEmpty, onNoNetwork);
+    }
+
+    @Override
     public void inflateEmptyView(View v, int layoutId)
     {
         helper.inflateEmptyView(v, layoutId);

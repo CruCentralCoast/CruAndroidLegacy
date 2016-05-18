@@ -55,6 +55,10 @@ public class SubscriptionsFragment extends ListFragment
                 () -> {
                     fab.setVisibility(View.GONE);
                     onEmpty(R.layout.empty_with_alert);
+                },
+                () -> {
+                    fab.setVisibility(View.GONE);
+                    onNoNetwork();
                 });
     }
 
@@ -99,6 +103,7 @@ public class SubscriptionsFragment extends ListFragment
             }
         });
         helper.recyclerView.setLayoutManager(layoutManager);
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> getCampusMinistryMap());
         getCampusMinistryMap();
 
     }

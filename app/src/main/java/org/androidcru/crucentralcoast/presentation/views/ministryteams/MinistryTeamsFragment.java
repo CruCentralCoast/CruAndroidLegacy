@@ -27,7 +27,7 @@ public class MinistryTeamsFragment extends ListFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_ministry_teams, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class MinistryTeamsFragment extends ListFragment
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         helper.recyclerView.setLayoutManager(layoutManager);
-
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> getMinistryTeamsList());
         getMinistryTeamsList();
     }
 

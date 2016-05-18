@@ -121,6 +121,21 @@ public class ListHelperImpl implements ListHelper
                 () -> onNoNetwork());
     }
 
+    @Override
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty, Action0 onNoNetwork)
+    {
+        return ObserverUtil.create(Observers.create(t -> {
+                    onNext.call(t);
+                    showContent();
+                },
+                e -> Timber.e(e, "Failed to retrieve."),
+                () -> swipeRefreshLayout.setRefreshing(false)),
+                () -> {
+                    onEmpty.call();
+                },
+                () -> onNoNetwork.call());
+    }
+
     public void inflateEmptyView(View v, int layoutId)
     {
         if(emptyViewStub == null)

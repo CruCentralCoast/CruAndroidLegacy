@@ -48,6 +48,8 @@ public class ResourcesFragment extends ListFragment
     private AlertDialog tagDialog;
     private AlertDialog typeDialog;
 
+    private boolean loadedTags = false;
+
     public ResourcesFragment()
     {
         resources = new ArrayList<>();
@@ -85,6 +87,7 @@ public class ResourcesFragment extends ListFragment
                 selectedTags = new boolean[filterTagsList.size()];
                 Arrays.fill(selectedTags, true);
                 setHasOptionsMenu(true);
+                loadedTags = true;
                 //Update the list of resources/tags by pulling from the server
                 forceUpdate(filterTypesList, filterTagsList);
             }
@@ -111,12 +114,12 @@ public class ResourcesFragment extends ListFragment
         super.onViewCreated(view, savedInstanceState);
 
         helper.swipeRefreshLayout.setRefreshing(true);
-        ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         helper.recyclerView.setLayoutManager(layoutManager);
 
         helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
+        ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
 
     private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)
@@ -124,7 +127,10 @@ public class ResourcesFragment extends ListFragment
         helper.swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        ResourceProvider.findResources(this, resourceSubscriber, types, tags);
+        if(loadedTags)
+            ResourceProvider.findResources(this, resourceSubscriber, types, tags);
+        else
+            ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
 
     private void setResources(List<Resource> resources)
@@ -218,20 +224,31 @@ public class ResourcesFragment extends ListFragment
     private List<ResourceTag> getFilteredTags()
     {
         ArrayList<ResourceTag> toReturn = new ArrayList<>();
-        for(int i = 0; i < selectedTags.length; i++)
-            if(selectedTags[i])
-                toReturn.add(filterTagsList.get(i));
-        return toReturn;
+        if(selectedTags != null && filterTagsList != null)
+        {
+            for (int i = 0; i < selectedTags.length; i++)
+                if (selectedTags[i])
+                    toReturn.add(filterTagsList.get(i));
+            return toReturn;
+        }
+        else
+            return new ArrayList<>();
+
     }
 
     //Generate list of ResourceTypes from tags selected in dialog
     private List<Resource.ResourceType> getFilteredTypes()
     {
         ArrayList<Resource.ResourceType> toReturn = new ArrayList<>();
-        for(int i = 0; i < selectedTypes.length; i++)
-            if(selectedTypes[i])
-                toReturn.add(filterTypesList.get(i));
-        return toReturn;
+        if(selectedTypes != null && filterTypesList != null)
+        {
+            for (int i = 0; i < selectedTypes.length; i++)
+                if (selectedTypes[i])
+                    toReturn.add(filterTypesList.get(i));
+            return toReturn;
+        }
+        else
+            return new ArrayList<>();
     }
 
     //Extract String field from list of ResourceTags

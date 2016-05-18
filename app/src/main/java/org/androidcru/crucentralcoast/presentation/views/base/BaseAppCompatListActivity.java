@@ -55,6 +55,12 @@ public class BaseAppCompatListActivity extends BaseAppCompatActivity implements 
     }
 
     @Override
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty, Action0 onNoNetwork)
+    {
+        return helper.createListObserver(onNext, onEmpty, onNoNetwork);
+    }
+
+    @Override
     public <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
     {
         return helper.createListObserver(emptyLayoutId, onNext);

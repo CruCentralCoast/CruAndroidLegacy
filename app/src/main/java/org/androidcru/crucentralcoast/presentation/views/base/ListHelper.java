@@ -17,6 +17,8 @@ public interface ListHelper
 
     <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty);
 
+    <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty, Action0 onNoNetwork);
+
     <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext);
 
     void inflateEmptyView(View v, int layoutId);
