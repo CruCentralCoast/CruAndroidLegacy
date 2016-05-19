@@ -3,10 +3,8 @@ package org.androidcru.crucentralcoast;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
@@ -78,7 +76,7 @@ public class CruApplication extends Application
             Intent service = new Intent(this, RegistrationIntentService.class);
             startService(service);
         }
-        Timber.d(getGCMID());
+        Timber.d(SharedPreferencesUtil.getGCMID());
     }
 
     public static Context getContext()
@@ -173,17 +171,6 @@ public class CruApplication extends Application
         builder.setPrettyPrinting();
 
         return builder.create();
-    }
-
-    public static void saveGCMID(String key)
-    {
-        SharedPreferencesUtil.writeGCMID(context, key);
-    }
-
-    //TODO apparently these can change.
-    public static String getGCMID()
-    {
-        return SharedPreferencesUtil.getGCMID(context);
     }
 
     public static boolean isOnline() {

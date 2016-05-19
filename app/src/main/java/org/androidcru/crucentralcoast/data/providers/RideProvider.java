@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
@@ -11,6 +10,7 @@ import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public final class RideProvider
                     boolean status = false;
                     for (Passenger p : ride.passengers)
                     {
-                        if (p.gcmId != null && p.gcmId.equals(CruApplication.getGCMID()))
+                        if (p.gcmId != null && p.gcmId.equals(SharedPreferencesUtil.getGCMID()))
                         {
                             status = true;
                         }

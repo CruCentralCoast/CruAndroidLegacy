@@ -7,13 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.MyRidesPassengerVM;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class MyRidesPassengerFragment extends ListFragment
     public void forceUpdate()
     {
         helper.swipeRefreshLayout.setRefreshing(true);
-        RideProvider.requestMyRidesPassenger(this, rideSubscriber, CruApplication.getGCMID());
+        RideProvider.requestMyRidesPassenger(this, rideSubscriber, SharedPreferencesUtil.getGCMID());
     }
 
     /**

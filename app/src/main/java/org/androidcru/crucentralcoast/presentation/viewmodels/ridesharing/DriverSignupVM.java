@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -126,7 +125,7 @@ public class DriverSignupVM extends BaseRideVM {
         return new Ride(nameField.getText().toString(), phoneField.getText().toString(),
                 Ride.Gender.getFromColloquial((String) genderField.getSelectedItem()), eventId,
                 ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault()), location,
-                radius, retrieveDirection(directionGroup), CruApplication.getGCMID(), retrieveCarCapacity());
+                radius, retrieveDirection(directionGroup), SharedPreferencesUtil.getGCMID(), retrieveCarCapacity());
     }
 
     @OnClick(R.id.time_field)

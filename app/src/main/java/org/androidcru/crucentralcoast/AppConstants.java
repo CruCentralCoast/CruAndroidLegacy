@@ -20,6 +20,7 @@ public class AppConstants
     //GCM
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String PLAY_SERVICES = "play_services";
+    public static final String GCM_REGISTRATION_ID = "gcm_registration_id";
 
     //Events
     public static final int DRIVER_REQUEST_CODE = 7;

@@ -59,7 +59,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
     private Passenger getPassenger()
     {
-        return new Passenger(nameField.getText().toString(), phoneField.getText().toString(), CruApplication.getGCMID(), direction);
+        return new Passenger(nameField.getText().toString(), phoneField.getText().toString(), SharedPreferencesUtil.getGCMID(), direction);
     }
 
     @Override

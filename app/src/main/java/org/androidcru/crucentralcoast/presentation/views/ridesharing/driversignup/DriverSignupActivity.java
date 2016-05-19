@@ -82,7 +82,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     //fill in fields that only the DriverSignupActivity has access to but DriverSignupVM doesn't
     private Ride completeRide(Ride r)
     {
-        r.gcmID = CruApplication.getGCMID();
+        r.gcmID = SharedPreferencesUtil.getGCMID();
         r.eventId = event.id;
         return r;
     }

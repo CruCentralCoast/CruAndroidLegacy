@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.util;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -8,7 +7,6 @@ import com.google.android.gms.common.ConnectionResult;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
-import org.androidcru.crucentralcoast.R;
 
 public class SharedPreferencesUtil
 {
@@ -32,9 +30,9 @@ public class SharedPreferencesUtil
             preferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneNumber).apply();
     }
 
-    public static void writeGCMID(Context context, String key)
+    public static void writeGCMID(String key)
     {
-        getSharedPreferences().edit().putString(context.getString(R.string.gcm_registration_id), key).apply();
+        getSharedPreferences().edit().putString(AppConstants.GCM_REGISTRATION_ID, key).apply();
     }
 
     public static void writeSentTokenToServer(Boolean value)
@@ -113,9 +111,9 @@ public class SharedPreferencesUtil
         return getSharedPreferences().getString(AppConstants.USER_PHONE_NUMBER, null);
     }
 
-    public static String getGCMID(Context context)
+    public static String getGCMID()
     {
-        return getSharedPreferences().getString(context.getString(R.string.gcm_registration_id), "");
+        return getSharedPreferences().getString(AppConstants.GCM_REGISTRATION_ID, "");
     }
 
     public static Boolean getMinistrySubscriptionIsSubscribed(String ministrySubscriptionId)

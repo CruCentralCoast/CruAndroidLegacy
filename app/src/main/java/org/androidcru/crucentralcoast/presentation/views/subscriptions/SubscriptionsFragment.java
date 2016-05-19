@@ -99,7 +99,7 @@ public class SubscriptionsFragment extends ListFragment
             public int getSpanSize(int position)
             {
                 // if the element is a header, it should span the columns, otherwise it is a regular element
-                return SubscriptionsSorter.isHeader(position, subscriptionAdapter.ministries) ? layoutManager.getSpanCount() : 1;
+                return SubscriptionsAdapter.isHeader(position, subscriptionAdapter.ministries) ? layoutManager.getSpanCount() : 1;
             }
         });
         helper.recyclerView.setLayoutManager(layoutManager);
