@@ -91,7 +91,7 @@ public class MainActivity extends BaseAppCompatActivity
                     {
                         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         String userPhoneNumber = telephonyManager.getLine1Number();
-                        if (userPhoneNumber != null)
+                        if (userPhoneNumber != null && userPhoneNumber.length() >= 10)
                         {
                             userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 

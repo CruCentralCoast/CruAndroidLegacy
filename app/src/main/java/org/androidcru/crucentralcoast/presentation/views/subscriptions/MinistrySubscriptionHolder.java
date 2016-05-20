@@ -52,11 +52,11 @@ public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
         this.model = model;
         boolean isChecked = getIsSubscribed();
         checkBox.setChecked(isChecked);
-        if(model.image != null)
+        if(model.image != null && !model.image.isEmpty())
         {
             Context context = ministryImage.getContext();
             Picasso.with(context)
-                    .load(model.image.url)
+                    .load(model.image)
                     .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
                     .into(ministryImage);
         }
