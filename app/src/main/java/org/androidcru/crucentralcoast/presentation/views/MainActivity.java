@@ -92,15 +92,17 @@ public class MainActivity extends BaseAppCompatActivity
                         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         String userPhoneNumber = telephonyManager.getLine1Number();
                         if (userPhoneNumber != null)
+                        {
                             userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
-                        SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
+                            SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
 
-                        Observer<CruUser> observer = Observers.create(cruUser -> {
-                            SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
-                        });
+                            Observer<CruUser> observer = Observers.create(cruUser -> {
+                                SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
+                            });
 
-                        UserProvider.requestCruUser(this, observer, userPhoneNumber);
+                            UserProvider.requestCruUser(this, observer, userPhoneNumber);
+                        }
                     }
                 });
         }
