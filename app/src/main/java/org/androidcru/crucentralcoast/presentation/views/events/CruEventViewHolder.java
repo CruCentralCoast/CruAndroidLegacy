@@ -96,9 +96,9 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         eventName.setText(cruEvent.name);
         eventDate.setText(getDateTime());
         Context context = eventBanner.getContext();
-        if(cruEvent.image != null)
+        if(cruEvent.image != null && !cruEvent.image.isEmpty())
         {
-            ViewUtil.setSource(eventBanner, cruEvent.image.url, ViewUtil.SCALE_TYPE.FIT);
+            ViewUtil.setSource(eventBanner, cruEvent.image, ViewUtil.SCALE_TYPE.FIT);
         }
         else
         {

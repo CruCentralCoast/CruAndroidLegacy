@@ -17,7 +17,7 @@ public final class CruEvent implements Dateable
     public static final String sEndDate = "endDate";
     public static final String sRideSharingEnabled = "rideSharingEnabled";
     public static final String sLocation = "location";
-    public static final String sImage = "image";
+    public static final String sImage = "imageLink";
     public static final String sId = "_id";
     public static final String sUrl = "url";
     public static final String sParentMinistrySubscriptions = "ministries";
@@ -28,7 +28,7 @@ public final class CruEvent implements Dateable
     @SerializedName(sEndDate) public ZonedDateTime endDate;
     @SerializedName(sRideSharingEnabled) public boolean rideSharingEnabled;
     @SerializedName(sLocation) public Location location;
-    @SerializedName(sImage) public Image image;
+    @SerializedName(sImage) public String image;
     @SerializedName(sId) public String id;
     @SerializedName(sUrl) public String url;
     @SerializedName(sParentMinistrySubscriptions) public ArrayList<String> parentMinistrySubscriptions;

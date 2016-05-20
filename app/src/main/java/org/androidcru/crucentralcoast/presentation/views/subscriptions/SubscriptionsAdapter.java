@@ -68,11 +68,11 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 boolean isChecked = ministrySubscriptionVM.getIsSubscribed();
                 ministrySubscriptionHolder.checkBox.setChecked(isChecked);
-                if(ministrySubscriptionVM.ministry.image != null)
+                if(ministrySubscriptionVM.ministry.image != null && !ministrySubscriptionVM.ministry.image.isEmpty())
                 {
                     Context context = ministrySubscriptionHolder.ministryImage.getContext();
                     Picasso.with(context)
-                            .load(ministrySubscriptionVM.ministry.image.url)
+                            .load(ministrySubscriptionVM.ministry.image)
                             .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
                             .into(ministrySubscriptionHolder.ministryImage);
                 }
