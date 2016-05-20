@@ -132,4 +132,14 @@ public class SharedPreferencesUtil
     {
         return getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false);
     }
+
+    public static boolean getNotificationEnabled()
+    {
+        return getSharedPreferences().getBoolean(AppConstants.NOTIFICATION_KEY, true);
+    }
+
+    public static void setNotificationEnable(boolean value)
+    {
+        getSharedPreferences().edit().putBoolean(AppConstants.NOTIFICATION_KEY, value).commit();
+    }
 }

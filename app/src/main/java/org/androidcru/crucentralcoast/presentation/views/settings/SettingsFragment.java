@@ -163,9 +163,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         notificationCheckbox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-
-                //TODO: implement toggle notifications
-
+                boolean newVal = o.toString().equals("true");
+                SharedPreferencesUtil.setNotificationEnable(newVal);
+//                Timber.d("toggled to " + SharedPreferencesUtil.getNotificationEnabled());
                 return true;
             }
         });

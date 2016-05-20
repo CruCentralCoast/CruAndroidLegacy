@@ -14,6 +14,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -29,6 +30,10 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
+
+        if (!SharedPreferencesUtil.getNotificationEnabled())
+            return;
+
         String message = data.getString("message");
         String title = data.getString("title");
         Log.d(TAG, "From: " + from);
