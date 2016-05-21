@@ -16,7 +16,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         // sets up the SettingS Activity title and view
-        getSupportActionBar().setTitle("Settings");
+        getSupportActionBar().setTitle(R.string.settings_title);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new SettingsFragment()).commit();
     }
 }

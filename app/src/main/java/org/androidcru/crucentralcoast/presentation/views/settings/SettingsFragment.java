@@ -42,12 +42,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     private Preference subscriptionButton;
     private Preference loginButton;
     private Preference notificationCheckbox;
-    private Preference cruGoldIsTheBest;
 
     //login
     private AlertDialog loginDialog;
     private View loginView;
-    @NotEmpty @Email(message = "Please Check and Enter a valid Email Address")EditText loginName;
+    @NotEmpty @Email(messageResId = R.string.invalid_email)EditText loginName;
     @NotEmpty EditText loginPassword;
     private BaseValidator loginValidator;
     private ProgressBar loginProgress;
