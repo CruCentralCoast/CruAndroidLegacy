@@ -1,8 +1,5 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import android.content.SharedPreferences;
-
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
@@ -15,7 +12,6 @@ import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolde
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -52,13 +48,17 @@ public class EventProvider
         return requestAllEvents()
                 .flatMap(cruEvents -> Observable.from(cruEvents))
                 .compose(getSubscriptionFilter())
+                .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
 
-    protected static Observable<ArrayList<CruEvent>> requestAllEvents()
+    protected static Observable<List<CruEvent>> requestAllEvents()
     {
         return cruService.getEvents()
+                .flatMap(cruEvents -> Observable.from(cruEvents))
+                .compose(FeedProvider.getSortDateable())
+                .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
 
