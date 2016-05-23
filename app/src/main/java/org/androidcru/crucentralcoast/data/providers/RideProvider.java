@@ -32,6 +32,24 @@ public final class RideProvider
                 });
     });
 
+    private static Observable.Transformer<Ride, Ride> attachDistance(double[] location)
+    {
+        return rideObservable -> rideObservable
+                .map(ride -> {
+                    ride.distance = MathUtil.convertMeterToMiles(LocationUtil.distance(location[0], location[1], ride.location.geo[1],
+                            ride.location.geo[0]));
+                    return ride;
+                })
+                .filter(ride1 -> {
+                    return ride1.distance <= ride1.radius;
+                });
+    }
+
+    private static Observable.Transformer<Ride, List<Ride>> sortByDistance = rideObservable -> rideObservable
+            .toSortedList((Ride r1, Ride r2) -> {
+                return Double.compare(r2.distance, r1.distance);
+            });
+
     public static void requestRides(SubscriptionsHolder holder, Observer<List<Ride>> observer)
     {
         Subscription s = requestRides()
@@ -98,7 +116,7 @@ public final class RideProvider
 
 
 
-    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, Double[] latlng)
+    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, double[] latlng)
     {
         Subscription s = searchRides(query, latlng)
                 .compose(RxComposeUtil.ui())
@@ -106,21 +124,18 @@ public final class RideProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Ride>> searchRides(Query query, Double[] latlng)
+    protected static Observable<List<Ride>> searchRides(Query query, double[] latlng)
     {
         return mCruService.searchRides(query)
                 .flatMap(rides -> {
                     return Observable.from(rides);
                 })
-                .compose(RxLoggingUtil.log("RIDES BEFORE LOC FILTER"))
-                .filter(ride -> {
-                    double distance = LocationUtil.distance(ride.location.geo[1], latlng[0], ride.location.geo[0], latlng[1]);
-                    Timber.d(Double.toString(distance));
-                    return distance <= MathUtil.convertMilesToMeters(ride.radius);
-                })
                 .compose(attachEvent)
-                .compose(RxLoggingUtil.log("RIDES AFTER LOC FILTER"))
-                .compose(RxComposeUtil.toListOrEmpty())
+                .compose(attachDistance(latlng))
+                .compose(sortByDistance)
+                .flatMap(finalRides -> {
+                    return finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides);
+                })
                 .compose(RxComposeUtil.network());
     }
 

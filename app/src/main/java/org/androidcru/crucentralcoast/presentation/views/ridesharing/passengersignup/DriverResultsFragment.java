@@ -65,7 +65,7 @@ public class DriverResultsFragment extends FormContentListFragment
         helper.swipeRefreshLayout.setRefreshing(true);
         results.clear();
         RideProvider.searchRides(this, rideResultsObserver, query,
-                new Double[]{passengerLocation.latitude, passengerLocation.longitude});
+                new double[]{passengerLocation.latitude, passengerLocation.longitude});
     }
 
     private void handleResults(List<Ride> results)
