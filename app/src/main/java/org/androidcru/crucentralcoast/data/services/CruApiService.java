@@ -10,6 +10,7 @@ import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.models.Ride;
+import org.androidcru.crucentralcoast.data.models.RideCheckResponse;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 
@@ -114,4 +115,6 @@ public interface CruApiService
     @GET("/api/signout")
     Observable<LoginResponse> signout();
 
+    @GET("/api/events/{event_id}/{gcm_id}")
+    Observable<RideCheckResponse> checkRideStatus(@Path("event_id") String eventId, @Path("gcm_id") String gcmId);
 }

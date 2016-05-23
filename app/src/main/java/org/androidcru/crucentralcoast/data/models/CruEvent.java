@@ -33,6 +33,8 @@ public final class CruEvent implements Dateable
     @SerializedName(sUrl) public String url;
     @SerializedName(sParentMinistrySubscriptions) public ArrayList<String> parentMinistrySubscriptions;
 
+    public RideCheckResponse.RideStatus rideStatus;
+
     @ParcelConstructor
     CruEvent() {}
 

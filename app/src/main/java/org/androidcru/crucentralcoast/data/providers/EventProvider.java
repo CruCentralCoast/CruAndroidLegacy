@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.data.providers;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.converters.ZonedDateTimeConverter;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
@@ -8,6 +9,7 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
+import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
@@ -35,6 +37,27 @@ public class EventProvider
         });
     }
 
+    protected static Observable.Transformer<CruEvent, CruEvent> getRideCheckTransformer()
+    {
+        return cruEventObservable -> cruEventObservable
+                .flatMap(cruEvent -> {
+                    return Observable.concat(
+                                (SharedPreferencesUtil.getGCMID().isEmpty()) ? Observable.empty() : Observable.just(SharedPreferencesUtil.getGCMID()),
+                                RegistrationIntentService.retrieveGCMId(CruApplication.getContext())
+                            )
+                            .take(1)
+                            .flatMap(gcmId -> {
+                                return cruService.checkRideStatus(cruEvent.id, gcmId)
+                                        .map(rideCheckResponse -> {
+                                            cruEvent.rideStatus = rideCheckResponse.value;
+                                            return rideCheckResponse;
+                                        })
+                                        .flatMap(response -> Observable.just(cruEvent));
+                            });
+
+                });
+    }
+
     public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer)
     {
         Subscription s = requestUsersEvents()
@@ -48,6 +71,7 @@ public class EventProvider
         return requestAllEvents()
                 .flatMap(cruEvents -> Observable.from(cruEvents))
                 .compose(getSubscriptionFilter())
+                .compose(getRideCheckTransformer())
                 .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
@@ -60,14 +84,6 @@ public class EventProvider
                 .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
-    }
-
-    public static void requestCruEventByID(SubscriptionsHolder holder, Observer<CruEvent> observer, String id)
-    {
-        Subscription s = requestCruEventByID(id)
-                .compose(RxComposeUtil.ui())
-                .subscribe(observer);
-        holder.addSubscription(s);
     }
 
     protected static Observable<CruEvent> requestCruEventByID(String id)

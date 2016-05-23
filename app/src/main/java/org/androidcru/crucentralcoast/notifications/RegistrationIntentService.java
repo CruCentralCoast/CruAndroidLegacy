@@ -48,7 +48,7 @@ public class RegistrationIntentService extends IntentService {
             .subscribe(observer);
     }
 
-    private static Observable<String> retrieveGCMId(Context context)
+    public static Observable<String> retrieveGCMId(Context context)
     {
         return Observable.fromCallable(() -> {
             InstanceID instanceID = InstanceID.getInstance(context);

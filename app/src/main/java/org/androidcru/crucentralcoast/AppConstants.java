@@ -28,8 +28,8 @@ public class AppConstants
 
     //MyRides Tabs
     public static final String MY_RIDES_TAB = "MY_RIDES_TAB";
-    public static final int DRIVER_TAB = 0;
-    public static final int PASSENGER_TAB = 1;
+    public static final int PASSENGER_TAB = 0;
+    public static final int DRIVER_TAB = 1;
 
     //Notifications
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
