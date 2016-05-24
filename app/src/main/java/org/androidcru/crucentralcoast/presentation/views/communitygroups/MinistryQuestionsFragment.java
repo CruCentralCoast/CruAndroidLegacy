@@ -34,13 +34,12 @@ public class MinistryQuestionsFragment extends FormContentFragment
     @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.empty_view_stub) ViewStub emptyViewStub;
 
-    //TODO
-    String removeThisString= "563b08482930ae0300fbc09c";
     private LinearLayoutManager layoutManager;
     private Observer<List<MinistryQuestion>> observer;
     private List<MinistryQuestion> questions;
     private MinistryQuestionsAdapter adapter;
     protected View emptyView;
+    private String ministryId;
 
     public MinistryQuestionsFragment()
     {
@@ -111,7 +110,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
-                getQuestions(removeThisString);
+                getQuestions(ministryId);
             }
         });
 
@@ -137,7 +136,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
         questions.clear();
         adapter = null;
         swipeRefreshLayout.setRefreshing(true);
-        getQuestions(removeThisString);
+        getQuestions(ministryId);
     }
 
     private void getQuestions(String ministryId)
@@ -148,8 +147,21 @@ public class MinistryQuestionsFragment extends FormContentFragment
 
     @Override
     public void setupData(FormHolder formHolder) {
-        formHolder.setTitle("Join a Community Group");
+        formHolder.setTitle("Community Group Form");
         formHolder.setSubtitle("");
+
+        ministryId = (String) formHolder.getDataObject("ministry");
+
         forceUpdate();
     }
+
+    @Override
+    public void onNext(FormHolder formHolder)
+    {
+        // validate data, well kind of
+        // write the data and filter on it
+
+        super.onNext(formHolder);
+    }
+
 }

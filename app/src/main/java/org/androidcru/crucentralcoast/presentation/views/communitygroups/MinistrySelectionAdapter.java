@@ -16,8 +16,9 @@ import com.squareup.picasso.Picasso;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
-import org.androidcru.crucentralcoast.presentation.viewmodels.subscriptions.MinistrySubscriptionVM;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.Item;
+import org.androidcru.crucentralcoast.presentation.views.subscriptions.MinistrySubscriptionHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,7 @@ import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 
 public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    private ArrayList<MinistrySubscriptionVM> ministries;
+    public ArrayList<Item<Campus, MinistrySubscription>> ministries;
     private FormHolder formHolder;
 
     public static final int MINISTRY_VIEW = 0;
@@ -41,36 +42,39 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public MinistrySelectionAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap, FormHolder formHolder)
     {
-        this.ministries = new ArrayList<>();
         this.formHolder = formHolder;
-
         convertSubscriptions(campusMinistryMap);
     }
 
     private void convertSubscriptions(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
     {
-        ArrayList<Pair<Campus, Integer>> sortableList = new ArrayList<>();
+        ArrayList<android.support.v4.util.Pair<Campus, Integer>> sortableList = new ArrayList<>();
         for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinistryMap.entrySet())
         {
-            sortableList.add(new Pair(entry.getKey(), entry.getValue().size()));
+            sortableList.add(new android.support.v4.util.Pair(entry.getKey(), entry.getValue().size()));
         }
 
         // This sorts the subscription page so it shows the campus with the most to least ministries
-        Collections.sort(sortableList, new Comparator<Pair<Campus, Integer>>()
+        Collections.sort(sortableList, new Comparator<android.support.v4.util.Pair<Campus, Integer>>()
         {
             @Override
-            public int compare(Pair<Campus, Integer> lhs, Pair<Campus, Integer> rhs)
+            public int compare(android.support.v4.util.Pair<Campus, Integer> lhs, android.support.v4.util.Pair<Campus, Integer> rhs)
             {
                 return rhs.second - lhs.second;
             }
         });
 
+        if(ministries == null)
+            ministries = new ArrayList<>();
+        else
+            ministries.clear();
+
         //adds each campus and each ministry in that campus to the ministries ArrayList in order
-        for (Pair<Campus, Integer> campusPair : sortableList)
+        for (android.support.v4.util.Pair<Campus, Integer> campusPair : sortableList)
         {
-            ministries.add(new MinistrySubscriptionVM(campusPair.first.campusName, null));
+            ministries.add(new Item<>(campusPair.first, null));
             for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
-                ministries.add(new MinistrySubscriptionVM(null, m));
+                ministries.add(new Item(null, m));
         }
 
     }
@@ -83,7 +87,7 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
         {
             case MINISTRY_VIEW:
                 View tileView = inflater.inflate(R.layout.tile_subscription, parent, false);
-                return new MinistrySubscriptionHolder(tileView);
+                return new CommunityGroupSubscriptionHolder(tileView, this);
             case HEADER_VIEW:
                 View headerView = inflater.inflate(R.layout.subscription_header, parent, false);
                 return new HeaderHolder(headerView);
@@ -97,30 +101,16 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
     {
         if(position < ministries.size())
         {
-            MinistrySubscriptionVM ministrySubscriptionVM = ministries.get(position);
-            if (holder instanceof MinistrySubscriptionHolder)
+            Item<Campus, MinistrySubscription> item = ministries.get(position);
+            if (holder instanceof org.androidcru.crucentralcoast.presentation.views.subscriptions.MinistrySubscriptionHolder)
             {
-                MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
-
-                if(ministrySubscriptionVM.ministry.image != null)
-                {
-                    Context context = ministrySubscriptionHolder.ministryImage.getContext();
-                    Picasso.with(context)
-                            .load(ministrySubscriptionVM.ministry.image.url)
-                            .transform(new ColorFilterTransformation(ContextCompat.getColor(context, R.color.cruGray)))
-                            .into(ministrySubscriptionHolder.ministryImage);
-                }
-                else
-                {
-                    ministrySubscriptionHolder.ministryImage.setImageResource(R.drawable.default_box);
-                }
-
-
+                org.androidcru.crucentralcoast.presentation.views.subscriptions.MinistrySubscriptionHolder ministrySubscriptionHolder = (org.androidcru.crucentralcoast.presentation.views.subscriptions.MinistrySubscriptionHolder) holder;
+                ministrySubscriptionHolder.bindUI(item.item);
             }
             else if (holder instanceof HeaderHolder)
             {
                 HeaderHolder headerHolder = (HeaderHolder) holder;
-                headerHolder.header.setText(ministrySubscriptionVM.campusName);
+                headerHolder.header.setText(item.header.campusName);
             }
         }
     }
@@ -136,7 +126,7 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public boolean isHeader(int position)
     {
-        return position >= ministries.size() || ministries.get(position).campusName != null;
+        return position >= ministries.size() || ministries.get(position).isHeader();
     }
 
     public class HeaderHolder extends RecyclerView.ViewHolder
@@ -152,23 +142,39 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
 
     }
 
-    public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
+    public class CommunityGroupSubscriptionHolder extends MinistrySubscriptionHolder
     {
-        @BindView(R.id.ministry_image)
-        ImageView ministryImage;
-        @BindView(R.id.checkbox)
-        CheckBox checkBox;
 
-        public MinistrySubscriptionHolder(View itemView)
+        public CommunityGroupSubscriptionHolder(View itemView, RecyclerView.Adapter adapter)
         {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+            super(itemView, adapter);
         }
 
+        @Override
+        public void bindUI(MinistrySubscription model)
+        {
+            this.model = model;
+            checkBox.setVisibility(View.GONE);
+            if(model.image != null && !model.image.isEmpty())
+            {
+                Context context = ministryImage.getContext();
+                Picasso.with(context)
+                        .load(model.image)
+                        .transform(new ColorFilterTransformation(ContextCompat.getColor(context, R.color.cruGray)))
+                        .into(ministryImage);
+            }
+            else
+            {
+                ministryImage.setImageResource(R.drawable.default_box);
+            }
+
+        }
+
+        @Override
         @OnClick(R.id.tile_subscription)
         public void onClick(View v)
         {
-            //formHolder.addDataObject();
+            formHolder.addDataObject("ministry", model.subscriptionId);
             formHolder.next();
         }
     }
