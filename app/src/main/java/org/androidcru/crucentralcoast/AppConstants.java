@@ -66,6 +66,9 @@ public class AppConstants
     //Notification
     public static final String NOTIFICATION_KEY = "Notification_KEY";
 
+    //Authorized Driver
+    public static final String AUTHORIZED_KEY = "AUTHORIZED_KEY";
+
     /**
      * REGEX EXPRESSIONS & FORMATTERS
      */

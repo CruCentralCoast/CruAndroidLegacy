@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.settings;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
@@ -74,7 +73,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
         //login button
         LayoutInflater factory = LayoutInflater.from(getContext());
-        loginView = factory.inflate(R.layout.login_alert, null);
+        loginView = factory.inflate(R.layout.alert_login, null);
         loginName = (EditText) loginView.findViewById(R.id.username_field);
         loginPassword = (EditText) loginView.findViewById(R.id.password_field);
         loginProgress = (ProgressBar) loginView.findViewById(R.id.progress);

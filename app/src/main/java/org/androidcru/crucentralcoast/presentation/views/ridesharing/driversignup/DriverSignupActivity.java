@@ -14,6 +14,7 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment;
@@ -27,6 +28,7 @@ import org.parceler.Parcels;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observer;
 import rx.observers.Observers;
 import timber.log.Timber;
 
@@ -41,6 +43,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     private MapFragment mapFragment;
 
     private CruEvent event;
+    private Observer<CruUser> userObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,13 @@ public class DriverSignupActivity extends BaseAppCompatActivity
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
 
         String rideId = bundle.getString(AppConstants.RIDE_KEY, "");
+
+        userObserver = Observers.create(cruUser -> {
+//            if(cruUser)
+//            {
+//
+//            }
+        });
 
         if (!rideId.isEmpty())
             requestRides(rideId);
@@ -133,6 +143,9 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     {
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
+
+            validateNumber();
+
             //if fields are valid, update shared preferences and the Ride
             if(driverSignupVM.validator.validate() && autocompleteFragment.validate())
             {
@@ -147,5 +160,10 @@ public class DriverSignupActivity extends BaseAppCompatActivity
                 finish();
             }
         });
+    }
+
+    private void validateNumber()
+    {
+
     }
 }

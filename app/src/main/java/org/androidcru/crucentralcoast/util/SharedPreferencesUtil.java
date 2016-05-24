@@ -142,4 +142,15 @@ public class SharedPreferencesUtil
     {
         getSharedPreferences().edit().putBoolean(AppConstants.NOTIFICATION_KEY, value).commit();
     }
+
+    public static boolean getAuthorizedDriver()
+    {
+        return getSharedPreferences().getBoolean(AppConstants.AUTHORIZED_KEY, true);
+    }
+
+    public static void setAuthoriziedDriver(boolean value)
+    {
+        getSharedPreferences().edit().putBoolean(AppConstants.AUTHORIZED_KEY, value).commit();
+    }
+
 }
