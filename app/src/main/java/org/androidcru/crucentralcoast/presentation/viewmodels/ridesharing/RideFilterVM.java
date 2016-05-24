@@ -83,8 +83,6 @@ public class RideFilterVM extends BaseRideVM
         ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
         ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
 
-
-
         //conditions
         ConditionsBuilder conditions = new ConditionsBuilder()
             .setCombineOperator(ConditionsBuilder.OPERATOR.AND)

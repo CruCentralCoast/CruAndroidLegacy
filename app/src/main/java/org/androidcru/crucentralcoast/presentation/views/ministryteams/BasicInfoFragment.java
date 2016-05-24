@@ -23,6 +23,7 @@ import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,8 +32,8 @@ import rx.observers.Observers;
 
 public class BasicInfoFragment extends FormContentFragment
 {
-    protected SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
     protected BaseValidator validator;
+
 
     public @BindView(R.id.name_field) @NotEmpty EditText nameField;
     public @BindView(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
@@ -53,9 +54,9 @@ public class BasicInfoFragment extends FormContentFragment
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         // Autofills the form if the information is available
-        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
-        emailField.setText(sharedPreferences.getString(AppConstants.USER_EMAIL, null));
+        nameField.setText(SharedPreferencesUtil.getUserName());
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        emailField.setText(SharedPreferencesUtil.getUserEmail());
     }
 
     @Override
@@ -70,9 +71,7 @@ public class BasicInfoFragment extends FormContentFragment
         if(validator.validate())
         {
             // gets the validated information and overwrites the user's information in shared preferences on a background thread
-            sharedPreferences.edit().putString(AppConstants.USER_NAME, nameField.getText().toString()).apply();
-            sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, phoneField.getText().toString()).apply();
-            sharedPreferences.edit().putString(AppConstants.USER_EMAIL, emailField.getText().toString()).apply();
+            SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), emailField.getText().toString(), phoneField.getText().toString());
 
 
             // gets back the ministry team object from the form holder.

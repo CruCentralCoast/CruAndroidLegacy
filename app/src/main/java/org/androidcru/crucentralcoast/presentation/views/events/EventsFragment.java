@@ -20,22 +20,22 @@ import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class EventsFragment extends ListFragment
 {
     private ArrayList<CruEvent> eventList;
     private LinearLayoutManager layoutManager;
     private Observer<List<CruEvent>> eventSubscriber;
-    private SharedPreferences sharedPreferences;
 
     /**
      * Invoked early on from the Android framework during rendering.
@@ -56,29 +56,26 @@ public class EventsFragment extends ListFragment
     /**
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
+     *  @param view               Inflated View created by onCreateView()
      *
-     * @param view               Inflated View created by onCreateView()
-     * @param savedInstanceState State of the application if it is being refreshed, given to Android by dev
      */
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
-        inflateEmptyView(R.layout.empty_events_view);
+        inflateEmptyView(view, R.layout.empty_events_view);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
-
+        unbinder = ButterKnife.bind(this, view);
         eventList = new ArrayList<>();
 
         setupObserver();
 
-        sharedPreferences = CruApplication.getSharedPreferences();
-
         //setup RecyclerView
         layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
+        helper.swipeRefreshLayout.setOnRefreshListener(this::getCruEvents);
     }
 
     @Override
@@ -90,38 +87,10 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = new Observer<List<CruEvent>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-                if (eventList.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "CruEvents failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<CruEvent> cruEvents)
-            {
-                setEvents(cruEvents);
-            }
-        };
+        eventSubscriber = createListObserver(R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
     }
 
     @OnClick(R.id.subscription_button)
-    @SuppressWarnings("unused")
     public void onManageSubscriptionsClicked()
     {
         startActivity(new Intent(getContext(), SubscriptionActivity.class));
@@ -129,8 +98,8 @@ public class EventsFragment extends ListFragment
 
     private void getCruEvents()
     {
-        swipeRefreshLayout.setRefreshing(true);
-        EventProvider.requestUsersEvents(this, eventSubscriber, sharedPreferences);
+        helper.swipeRefreshLayout.setRefreshing(true);
+        EventProvider.requestUsersEvents(this, eventSubscriber);
     }
 
 
@@ -146,13 +115,13 @@ public class EventsFragment extends ListFragment
                 .map(cruEvent -> {
                     if (CalendarProvider.hasCalendarPermission(getContext()))
                     {
-                        CalendarProvider.updateEvent(getContext(), cruEvent, sharedPreferences.getLong(cruEvent.id, -1), Observers.empty());
+                        CalendarProvider.updateEvent(getContext(), cruEvent, SharedPreferencesUtil.getCalendarEventId(cruEvent.id), Observers.empty());
                     }
                     return cruEvent;
                 })
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(eventList::add);
-        recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
+        helper.recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
     }
 
     /**
@@ -181,6 +150,6 @@ public class EventsFragment extends ListFragment
 
     public void refreshAdapter()
     {
-        recyclerView.getAdapter().notifyDataSetChanged();
+        helper.recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

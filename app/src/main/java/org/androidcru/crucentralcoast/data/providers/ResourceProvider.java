@@ -38,7 +38,7 @@ public final class ResourceProvider
                 return resource;
             });
 
-    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, Resource.ResourceType[] types, ResourceTag[] tags)
+    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, List<Resource.ResourceType> types, List<ResourceTag> tags)
     {
         Subscription s = findResources(types, tags)
                 .compose(RxComposeUtil.ui())
@@ -46,17 +46,17 @@ public final class ResourceProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Resource>> findResources(Resource.ResourceType[] types, ResourceTag[] tags)
+    protected static Observable<List<Resource>> findResources(List<Resource.ResourceType> types, List<ResourceTag> tags)
     {
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
 
-        if(types != null && types.length > 0)
+        if(types != null)
         {
-            String[] stringTypes = new String[types.length];
-            for (int i = 0; i < types.length; i++)
+            String[] stringTypes = new String[types.size()];
+            for (int i = 0; i < types.size(); i++)
             {
-                stringTypes[i] = types[i].toString();
+                stringTypes[i] = types.get(i).toString();
             }
 
             conditionsBuilder
@@ -65,12 +65,12 @@ public final class ResourceProvider
                             .addRestriction(ConditionsBuilder.OPERATOR.IN, stringTypes));
         }
 
-        if(tags != null && tags.length > 0)
+        if(tags != null)
         {
-            String[] stringTags = new String[tags.length];
-            for (int i = 0; i < tags.length; i++)
+            String[] stringTags = new String[tags.size()];
+            for (int i = 0; i < tags.size(); i++)
             {
-                stringTags[i] = tags[i].id;
+                stringTags[i] = tags.get(i).id;
             }
 
             conditionsBuilder
@@ -83,12 +83,10 @@ public final class ResourceProvider
         Query query = new Query.Builder()
                 .setCondition(conditionsBuilder.build())
                 .build();
-
-
-
         return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
@@ -111,8 +109,9 @@ public final class ResourceProvider
     {
         return cruApiService.getResources()
                 .flatMap(resources -> Observable.from(resources))
-                .compose(RxComposeUtil.network())
-                .compose(tagRetriever);
+                .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
+                .compose(RxComposeUtil.network());
     }
 
     protected static Observable<Resource> getResourcesPaginated(int page, int pageSize)
@@ -126,6 +125,7 @@ public final class ResourceProvider
         return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.network());
     }
 }

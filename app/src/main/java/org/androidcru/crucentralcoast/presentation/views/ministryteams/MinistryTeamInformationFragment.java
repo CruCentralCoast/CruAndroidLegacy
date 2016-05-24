@@ -51,7 +51,7 @@ public class MinistryTeamInformationFragment extends FormContentFragment
         formHolder.setTitle(ministryTeam.name);
 
         // setup the image that is tied to this ministry team
-        ViewUtil.setSource(ministryInfoImage, ministryTeam.teamImage != null ? ministryTeam.teamImage.url : null, 0, null, null);
+        ViewUtil.setSource(ministryInfoImage, (ministryTeam.teamImage != null && !ministryTeam.teamImage.isEmpty()) ? ministryTeam.teamImage : null, 0, null, null);
         ministryTeamDescription.setText(ministryTeam.description);
     }
 }

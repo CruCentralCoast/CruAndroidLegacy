@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
+import org.androidcru.crucentralcoast.presentation.util.AlertDialogCreator;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup.DriverSignupActivity;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesDriverFragment;
 import org.parceler.Parcels;
@@ -94,9 +95,10 @@ public class MyRidesDriverVM {
                 CruApplication.getContext().getString(R.string.alert_dialog_no),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                     }
                 });
+
     }
 
     public View.OnClickListener onCancelOfferingClicked()

@@ -1,30 +1,30 @@
 package org.androidcru.crucentralcoast.notifications;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
-import java.io.IOException;
-
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.observers.Observers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
-    private static InstanceID instanceID;
-    private static String token;
-    private static GcmPubSub pubSub;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -32,101 +32,101 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
+        retrieveGCMId(Observers.create((token) -> {}, e -> {
+            Timber.e(e, "GCM Retrieval failed");
+            SharedPreferencesUtil.writeSentTokenToServer(false);
+        }, () -> {
+            Intent registrationComplete = new Intent(AppConstants.REGISTRATION_COMPLETE);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        }), this);
+    }
 
-        try {
-            // [START register_for_gcm]
-            // Initially this call goes out to the network to retrieve the token, subsequent calls
-            // are local.
-            // R.string.gcm_defaultSenderId (the Sender ID) is typically derived from google-services.json.
-            // See https://developers.google.com/cloud-messaging/android/start for details on this file.
-            // [START get_token]
-            instanceID = InstanceID.getInstance(this);
-            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+    public static void retrieveGCMId(Observer<String> observer, Context context)
+    {
+        retrieveGCMId(context)
+            .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+            .subscribe(observer);
+    }
+
+    public static Observable<String> retrieveGCMId(Context context)
+    {
+        return Observable.fromCallable(() -> {
+            InstanceID instanceID = InstanceID.getInstance(context);
+            String token = instanceID.getToken(context.getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
-            Log.i(TAG, "GCM Registration Token: " + token);
+            Timber.i(TAG, "GCM Registration Token: " + token);
 
             // TODO: Implement this method to send any registration to your app's servers.
-            sendRegistrationToServer(token);
-
-            // Subscribe to topic channels
-            subscribeTopics(token);
+            SharedPreferencesUtil.writeGCMID(token);
 
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
-            sharedPreferences.edit().putBoolean(AppConstants.SENT_TOKEN_TO_SERVER, true).apply();
-            // [END register_for_gcm]
-        } catch (Exception e) {
-            Log.d(TAG, "Failed to complete token refresh", e);
-            // If an exception happens while fetching the new token or updating our registration data
-            // on a third-party server, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(AppConstants.SENT_TOKEN_TO_SERVER, false).apply();
-        }
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
-        Intent registrationComplete = new Intent(AppConstants.REGISTRATION_COMPLETE);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+            SharedPreferencesUtil.writeSentTokenToServer(true);
+
+            return token;
+        })
+        .flatMap(token -> {
+            return setupGcmPubSub(token, context)
+                    .flatMap(gcmPubSub -> Observable.just(token));
+        });
     }
 
-    /**
-     * Persist registration to third-party servers.
-     *
-     * Modify this method to associate the user's GCM registration token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private void sendRegistrationToServer(String token) {
-        // Saves this locally
-        CruApplication.saveGCMID(token);
-        Timber.d(token);
-    }
-
-    public static void subscribeToMinistry(final String topic)
+    private static Observable<GcmPubSub> setupGcmPubSub(String token, Context context)
     {
-
-        new Thread(() -> {
-            try
-            {
-                pubSub.subscribe(token, "/topics/" + topic, null);
+        return Observable.fromCallable(() -> {
+            GcmPubSub gcmPubSub  = GcmPubSub.getInstance(context);
+            for (String topic : TOPICS) {
+                gcmPubSub.subscribe(token, "/topics/" + topic, null);
             }
-            catch (IOException e)
-            {
-                Timber.e(e, e.getStackTrace().toString());
-            }
-        }).start();
-
+            return gcmPubSub;
+        })
+        .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
     }
 
-    public static void unsubscribeToMinistry(final String topic)
+    public static void subscribeToMinistry(Observer<Boolean> observer, Context context, final String topic)
     {
-        new Thread(() -> {
-            try
-            {
-                pubSub.unsubscribe(token, "/topics/" + topic);
-            }
-            catch (IOException e)
-            {
-                Timber.e(e, e.getStackTrace().toString());
-            }
-        }).start();
+        Observable.concat(
+                (SharedPreferencesUtil.getGCMID().isEmpty()) ? Observable.empty() : Observable.just(SharedPreferencesUtil.getGCMID()),
+                retrieveGCMId(context)
+            )
+            .take(1)
+            .flatMap(token -> {
+                return setupGcmPubSub(token, context)
+                    .flatMap(gcmPubSub -> {
+                        return Observable.fromCallable(() -> {
+                            gcmPubSub.subscribe(token, "/topics/" + topic, null);
+                            return true;
+                        });
+                    });
+            })
+            .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(observer);
+
 
     }
 
-    /**
-     * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.
-     *
-     * @param token GCM token
-     * @throws IOException if unable to reach the GCM PubSub service
-     */
-    // [START subscribe_topics]
-    private void subscribeTopics(String token) throws IOException {
-        pubSub = GcmPubSub.getInstance(this);
-        for (String topic : TOPICS) {
-            pubSub.subscribe(token, "/topics/" + topic, null);
-        }
-    }
-    // [END subscribe_topics]
+    public static void unsubscribeToMinistry(Observer<Boolean> observer, Context context, final String topic)
+    {
+        Observable.concat(
+                (SharedPreferencesUtil.getGCMID().isEmpty()) ? Observable.empty() : Observable.just(SharedPreferencesUtil.getGCMID()),
+                retrieveGCMId(context)
+            )
+            .take(1)
+            .flatMap(token -> {
+                return setupGcmPubSub(token, context)
+                        .flatMap(gcmPubSub -> {
+                            return Observable.fromCallable(() -> {
+                                gcmPubSub.unsubscribe(token, "/topics/" + topic);
+                                return true;
+                            });
+                        });
+            })
+            .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(observer);
 
+    }
 }

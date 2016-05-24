@@ -13,8 +13,8 @@ import android.support.v4.util.Pair;
 
 import com.tbruyelle.rxpermissions.RxPermissions;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.DateTimeUtils;
 
 import java.util.Calendar;
@@ -52,7 +52,7 @@ public final class CalendarProvider
 
                         if (eventID > -1)
                         {
-                            CruApplication.getSharedPreferences().edit().putLong(cruEvent.id, eventID).commit();
+                            SharedPreferencesUtil.writeCalendarID(cruEvent.id, eventID);
                             Observable.just(new Pair<>(cruEvent.id, eventID)).subscribe(parentSubscriber);
                         }
                     } catch (SecurityException e)
@@ -77,7 +77,7 @@ public final class CalendarProvider
                         ContentResolver cr = context.getContentResolver();
                         Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
                         cr.delete(deleteUri, null, null);
-                        CruApplication.getSharedPreferences().edit().remove(cruEvent.id).commit();
+                        SharedPreferencesUtil.removeKey(cruEvent.id);
                         Observable.just(new Pair<>(cruEvent.id, -1l)).subscribe(parentSubscriber);
                     }
                 });

@@ -40,5 +40,13 @@
             android:layout_marginBottom="4dp"
             android:textSize="16dp"/>
 
+        <TextView
+            tools:text="5.000000 miles away"
+            android:id="@+id/distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:textSize="16dp"/>
+
     </LinearLayout>
 </RelativeLayout>

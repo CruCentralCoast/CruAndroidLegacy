@@ -11,7 +11,7 @@ public final class SummerMission
 {
     public static final String sDescription = "description";
     public static final String sName = "name";
-    public static final String sImage = "image";
+    public static final String sImage = "imageLink";
     public static final String sLeaders = "leaders";
     public static final String sStartDate = "startDate";
     public static final String sEndDate = "endDate";
@@ -21,7 +21,7 @@ public final class SummerMission
     @SerializedName(sId) public String id;
     @SerializedName(sDescription) public String description;
     @SerializedName(sName) public String name;
-    @SerializedName(sImage) public Image image;
+    @SerializedName(sImage) public String image;
     @SerializedName(sLeaders) public String leaders;
     @SerializedName(sStartDate) public ZonedDateTime startDate;
     @SerializedName(sEndDate) public ZonedDateTime endDate;

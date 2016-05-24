@@ -34,4 +34,10 @@ public final class ResourceTag
     {
         return id.hashCode();
     }
+
+    @Override
+    public String toString()
+    {
+        return title;
+    }
 }

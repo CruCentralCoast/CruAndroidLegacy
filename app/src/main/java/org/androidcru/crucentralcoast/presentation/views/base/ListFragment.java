@@ -1,14 +1,13 @@
 package org.androidcru.crucentralcoast.presentation.views.base;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewStub;
 
-import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.providers.observer.CruObserver;
 
-import butterknife.ButterKnife;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 /**
  * Reusable class for Fragments with just a RecyclerView and emptyView for when that RecyclerView
@@ -16,44 +15,62 @@ import butterknife.ButterKnife;
  *
  * Takes care of inflating a ViewStub when the time is right as well as a SwipeRefreshLayout workaround (see below)
  */
-public class ListFragment extends BaseSupportFragment
+public class ListFragment extends BaseSupportFragment implements ListHelper
 {
-    //Inject views
-    protected RecyclerView recyclerView;
-    protected SwipeRefreshLayout swipeRefreshLayout;
-    private ViewStub emptyViewStub;
-    protected View emptyView;
+    protected ListHelperImpl helper;
+
+    public ListFragment()
+    {
+        this.helper = new ListHelperImpl(this);
+    }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
 
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-
-        recyclerView.setHasFixedSize(true);
-
-        setupSwipeRefreshLayout(swipeRefreshLayout);
+        helper.onViewCreated(view);
     }
 
-    public static void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout)
+    @Override
+    public View onEmpty(int layoutId)
     {
-        //issue 77712, workaround until Google fixes it
-        swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
-        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
+        return helper.onEmpty(layoutId);
     }
 
-    protected void inflateEmptyView(int layoutId)
+    @Override
+    public void onNoNetwork()
     {
-        if(emptyViewStub == null)
-            emptyViewStub = (ViewStub) getView().findViewById(R.id.empty_view_stub);
+        helper.onNoNetwork();
+    }
 
-        if(emptyViewStub != null)
-        {
-            emptyViewStub.setLayoutResource(layoutId);
-            emptyView = emptyViewStub.inflate();
-            ButterKnife.bind(this, getView());
-        }
+    @Override
+    public void showContent()
+    {
+        helper.showContent();
+    }
+
+    @Override
+    public <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
+    {
+        return helper.createListObserver(emptyLayoutId, onNext);
+    }
+
+    @Override
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
+    {
+        return helper.createListObserver(onNext, onEmpty);
+    }
+
+    @Override
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty, Action0 onNoNetwork)
+    {
+        return helper.createListObserver(onNext, onEmpty, onNoNetwork);
+    }
+
+    @Override
+    public void inflateEmptyView(View v, int layoutId)
+    {
+        helper.inflateEmptyView(v, layoutId);
     }
 }

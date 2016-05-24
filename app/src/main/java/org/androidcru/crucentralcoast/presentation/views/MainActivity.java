@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,7 +20,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.providers.UserProvider;
@@ -33,9 +31,10 @@ import org.androidcru.crucentralcoast.presentation.views.feed.FeedFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
-import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
+import org.androidcru.crucentralcoast.presentation.views.settings.SettingsActivity;
 import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.Collections;
 
@@ -84,7 +83,7 @@ public class MainActivity extends BaseAppCompatActivity
      */
     private void setupAutoFillData()
     {
-        if (!CruApplication.getSharedPreferences().getBoolean(AppConstants.FIRST_LAUNCH, false))
+        if (!SharedPreferencesUtil.isFirstLaunch())
         {
             RxPermissions.getInstance(this)
                 .request(Manifest.permission.READ_PHONE_STATE)
@@ -93,27 +92,27 @@ public class MainActivity extends BaseAppCompatActivity
                     {
                         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         String userPhoneNumber = telephonyManager.getLine1Number();
-                        if (userPhoneNumber != null)
+                        if (userPhoneNumber != null && userPhoneNumber.length() >= 10)
+                        {
                             userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
-                        CruApplication.getSharedPreferences().edit().putString(AppConstants.USER_PHONE_NUMBER, userPhoneNumber).apply();
+                            SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
 
-                        Observer<CruUser> observer = Observers.create(cruUser -> {
-                            SharedPreferences userSharedPreferences = CruApplication.getSharedPreferences();
-                            userSharedPreferences.edit().putString(AppConstants.USER_NAME, cruUser.name.firstName + " " + cruUser.name.lastName).commit();
-                            userSharedPreferences.edit().putString(AppConstants.USER_EMAIL, cruUser.email).commit();
-                        });
+                            Observer<CruUser> observer = Observers.create(cruUser -> {
+                                SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
+                            });
 
-                        UserProvider.requestCruUser(this, observer, userPhoneNumber);
+                            UserProvider.requestCruUser(this, observer, userPhoneNumber);
+                        }
                     }
                 });
         }
-        CruApplication.getSharedPreferences().edit().putBoolean(AppConstants.FIRST_LAUNCH, true).apply();
+        SharedPreferencesUtil.writeFirstLaunch(true);
     }
 
     private void checkPlayServicesCode()
     {
-        int playServicesCode = CruApplication.getSharedPreferences().getInt(AppConstants.PLAY_SERVICES, ConnectionResult.SUCCESS);
+        int playServicesCode = SharedPreferencesUtil.getPlayServicesCode();
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         if(playServicesCode != ConnectionResult.SUCCESS)
         {
@@ -172,7 +171,8 @@ public class MainActivity extends BaseAppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
-            startActivity(new Intent(this, SubscriptionActivity.class));
+//            startActivity(new Intent(this, SubscriptionActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

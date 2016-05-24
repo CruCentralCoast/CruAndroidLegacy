@@ -1,0 +1,255 @@
+[
+  {
+    "_id": "563b091f2930ae0300fbc0a3",
+    "slug": "cru-2",
+    "description": "",
+    "name": "Cru",
+    "campuses": [
+      "563b048d2930ae0300fbc098"
+    ],
+    "__v": 0,
+    "campus": "563b048d2930ae0300fbc098",
+    "teams": [],
+    "image": {
+      "public_id": "jvnjtytex6ymp8jqeaud",
+      "version": 1453335212,
+      "signature": "25ee5e9b7f0de065aa4f8957dc6963452b37f968",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335212/jvnjtytex6ymp8jqeaud.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335212/jvnjtytex6ymp8jqeaud.png"
+    }
+  },
+  {
+    "_id": "563b09332930ae0300fbc0a4",
+    "slug": "cru-high",
+    "description": "",
+    "name": "Cru High",
+    "campuses": [
+      "563b05382930ae0300fbc09a"
+    ],
+    "__v": 0,
+    "campus": "563b05382930ae0300fbc09a",
+    "teams": [],
+    "image": {
+      "public_id": "zjfj3hn0ohrgcaas6r7z",
+      "version": 1453335277,
+      "signature": "10ff150c4e09d5a70705b85902158dbd1b1e3f4c",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335277/zjfj3hn0ohrgcaas6r7z.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335277/zjfj3hn0ohrgcaas6r7z.png"
+    }
+  },
+  {
+    "_id": "563b094e2930ae0300fbc0a5",
+    "slug": "fellowship-of-christian-athletes-in-action",
+    "description": "",
+    "name": "Fellowship of Christian Athletes in Action",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "q26b702lflybnscz6hjp",
+      "version": 1453335133,
+      "signature": "43f32e68e1e18ded785960e51105d032224c617b",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335133/q26b702lflybnscz6hjp.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335133/q26b702lflybnscz6hjp.png"
+    }
+  },
+  {
+    "_id": "56961d7f0d8b502f21d22115",
+    "slug": "branded",
+    "description": "",
+    "name": "Branded",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "fabue6nidw0oftoeynqx",
+      "version": 1453335185,
+      "signature": "2e93fdb323024f811924c0d3b61f12f2e65ae2a9",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335185/fabue6nidw0oftoeynqx.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335185/fabue6nidw0oftoeynqx.png"
+    }
+  },
+  {
+    "_id": "563b07402930ae0300fbc09b",
+    "slug": "slo-cru",
+    "description": "",
+    "name": "Slo Cru",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "urqpl3nfbos6bttvwi8r",
+      "version": 1453081368,
+      "signature": "71fc806bc52c7212d8721655406772614964e5ca",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453081368/urqpl3nfbos6bttvwi8r.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453081368/urqpl3nfbos6bttvwi8r.png"
+    }
+  },
+  {
+    "_id": "563b08482930ae0300fbc09c",
+    "slug": "epic",
+    "description": "",
+    "name": "Epic",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "zes2rkashzoisjzawtkp",
+      "version": 1453081483,
+      "signature": "fddfa45fc27a5a0813b07d82aa3a2f52e366733f",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453081483/zes2rkashzoisjzawtkp.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453081483/zes2rkashzoisjzawtkp.png"
+    }
+  },
+  {
+    "_id": "563b085d2930ae0300fbc09d",
+    "slug": "greek-row",
+    "description": "",
+    "name": "Greek Row",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "nrsmcoqfbx7c8y5ycdk1",
+      "version": 1453335113,
+      "signature": "7af00beec77a71e18999db6327c7eb4c9cf2dcb2",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335113/nrsmcoqfbx7c8y5ycdk1.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335113/nrsmcoqfbx7c8y5ycdk1.png"
+    }
+  },
+  {
+    "_id": "563b08c72930ae0300fbc09e",
+    "slug": "faculty-commons",
+    "description": "",
+    "name": "Faculty Commons",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "cr143wek1tlvurog7wgp",
+      "version": 1453335155,
+      "signature": "fd23600d40d85ba129738993092114e68f5c6143",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335155/cr143wek1tlvurog7wgp.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335155/cr143wek1tlvurog7wgp.png"
+    }
+  },
+  {
+    "_id": "563b08d62930ae0300fbc09f",
+    "slug": "destino",
+    "description": "",
+    "name": "Destino",
+    "campuses": [
+      "563b04112930ae0300fbc096"
+    ],
+    "__v": 0,
+    "campus": "563b04112930ae0300fbc096",
+    "teams": [],
+    "image": {
+      "public_id": "sgfqc6jnom0bejfonmik",
+      "version": 1453335101,
+      "signature": "90c003f4447aaf06eb32c11cbec88255bade06df",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335101/sgfqc6jnom0bejfonmik.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335101/sgfqc6jnom0bejfonmik.png"
+    }
+  },
+  {
+    "_id": "563b08fb2930ae0300fbc0a1",
+    "slug": "cru",
+    "description": "",
+    "name": "Cru",
+    "campuses": [
+      "563b04c52930ae0300fbc099"
+    ],
+    "__v": 0,
+    "campus": "563b04c52930ae0300fbc099",
+    "teams": [],
+    "image": {
+      "public_id": "hpzl29w5bjnxhdbrqeyf",
+      "version": 1453335239,
+      "signature": "f5fcd7c6b1cfb09e97b35a5b3677cb158e510c97",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453335239/hpzl29w5bjnxhdbrqeyf.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453335239/hpzl29w5bjnxhdbrqeyf.png"
+    }
+  },
+  {
+    "_id": "563b090b2930ae0300fbc0a2",
+    "slug": "cru-1",
+    "description": "",
+    "name": "Cru",
+    "campuses": [
+      "563b04532930ae0300fbc097"
+    ],
+    "__v": 0,
+    "campus": "563b04532930ae0300fbc097",
+    "teams": [],
+    "image": {
+      "public_id": "zkt9o7hbdth4tixafaqm",
+      "version": 1453081433,
+      "signature": "7f3738a74b2239cf71b6cae92737c08a0a6a4a21",
+      "width": 300,
+      "height": 200,
+      "format": "png",
+      "resource_type": "image",
+      "url": "http://res.cloudinary.com/debabl6od/image/upload/v1453081433/zkt9o7hbdth4tixafaqm.png",
+      "secure_url": "https://res.cloudinary.com/debabl6od/image/upload/v1453081433/zkt9o7hbdth4tixafaqm.png"
+    }
+  }
+]

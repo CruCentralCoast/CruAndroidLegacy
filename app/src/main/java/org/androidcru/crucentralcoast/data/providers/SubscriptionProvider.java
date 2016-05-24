@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.Subscription;
 
 /**
@@ -71,42 +70,36 @@ public final class SubscriptionProvider
 
     protected static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
     {
-        return Observable.create(new Observable.OnSubscribe<HashMap<Campus, ArrayList<MinistrySubscription>>>()
-        {
-            @Override
-            public void call(Subscriber<? super HashMap<Campus, ArrayList<MinistrySubscription>>> subscriber)
+        return Observable.fromCallable(() -> {
+            ArrayList<Campus> campuses = requestCampuses().toBlocking().single();
+            ArrayList<MinistrySubscription> ministries = requestMinistries().toBlocking().single();
+
+            HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap = new HashMap<>();
+
+            for (MinistrySubscription m : ministries)
             {
-                ArrayList<Campus> campuses = requestCampuses().toBlocking().single();
-                ArrayList<MinistrySubscription> ministries = requestMinistries().toBlocking().single();
+                Campus selectedCampus = null;
 
-                HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap = new HashMap<>();
+                // set the selected campus for this ministry
+                for (Campus c : campuses)
+                    if (m.campusId.get(0).equals(c.id))
+                        selectedCampus = c;
 
-                for (MinistrySubscription m : ministries)
+                if (campusMinistryMap.containsKey(selectedCampus))
                 {
-                    Campus selectedCampus = null;
-
-                    // set the selected campus for this ministry
-                    for (Campus c : campuses)
-                        if (m.campusId.get(0).equals(c.id))
-                            selectedCampus = c;
-
-                    if (campusMinistryMap.containsKey(selectedCampus))
-                    {
-                        ArrayList<MinistrySubscription> ministriesSoFar = campusMinistryMap.get(selectedCampus);
-                        ministriesSoFar.add(m);
-                        campusMinistryMap.put(selectedCampus, ministriesSoFar);
-                    }
-                    else
-                    {
-                        ArrayList<MinistrySubscription> newMinistries = new ArrayList<>();
-                        newMinistries.add(m);
-                        campusMinistryMap.put(selectedCampus, newMinistries);
-                    }
+                    ArrayList<MinistrySubscription> ministriesSoFar = campusMinistryMap.get(selectedCampus);
+                    ministriesSoFar.add(m);
+                    campusMinistryMap.put(selectedCampus, ministriesSoFar);
                 }
-
-                subscriber.onNext(campusMinistryMap);
-                subscriber.onCompleted();
+                else
+                {
+                    ArrayList<MinistrySubscription> newMinistries = new ArrayList<>();
+                    newMinistries.add(m);
+                    campusMinistryMap.put(selectedCampus, newMinistries);
+                }
             }
+
+            return campusMinistryMap;
         })
         .compose(RxComposeUtil.network());
     }

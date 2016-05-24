@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupEditingVM;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing.DriverSignupVM;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.parceler.Parcels;
 
 import butterknife.BindView;
@@ -30,8 +31,6 @@ import timber.log.Timber;
 
 public class DriverSignupActivity extends BaseAppCompatActivity
 {
-    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
-
     private DriverSignupVM driverSignupVM;
 
     @BindView(R.id.fab) FloatingActionButton fab;
@@ -83,7 +82,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
     //fill in fields that only the DriverSignupActivity has access to but DriverSignupVM doesn't
     private Ride completeRide(Ride r)
     {
-        r.gcmID = CruApplication.getGCMID();
+        r.gcmID = SharedPreferencesUtil.getGCMID();
         r.eventId = event.id;
         return r;
     }
@@ -136,8 +135,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity
             //if fields are valid, update shared preferences and the Ride
             if(driverSignupVM.validator.validate())
             {
-                sharedPreferences.edit().putString(AppConstants.USER_NAME, driverSignupVM.nameField.getText().toString()).apply();
-                sharedPreferences.edit().putString(AppConstants.USER_PHONE_NUMBER, driverSignupVM.phoneField.getText().toString()).apply();
+                SharedPreferencesUtil.writeBasicInfo(driverSignupVM.nameField.getText().toString(), null, driverSignupVM.phoneField.getText().toString());
 
                 if(driverSignupVM instanceof DriverSignupEditingVM)
                     updateDriver();

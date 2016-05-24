@@ -39,7 +39,8 @@ public final class YouTubeVideoProvider
         if(!first && nextPageToken == null)
             return Observable.empty();
 
-        return youTubeDataService.getSearchResults(BuildConfig.YOUTUBEBROWSERAPIKEY, "snippet", search, AppConstants.CRU_YOUTUBE_UPLOADS_ID, AppConstants.PAGE_SIZE, nextPageToken)
+        return youTubeDataService.getSearchResults(BuildConfig.YOUTUBEBROWSERAPIKEY, "snippet", search,
+                AppConstants.CRU_YOUTUBE_CHANNEL_ID, AppConstants.PAGE_SIZE, nextPageToken)
                 .flatMap(response -> {
                     if(!response.items.isEmpty())
                     {

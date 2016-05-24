@@ -20,6 +20,7 @@ public class AppConstants
     //GCM
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String PLAY_SERVICES = "play_services";
+    public static final String GCM_REGISTRATION_ID = "gcm_registration_id";
 
     //Events
     public static final int DRIVER_REQUEST_CODE = 7;
@@ -27,8 +28,8 @@ public class AppConstants
 
     //MyRides Tabs
     public static final String MY_RIDES_TAB = "MY_RIDES_TAB";
-    public static final int DRIVER_TAB = 0;
-    public static final int PASSENGER_TAB = 1;
+    public static final int PASSENGER_TAB = 0;
+    public static final int DRIVER_TAB = 1;
 
     //Notifications
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
@@ -58,6 +59,10 @@ public class AppConstants
 
     //Ministry Team
     public static final String MINISTRY_TEAM_KEY = "MINISTRY_TEAM";
+
+    //Login
+    public static final String LOGIN_KEY = "LOGIN_KEY";
+    public static final String USERNAME_KEY = "USERNAME_KEY";
 
 
     /**

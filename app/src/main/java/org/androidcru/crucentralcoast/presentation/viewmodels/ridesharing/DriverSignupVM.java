@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
 import android.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +33,7 @@ import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
@@ -46,7 +46,6 @@ import butterknife.OnTextChanged;
 import timber.log.Timber;
 
 public class DriverSignupVM extends BaseRideVM {
-    SharedPreferences sharedPreferences = CruApplication.getSharedPreferences();
 
     public Double radius;
     protected GoogleMap map;
@@ -97,8 +96,8 @@ public class DriverSignupVM extends BaseRideVM {
         rideTime.setOnKeyListener(null);
         rideDate.setOnKeyListener(null);
 
-        nameField.setText(sharedPreferences.getString(AppConstants.USER_NAME, null));
-        phoneField.setText(sharedPreferences.getString(AppConstants.USER_PHONE_NUMBER, null));
+        nameField.setText(SharedPreferencesUtil.getUserName());
+        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
     }
 
     protected int retrieveCarCapacity() {
@@ -126,7 +125,7 @@ public class DriverSignupVM extends BaseRideVM {
         return new Ride(nameField.getText().toString(), phoneField.getText().toString(),
                 Ride.Gender.getFromColloquial((String) genderField.getSelectedItem()), eventId,
                 ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault()), location,
-                radius, retrieveDirection(directionGroup), CruApplication.getGCMID(), retrieveCarCapacity());
+                radius, retrieveDirection(directionGroup), SharedPreferencesUtil.getGCMID(), retrieveCarCapacity());
     }
 
     @OnClick(R.id.time_field)
@@ -144,21 +143,7 @@ public class DriverSignupVM extends BaseRideVM {
         updateMap(precisePlace);
 
         if (placeAddress != null) {
-            String[] splitAddress = placeAddress.split(AppConstants.SPACE_COMMA_ESCAPE);
-            String[] splitStateZip = splitAddress[2].split(" ");
-
-            if (splitStateZip.length == 2)
-            {
-                location = new Location(splitStateZip[1], splitStateZip[0],
-                        splitAddress[1], splitAddress[0], splitAddress[3],
-                        new double[] {precisePlace.longitude, precisePlace.latitude});
-            }
-            else
-            {
-                location = new Location(null, null,
-                        splitAddress[1], splitAddress[0], splitAddress[3],
-                        new double[] {precisePlace.longitude, precisePlace.latitude});
-            }
+            location = new Location(placeAddress, new double[] {precisePlace.longitude, precisePlace.latitude});
         }
     }
 

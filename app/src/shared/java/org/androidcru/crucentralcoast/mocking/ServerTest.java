@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.mockwebserver.MockWebServer;
-
+import rx.schedulers.Schedulers;
 
 public class ServerTest
 {
@@ -21,12 +21,14 @@ public class ServerTest
     {
         server.start();
         CruApiProvider.setBaseUrl(server.url("/").toString());
+        CruApiProvider.setNetworkScheduler(Schedulers.io());
     }
 
     @Before
     public void clearServer() throws InterruptedException
     {
-        server.takeRequest(2, TimeUnit.SECONDS);
+        if(server.getRequestCount() > 0)
+            server.takeRequest(2, TimeUnit.SECONDS);
     }
 
     @AfterClass

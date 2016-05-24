@@ -1,15 +1,15 @@
 package org.androidcru.crucentralcoast.presentation.validator;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.support.v4.app.Fragment;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
-import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
-import org.androidcru.crucentralcoast.presentation.views.base.BaseSupportFragment;
 
 import java.util.List;
 
@@ -34,14 +34,14 @@ public class BaseValidator implements Validator.ValidationListener
         postInit();
     }
 
-    public BaseValidator(BaseAppCompatActivity activity)
+    public BaseValidator(Activity activity)
     {
         context = activity;
         validator = new Validator(activity);
         postInit();
     }
 
-    public BaseValidator(BaseSupportFragment fragment)
+    public BaseValidator(Fragment fragment)
     {
         context = fragment.getContext();
         validator = new Validator(fragment);

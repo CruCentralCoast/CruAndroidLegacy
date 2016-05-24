@@ -4,36 +4,55 @@ import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Scheduler;
 import rx.schedulers.Schedulers;
 
 public class CruApiProvider
 {
     private static CruApiService service;
+    private static Retrofit.Builder builder;
+    private static Scheduler networkScheduler;
+
+    static {
+        builder = new Retrofit.Builder()
+                .client(CruApplication.setupOkHttp())
+                .addConverterFactory(GsonConverterFactory.create(CruApplication.gson));
+    }
 
     public static CruApiService getService()
     {
         if(service == null)
-        {
             setBaseUrl(BuildConfig.CRU_SERVER);
-        }
+
+        if(networkScheduler == null)
+            setNetworkScheduler(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
 
         return service;
     }
 
-    public static CruApiService setBaseUrl(String baseUrl)
+    public static Retrofit.Builder setBaseUrl(String baseUrl)
     {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(CruApplication.setupOkHttp())
-                .addConverterFactory(GsonConverterFactory.create(CruApplication.gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .build();
+        builder = builder.baseUrl(baseUrl);
+        service = builder.build().create(CruApiService.class);
 
-        service = retrofit.create(CruApiService.class);
+        return builder;
+    }
 
-        return service;
+    public static Retrofit.Builder setNetworkScheduler(Scheduler scheduler)
+    {
+        networkScheduler = scheduler;
+        builder = builder.addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(scheduler));
+        service = builder.build().create(CruApiService.class);
+
+        return builder;
+    }
+
+    public static Scheduler getNetworkScheduler()
+    {
+        return networkScheduler;
     }
 }
