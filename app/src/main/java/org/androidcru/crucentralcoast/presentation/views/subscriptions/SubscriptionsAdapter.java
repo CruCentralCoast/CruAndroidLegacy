@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.subscriptions;
 
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,11 @@ import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +36,7 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public SubscriptionsAdapter(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
     {
-        this.ministries = SubscriptionsSorter.convertSubscriptions(campusMinistryMap);
+        convertSubscriptions(campusMinistryMap);
     }
 
     @Override
@@ -92,6 +96,39 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+    }
+
+    private void convertSubscriptions(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
+    {
+        ArrayList<Pair<Campus, Integer>> sortableList = new ArrayList<>();
+        for(Map.Entry<Campus, ArrayList<MinistrySubscription>> entry : campusMinistryMap.entrySet())
+        {
+            sortableList.add(new Pair(entry.getKey(), entry.getValue().size()));
+        }
+
+        // This sorts the subscription page so it shows the campus with the most to least ministries
+        Collections.sort(sortableList, new Comparator<Pair<Campus, Integer>>()
+        {
+            @Override
+            public int compare(Pair<Campus, Integer> lhs, Pair<Campus, Integer> rhs)
+            {
+                return rhs.second - lhs.second;
+            }
+        });
+
+        if(ministries == null)
+            ministries = new ArrayList<>();
+        else
+            ministries.clear();
+
+        //adds each campus and each ministry in that campus to the ministries ArrayList in order
+        for (Pair<Campus, Integer> campusPair : sortableList)
+        {
+            ministries.add(new Item<>(campusPair.first, null));
+            for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
+                ministries.add(new Item(null, m));
         }
 
     }

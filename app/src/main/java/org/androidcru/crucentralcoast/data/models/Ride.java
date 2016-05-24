@@ -41,6 +41,7 @@ public final class Ride
 
     public List<Passenger> passengers;
     public CruEvent event;
+    public double distance;
 
     @ParcelConstructor
     public Ride(String driverName, String driverNumber, Gender gender, String eventId,
