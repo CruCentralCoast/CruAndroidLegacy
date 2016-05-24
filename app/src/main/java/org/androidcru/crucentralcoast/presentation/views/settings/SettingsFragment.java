@@ -16,7 +16,6 @@ import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.LoginResponse;
 import org.androidcru.crucentralcoast.data.providers.LoginProvider;
@@ -118,7 +117,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                     String name = loginName.getText().toString();
                     String password = loginPassword.getText().toString();
                     loginProgress.setVisibility(View.VISIBLE);
-                    LoginProvider.login(SettingsFragment.this, loginObserver, name, password, CruApplication.getGCMID());
+                    LoginProvider.login(SettingsFragment.this, loginObserver, name, password, SharedPreferencesUtil.getGCMID());
 
                     Timber.d("Logging in as " + name + " and pw: " + password);
                 }

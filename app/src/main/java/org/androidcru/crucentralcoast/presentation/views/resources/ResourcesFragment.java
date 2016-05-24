@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import rx.Observer;
-import rx.Subscription;
 import timber.log.Timber;
 
 
@@ -37,7 +36,7 @@ public class ResourcesFragment extends ListFragment
     private ArrayList<Resource> resources;
     private Observer<List<Resource>> resourceSubscriber;
     private Observer<List<ResourceTag>> resourceTagSubscriber;
-    private Subscription subscription;
+
 
     //holds all tags
     private ArrayList<ResourceTag> filterTagsList;
@@ -48,6 +47,8 @@ public class ResourcesFragment extends ListFragment
 
     private AlertDialog tagDialog;
     private AlertDialog typeDialog;
+
+    private boolean loadedTags = false;
 
     public ResourcesFragment()
     {
@@ -72,6 +73,10 @@ public class ResourcesFragment extends ListFragment
             @Override
             public void onError(Throwable e)
             {
+                if(!CruApplication.isOnline())
+                {
+                    onNoNetwork();
+                }
                 Timber.e(e, "Resource Tags failed to retrieve.");
             }
 
@@ -82,6 +87,9 @@ public class ResourcesFragment extends ListFragment
                 selectedTags = new boolean[filterTagsList.size()];
                 Arrays.fill(selectedTags, true);
                 setHasOptionsMenu(true);
+                loadedTags = true;
+                //Update the list of resources/tags by pulling from the server
+                forceUpdate(filterTypesList, filterTagsList);
             }
 
         };
@@ -89,39 +97,7 @@ public class ResourcesFragment extends ListFragment
 
     void setupResourceObserver()
     {
-        resourceSubscriber = new Observer<List<Resource>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-                Log.d("eeks", "Resource onCompleted: HERE");
-
-                if (resources.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                }
-                else {
-                    emptyView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Timber.e(e, "Resources failed to retrieve.");
-            }
-
-            @Override
-            public void onNext(List<Resource> resources)
-            {
-                setResources(resources);
-                Log.d("okes", "Resource onNext: IKES");
-
-            }
-
-        };
+        resourceSubscriber = createListObserver(R.layout.empty_articles_view, resources -> setResources(resources));
     }
 
     @Nullable
@@ -135,33 +111,33 @@ public class ResourcesFragment extends ListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        inflateEmptyView(R.layout.empty_articles_view);
-        //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
-        //Update the list of resources/tags by pulling from the server
-        forceUpdate(filterTypesList, null);
-        ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
+        helper.swipeRefreshLayout.setRefreshing(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setLayoutManager(layoutManager);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
+        ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
 
     private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        ResourceProvider.findResources(this, resourceSubscriber, types, tags);
+        if(loadedTags)
+            ResourceProvider.findResources(this, resourceSubscriber, types, tags);
+        else
+            ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
 
     private void setResources(List<Resource> resources)
     {
         //Adapter for RecyclerView
         ResourcesAdapter resourcesAdapter = new ResourcesAdapter(new ArrayList<>(resources), customTabsIntentBuilder);
-        recyclerView.setAdapter(resourcesAdapter);
+        helper.recyclerView.setAdapter(resourcesAdapter);
         this.resources = new ArrayList<>(resources);
     }
 
@@ -184,7 +160,7 @@ public class ResourcesFragment extends ListFragment
             builder.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            forceUpdate(filterTypesList, getFilteredTags());
+                            forceUpdate(getFilteredTypes(), getFilteredTags());
                         }
                     });
 
@@ -218,11 +194,7 @@ public class ResourcesFragment extends ListFragment
             builder.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            List<Resource.ResourceType> types = getFilteredTypes();
-                            //If all boxes unchecked, display all options
-                            if (types.isEmpty())
-                                types = filterTypesList;
-                            forceUpdate(types, getFilteredTags());
+                            forceUpdate(getFilteredTypes(), getFilteredTags());
                         }
                     });
 
@@ -252,20 +224,31 @@ public class ResourcesFragment extends ListFragment
     private List<ResourceTag> getFilteredTags()
     {
         ArrayList<ResourceTag> toReturn = new ArrayList<>();
-        for(int i = 0; i < selectedTags.length; i++)
-            if(selectedTags[i])
-                toReturn.add(filterTagsList.get(i));
-        return toReturn;
+        if(selectedTags != null && filterTagsList != null)
+        {
+            for (int i = 0; i < selectedTags.length; i++)
+                if (selectedTags[i])
+                    toReturn.add(filterTagsList.get(i));
+            return toReturn;
+        }
+        else
+            return new ArrayList<>();
+
     }
 
     //Generate list of ResourceTypes from tags selected in dialog
     private List<Resource.ResourceType> getFilteredTypes()
     {
         ArrayList<Resource.ResourceType> toReturn = new ArrayList<>();
-        for(int i = 0; i < selectedTypes.length; i++)
-            if(selectedTypes[i])
-                toReturn.add(filterTypesList.get(i));
-        return toReturn;
+        if(selectedTypes != null && filterTypesList != null)
+        {
+            for (int i = 0; i < selectedTypes.length; i++)
+                if (selectedTypes[i])
+                    toReturn.add(filterTypesList.get(i));
+            return toReturn;
+        }
+        else
+            return new ArrayList<>();
     }
 
     //Extract String field from list of ResourceTags

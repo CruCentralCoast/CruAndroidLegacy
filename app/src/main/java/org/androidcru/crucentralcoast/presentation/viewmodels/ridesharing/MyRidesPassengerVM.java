@@ -11,6 +11,7 @@ import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesPassengerFragment;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import rx.observers.Observers;
@@ -59,7 +60,7 @@ public class MyRidesPassengerVM {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (Passenger p : ride.passengers) {
-                            if (p.gcmId.equals(CruApplication.getGCMID())) {
+                            if (p.gcmId.equals(SharedPreferencesUtil.getGCMID())) {
                                 RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id, p.id);
                             }
                         }

@@ -67,12 +67,11 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         holder.missionLeaders.setText(context.getResources().getString(R.string.mission_leaders,
                 summerMission.leaders));
         holder.missionLeaders.setVisibility(isExpanded.get(position) && summerMission.leaders != null ? View.VISIBLE : View.GONE);
-        if(summerMission.image != null)
+        if(summerMission.image != null && !summerMission.image.isEmpty())
         {
-            ViewUtil.setSource(holder.missionBanner, summerMission.image.url,
+            ViewUtil.setSource(holder.missionBanner, summerMission.image,
                     0,
-                    DrawableUtil.getDrawable(holder.missionBanner.getContext(), R.drawable.cru_logo_grey600),
-                    ViewUtil.SCALE_TYPE.FIT);
+                    DrawableUtil.getDrawable(holder.missionBanner.getContext(), R.drawable.cru_logo_grey600), null);
         }
         else
         {

@@ -34,7 +34,6 @@
     <string name="facebook_app_id">544416192400105</string>
     <string name="rsvp_title">Set RSVP Status</string>
 
-    <string name="gcm_registration_id">gcm_registration_id</string>
     <string name="select_gender">Select Gender</string>
     <string name="preferred_driver_gender">Select Preferred Driver Sex</string>
     <string name="select_car_capacity">Select Car Capacity</string>
@@ -170,5 +169,8 @@
     <string name="notification">Notifications</string>
     <string name="settings_title">Settings</string>
     <string name="invalid_email">Please Check and Enter a Valid Email Address</string>
+    <string name="empty_summer_missions">There are no summer missions at this time!</string>
+    <string name="empty_ministry_subscriptions">No Ministry Subscriptions can be found at this time.</string>
+    <string name="failed_login">Login Failed</string>
 
 </resources>

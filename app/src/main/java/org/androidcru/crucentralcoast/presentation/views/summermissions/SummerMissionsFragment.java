@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
@@ -15,35 +16,21 @@ import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.Observer;
 
 public class SummerMissionsFragment extends ListFragment
 {
     private RecyclerView.LayoutManager layoutManager;
     private Observer<List<SummerMission>> observer;
+    @BindView(R.id.informational_text) TextView inforomationalText;
 
     public SummerMissionsFragment()
     {
-        observer = new Observer<List<SummerMission>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-
-            }
-
-            @Override
-            public void onNext(List<SummerMission> summerMissions)
-            {
-                recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
-            }
-        };
+        observer = createListObserver(R.layout.empty_with_alert, summerMissions -> {
+            helper.recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
+        });
     }
 
     @Nullable
@@ -57,12 +44,16 @@ public class SummerMissionsFragment extends ListFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
 
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        unbinder = ButterKnife.bind(this, view);
+        inforomationalText.setText(R.string.empty_summer_missions);
 
-        swipeRefreshLayout.setOnRefreshListener(this::getSummerMissions);
+        layoutManager = new LinearLayoutManager(getContext());
+        helper.recyclerView.setLayoutManager(layoutManager);
+
+        helper.swipeRefreshLayout.setOnRefreshListener(this::getSummerMissions);
     }
 
     @Override
@@ -74,7 +65,7 @@ public class SummerMissionsFragment extends ListFragment
 
     private void getSummerMissions()
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         SummerMissionProvider.requestSummerMissions(this, observer);
     }
 }

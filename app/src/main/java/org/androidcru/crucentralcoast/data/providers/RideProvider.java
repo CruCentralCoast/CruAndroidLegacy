@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.data.providers;
 
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
@@ -11,6 +10,7 @@ import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,37 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public final class RideProvider
 {
     private static CruApiService mCruService = CruApiProvider.getService();
 
+    private static Observable.Transformer<Ride, Ride> attachEvent = rideObservable -> rideObservable.flatMap(ride -> {
+        return EventProvider.requestCruEventByID(ride.eventId)
+                .flatMap(event -> {
+                    ride.event = event;
+                    return Observable.just(ride);
+                });
+    });
 
+    private static Observable.Transformer<Ride, Ride> attachDistance(double[] location)
+    {
+        return rideObservable -> rideObservable
+                .map(ride -> {
+                    ride.distance = MathUtil.convertMeterToMiles(LocationUtil.distance(location[0], location[1], ride.location.geo[1],
+                            ride.location.geo[0]));
+                    return ride;
+                })
+                .filter(ride1 -> {
+                    return ride1.distance <= ride1.radius;
+                });
+    }
+
+    private static Observable.Transformer<Ride, List<Ride>> sortByDistance = rideObservable -> rideObservable
+            .toSortedList((Ride r1, Ride r2) -> {
+                return Double.compare(r2.distance, r1.distance);
+            });
 
     public static void requestRides(SubscriptionsHolder holder, Observer<List<Ride>> observer)
     {
@@ -57,7 +80,7 @@ public final class RideProvider
                     boolean status = false;
                     for (Passenger p : ride.passengers)
                     {
-                        if (p.gcmId != null && p.gcmId.equals(CruApplication.getGCMID()))
+                        if (p.gcmId != null && p.gcmId.equals(SharedPreferencesUtil.getGCMID()))
                         {
                             status = true;
                         }
@@ -72,7 +95,6 @@ public final class RideProvider
     protected static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
-                .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
                     Timber.d("Rides found");
                     return Observable.from(rides);
@@ -87,20 +109,14 @@ public final class RideProvider
                         ride.passengers = new ArrayList<Passenger>();
                     return ride;
                 })
-                .map(ride -> {
-                    EventProvider.requestCruEventByID(ride.eventId)
-                            .compose(RxLoggingUtil.log("EVENTS"))
-                            .map(theEvent -> ride.event = theEvent)
-                            .toBlocking()
-                            .subscribe();
-                    return ride;
-                })
+                .compose(attachEvent)
+                .compose(RxComposeUtil.network())
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 
 
 
-    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, Double[] latlng)
+    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, double[] latlng)
     {
         Subscription s = searchRides(query, latlng)
                 .compose(RxComposeUtil.ui())
@@ -108,20 +124,18 @@ public final class RideProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Ride>> searchRides(Query query, Double[] latlng)
+    protected static Observable<List<Ride>> searchRides(Query query, double[] latlng)
     {
         return mCruService.searchRides(query)
                 .flatMap(rides -> {
                     return Observable.from(rides);
                 })
-                .compose(RxLoggingUtil.log("RIDES BEFORE LOC FILTER"))
-                .filter(ride -> {
-                    double distance = LocationUtil.distance(ride.location.geo[1], latlng[0], ride.location.geo[0], latlng[1]);
-                    Timber.d(Double.toString(distance));
-                    return distance <= MathUtil.convertMilesToMeters(ride.radius);
+                .compose(attachEvent)
+                .compose(attachDistance(latlng))
+                .compose(sortByDistance)
+                .flatMap(finalRides -> {
+                    return finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides);
                 })
-                .compose(RxLoggingUtil.log("RIDES AFTER LOC FILTER"))
-                .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
 
@@ -137,6 +151,7 @@ public final class RideProvider
     protected static Observable<Ride> createRide(Ride ride)
     {
         return mCruService.postRide(ride)
+                .compose(attachEvent)
                 .compose(RxComposeUtil.network());
     }
 
@@ -152,6 +167,7 @@ public final class RideProvider
     protected static Observable<Ride> updateRide(String rideId, Ride ride)
     {
         return mCruService.updateRide(rideId, ride)
+                .compose(attachEvent)
                 .compose(RxComposeUtil.network());
     }
 
@@ -214,19 +230,19 @@ public final class RideProvider
     protected static Observable<Ride> requestRideByID(String id)
     {
         return mCruService.findSingleRide(id)
-                .compose(RxComposeUtil.network())
                 .flatMap(rides -> {
                     Timber.d("Rides found");
                     return Observable.from(rides);
                 })
-                .map(ride -> {
-                    PassengerProvider.getPassengers(ride.passengerIds)
-                            .subscribeOn(Schedulers.io())
+                .take(1)
+                .flatMap(ride -> {
+                    return PassengerProvider.getPassengers(ride.passengerIds)
+                            .defaultIfEmpty(new ArrayList<>())
                             .map(passengers -> ride.passengers = passengers)
-                            .toBlocking()
-                            .subscribe();
-                    return ride;
-                });
+                            .flatMap(passengers1 -> Observable.just(ride));
+                })
+                .compose(attachEvent)
+                .compose(RxComposeUtil.network());
 
     }
 }

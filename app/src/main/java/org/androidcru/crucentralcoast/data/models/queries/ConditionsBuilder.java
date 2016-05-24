@@ -73,7 +73,7 @@ public final class ConditionsBuilder
 
     public ConditionsBuilder addRestriction(OPERATOR operator, String[] value)
     {
-        if(value != null && value.length > 0)
+        if(value != null)
         {
             JsonObject object = new JsonObject();
             JsonArray array = new JsonArray();

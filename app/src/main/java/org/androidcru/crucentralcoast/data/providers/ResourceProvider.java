@@ -51,7 +51,7 @@ public final class ResourceProvider
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
 
-        if(types != null && !types.isEmpty())
+        if(types != null)
         {
             String[] stringTypes = new String[types.size()];
             for (int i = 0; i < types.size(); i++)
@@ -65,7 +65,7 @@ public final class ResourceProvider
                             .addRestriction(ConditionsBuilder.OPERATOR.IN, stringTypes));
         }
 
-        if(tags != null && !tags.isEmpty())
+        if(tags != null)
         {
             String[] stringTags = new String[tags.size()];
             for (int i = 0; i < tags.size(); i++)
@@ -83,12 +83,10 @@ public final class ResourceProvider
         Query query = new Query.Builder()
                 .setCondition(conditionsBuilder.build())
                 .build();
-
-
-
         return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
     }
@@ -111,8 +109,9 @@ public final class ResourceProvider
     {
         return cruApiService.getResources()
                 .flatMap(resources -> Observable.from(resources))
-                .compose(RxComposeUtil.network())
-                .compose(tagRetriever);
+                .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
+                .compose(RxComposeUtil.network());
     }
 
     protected static Observable<Resource> getResourcesPaginated(int page, int pageSize)
@@ -126,6 +125,7 @@ public final class ResourceProvider
         return cruApiService.findResources(query)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
+                .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.network());
     }
 }

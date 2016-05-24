@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/empty_videos_view"
     android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="gone">
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"

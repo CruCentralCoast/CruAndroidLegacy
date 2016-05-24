@@ -21,4 +21,10 @@
     <style name="PreferenceTheme" parent="@style/AppTheme">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
+
+    <style name="CardStyle" parent="CardView">
+        <item name="cardCornerRadius">0dp</item>
+        <item name="cardElevation">0dp</item>
+         <item name="cardUseCompatPadding">false</item>
+    </style>
 </resources>

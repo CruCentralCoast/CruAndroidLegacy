@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.CruApplication;
@@ -14,6 +16,7 @@ import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.presentation.customtabs.CustomTabActivityHelper;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.webview.WebviewFallback;
+import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,12 +38,17 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
 
         if (isFeed)
         {
-            cardView.setUseCompatPadding(true);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            int margin = DisplayMetricsUtil.dpToPx(rootView.getContext(), 16);
+            params.setMargins(0, margin, 0, 0);
+            cardView.setLayoutParams(params);
             divider.setVisibility(View.GONE);
         }
         else
         {
-            cardView.setUseCompatPadding(false);
             divider.setVisibility(View.VISIBLE);
         }
     }
@@ -48,11 +56,10 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     public ResourceViewHolder(View rootView) {
         super(rootView);
         rootView.setOnClickListener(this);
-
         ButterKnife.bind(this, rootView);
     }
-    
-    public void bind(Resource resource) 
+
+    public void bind(Resource resource)
     {
         this.model = resource;
         bindUI();

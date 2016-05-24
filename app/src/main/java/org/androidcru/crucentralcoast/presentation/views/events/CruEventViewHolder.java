@@ -3,8 +3,8 @@ package org.androidcru.crucentralcoast.presentation.views.events;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.facebook.login.LoginResult;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.Location;
@@ -98,9 +97,9 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         eventName.setText(cruEvent.name);
         eventDate.setText(getDateTime());
         Context context = eventBanner.getContext();
-        if(cruEvent.image != null)
+        if(cruEvent.image != null && !cruEvent.image.isEmpty())
         {
-            ViewUtil.setSource(eventBanner, cruEvent.image.url, ViewUtil.SCALE_TYPE.FIT);
+            ViewUtil.setSource(eventBanner, cruEvent.image, ViewUtil.SCALE_TYPE.FIT);
         }
         else
         {
@@ -177,17 +176,15 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
                 SharedPreferencesUtil.writeCalendarID(cruEventId, calendarId);
             }
             
-            //TODO
-            /*
-            eventFragment.refreshAdapter();
-             */
+            adapter.notifyItemChanged(getAdapterPosition());
         });
 
         final boolean adding = !addedToCalendar;
         //REVIEW magic strings
         String operation = adding ? "Add " : "Remove ";
+        String toFrom = adding ? "to" : "from";
         AlertDialog confirmDialog = new AlertDialog.Builder(v.getContext())
-                .setTitle(operation + cruEvent.name + " to your calendar?")
+                .setTitle(operation + cruEvent.name + " " + toFrom + " your calendar?")
                 .setNegativeButton("NOPE", (dialog, which) -> {
                 })
                 .setPositiveButton("SURE", (dialog, which) -> {
@@ -277,30 +274,45 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         //TODO Passenger and Driver Activities should have a unified set of Extras
         if(cruEvent.rideSharingEnabled)
         {
-            //REVIEW magic strings
-            AlertDialog dialog = new AlertDialog.Builder(v.getContext())
-                    .setTitle("Ride Sharing")
-                    .setMessage(Html.fromHtml(String.format("For %s, would you like to be a <b>Driver</b> " +
-                            "or a <b>Passenger</b>?", cruEvent.name)))
-                    .setPositiveButton("PASSENGER", (dialog1, which) -> {
+            switch (cruEvent.rideStatus)
+            {
+                case NEITHER:
+                    //REVIEW magic strings
+                    AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                            .setTitle("Ride Sharing")
+                            .setMessage(Html.fromHtml(String.format("For %s, would you like to be a <b>Driver</b> " +
+                                    "or a <b>Passenger</b>?", cruEvent.name)))
+                            .setPositiveButton("PASSENGER", (dialog1, which) -> {
 
-                        Intent passengerIntent = new Intent(activity, PassengerSignupActivity.class);
+                                Intent passengerIntent = new Intent(activity, PassengerSignupActivity.class);
 
-                        passengerIntent.putExtra(AppConstants.EVENT_KEY, Parcels.wrap(cruEvent));
+                                passengerIntent.putExtra(AppConstants.EVENT_KEY, Parcels.wrap(cruEvent));
 
-                        activity.startActivityForResult(passengerIntent, AppConstants.PASSENGER_REQUEST_CODE);
-                    })
-                    .setNegativeButton("DRIVER", (dialog1, which) -> {
+                                activity.startActivityForResult(passengerIntent, AppConstants.PASSENGER_REQUEST_CODE);
+                            })
+                            .setNegativeButton("DRIVER", (dialog1, which) -> {
 
-                        Intent driverIntent = new Intent(activity,
-                                DriverSignupActivity.class);
+                                Intent driverIntent = new Intent(activity,
+                                        DriverSignupActivity.class);
 
-                        Parcelable serializedEvent = Parcels.wrap(cruEvent);
-                        driverIntent.putExtra(AppConstants.EVENT_KEY, serializedEvent);
-                        activity.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
-                    })
-                    .create();
-            dialog.show();
+                                Parcelable serializedEvent = Parcels.wrap(cruEvent);
+                                driverIntent.putExtra(AppConstants.EVENT_KEY, serializedEvent);
+                                activity.startActivityForResult(driverIntent, AppConstants.DRIVER_REQUEST_CODE);
+                            })
+                            .create();
+                    dialog.show();
+                    break;
+                case DRIVER:
+                    Bundle driverBundle = new Bundle();
+                    driverBundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.DRIVER_TAB);
+                    ((MainActivity) activity).switchToMyRides(driverBundle);
+                    break;
+                case PASSENGER:
+                    Bundle passengerBundle = new Bundle();
+                    passengerBundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.PASSENGER_TAB);
+                    ((MainActivity) activity).switchToMyRides(passengerBundle);
+                    break;
+            }
         }
         else
         {

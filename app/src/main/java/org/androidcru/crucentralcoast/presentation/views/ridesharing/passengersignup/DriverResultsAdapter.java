@@ -45,6 +45,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
         Ride currentRide = rides.get(position);
         holder.driverName.setText(currentRide.driverName);
         holder.rideDateTime.setText(currentRide.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER + " " + AppConstants.TIME_FORMATTER)));
+        holder.distance.setText(String.format("%.2f miles away", currentRide.distance));
     }
 
     @Override
@@ -58,6 +59,7 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
 
         @BindView(R.id.driverName) TextView driverName;
         @BindView(R.id.rideDateTime) TextView rideDateTime;
+        @BindView(R.id.distance) TextView distance;
 
         public DriverResultViewHolder(View itemView)
         {

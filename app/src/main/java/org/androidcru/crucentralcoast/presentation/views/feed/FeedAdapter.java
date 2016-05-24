@@ -50,7 +50,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case CRU_EVENT:
                 return new CruEventViewHolder(inflater.inflate(R.layout.card_event, parent, false), this, layoutManager);
             case YOUTUBE_VIDEO:
-                return new CruVideoViewHolder(inflater.inflate(R.layout.card_video, parent, false), this, layoutManager);
+                return new CruVideoViewHolder(inflater.inflate(R.layout.card_video, parent, false), this, layoutManager, true);
             default:
                 return new ResourceViewHolder(inflater.inflate(R.layout.item_resource, parent, false), true);
         }
