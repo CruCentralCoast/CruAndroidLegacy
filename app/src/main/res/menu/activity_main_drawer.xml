@@ -42,4 +42,11 @@
             android:title="@string/nav_videos"/>
     </group>
 
+    <group android:checkableBehavior="single" android:id="@+id/other">
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/bell"
+            android:title="@string/nav_notifications"/>
+    </group>
+
 </menu>

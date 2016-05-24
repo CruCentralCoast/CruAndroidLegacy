@@ -28,6 +28,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActiv
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.feed.FeedFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
+import org.androidcru.crucentralcoast.presentation.views.notifications.NotificationFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
 import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyRidesFragment;
 import org.androidcru.crucentralcoast.presentation.views.settings.SettingsActivity;
@@ -217,6 +218,10 @@ public class MainActivity extends BaseAppCompatActivity
             case R.id.nav_videos:
                 toolbar.setTitle(R.string.nav_videos);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
+                break;
+            case R.id.nav_notifications:
+                toolbar.setTitle(R.string.nav_notifications);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, new NotificationFragment()).commit();
                 break;
         }
 

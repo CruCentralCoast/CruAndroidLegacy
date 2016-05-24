@@ -170,5 +170,6 @@
     <string name="notification">Notifications</string>
     <string name="empty_summer_missions">There are no summer missions at this time!</string>
     <string name="empty_ministry_subscriptions">No Ministry Subscriptions can be found at this time.</string>
+    <string name="nav_notifications">Notifications</string>
 
 </resources>

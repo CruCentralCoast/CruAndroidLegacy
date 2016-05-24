@@ -13,7 +13,12 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.Notification;
+import org.androidcru.crucentralcoast.data.providers.NotificationProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.threeten.bp.ZonedDateTime;
+
+import rx.observers.Observers;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -33,6 +38,8 @@ public class MyGcmListenerService extends GcmListenerService {
         String title = data.getString("title");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
+
+        NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now()));
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.
