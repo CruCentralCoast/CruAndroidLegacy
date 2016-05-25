@@ -45,7 +45,7 @@ public class LocationTest {
         Location loc1 = new Location(addr1, geo);
         Location loc2 = new Location(addr2, geo);
 
-        assertEquals("S Higuera St San Luis Obispo, CA, USA", loc1.toString());
-        assertEquals("200 N Santa Rosa St San Luis Obispo, CA, 93405, USA", loc2.toString());
+        assertEquals("S Higuera St, San Luis Obispo, CA, USA", loc1.toString());
+        assertEquals("200 N Santa Rosa St, San Luis Obispo, CA 93405, USA", loc2.toString());
     }
 }

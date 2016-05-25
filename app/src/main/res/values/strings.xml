@@ -161,15 +161,17 @@
     <string name="logout_dialog_text">Are you sure you want to logout?</string>
     <string name="notification_checkbox_key">Notifications Key</string>
     <string name="notification_checkbox_text">Enable Notifications</string>
-    <string name="Cru_Gold_is_the_best">Cru Gold is the best</string>
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
     <string name="login">Login</string>
     <string name="logged_in">Logged in as</string>
     <string name="logout">Logout</string>
     <string name="notification">Notifications</string>
+    <string name="settings_title">Settings</string>
+    <string name="invalid_email">Please Check and Enter a Valid Email Address</string>
     <string name="empty_summer_missions">There are no summer missions at this time!</string>
     <string name="empty_ministry_subscriptions">No Ministry Subscriptions can be found at this time.</string>
     <string name="nav_notifications">Notifications</string>
+    <string name="failed_login">Login Failed</string>
 
 </resources>

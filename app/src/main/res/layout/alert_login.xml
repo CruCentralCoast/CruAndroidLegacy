@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/login_failed"
-        android:text="Login Failed!"
+        android:text="@string/failed_login"
         android:textColor="@color/red600"
         android:textSize="16sp"
         android:layout_width="wrap_content"

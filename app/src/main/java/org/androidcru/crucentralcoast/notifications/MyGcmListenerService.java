@@ -19,6 +19,8 @@ import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.threeten.bp.ZonedDateTime;
 
 import rx.observers.Observers;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
+
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -34,8 +36,10 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        String title = data.getString("title");
+
+
+        String message = data.getBundle("notification").getString("body");
+        String title = data.getBundle("notification").getString("title");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -70,6 +74,9 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message, String title) {
+        if (!SharedPreferencesUtil.getNotificationEnabled())
+            return;
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -88,9 +95,5 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
-
-    private void sendNotification(String message) {
-        sendNotification(message, "Cru Central Coast");
     }
 }

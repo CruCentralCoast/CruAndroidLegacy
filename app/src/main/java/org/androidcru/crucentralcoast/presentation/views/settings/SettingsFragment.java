@@ -3,6 +3,7 @@ package org.androidcru.crucentralcoast.presentation.views.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
@@ -39,13 +40,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
     private Preference subscriptionButton;
     private Preference loginButton;
-    private Preference notificationCheckbox;
-    private Preference cruGoldIsTheBest;
+    private CheckBoxPreference notificationCheckbox;
 
     //login
     private AlertDialog loginDialog;
     private View loginView;
-    @NotEmpty @Email(message = "Please Check and Enter a valid Email Address")EditText loginName;
+    @NotEmpty @Email(messageResId = R.string.invalid_email)EditText loginName;
     @NotEmpty EditText loginPassword;
     private BaseValidator loginValidator;
     private ProgressBar loginProgress;
@@ -73,7 +73,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
         //login button
         LayoutInflater factory = LayoutInflater.from(getContext());
-        loginView = factory.inflate(R.layout.login_alert, null);
+        loginView = factory.inflate(R.layout.alert_login, null);
         loginName = (EditText) loginView.findViewById(R.id.username_field);
         loginPassword = (EditText) loginView.findViewById(R.id.password_field);
         loginProgress = (ProgressBar) loginView.findViewById(R.id.progress);
@@ -157,13 +157,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                 .create();
 
         //notification
-        notificationCheckbox = (Preference) getPreferenceManager().findPreference(getString(R.string.notification_checkbox_key));
+        notificationCheckbox = (CheckBoxPreference) getPreferenceManager().findPreference(getString(R.string.notification_checkbox_key));
+        notificationCheckbox.setChecked(SharedPreferencesUtil.getNotificationEnabled());
         notificationCheckbox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-
-                //TODO: implement toggle notifications
-
+                SharedPreferencesUtil.setNotificationEnable(notificationCheckbox.isChecked());
                 return true;
             }
         });

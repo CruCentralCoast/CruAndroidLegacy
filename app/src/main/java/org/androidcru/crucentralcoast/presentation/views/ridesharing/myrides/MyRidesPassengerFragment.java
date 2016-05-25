@@ -86,10 +86,6 @@ public class MyRidesPassengerFragment extends ListFragment
     public void setRides(List<Ride> rides)
     {
         rideVMs.clear();
-//        rx.Observable.from(rides)
-//                .map(ride -> new MyRidesPassengerVM(this, ride, false))
-//                .subscribeOn(Schedulers.immediate())
-//                .subscribe(rideVMs::add);
         for (Ride ride : rides)
             rideVMs.add(new MyRidesPassengerVM(this, ride, false));
 
