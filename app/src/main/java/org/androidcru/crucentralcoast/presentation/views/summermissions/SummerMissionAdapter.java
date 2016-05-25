@@ -71,7 +71,7 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         {
             ViewUtil.setSource(holder.missionBanner, summerMission.image,
                     0,
-                    DrawableUtil.getDrawable(holder.missionBanner.getContext(), R.drawable.cru_logo_grey600), null);
+                    DrawableUtil.getDrawable(holder.missionBanner.getContext(), R.drawable.cru_logo_grey600), null, null);
         }
         else
         {

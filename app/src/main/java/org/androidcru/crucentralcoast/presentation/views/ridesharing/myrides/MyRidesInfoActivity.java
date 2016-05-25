@@ -76,7 +76,7 @@ public class MyRidesInfoActivity extends BaseAppCompatListActivity
 
         if(ride.event.image != null && !ride.event.image.isEmpty())
         {
-            ViewUtil.setSource(eventBanner, ride.event.image, ViewUtil.SCALE_TYPE.FIT);
+            ViewUtil.setSource(eventBanner, ride.event.image, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
         }
         rideType.setText(getString(R.string.myride_info_dir) + ride.direction.getValueDetailed());
         rideTime.setText(getString(R.string.myride_info_departure_time)

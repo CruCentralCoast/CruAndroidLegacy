@@ -93,7 +93,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
 
         Context context = videoThumb.getContext();
 
-        ViewUtil.setSource(videoThumb, model.getHigh().url, null);
+        ViewUtil.setSource(videoThumb, model.getHigh().url, 0, null, null, null);
 
         // Set the chevron to up or down depending on if the view is expanded or not
         videoChev.setImageDrawable(state.isExpanded
