@@ -159,12 +159,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         //notification
         notificationCheckbox = (CheckBoxPreference) getPreferenceManager().findPreference(getString(R.string.notification_checkbox_key));
         notificationCheckbox.setChecked(SharedPreferencesUtil.getNotificationEnabled());
-        notificationCheckbox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                SharedPreferencesUtil.setNotificationEnable(notificationCheckbox.isChecked());
-                return true;
-            }
+        notificationCheckbox.setOnPreferenceChangeListener((preference, o) -> {
+            SharedPreferencesUtil.setNotificationEnable(!notificationCheckbox.isChecked());
+            return true;
         });
     }
 
