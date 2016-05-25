@@ -124,7 +124,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
         //new ride
         if (r == null)
             driverSignupVM = new DriverSignupVM(this, getFragmentManager(), event.id, event.startDate, event.endDate);
-            //editing an existing ride
+        //editing an existing ride
         else
             driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r, event.endDate);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());
@@ -159,10 +159,11 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
 
     private void setupUserObserver() {
         userObserver = ObserverUtil.create(Observers.create(t -> {
-                    if (t != null)
+                    if (t != null) {
                         sendRide();
+                    }
                 },
-                e -> Timber.e(e, "Failed to retrieve."),
+                e -> Timber.e(e, "Failed to retrieve User."),
                 () -> {
                 }),
                 () -> {

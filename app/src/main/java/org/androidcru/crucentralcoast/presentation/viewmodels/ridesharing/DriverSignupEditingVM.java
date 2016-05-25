@@ -113,4 +113,12 @@ public class DriverSignupEditingVM extends DriverSignupVM {
                 updateMap(new LatLng(ride.location.geo[1], ride.location.geo[0]));
         };
     }
+
+    @Override
+    public Ride getRide()
+    {
+        Ride temp = super.getRide();
+        temp.id = ride.id;
+        return temp;
+    }
 }
