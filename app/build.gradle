@@ -51,8 +51,9 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "CRU_SERVER", '"http://androidcru-prod.jonamireh.com"'
+            buildConfigField "String", "CRU_SERVER", '"http://androidcru-capstone.jonamireh.com"'
         }
         debug {
             buildConfigField "String", "CRU_SERVER", '"http://androidcru-dev.jonamireh.com"'
