@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.summermissions;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
+import org.androidcru.crucentralcoast.presentation.customtabs.CustomTabActivityHelper;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
+import org.androidcru.crucentralcoast.presentation.views.webview.WebviewFallback;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -85,9 +88,9 @@ public class SummerMissionAdapter extends RecyclerView.Adapter<SummerMissionAdap
         holder.missionDescription.setVisibility(isExpanded.get(position) ? View.VISIBLE : View.GONE);
         holder.learnMore.setVisibility((summerMission.url != null && !summerMission.url.isEmpty()) ? View.VISIBLE : View.GONE);
         holder.learnMore.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(summerMission.url));
-            context.startActivity(i);
+            CustomTabActivityHelper.openCustomTab(
+                    (Activity)context, ViewUtil.getCustomTabsIntent(v.getContext()), Uri.parse(summerMission.url),
+                        new WebviewFallback());
         });
     }
 
