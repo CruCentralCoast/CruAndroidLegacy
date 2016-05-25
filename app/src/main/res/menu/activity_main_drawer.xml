@@ -47,6 +47,10 @@
             android:id="@+id/nav_notifications"
             android:icon="@drawable/bell"
             android:title="@string/nav_notifications"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings"
+            android:title="@string/nav_settings"/>
     </group>
 
 </menu>

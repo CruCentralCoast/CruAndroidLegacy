@@ -173,5 +173,6 @@
     <string name="empty_ministry_subscriptions">No Ministry Subscriptions can be found at this time.</string>
     <string name="nav_notifications">Notifications</string>
     <string name="failed_login">Login Failed</string>
+    <string name="nav_settings">Settings</string>
 
 </resources>

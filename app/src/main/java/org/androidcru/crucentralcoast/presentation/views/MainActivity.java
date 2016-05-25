@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
@@ -153,38 +152,11 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-//            startActivity(new Intent(this, SubscriptionActivity.class));
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        boolean displayAsSelectedItem = true;
         switch (id)
         {
             case R.id.nav_feed:
@@ -223,11 +195,15 @@ public class MainActivity extends BaseAppCompatActivity
                 toolbar.setTitle(R.string.nav_notifications);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new NotificationFragment()).commit();
                 break;
+            case R.id.nav_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                displayAsSelectedItem = false;
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return displayAsSelectedItem;
     }
 
     public void switchToMyRides(Bundle b)
