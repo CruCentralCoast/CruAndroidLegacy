@@ -173,4 +173,8 @@
     <string name="empty_ministry_subscriptions">No Ministry Subscriptions can be found at this time.</string>
     <string name="failed_login">Login Failed</string>
 
+    <string name="driver_authorization_title">Oops!</string>
+    <string name="driver_authorization_msg">You are not a verified driver.  Please contact Cru</string>
+    <string name="driver_authorization_dismiss">Ok</string>
+
 </resources>
