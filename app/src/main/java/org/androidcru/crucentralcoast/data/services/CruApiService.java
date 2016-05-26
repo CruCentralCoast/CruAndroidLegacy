@@ -61,7 +61,7 @@ public interface CruApiService
     Observable<ArrayList<Ride>> searchRides(@Body Query query);
 
     @POST("api/resources/search")
-    Observable<ArrayList<Resource>> findResources(@Body Query query);
+    Observable<ArrayList<Resource>> findResources(@Body Query query, @retrofit2.http.Query("LeaderAPIKey") String leaderAPIKey);
 
     @GET("api/resources")
     Observable<ArrayList<Resource>> getResources();

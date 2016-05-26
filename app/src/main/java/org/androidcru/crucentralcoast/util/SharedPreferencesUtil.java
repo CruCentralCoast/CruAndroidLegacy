@@ -88,7 +88,12 @@ public class SharedPreferencesUtil
     public static void writeLoginInformation(String loginName, String leaderApiKey)
     {
         getSharedPreferences().edit().putString(AppConstants.USERNAME_KEY, loginName).commit();
-        getSharedPreferences().edit().putString(AppConstants.LOGIN_KEY, leaderApiKey).commit();
+
+    }
+
+    public static String getLeaderAPIKey()
+    {
+        return getSharedPreferences().getString(AppConstants.LOGIN_KEY, "");
     }
 
     public static String getLoginUsername()

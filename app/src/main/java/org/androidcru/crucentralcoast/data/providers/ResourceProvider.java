@@ -38,15 +38,15 @@ public final class ResourceProvider
                 return resource;
             });
 
-    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, List<Resource.ResourceType> types, List<ResourceTag> tags)
+    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, List<Resource.ResourceType> types, List<ResourceTag> tags, String leaderAPIKey)
     {
-        Subscription s = findResources(types, tags)
+        Subscription s = findResources(types, tags, leaderAPIKey)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Resource>> findResources(List<Resource.ResourceType> types, List<ResourceTag> tags)
+    protected static Observable<List<Resource>> findResources(List<Resource.ResourceType> types, List<ResourceTag> tags, String leaderAPIKey)
     {
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
@@ -83,7 +83,7 @@ public final class ResourceProvider
         Query query = new Query.Builder()
                 .setCondition(conditionsBuilder.build())
                 .build();
-        return cruApiService.findResources(query)
+        return cruApiService.findResources(query, leaderAPIKey)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())
@@ -114,7 +114,7 @@ public final class ResourceProvider
                 .compose(RxComposeUtil.network());
     }
 
-    protected static Observable<Resource> getResourcesPaginated(int page, int pageSize)
+    protected static Observable<Resource> getResourcesPaginated(int page, int pageSize, String leaderAPIKey)
     {
         Query query = new Query.Builder()
                 .setOptions(new OptionsBuilder()
@@ -122,7 +122,7 @@ public final class ResourceProvider
                         .build())
                 .build();
 
-        return cruApiService.findResources(query)
+        return cruApiService.findResources(query, leaderAPIKey)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())
