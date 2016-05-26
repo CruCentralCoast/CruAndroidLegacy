@@ -41,7 +41,7 @@ public class ViewUtil
         }
         view.setTypeface(fontCache.get(fontFileName));
     }
-    
+
     public static Typeface getFont(Context context, String fontFileName)
     {
         if(!fontCache.containsKey(fontFileName))
