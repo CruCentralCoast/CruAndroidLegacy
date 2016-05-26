@@ -32,12 +32,11 @@ import rx.observers.Observers;
 
 public class BasicInfoFragment extends FormContentFragment
 {
-    private BaseValidator validator;
+    protected BaseValidator validator;
 
-    @BindView(R.id.name_field) @NotEmpty EditText nameField;
-    @BindView(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @BindView(R.id.email_field) @Email EditText emailField;
-
+    public @BindView(R.id.name_field) @NotEmpty EditText nameField;
+    public @BindView(R.id.phone_field) @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
+    public @BindView(R.id.email_field) @Email EditText emailField;
 
     @Nullable
     @Override
@@ -72,6 +71,7 @@ public class BasicInfoFragment extends FormContentFragment
         {
             // gets the validated information and overwrites the user's information in shared preferences on a background thread
             SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), emailField.getText().toString(), phoneField.getText().toString());
+
 
             // gets back the ministry team object from the form holder.
             MinistryTeam ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);

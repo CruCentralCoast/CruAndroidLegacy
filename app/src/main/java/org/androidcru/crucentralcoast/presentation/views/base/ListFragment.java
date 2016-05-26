@@ -27,6 +27,7 @@ public class ListFragment extends BaseSupportFragment implements ListHelper
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
+
         super.onViewCreated(view, savedInstanceState);
         helper.onViewCreated(view);
     }

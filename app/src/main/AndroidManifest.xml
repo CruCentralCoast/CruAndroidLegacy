@@ -69,7 +69,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity android:name=".presentation.views.communitygroups.JoinCommunityGroupActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".presentation.views.ridesharing.myrides.MyRidesInfoActivity"
             android:screenOrientation="portrait"

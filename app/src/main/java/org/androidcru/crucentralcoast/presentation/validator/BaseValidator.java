@@ -2,7 +2,11 @@ package org.androidcru.crucentralcoast.presentation.validator;
 
 import android.app.Activity;
 import android.content.Context;
+
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -17,6 +21,13 @@ public class BaseValidator implements Validator.ValidationListener
     protected Context context;
 
     private boolean isValid;
+
+    public BaseValidator(RecyclerView.ViewHolder holder, View rootView)
+    {
+        context = rootView.getContext();
+        validator = new Validator(holder);
+        postInit();
+    }
 
     public BaseValidator(BaseVM baseVM)
     {

@@ -216,6 +216,7 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder, F
     {
         currentIndex++;
         FormContentFragment nextFragment = currentIndex < fragments.size() ? fragments.get(currentIndex) : null;
+        onPageChange();
         if(nextFragment != null)
         {
             currentFormContent = nextFragment;
@@ -241,7 +242,6 @@ public class FormActivity extends BaseAppCompatActivity implements FormHolder, F
         currentFormContent = fragments.get(currentIndex);
         onPageChange();
         formPager.setCurrentItem(currentIndex);
-
     }
 
     @Override

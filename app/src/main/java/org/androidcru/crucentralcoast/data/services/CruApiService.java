@@ -3,7 +3,11 @@ package org.androidcru.crucentralcoast.data.services;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
+
 import org.androidcru.crucentralcoast.data.models.LoginResponse;
+
+import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
+
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.models.Passenger;
@@ -49,6 +53,9 @@ public interface CruApiService
 
     @POST("/api/ministryteams/{id}/join")
     public Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);
+
+    @GET("/api/ministryquestions/")
+    public Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
 
     @FormUrlEncoded
     @POST("/api/users/find")
