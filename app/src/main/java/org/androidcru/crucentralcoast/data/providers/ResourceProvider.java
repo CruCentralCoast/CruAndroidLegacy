@@ -11,6 +11,8 @@ import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -67,10 +69,19 @@ public final class ResourceProvider
 
         if(tags != null)
         {
-            String[] stringTags = new String[tags.size()];
-            for (int i = 0; i < tags.size(); i++)
+            List<ResourceTag> dTags = new ArrayList<>(tags);
+            Iterator<ResourceTag> iterator = dTags.iterator();
+            while(iterator.hasNext())
             {
-                stringTags[i] = tags.get(i).id;
+                ResourceTag tag = iterator.next();
+                if (tag.id.equals(ResourceTag.SPECIAL_LEADER_ID))
+                    iterator.remove();
+            }
+
+            String[] stringTags = new String[dTags.size()];
+            for (int i = 0; i < dTags.size(); i++)
+            {
+                stringTags[i] = dTags.get(i).id;
             }
 
             conditionsBuilder

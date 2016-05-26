@@ -85,10 +85,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
             {
                 SharedPreferencesUtil.writeLoginInformation(loginName.getText().toString(), response.leaderAPIKey);
                 loginName.setText("");
-                loginName.setError("");
+                loginName.setError(null);
 
                 loginPassword.setText("");
-                loginPassword.setError("");
+                loginPassword.setError(null);
 
                 loginFailed.setVisibility(View.GONE);
                 Timber.d("LOGIN SUCCEEDED");
