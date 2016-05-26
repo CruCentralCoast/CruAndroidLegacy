@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -71,6 +72,14 @@ public class MyRidesDriverFragment extends ListFragment
         //Enables actions in the Activity Toolbar (top-right buttons)
         setHasOptionsMenu(true);
 
+        Button redirectEvents = (Button) view.findViewById(R.id.events_button_driver);
+        redirectEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).switchToEvents();
+            }
+        });
+
         //LayoutManager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         helper.recyclerView.setLayoutManager(layoutManager);
@@ -105,12 +114,5 @@ public class MyRidesDriverFragment extends ListFragment
 
         helper.recyclerView.setAdapter(new MyRidesDriverAdapter(rideVMs, getContext()));
         helper.swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @OnClick(R.id.events_button_driver)
-    @SuppressWarnings("unused")
-    public void onViewUpcomingEventsClicked()
-    {
-        ((MainActivity)getActivity()).switchToEvents();
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import butterknife.OnClick;
 import rx.Observer;
+import timber.log.Timber;
 
 public class MyRidesPassengerFragment extends ListFragment
 {
@@ -63,6 +65,14 @@ public class MyRidesPassengerFragment extends ListFragment
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
         super.onViewCreated(view, savedInstanceState);
 
+        Button redirectEvents = (Button) view.findViewById(R.id.events_button);
+        redirectEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).switchToEvents();
+            }
+        });
+
         //LayoutManager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         helper.recyclerView.setLayoutManager(layoutManager);
@@ -90,12 +100,5 @@ public class MyRidesPassengerFragment extends ListFragment
             rideVMs.add(new MyRidesPassengerVM(this, ride, false));
 
         helper.recyclerView.setAdapter(new MyRidesPassengerAdapter(rideVMs));
-    }
-
-    @OnClick(R.id.events_button)
-    @SuppressWarnings("unused")
-    public void onViewUpcomingEventsClicked()
-    {
-        ((MainActivity)getActivity()).switchToEvents();
     }
 }
