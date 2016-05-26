@@ -20,7 +20,7 @@ public class ObserverUtil
      * @param onNoNetwork Action0 to call in the event there is no network connectivity
      * @return CruObserver which handles onEmpty() and onNoNetwork() in addition to all normal Observer calls
      */
-    public static <T> CruObserver<T> create(Observer<T> observer, Action0 onEmpty, Action0 onNoNetwork)
+    public static <T> CruObserver<T> create(Observer<T> observer, Action0 onEmpty, Action0 onNoNetwork, Action0 onNetworkError)
     {
         return new CruObserver<T>()
         {
@@ -52,7 +52,10 @@ public class ObserverUtil
             public void onError(Throwable e)
             {
                 if(e instanceof HttpException)
+                {
                     Timber.e(e, "HTTP Error in Observer");
+                    onNetworkError.call();
+                }
                 if(e instanceof IOException || e.getCause() instanceof IOException)
                 {
                     if(!CruApplication.isOnline())

@@ -26,6 +26,8 @@ public class ListHelperImpl implements ListHelper
     private ViewStub noNetworkViewStub;
     private ScrollView noNetworkViewScrollView;
 
+    private ScrollView networkErrorScrollView;
+
     private View noNetworkView;
     private View emptyView;
 
@@ -46,6 +48,7 @@ public class ListHelperImpl implements ListHelper
 
         emptyViewScrollView = (ScrollView) view.findViewById(R.id.empty_view);
         noNetworkViewScrollView = (ScrollView) view.findViewById(R.id.no_network_view);
+        networkErrorScrollView = (ScrollView) view.findViewById(R.id.network_error_view);
         recyclerView.setHasFixedSize(true);
 
         setupSwipeRefreshLayout(swipeRefreshLayout);
@@ -69,6 +72,8 @@ public class ListHelperImpl implements ListHelper
         if(noNetworkView != null)
             noNetworkViewScrollView.setVisibility(View.GONE);
 
+        networkErrorScrollView.setVisibility(View.GONE);
+
         swipeRefreshLayout.setRefreshing(false);
         recyclerView.setVisibility(View.GONE);
         emptyViewScrollView.setVisibility(View.VISIBLE);
@@ -86,9 +91,25 @@ public class ListHelperImpl implements ListHelper
         if(emptyView != null)
             emptyViewScrollView.setVisibility(View.GONE);
 
+        networkErrorScrollView.setVisibility(View.GONE);
+
         swipeRefreshLayout.setRefreshing(false);
         recyclerView.setVisibility(View.GONE);
         noNetworkViewScrollView.setVisibility(View.VISIBLE);
+    }
+
+    public void onNetworkError()
+    {
+        if(emptyView != null)
+            emptyViewScrollView.setVisibility(View.GONE);
+
+        if(noNetworkView != null)
+            noNetworkViewScrollView.setVisibility(View.GONE);
+
+
+        swipeRefreshLayout.setRefreshing(false);
+        recyclerView.setVisibility(View.GONE);
+        networkErrorScrollView.setVisibility(View.VISIBLE);
     }
 
     public void showContent()
@@ -97,6 +118,7 @@ public class ListHelperImpl implements ListHelper
             emptyViewScrollView.setVisibility(View.GONE);
         if(noNetworkView != null)
             noNetworkViewScrollView.setVisibility(View.GONE);
+        networkErrorScrollView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
     }
 
@@ -111,7 +133,7 @@ public class ListHelperImpl implements ListHelper
                 () -> {
                     child.onEmpty(emptyLayoutId);
                 },
-                () -> child.onNoNetwork());
+                () -> child.onNoNetwork(), () -> onNetworkError());
     }
 
     public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)
@@ -125,7 +147,7 @@ public class ListHelperImpl implements ListHelper
                 () -> {
                     onEmpty.call();
                 },
-                () -> child.onNoNetwork());
+                () -> child.onNoNetwork(), () -> onNetworkError());
     }
 
     @Override
@@ -140,7 +162,22 @@ public class ListHelperImpl implements ListHelper
                 () -> {
                     onEmpty.call();
                 },
-                () -> onNoNetwork.call());
+                () -> onNoNetwork.call(), () -> onNoNetwork());
+    }
+
+    @Override
+    public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty, Action0 onNoNetwork, Action0 onNetworkError)
+    {
+        return ObserverUtil.create(Observers.create(t -> {
+                    onNext.call(t);
+                    child.showContent();
+                },
+                e -> Timber.e(e, "Failed to retrieve."),
+                () -> swipeRefreshLayout.setRefreshing(false)),
+                () -> {
+                    onEmpty.call();
+                },
+                () -> onNoNetwork.call(), () -> onNetworkError.call());
     }
 
     public void inflateEmptyView(View v, int layoutId)
