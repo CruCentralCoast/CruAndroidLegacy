@@ -15,6 +15,7 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
+import org.androidcru.crucentralcoast.data.models.MinistryQuestionAnswer;
 import org.androidcru.crucentralcoast.data.providers.MinistryQuestionsProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
@@ -22,6 +23,7 @@ import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,10 +76,10 @@ public class MinistryQuestionsFragment extends FormContentFragment
                     adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager, getActivity().getFragmentManager());
                     questionsList.setAdapter(adapter);
                 }
-                else
-                {
-                    questions.addAll(ministryQuestions);
-                }
+//                else
+//                {
+//                    questions.addAll(ministryQuestions);
+//                }
             }
         };
     }
@@ -158,8 +160,13 @@ public class MinistryQuestionsFragment extends FormContentFragment
     @Override
     public void onNext(FormHolder formHolder)
     {
-        // validate data, well kind of
-        // write the data and filter on it
+        ArrayList<MinistryQuestionAnswer> questionAnswers = new ArrayList<>();
+        for (Map.Entry<MinistryQuestion, String> e : adapter.questionAnswerMap.entrySet())
+        {
+            questionAnswers.add(new MinistryQuestionAnswer(e.getKey(), e.getValue()));
+        }
+
+        formHolder.addDataObject("questionAnswers", questionAnswers);
 
         super.onNext(formHolder);
     }

@@ -8,14 +8,15 @@ import android.view.ViewGroup;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     private static final int TEXT = 0;
     private static final int SELECT = 1;
-    private static final int DATETIME= 2;
 
+    public HashMap<MinistryQuestion, String> questionAnswerMap;
     List<MinistryQuestion> questions;
     RecyclerView.LayoutManager layoutManager;
     private FragmentManager fm;
@@ -25,6 +26,7 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
         this.questions = questions;
         this.layoutManager = layoutManager;
         this.fm = fm;
+        this.questionAnswerMap = new HashMap<>();
     }
 
     @Override
@@ -34,10 +36,8 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
         {
             case TEXT:
                 return new MinistryQuestionsTextHolder(inflater.inflate(R.layout.card_cg_question_text, parent, false), this, layoutManager);
-            case SELECT:
-                return new MinistryQuestionsSelectHolder(inflater.inflate(R.layout.card_cg_question_select, parent, false), this, layoutManager);
             default:
-                return new MinistryQuestionsDateTimeHolder(inflater.inflate(R.layout.card_cg_question_datetime, parent, false), this, layoutManager, fm);
+                return new MinistryQuestionsSelectHolder(inflater.inflate(R.layout.card_cg_question_select, parent, false), this, layoutManager);
         }
     }
 
@@ -49,14 +49,9 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
             MinistryQuestionsTextHolder viewHolder = (MinistryQuestionsTextHolder) holder;
             viewHolder.bindQuestion(questions.get(position));
         }
-        else if(holder instanceof MinistryQuestionsSelectHolder)
-        {
-            MinistryQuestionsSelectHolder viewHolder = (MinistryQuestionsSelectHolder) holder;
-            viewHolder.bindQuestion(questions.get(position));
-        }
         else
         {
-            MinistryQuestionsDateTimeHolder viewHolder = (MinistryQuestionsDateTimeHolder) holder;
+            MinistryQuestionsSelectHolder viewHolder = (MinistryQuestionsSelectHolder) holder;
             viewHolder.bindQuestion(questions.get(position));
         }
     }
@@ -75,10 +70,8 @@ public class MinistryQuestionsAdapter extends RecyclerView.Adapter<RecyclerView.
         {
             case TEXT:
                 return TEXT;
-            case SELECT:
-                return SELECT;
             default:
-                return DATETIME;
+                return SELECT;
         }
     }
 }

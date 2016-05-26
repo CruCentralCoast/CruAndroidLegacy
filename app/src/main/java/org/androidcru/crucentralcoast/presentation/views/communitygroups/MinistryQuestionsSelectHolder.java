@@ -19,10 +19,10 @@ public class MinistryQuestionsSelectHolder extends RecyclerView.ViewHolder
     @BindView(R.id.cgq_select) Spinner selectionEntry;
 
     public MinistryQuestion question;
-    public RecyclerView.Adapter adapter;
+    public MinistryQuestionsAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
 
-    public MinistryQuestionsSelectHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager)
+    public MinistryQuestionsSelectHolder(View rootView, MinistryQuestionsAdapter adapter, RecyclerView.LayoutManager layoutManager)
     {
         super(rootView);
         this.adapter = adapter;
@@ -47,6 +47,7 @@ public class MinistryQuestionsSelectHolder extends RecyclerView.ViewHolder
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
+                adapter.questionAnswerMap.put(question, selectionOptions[position]);
             }
 
             @Override
