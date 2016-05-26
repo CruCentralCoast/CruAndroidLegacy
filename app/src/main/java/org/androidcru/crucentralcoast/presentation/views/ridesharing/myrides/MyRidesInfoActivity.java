@@ -64,7 +64,7 @@ public class MyRidesInfoActivity extends BaseAppCompatListActivity
                     ride = newRide;
                     setupPassengers();
                     setAdapter();
-                    spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+                    spotsRemaining.setText(getString(R.string.myride_info_spots) + " " + (ride.carCapacity - ride.passengers.size()));
                 },
                 () -> {});
 
@@ -79,14 +79,14 @@ public class MyRidesInfoActivity extends BaseAppCompatListActivity
         {
             ViewUtil.setSource(eventBanner, ride.event.image, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
         }
-        rideType.setText(getString(R.string.myride_info_dir) + ride.direction.getValueDetailed());
+        rideType.setText(getString(R.string.myride_info_dir) + " " + ride.direction.getValueDetailed());
         rideTime.setText(getString(R.string.myride_info_departure_time)
                 + "\n" + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER)));
 
         departureLoc.setText(getString(R.string.myride_info_pickup_loc) + "\n" + ride.location.toString());
         setupPassengers();
-        spotsRemaining.setText(getString(R.string.myride_info_spots) + (ride.carCapacity - ride.passengers.size()));
+        spotsRemaining.setText(getString(R.string.myride_info_spots) + " " + (ride.carCapacity - ride.passengers.size()));
 
         helper.recyclerView.setNestedScrollingEnabled(false);
     }
