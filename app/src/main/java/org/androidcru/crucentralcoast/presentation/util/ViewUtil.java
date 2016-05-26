@@ -128,9 +128,9 @@ public class ViewUtil
                 resources);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setSelection(index);
         if(onItemSelected != null)
             spinner.setOnItemSelectedListener(onItemSelected);
+        spinner.setSelection(index);
     }
 
     public static CustomTabsIntent getCustomTabsIntent(Context context) {

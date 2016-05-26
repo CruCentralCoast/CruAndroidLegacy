@@ -5,15 +5,13 @@
     android:id="@+id/cg_question_toggle_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardPreventCornerOverlap="true"
-    card_view:cardUseCompatPadding="true"
-    android:layout_margin="4dp">
-    <!--android:foreground="?android:attr/selectableItemBackground">-->
+    card_view:cardCornerRadius="0dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="86dp"
+        android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
@@ -21,45 +19,21 @@
         <TextView
         android:id="@+id/cgq_toggle_text"
         android:text="Are you interested in joining a Community Group?"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/cgq_toggle"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
         <Switch
         android:id="@+id/cgq_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
+        android:layout_marginLeft="16dp"
         android:checked="false"/>
-    </RelativeLayout>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent"
+          android:id="@+id/resource_divider"
+          android:layout_height="2px"
+          android:background="@color/grey300"
+          android:minHeight="2px"/>
 
 </android.support.v7.widget.CardView>
-
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-                 <!--android:layout_width="match_parent"-->
-                 <!--android:layout_height="match_parent"-->
-                <!--android:paddingTop="16dp"-->
-                 <!--android:paddingLeft="16dp"-->
-                 <!--android:paddingRight="16dp">-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/question_text"-->
-        <!--android:text="Are you interested in joining a Community Group?"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_toLeftOf="@+id/question_switch"/>-->
-
-    <!--<Switch-->
-        <!--android:id="@+id/question_switch"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:checked="false"/>-->
-<!--</RelativeLayout>-->

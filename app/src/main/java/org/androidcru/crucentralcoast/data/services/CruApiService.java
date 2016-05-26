@@ -1,8 +1,11 @@
 package org.androidcru.crucentralcoast.data.services;
 
 import org.androidcru.crucentralcoast.data.models.Campus;
+import org.androidcru.crucentralcoast.data.models.CommunityGroup;
+import org.androidcru.crucentralcoast.data.models.CommunityGroupRequest;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
+
 
 import org.androidcru.crucentralcoast.data.models.LoginResponse;
 
@@ -124,4 +127,7 @@ public interface CruApiService
 
     @GET("/api/events/{event_id}/{gcm_id}")
     Observable<RideCheckResponse> checkRideStatus(@Path("event_id") String eventId, @Path("gcm_id") String gcmId);
+
+    @POST("/api/Ministries/{id}/communitygroups")
+    Observable<List<CommunityGroup>> getCommunityGroups(@Path("id") String ministryId, @Body CommunityGroupRequest questionAnswers);
 }

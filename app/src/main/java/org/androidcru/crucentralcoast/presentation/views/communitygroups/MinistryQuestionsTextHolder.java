@@ -13,9 +13,6 @@ import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by mitch on 5/8/16.
- */
 public class MinistryQuestionsTextHolder extends RecyclerView.ViewHolder
 {
     @BindView(R.id.cgq_text_text) TextView textDescription;
@@ -37,13 +34,7 @@ public class MinistryQuestionsTextHolder extends RecyclerView.ViewHolder
     public void bindQuestion(MinistryQuestion questionState)
     {
         this.question = questionState;
-        bindUI();
-    }
-
-    private void bindUI()
-    {
-        //TODO too many questions
         textDescription.setText(this.question.question);
-        //TODO Set text entry hint?
+        // TODO do we want to set a text hint?
     }
 }

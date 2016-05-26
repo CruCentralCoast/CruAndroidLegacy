@@ -62,6 +62,7 @@ public class BasicInfoFragment extends FormContentFragment
     public void setupData(FormHolder formHolder)
     {
         formHolder.setTitle("Contact Information");
+        formHolder.setSubtitle("");
     }
 
     @Override

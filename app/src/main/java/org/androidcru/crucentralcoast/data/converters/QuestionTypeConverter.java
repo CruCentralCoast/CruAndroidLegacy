@@ -32,9 +32,6 @@ public class QuestionTypeConverter implements JsonDeserializer<MinistryQuestion.
             case "text":
                 toReturn = MinistryQuestion.Type.TEXT;
                 break;
-            case "datetime":
-                toReturn = MinistryQuestion.Type.DATETIME;
-                break;
             default:
                 throw new JsonParseException("MinistryQuestion.Type Serialize error: Unexpected value: " + json.getAsString());
         }

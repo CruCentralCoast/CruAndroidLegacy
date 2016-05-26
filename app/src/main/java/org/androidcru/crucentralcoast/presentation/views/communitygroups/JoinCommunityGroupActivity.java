@@ -22,6 +22,7 @@ public class JoinCommunityGroupActivity extends FormActivity
         fragments.add(new MinistrySelectionFragment());
         fragments.add(new BasicInfoFragment());
         fragments.add(new MinistryQuestionsFragment());
+        fragments.add(new ResultsFragment());
 
         setFormContent(fragments);
     }

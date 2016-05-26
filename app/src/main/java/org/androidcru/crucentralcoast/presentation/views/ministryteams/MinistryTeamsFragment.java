@@ -36,7 +36,6 @@ public class MinistryTeamsFragment extends ListFragment
         inflateEmptyView(view, R.layout.empty_with_alert);
 
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
 
         observer = createListObserver(R.layout.empty_with_alert,
                 ministryTeams -> {

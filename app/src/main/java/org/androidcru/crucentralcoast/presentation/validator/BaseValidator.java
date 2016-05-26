@@ -2,11 +2,9 @@ package org.androidcru.crucentralcoast.presentation.validator;
 
 import android.app.Activity;
 import android.content.Context;
-
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;

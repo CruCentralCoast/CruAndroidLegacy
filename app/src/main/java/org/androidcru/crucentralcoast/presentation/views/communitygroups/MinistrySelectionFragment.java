@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.communitygroups;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,14 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Campus;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.providers.SubscriptionProvider;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
+import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionsAdapter;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +31,12 @@ import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscription;
 
-public class MinistrySelectionFragment extends FormContentFragment
+public class MinistrySelectionFragment extends FormContentListFragment
 {
     private GridLayoutManager layoutManager;
     private MinistrySelectionAdapter ministryAdapter;
 
-    @BindView(R.id.subscription_list) RecyclerView subscriptionList;
-    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.informational_text) TextView informationalText;
 
     private Observer<HashMap<Campus, ArrayList<MinistrySubscription>>> observer;
 
@@ -39,17 +44,16 @@ public class MinistrySelectionFragment extends FormContentFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_ministry_teams, container, false);
+        return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-
-        subscriptionList.setHasFixedSize(true);
-        subscriptionList.setAdapter(ministryAdapter);
+        unbinder = ButterKnife.bind(this, view);
+        informationalText.setText(R.string.empty_ministry_subscriptions);
 
         // use a grid layout manager
         layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -59,28 +63,16 @@ public class MinistrySelectionFragment extends FormContentFragment
             public int getSpanSize(int position)
             {
                 // if the element is a header, it should span the columns, otherwise it is a regular element
-                return ministryAdapter.isHeader(position) ? layoutManager.getSpanCount() : 1;
+                return SubscriptionsAdapter.isHeader(position, ministryAdapter.ministries) ? layoutManager.getSpanCount() : 1;
             }
         });
-        subscriptionList.setLayoutManager(layoutManager);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        getCampusMinistryMap();
-    }
-
-    private void toggleProgessBar(boolean isShown)
-    {
-        progressBar.setVisibility(isShown ? View.VISIBLE : View.GONE);
-        subscriptionList.setVisibility(isShown ? View.GONE : View.VISIBLE);
+        helper.recyclerView.setLayoutManager(layoutManager);
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> getCampusMinistryMap());
     }
 
     public void getCampusMinistryMap()
     {
-        toggleProgessBar(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         SubscriptionProvider.requestCampusMinistryMap(this, observer);
     }
 
@@ -89,26 +81,15 @@ public class MinistrySelectionFragment extends FormContentFragment
     {
         formHolder.setTitle("Join a Community Group");
         formHolder.setSubtitle("Select a ministry");
+        formHolder.setNavigationVisibility(View.GONE);
 
         ministryAdapter = new MinistrySelectionAdapter(new HashMap<>(), formHolder);
 
-        observer = new Observer<HashMap<Campus, ArrayList<MinistrySubscription>>>()
-        {
-            @Override
-            public void onCompleted()
-            {
-                toggleProgessBar(false);
-            }
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap)
-            {
-                ministryAdapter = new MinistrySelectionAdapter(campusMinistryMap, formHolder);
-                subscriptionList.setAdapter(ministryAdapter);
-            }
-        };
+        observer = createListObserver(R.layout.empty_with_alert,
+                campusMinistryMap -> {
+                    ministryAdapter = new MinistrySelectionAdapter(campusMinistryMap, formHolder);
+                    helper.recyclerView.setAdapter(ministryAdapter);
+                });
+        getCampusMinistryMap();
     }
 }

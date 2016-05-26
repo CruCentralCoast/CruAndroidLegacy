@@ -172,7 +172,7 @@ public class CruApplication extends Application
         builder.registerTypeAdapter(Snippet.class, new SnippetConverter());
         builder.registerTypeAdapter(RideCheckResponse.RideStatus.class, new RideStatusConverter());
         builder.registerTypeAdapter(MinistryQuestion.Type.class, new QuestionTypeConverter());
-
+        builder.registerTypeAdapter(RideCheckResponse.RideStatus.class, new RideStatusConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.setPrettyPrinting();

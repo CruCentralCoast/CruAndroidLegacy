@@ -24,11 +24,11 @@ import timber.log.Timber;
 
 public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
 {
-    @BindView(R.id.ministry_image) ImageView ministryImage;
-    @BindView(R.id.checkbox) CheckBox checkBox;
+    protected @BindView(R.id.ministry_image) ImageView ministryImage;
+    protected @BindView(R.id.checkbox) CheckBox checkBox;
 
     private RecyclerView.Adapter adapter;
-    private MinistrySubscription model;
+    protected MinistrySubscription model;
     private Context context;
 
     private Observer<Boolean> observer = Observers.create((status) -> {

@@ -15,6 +15,7 @@ import com.orhanobut.logger.Logger;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
+import org.androidcru.crucentralcoast.data.models.MinistryQuestionAnswer;
 import org.androidcru.crucentralcoast.data.providers.MinistryQuestionsProvider;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
@@ -22,6 +23,7 @@ import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,13 +36,12 @@ public class MinistryQuestionsFragment extends FormContentFragment
     @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.empty_view_stub) ViewStub emptyViewStub;
 
-    //TODO
-    String removeThisString= "563b08482930ae0300fbc09c";
     private LinearLayoutManager layoutManager;
     private Observer<List<MinistryQuestion>> observer;
     private List<MinistryQuestion> questions;
     private MinistryQuestionsAdapter adapter;
     protected View emptyView;
+    private String ministryId;
 
     public MinistryQuestionsFragment()
     {
@@ -72,21 +73,13 @@ public class MinistryQuestionsFragment extends FormContentFragment
                 if(questions == null || questions.isEmpty())
                 {
                     questions = ministryQuestions;
-                    adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager);
+                    adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager, getActivity().getFragmentManager());
                     questionsList.setAdapter(adapter);
                 }
-                else
-                {
-                    questions.addAll(ministryQuestions);
-                }
-
-                if(questions != null)
-                {
-                    for(MinistryQuestion m : questions)
-                    {
-                        Logger.e(m.question + " " + m.ministry);
-                    }
-                }
+//                else
+//                {
+//                    questions.addAll(ministryQuestions);
+//                }
             }
         };
     }
@@ -119,7 +112,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
-                getQuestions(removeThisString);
+                getQuestions(ministryId);
             }
         });
 
@@ -145,7 +138,7 @@ public class MinistryQuestionsFragment extends FormContentFragment
         questions.clear();
         adapter = null;
         swipeRefreshLayout.setRefreshing(true);
-        getQuestions(removeThisString);
+        getQuestions(ministryId);
     }
 
     private void getQuestions(String ministryId)
@@ -156,8 +149,26 @@ public class MinistryQuestionsFragment extends FormContentFragment
 
     @Override
     public void setupData(FormHolder formHolder) {
-        formHolder.setTitle("Join a Community Group");
+        formHolder.setTitle("Community Group Form");
         formHolder.setSubtitle("");
-        getQuestions("");
+
+        ministryId = (String) formHolder.getDataObject("ministry");
+
+        forceUpdate();
     }
+
+    @Override
+    public void onNext(FormHolder formHolder)
+    {
+        ArrayList<MinistryQuestionAnswer> questionAnswers = new ArrayList<>();
+        for (Map.Entry<MinistryQuestion, String> e : adapter.questionAnswerMap.entrySet())
+        {
+            questionAnswers.add(new MinistryQuestionAnswer(e.getKey(), e.getValue()));
+        }
+
+        formHolder.addDataObject("questionAnswers", questionAnswers);
+
+        super.onNext(formHolder);
+    }
+
 }
