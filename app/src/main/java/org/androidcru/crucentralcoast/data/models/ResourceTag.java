@@ -11,11 +11,17 @@ public final class ResourceTag
     public static final String sId = "_id";
     public static final String sTitle = "title";
 
+    public static final String SPECIAL_LEADER_ID = "-1";
+
     @SerializedName(sId) public String id;
     @SerializedName(sTitle) public String title;
 
     @ParcelConstructor
-    ResourceTag() {}
+    public ResourceTag(String id, String title)
+    {
+        this.id = id;
+        this.title = title;
+    }
 
     @Override
     public boolean equals(Object o)

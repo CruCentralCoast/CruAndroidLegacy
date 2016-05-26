@@ -11,6 +11,8 @@ import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -38,15 +40,15 @@ public final class ResourceProvider
                 return resource;
             });
 
-    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, List<Resource.ResourceType> types, List<ResourceTag> tags)
+    public static void findResources(SubscriptionsHolder holder, Observer<List<Resource>> observer, List<Resource.ResourceType> types, List<ResourceTag> tags, String leaderAPIKey)
     {
-        Subscription s = findResources(types, tags)
+        Subscription s = findResources(types, tags, leaderAPIKey)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Resource>> findResources(List<Resource.ResourceType> types, List<ResourceTag> tags)
+    protected static Observable<List<Resource>> findResources(List<Resource.ResourceType> types, List<ResourceTag> tags, String leaderAPIKey)
     {
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder()
                 .setCombineOperator(ConditionsBuilder.OPERATOR.AND);
@@ -67,10 +69,19 @@ public final class ResourceProvider
 
         if(tags != null)
         {
-            String[] stringTags = new String[tags.size()];
-            for (int i = 0; i < tags.size(); i++)
+            List<ResourceTag> dTags = new ArrayList<>(tags);
+            Iterator<ResourceTag> iterator = dTags.iterator();
+            while(iterator.hasNext())
             {
-                stringTags[i] = tags.get(i).id;
+                ResourceTag tag = iterator.next();
+                if (tag.id.equals(ResourceTag.SPECIAL_LEADER_ID))
+                    iterator.remove();
+            }
+
+            String[] stringTags = new String[dTags.size()];
+            for (int i = 0; i < dTags.size(); i++)
+            {
+                stringTags[i] = dTags.get(i).id;
             }
 
             conditionsBuilder
@@ -83,7 +94,7 @@ public final class ResourceProvider
         Query query = new Query.Builder()
                 .setCondition(conditionsBuilder.build())
                 .build();
-        return cruApiService.findResources(query)
+        return cruApiService.findResources(query, leaderAPIKey)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())
@@ -114,7 +125,7 @@ public final class ResourceProvider
                 .compose(RxComposeUtil.network());
     }
 
-    protected static Observable<Resource> getResourcesPaginated(int page, int pageSize)
+    protected static Observable<Resource> getResourcesPaginated(int page, int pageSize, String leaderAPIKey)
     {
         Query query = new Query.Builder()
                 .setOptions(new OptionsBuilder()
@@ -122,7 +133,7 @@ public final class ResourceProvider
                         .build())
                 .build();
 
-        return cruApiService.findResources(query)
+        return cruApiService.findResources(query, leaderAPIKey)
                 .flatMap(resources -> Observable.from(resources))
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())

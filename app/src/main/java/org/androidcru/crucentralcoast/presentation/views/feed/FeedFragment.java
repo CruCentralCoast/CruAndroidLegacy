@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Dateable;
 import org.androidcru.crucentralcoast.data.providers.FeedProvider;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
@@ -113,6 +113,6 @@ public class FeedFragment extends ListFragment
     private void getMoreFeedItems(int page)
     {
         helper.swipeRefreshLayout.setRefreshing(true);
-        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, ZonedDateTime.now(), page, (int) AppConstants.PAGE_SIZE);
+        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, ZonedDateTime.now(), SharedPreferencesUtil.getLeaderAPIKey(), page, (int) AppConstants.PAGE_SIZE);
     }
 }

@@ -41,7 +41,7 @@ public class ViewUtil
         }
         view.setTypeface(fontCache.get(fontFileName));
     }
-
+    
     public static Typeface getFont(Context context, String fontFileName)
     {
         if(!fontCache.containsKey(fontFileName))
@@ -53,50 +53,46 @@ public class ViewUtil
             return fontCache.get(fontFileName);
     }
 
-    public static void setSource(ImageView view, String url, SCALE_TYPE scaleType)
+    public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, Drawable error, SCALE_TYPE scaleType)
     {
-        setSource(view, url, 0, null, scaleType);
-    }
+        //Picasso can handle null images (use placeholder image), but throws exception on empty
+        if (url.isEmpty())
+            url = null;
 
-    public static void setSource(ImageView view, String url, int tintColor, SCALE_TYPE scaleType)
-    {
-        setSource(view, url, tintColor, null, scaleType);
-    }
+        RequestCreator request = Picasso.with(view.getContext()).load(url);
 
-    public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, SCALE_TYPE scaleType)
-    {
-        if(url == null || url.isEmpty())
+        if(scaleType != null)
         {
-            view.setImageDrawable(placeholder != null ? placeholder : DrawableUtil.getDrawable(view.getContext(), R.drawable.cru_logo_grey600));
-        }
-        else
-        {
-            RequestCreator request = Picasso.with(view.getContext()).load(url);
-
-            if(scaleType != null)
+            switch (scaleType)
             {
-                switch (scaleType)
-                {
-                    case FIT:
-                        request.fit();
-                        break;
-                    case CENTER_INSIDE:
-                        request.centerInside();
-                        break;
-                    case CENTER_CROP:
-                        request.centerCrop();
-                        break;
-                }
+                case FIT:
+                    request.fit();
+                    break;
+                case CENTER_INSIDE:
+                    request.centerInside();
+                    break;
+                case CENTER_CROP:
+                    request.centerCrop();
+                    break;
             }
-
-            if(placeholder != null)
-                request.placeholder(placeholder);
-
-            if(tintColor != 0)
-                request.transform(new ColorFilterTransformation(tintColor));
-
-            request.into(view);
         }
+
+        //Set a placeholder image
+        if(placeholder == null)
+            request.placeholder(DrawableUtil.getDrawable(view.getContext(), R.drawable.cru_logo_grey600));
+        else
+            request.placeholder(placeholder);
+
+        //Set an image in case of network error
+        if(error == null)
+            request.placeholder(DrawableUtil.getDrawable(view.getContext(), R.drawable.cru_logo_grey600));
+        else
+            request.placeholder(error);
+
+        if(tintColor != 0)
+            request.transform(new ColorFilterTransformation(tintColor));
+
+        request.into(view);
     }
 
     public enum SCALE_TYPE {
@@ -160,7 +156,7 @@ public class ViewUtil
         // Sets the MIME type
         intentInsertEdit.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
         intentInsertEdit.putExtra(ContactsContract.Intents.Insert.PHONE, phone)
-                .putExtra(ContactsContract.Intents.Insert.NAME, name);
+               .putExtra(ContactsContract.Intents.Insert.NAME, name);
         return intentInsertEdit;
     }
 }

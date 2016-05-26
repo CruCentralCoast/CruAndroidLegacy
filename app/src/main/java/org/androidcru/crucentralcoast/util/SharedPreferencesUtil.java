@@ -91,6 +91,11 @@ public class SharedPreferencesUtil
         getSharedPreferences().edit().putString(AppConstants.LOGIN_KEY, leaderApiKey).commit();
     }
 
+    public static String getLeaderAPIKey()
+    {
+        return getSharedPreferences().getString(AppConstants.LOGIN_KEY, "");
+    }
+
     public static String getLoginUsername()
     {
         return getSharedPreferences().getString(AppConstants.USERNAME_KEY, "");

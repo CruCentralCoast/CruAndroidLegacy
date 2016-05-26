@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginResult;
+import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -97,15 +98,16 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         eventName.setText(cruEvent.name);
         eventDate.setText(getDateTime());
         Context context = eventBanner.getContext();
-        if(cruEvent.image != null && !cruEvent.image.isEmpty())
-        {
-            ViewUtil.setSource(eventBanner, cruEvent.image, ViewUtil.SCALE_TYPE.FIT);
-        }
-        else
-        {
-            //clear ImageView of it's old content
-            eventBanner.setImageResource(android.R.color.transparent);
-        }
+
+//        if(cruEvent.image != null && !cruEvent.image.isEmpty())
+//        {
+            ViewUtil.setSource(eventBanner, cruEvent.image, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
+//        }
+//        else
+//        {
+//            //clear ImageView of it's old content
+//            eventBanner.setImageResource(android.R.color.transparent);
+//        }
 
 
         fbButton.setEnabled(cruEvent.url != null && !cruEvent.url.isEmpty());

@@ -24,15 +24,15 @@ public class FeedProvider
     }
 
     public static void getFeedItems(SubscriptionsHolder holder, Observer<List<Dateable>> observer,
-            YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, int page, int pageSize)
+            YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, String leaderAPIKey, int page, int pageSize)
     {
-        Subscription s = getFeedItems(youTubeVideoProvider, fromDate, page, pageSize)
+        Subscription s = getFeedItems(youTubeVideoProvider, fromDate, leaderAPIKey, page, pageSize)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Dateable>> getFeedItems(YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, int page, int pageSize)
+    protected static Observable<List<Dateable>> getFeedItems(YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, String leaderAPIKey, int page, int pageSize)
     {
         return Observable.merge(
                 //events
@@ -40,7 +40,7 @@ public class FeedProvider
                     .flatMap(events -> Observable.from(events))
                     .compose(EventProvider.getSubscriptionFilter()),
                 //resources
-                ResourceProvider.getResourcesPaginated(page, pageSize),
+                ResourceProvider.getResourcesPaginated(page, pageSize, leaderAPIKey),
                 //youtube videos
                 (page == 0
                         ? youTubeVideoProvider.refreshQuery()

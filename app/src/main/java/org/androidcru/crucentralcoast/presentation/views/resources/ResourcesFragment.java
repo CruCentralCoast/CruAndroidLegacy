@@ -13,12 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.providers.ResourceProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +51,7 @@ public class ResourcesFragment extends ListFragment
     private AlertDialog typeDialog;
 
     private boolean loadedTags = false;
+    private boolean checkedSpecial = true;
 
     public ResourcesFragment()
     {
@@ -84,6 +87,8 @@ public class ResourcesFragment extends ListFragment
             public void onNext(List<ResourceTag> resourceTags)
             {
                 filterTagsList = new ArrayList<>(resourceTags);
+                if(!SharedPreferencesUtil.getLeaderAPIKey().isEmpty())
+                    filterTagsList.add(0, new ResourceTag(ResourceTag.SPECIAL_LEADER_ID, "Special Leader"));
                 selectedTags = new boolean[filterTagsList.size()];
                 Arrays.fill(selectedTags, true);
                 setHasOptionsMenu(true);
@@ -128,7 +133,10 @@ public class ResourcesFragment extends ListFragment
         //Start listening for stream data from network call
         this.resources.clear();
         if(loadedTags)
-            ResourceProvider.findResources(this, resourceSubscriber, types, tags);
+            ResourceProvider.findResources(this, resourceSubscriber, types, tags,
+                    (checkedSpecial && SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
+                            ? SharedPreferencesUtil.getLeaderAPIKey()
+                            : null);
         else
             ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
@@ -151,7 +159,10 @@ public class ResourcesFragment extends ListFragment
                     new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            selectedTags[which] = isChecked;
+                            if(filterTagsList.get(which).id.equals(ResourceTag.SPECIAL_LEADER_ID))
+                                checkedSpecial = isChecked;
+                            else
+                                selectedTags[which] = isChecked;
                         }
                     });
 
