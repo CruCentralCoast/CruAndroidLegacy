@@ -173,6 +173,15 @@ public class DriverSignupVM extends BaseRideVM {
         }
     }
 
+    @OnTextChanged(R.id.name_field)
+    public void onNameChange(CharSequence s) {
+        String newName = s.toString().replaceAll("[^a-zA-Z]", "");
+        Timber.d("newname is now " + newName + " vs " + s.toString());
+        if (!newName.equals(s.toString())) {
+            nameField.setText(newName);
+        }
+    }
+
     protected void initMap(GoogleMap googleMap)
     {
         if (map == null) {
