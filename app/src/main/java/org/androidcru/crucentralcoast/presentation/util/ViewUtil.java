@@ -1,9 +1,11 @@
 package org.androidcru.crucentralcoast.presentation.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.provider.ContactsContract;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.widget.AdapterView;
@@ -38,6 +40,17 @@ public class ViewUtil
             view.setTypeface(fontCache.put(fontFileName, typeface));
         }
         view.setTypeface(fontCache.get(fontFileName));
+    }
+
+    public static Typeface getFont(Context context, String fontFileName)
+    {
+        if(!fontCache.containsKey(fontFileName))
+        {
+            Typeface typeface = Typeface.createFromAsset(context.getAssets(), fontsDir + fontFileName);
+            return fontCache.put(fontFileName, typeface);
+        }
+        else
+            return fontCache.get(fontFileName);
     }
 
     public static void setSource(ImageView view, String url, SCALE_TYPE scaleType)
@@ -138,5 +151,16 @@ public class ViewUtil
             intent = customTabsIntentBuilder.build();
         }
         return intent;
+    }
+
+    public static Intent insertOrEditContact(String name, String phone)
+    {
+        // Creates a new Intent to insert or edit a contact
+        Intent intentInsertEdit = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+        // Sets the MIME type
+        intentInsertEdit.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+        intentInsertEdit.putExtra(ContactsContract.Intents.Insert.PHONE, phone)
+                .putExtra(ContactsContract.Intents.Insert.NAME, name);
+        return intentInsertEdit;
     }
 }

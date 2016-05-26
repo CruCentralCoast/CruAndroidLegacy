@@ -69,6 +69,7 @@ public class MyRidesInfoActivity extends BaseAppCompatListActivity
                 () -> {});
 
         helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+        forceUpdate();
     }
 
     private void setupUI() {
