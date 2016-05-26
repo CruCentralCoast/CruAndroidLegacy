@@ -1,6 +1,5 @@
 package org.androidcru.crucentralcoast.presentation.views.ridesharing.driversignup;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -8,11 +7,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.MapFragment;
 
 import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
@@ -163,13 +160,9 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
                         sendRide();
                     }
                 },
-                e -> Timber.e(e, "Failed to retrieve User."),
-                () -> {
-                }),
+                e -> Timber.e(e, "Failed to retrieve User.")),
                 () -> {
                     displayFailure();
-                },
-                () -> {
                 });
     }
 

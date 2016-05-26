@@ -75,5 +75,15 @@ public class ObserverUtil
         };
     }
 
+    public static <T> CruObserver<T> create(Observer<T> observer, Action0 onEmpty)
+    {
+        return create(observer, onEmpty, () -> {}, () -> {});
+    }
+
+    public static <T> CruObserver<T> create(Observer<T> observer, Action0 onEmpty, Action0 onNoNetwork)
+    {
+        return create(observer, onEmpty, onNoNetwork, () -> {});
+    }
+
 
 }
