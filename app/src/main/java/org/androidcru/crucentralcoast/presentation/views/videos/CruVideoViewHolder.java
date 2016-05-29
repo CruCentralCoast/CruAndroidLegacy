@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeIntents;
-import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -25,7 +24,7 @@ import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CruVideoViewHolder extends RecyclerView.ViewHolder
+public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
     @BindView(R.id.card_video_view) CardView cardView;
     @BindView(R.id.videos_divider) View divider;
@@ -35,9 +34,10 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
     @BindView(R.id.video_chev) ImageView videoChev;
     @BindView(R.id.video_id_and_views) TextView videoIdAndViews;
     @BindView(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
+    @BindView(R.id.animating_layout) public LinearLayout animatingLayout;
 
     public Snippet model;
-
+    private ExpandableState<Snippet> state;
     public RecyclerView.Adapter adapter;
     public RecyclerView.LayoutManager layoutManager;
     public View rootView;
@@ -68,17 +68,14 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
         this.layoutManager = layoutManager;
 
         ButterKnife.bind(this, rootView);
+        animatingLayout.setOnClickListener(this);
+        ViewUtil.debounceExpandingView(animatingLayout, this);
     }
     
     public void bindSnippet(ExpandableState<Snippet> state)
     {
         this.model = state.model;
-        bindUI(state);
-    }
-    
-    public void bindDatedVideo(ExpandableState<Snippet> state)
-    {
-        this.model = state.model;
+        this.state = state;
         bindUI(state);
     }
 
@@ -93,7 +90,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
 
         Context context = videoThumb.getContext();
 
-        ViewUtil.setSource(videoThumb, model.getHigh().url, 0, null, null, null);
+        ViewUtil.setSource(videoThumb, model.getHigh().url, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
 
         // Set the chevron to up or down depending on if the view is expanded or not
         videoChev.setImageDrawable(state.isExpanded
@@ -119,25 +116,25 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder
             videoDescription.setText(R.string.videos_no_description);
 
         videoDescription.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
+    }
 
-        // If the description is selected, retract the view
-        rootView.setOnClickListener((View v) ->
-        {
-            int visibility;
-            if (videoDescription.getVisibility() == View.VISIBLE) {
-                visibility = View.GONE;
-            } else {
-                visibility = View.VISIBLE;
-            }
-            videoDescription.setVisibility(visibility);
+    @Override
+    public void onClick(View v)
+    {
+        int visibility;
+        if (videoDescription.getVisibility() == View.VISIBLE) {
+            visibility = View.GONE;
+        } else {
+            visibility = View.VISIBLE;
+        }
+        videoDescription.setVisibility(visibility);
+        Context context = videoChev.getContext();
+        videoChev.setImageDrawable(visibility == View.VISIBLE
+                ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
+                : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
 
-            videoChev.setImageDrawable(visibility == View.VISIBLE
-                    ? DrawableUtil.getDrawable(context, R.drawable.ic_chevron_up_grey600)
-                    : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
-
-            state.isExpanded = visibility == View.VISIBLE;
-            adapter.notifyItemChanged(getAdapterPosition());
-            layoutManager.scrollToPosition(getAdapterPosition());
-        });
+        state.isExpanded = visibility == View.VISIBLE;
+        adapter.notifyItemChanged(getAdapterPosition());
+        layoutManager.scrollToPosition(getAdapterPosition());
     }
 }

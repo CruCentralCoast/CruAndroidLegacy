@@ -81,7 +81,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(holder instanceof CruVideoViewHolder)
         {
             CruVideoViewHolder viewHolder = (CruVideoViewHolder) holder;
-            viewHolder.bindDatedVideo((ExpandableState) items.get(position));
+            viewHolder.bindSnippet((ExpandableState) items.get(position));
         }
         if(holder instanceof ResourceViewHolder)
         {
