@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
+import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.parceler.Parcels;
 
@@ -42,13 +43,13 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
         MinistryTeamHolder ministryTeamHolder = (MinistryTeamHolder) holder;
+
         // sets up the ministry team box logo for each ministry based on their position
         String image = ministryTeams.get(position).image;
-        if(image != null && !image.isEmpty())
-//            ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).image, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null);
-            ViewUtil.setSource(ministryTeamHolder.ministryImage, ministryTeams.get(position).image, ContextCompat.getColor(parent, R.color.cruDarkBlue), null, null, null);
-        else
-            ministryTeamHolder.ministryImage.setImageResource(R.drawable.default_box);
+        ViewUtil.setSource(ministryTeamHolder.ministryImage, image, ContextCompat.getColor(parent, R.color.cruDarkBlue),
+                DrawableUtil.getDrawable(ministryTeamHolder.ministryImage.getContext(), R.drawable.default_box),
+                DrawableUtil.getDrawable(ministryTeamHolder.ministryImage.getContext(), R.drawable.default_box),
+                null);
 
         Intent intent = new Intent(parent, JoinMinistryTeamActivity.class);
         intent.putExtra(AppConstants.MINISTRY_TEAM_KEY, Parcels.wrap(ministryTeams.get(position)));

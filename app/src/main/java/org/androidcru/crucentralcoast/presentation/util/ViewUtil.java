@@ -58,8 +58,8 @@ public class ViewUtil
 
     public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, Drawable error, SCALE_TYPE scaleType)
     {
-        //Picasso can handle null images (use placeholder image), but throws exception on empty
-        if (url.isEmpty())
+        //Picasso can handle null images (uses placeholder image), but throws exception on empty
+        if (url != null && url.isEmpty())
             url = null;
 
         RequestCreator request = Picasso.with(view.getContext()).load(url);
