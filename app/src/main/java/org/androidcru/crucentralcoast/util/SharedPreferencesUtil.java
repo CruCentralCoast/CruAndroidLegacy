@@ -146,14 +146,14 @@ public class SharedPreferencesUtil
         getSharedPreferences().edit().putBoolean(AppConstants.NOTIFICATION_KEY, value).commit();
     }
 
-    public static boolean getAuthorizedDriver()
+    public static boolean getAuthorizedDriver(String number)
     {
-        return getSharedPreferences().getBoolean(AppConstants.AUTHORIZED_KEY, true);
+        return getSharedPreferences().getString(AppConstants.AUTHORIZED_KEY, "").equals(number);
     }
 
-    public static void setAuthoriziedDriver(boolean value)
+    public static void setAuthoriziedDriver(String number)
     {
-        getSharedPreferences().edit().putBoolean(AppConstants.AUTHORIZED_KEY, value).commit();
+        getSharedPreferences().edit().putString(AppConstants.AUTHORIZED_KEY, number).commit();
     }
 
 }

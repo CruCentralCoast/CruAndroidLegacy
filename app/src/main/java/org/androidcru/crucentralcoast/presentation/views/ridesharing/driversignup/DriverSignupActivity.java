@@ -132,8 +132,12 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
     {
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
+            String number = convString(driverSignupVM.phoneField.getText().toString());
             if (driverSignupVM.validator.validate() && autocompleteFragment.validate())
-                UserProvider.requestCruUser(this, userObserver, convString(driverSignupVM.phoneField.getText().toString()));
+                if (SharedPreferencesUtil.getAuthorizedDriver(number))
+                    sendRide();
+                else
+                    UserProvider.requestCruUser(this, userObserver, number);
         });
     }
 
@@ -157,6 +161,9 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
     private void setupUserObserver() {
         userObserver = ObserverUtil.create(Observers.create(t -> {
                     if (t != null) {
+                        //update shared preferences with the number
+                        SharedPreferencesUtil.setAuthoriziedDriver(convString(driverSignupVM.phoneField.getText().toString()));
+
                         sendRide();
                     }
                 },
