@@ -175,7 +175,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     @OnTextChanged(R.id.name_field)
     public void onNameChange(CharSequence s) {
-        String newName = s.toString().replaceAll("[^a-zA-Z]", "");
+        String newName = s.toString().replaceAll("[^a-zA-Z\\s]", "");
         Timber.d("newname is now " + newName + " vs " + s.toString());
         if (!newName.equals(s.toString())) {
             nameField.setText(newName);
