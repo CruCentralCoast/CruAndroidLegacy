@@ -2,14 +2,15 @@ package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
+import org.androidcru.crucentralcoast.presentation.views.conttactcards.UserContactCardsAdapter;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
@@ -20,7 +21,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 {
     private MinistryTeam ministryTeam;
 
-    @BindView(R.id.ministry_leader_info_text_view) TextView ministryTeamLeaderInfo;
+    @BindView(R.id.recyclerview) RecyclerView ministryTeamLeaderInfo;
 
     public MinistryTeamLeaderInformationFragment()
     {
@@ -49,15 +50,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 
         formHolder.setTitle(ministryTeam.name);
 
-        // For each ministry team leader insert their information into the text view.
-        // This should be done with injecting custom views
-        for (CruUser user : ministryTeam.ministryTeamLeaders)
-        {
-            ministryTeamLeaderInfo.setText(
-                    ministryTeamLeaderInfo.getText().toString() +
-                            user.name.firstName + " " + user.name.lastName + "\n    " +
-                            (user.email != null ? user.email + "\n    " : "")  +
-                            (user.phone != null ? user.phone + "\n" : "") + "\n");
-        }
+        ministryTeamLeaderInfo.setLayoutManager(new LinearLayoutManager(getContext()));
+        ministryTeamLeaderInfo.setAdapter(new UserContactCardsAdapter(ministryTeam.ministryTeamLeaders));
     }
 }

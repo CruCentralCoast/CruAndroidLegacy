@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your contact information has been sent to the following ministry team leaders."
-            android:textSize="16dp"
-            android:layout_margin="16dp"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-        <View android:layout_width="match_parent"
-              android:layout_height="2dip"
-              android:background="@color/cruGold" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your contact information has been sent to the following ministry team leaders."
+        android:textSize="16dp"
+        android:layout_margin="16dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Leaders"
-            android:textStyle="bold"
-            android:textSize="24dp"
-            android:layout_margin="16dp"/>
-        <TextView
-            android:id="@+id/ministry_leader_info_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="16dp"/>
+    <View android:layout_width="match_parent"
+          android:layout_height="2dip"
+          android:background="@color/cruGold" />
 
-    </LinearLayout>
-</ScrollView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Leaders"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        android:layout_margin="16dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

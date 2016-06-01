@@ -20,4 +20,20 @@ public final class CruName
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    @Override
+    public String toString()
+    {
+        return firstName + " " + lastName;
+    }
+
+    public String initialis()
+    {
+        StringBuilder builder = new StringBuilder();
+        if(firstName != null && !firstName.isEmpty())
+            builder.append(firstName.toUpperCase().charAt(0));
+        if(lastName != null && !lastName.isEmpty())
+            builder.append(lastName.toUpperCase().charAt(0));
+        return builder.toString();
+    }
 }
