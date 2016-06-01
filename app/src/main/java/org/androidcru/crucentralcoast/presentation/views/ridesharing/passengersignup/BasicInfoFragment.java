@@ -54,11 +54,6 @@ public class BasicInfoFragment extends FormContentFragment
         unbinder = ButterKnife.bind(this, view);
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-
-        AutoFill.setupAutoFillData((BaseAppCompatActivity)getActivity(), () -> {
-            nameField.setText(SharedPreferencesUtil.getUserName());
-            phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
-        });
     }
 
     private Passenger getPassenger()
@@ -90,6 +85,10 @@ public class BasicInfoFragment extends FormContentFragment
         formHolder.setTitle(getString(R.string.passenger_contact_info));
         ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
         direction = (Ride.Direction) formHolder.getDataObject(PassengerSignupActivity.DIRECTION);
+        AutoFill.setupAutoFillData((BaseAppCompatActivity)getActivity(), () -> {
+            nameField.setText(SharedPreferencesUtil.getUserName());
+            phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        });
     }
 }
 
