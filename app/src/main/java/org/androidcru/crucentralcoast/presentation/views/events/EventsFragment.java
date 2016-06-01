@@ -124,29 +124,6 @@ public class EventsFragment extends ListFragment
         helper.recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
     }
 
-    /**
-     * Launches the MyRidesFragment and switches to either the Driver or Passenger Tab
-     * depending on which sign-up just completed successfully.
-     * @param requestCode identifies which fragment was launched, Driver/Passenger Sign-up
-     * @param resultCode reports if the Sign-up was successful or cancelled
-     * @param data the intent from the launched fragment
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Bundle bundle = new Bundle();
-
-        if (requestCode == AppConstants.DRIVER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.DRIVER_TAB);
-            ((MainActivity) getActivity()).switchToMyRides(bundle);
-        }
-        else if (requestCode == AppConstants.PASSENGER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.PASSENGER_TAB);
-            ((MainActivity) getActivity()).switchToMyRides(bundle);
-        }
-    }
 
     public void refreshAdapter()
     {
