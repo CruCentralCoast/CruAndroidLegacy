@@ -40,6 +40,12 @@ public class CommunityGroupProvider
             return Observable.empty();
         else
             return cruApiService.getCommunityGroups(requiredMinistryQuestionAnswers.get(0).ministryQuestion.ministry, new CommunityGroupRequest(requiredMinistryQuestionAnswers))
+                    .flatMap(groups -> {
+                        if(groups.isEmpty())
+                            return Observable.empty();
+                        else
+                            return Observable.just(groups);
+                    })
                     .compose(RxComposeUtil.network());
     }
 }

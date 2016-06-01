@@ -11,13 +11,11 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestionAnswer;
 import org.androidcru.crucentralcoast.data.providers.MinistryQuestionsProvider;
-import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 import org.androidcru.crucentralcoast.util.EndlessRecyclerViewScrollListener;
 
@@ -28,13 +26,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
-import timber.log.Timber;
 
-public class MinistryQuestionsFragment extends FormContentFragment
+public class MinistryQuestionsFragment extends FormContentListFragment
 {
-    @BindView(R.id.recyclerview) RecyclerView questionsList;
-    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.empty_view_stub) ViewStub emptyViewStub;
+    @BindView(R.id.informational_text) TextView informationText;
 
     private LinearLayoutManager layoutManager;
     private Observer<List<MinistryQuestion>> observer;
@@ -42,42 +37,21 @@ public class MinistryQuestionsFragment extends FormContentFragment
     private MinistryQuestionsAdapter adapter;
     protected View emptyView;
     private String ministryId;
+    private FormHolder formHolder;
 
     public MinistryQuestionsFragment()
     {
-        observer = new Observer<List<MinistryQuestion>>()
-        {
-            @Override
-            public void onCompleted() {
-                if(questions.isEmpty())
-                {
-                    emptyView.setVisibility(View.VISIBLE);
-                    ((TextView)(MinistryQuestionsFragment.this.getView().findViewById(R.id.informational_text))).setText("No ministry questions were found");
-                }
-                else
-                {
-                    emptyView.setVisibility(View.GONE);
-                }
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onError(Throwable e)
+        observer = helper.createListObserver( ministryQuestions -> {
+            if(questions == null || questions.isEmpty())
             {
-                Timber.e(e, "Ministry Question Error");
+                questions = ministryQuestions;
+                adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager, getActivity().getFragmentManager());
+                helper.recyclerView.setAdapter(adapter);
             }
-
-            @Override
-            public void onNext(List<MinistryQuestion> ministryQuestions)
-            {
-                if(questions == null || questions.isEmpty())
-                {
-                    questions = ministryQuestions;
-                    adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager, getActivity().getFragmentManager());
-                    questionsList.setAdapter(adapter);
-                }
-            }
-        };
+        }, () -> {
+            formHolder.setNextVisibility(View.GONE);
+            helper.onEmpty(R.layout.empty_with_alert);
+        });
     }
 
     @Nullable
@@ -91,20 +65,17 @@ public class MinistryQuestionsFragment extends FormContentFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
 
+        informationText.setText("No community groups found");
+
         questions = new ArrayList<>();
-        emptyViewStub.setLayoutResource(R.layout.empty_with_alert);
-        emptyView = emptyViewStub.inflate();
-
-        questionsList.setHasFixedSize(true);
-
-        setupSwipeRefreshLayout(swipeRefreshLayout);
 
         layoutManager = new LinearLayoutManager(getContext());
-        questionsList.setLayoutManager(layoutManager);
-        questionsList.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        helper.recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
             {
@@ -112,34 +83,20 @@ public class MinistryQuestionsFragment extends FormContentFragment
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
-    }
-
-    public static void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout)
-    {
-        //issue 77712, workaround until Google fixes it
-        swipeRefreshLayout.measure(View.MEASURED_SIZE_MASK, View.MEASURED_HEIGHT_STATE_SHIFT);
-        swipeRefreshLayout.setColorSchemeResources(R.color.cruDarkBlue, R.color.cruGold, R.color.cruOrange);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        forceUpdate();
+        helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
     }
 
     private void forceUpdate()
     {
         questions.clear();
         adapter = null;
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         getQuestions(ministryId);
     }
 
     private void getQuestions(String ministryId)
     {
-        swipeRefreshLayout.setRefreshing(true);
+        helper.swipeRefreshLayout.setRefreshing(true);
         MinistryQuestionsProvider.getMinistryQuestions(this, observer, ministryId);
     }
 
@@ -147,6 +104,8 @@ public class MinistryQuestionsFragment extends FormContentFragment
     public void setupData(FormHolder formHolder) {
         formHolder.setTitle("Community Group Form");
         formHolder.setSubtitle("");
+
+        this.formHolder = formHolder;
 
         ministryId = (String) formHolder.getDataObject("ministry");
 
