@@ -60,9 +60,8 @@ public interface CruApiService
     @GET("/api/ministryquestions/")
     public Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
 
-    @FormUrlEncoded
-    @POST("/api/users/find")
-    public Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Field("ministryTeams") ArrayList<String> ministryId);
+    @POST("/api/users/search")
+    public Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Body Query query);
 
     @GET("/api/rides/")
     Observable<ArrayList<Ride>> getRides();

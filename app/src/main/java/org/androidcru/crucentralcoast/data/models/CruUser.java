@@ -12,6 +12,8 @@ public final class CruUser
     public static final String sName = "name";
     public static final String sEmail = "email";
     public static final String sPhone = "phone";
+    public static final String sIsMinistryTeamLeader = "isMinistryTeamLeader";
+    public static final String sMinistryTeams = "ministryTeams";
 
     @SerializedName(sId) public String id;
     @SerializedName(sName) public CruName name;
