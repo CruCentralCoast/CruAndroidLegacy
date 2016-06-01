@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.CommunityGroup;
 import org.androidcru.crucentralcoast.data.models.CommunityGroupRequest;
+import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
 import org.androidcru.crucentralcoast.data.models.MinistryQuestionAnswer;
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
@@ -41,5 +42,12 @@ public class CommunityGroupProvider
         else
             return cruApiService.getCommunityGroups(requiredMinistryQuestionAnswers.get(0).ministryQuestion.ministry, new CommunityGroupRequest(requiredMinistryQuestionAnswers))
                     .compose(RxComposeUtil.network());
+    }
+
+    public static void joinCommunityGroup(Observer<Void> observer, String id, CruUser user)
+    {
+        cruApiService.joinCommunityGroup(id, user)
+                .compose(RxComposeUtil.network())
+                .subscribe(observer);
     }
 }

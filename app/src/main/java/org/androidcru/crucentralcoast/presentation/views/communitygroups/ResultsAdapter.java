@@ -12,9 +12,12 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CommunityGroup;
+import org.androidcru.crucentralcoast.data.models.CruName;
+import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.providers.CommunityGroupProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -114,6 +117,11 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
 
             //send push notification to CG leaders
             //CommunityGroupProvider.joinCommunityGroup(Observers.empty(),));
+            CruUser usr = new CruUser(new CruName(SharedPreferencesUtil.getUserName(), ""),
+                    SharedPreferencesUtil.getUserEmail(),
+                    SharedPreferencesUtil.getUserPhoneNumber());
+
+            CommunityGroupProvider.joinCommunityGroup(Observers.empty(), communityGroup.id, usr);
 
             formHolder.next();
         }
