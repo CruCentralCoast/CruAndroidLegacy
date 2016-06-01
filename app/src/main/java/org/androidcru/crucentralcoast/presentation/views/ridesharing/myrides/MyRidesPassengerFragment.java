@@ -51,6 +51,12 @@ public class MyRidesPassengerFragment extends ListFragment
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        forceUpdate();
+    }
+
     /**
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
