@@ -98,7 +98,6 @@ public class MyRidesDriverVM {
                         alertDialog.dismiss();
                     }
                 });
-
     }
 
     public View.OnClickListener onCancelOfferingClicked()

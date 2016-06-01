@@ -156,4 +156,13 @@ public class SharedPreferencesUtil
         getSharedPreferences().edit().putString(AppConstants.AUTHORIZED_KEY, number).commit();
     }
 
+    public static void setMinistryTeamSignup(String ministryName)
+    {
+        getSharedPreferences().edit().putBoolean(ministryName, true).commit();
+    }
+
+    public static boolean getMinistryTeamSignup(String ministryName)
+    {
+        return getSharedPreferences().getBoolean(ministryName, false);
+    }
 }
