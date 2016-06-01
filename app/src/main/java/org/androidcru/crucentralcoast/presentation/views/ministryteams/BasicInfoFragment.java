@@ -73,6 +73,8 @@ public class BasicInfoFragment extends FormContentFragment
             // gets the validated information and overwrites the user's information in shared preferences on a background thread
             SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), emailField.getText().toString(), phoneField.getText().toString());
 
+            // save signup for this minstry team to avoid having to enter info again
+            SharedPreferencesUtil.setMinistryTeamSignup(((MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM)).name);
 
             // gets back the ministry team object from the form holder.
             MinistryTeam ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);

@@ -8,6 +8,7 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -40,8 +41,10 @@ public class JoinMinistryTeamActivity extends FormActivity
         ministryTeamInformationFragment.setArguments(bundle);
 
         // set up the form holder arraylist with the various fragments
-        fragments.add(ministryTeamInformationFragment);
-        fragments.add(new BasicInfoFragment());
+        if (!SharedPreferencesUtil.getMinistryTeamSignup(ministryTeam.name)) {
+            fragments.add(ministryTeamInformationFragment);
+            fragments.add(new BasicInfoFragment());
+        }
         fragments.add(new MinistryTeamLeaderInformationFragment());
 
         // adds the ministry team to the form holder so other fragments will have access to it
