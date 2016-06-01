@@ -2,6 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 {
     List<Passenger> passengers;
     private MyRidesInfoActivity parent;
-    private AlertDialogCreator alertDialog;
+    private AlertDialog alertDialog;
     private String rideID;
     private String selectedPassengerID;
 
@@ -138,14 +139,23 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
     private void initAlertDialog() {
-
-        alertDialog = new AlertDialogCreator(parent,
-                CruApplication.getContext().getString(R.string.alert_dialog_kick_title),
-                CruApplication.getContext().getString(R.string.alert_dialog_kick_msg),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
-                    }
-                });
+        alertDialog = new AlertDialog.Builder(parent)
+            .setTitle(CruApplication.getContext().getString(R.string.alert_dialog_kick_title))
+            .setMessage(CruApplication.getContext().getString(R.string.alert_dialog_kick_msg))
+            .create();
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+            CruApplication.getContext().getString(R.string.alert_dialog_yes),
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), rideID, selectedPassengerID);
+                }
+            });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+            CruApplication.getContext().getString(R.string.alert_dialog_no),
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
     }
 }
