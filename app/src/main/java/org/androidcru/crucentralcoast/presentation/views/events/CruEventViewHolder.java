@@ -61,6 +61,7 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.calButton) public ImageButton calButton;
     @BindView(R.id.rideSharingButton) public ImageButton rideSharingButton;
     @BindView(R.id.eventDescription) public TextView eventDescription;
+    @BindView(R.id.eventAddress) public TextView eventAddress;
     @BindView(R.id.animating_layout) public LinearLayout animatingLayout;
 
     private RecyclerView.LayoutManager layoutManager;
@@ -124,6 +125,9 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
                 : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         eventDescription.setText(cruEvent.description);
         eventDescription.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
+        eventAddress.setText(cruEvent.location.street1 + ", " + cruEvent.location.suburb +
+                ", " + cruEvent.location.state + " " + cruEvent.location.postcode);
+        eventAddress.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -140,14 +144,14 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         if(state != null)
         {
             int visibility;
+
             if (eventDescription.getVisibility() == View.VISIBLE)
-            {
                 visibility = View.GONE;
-            } else
-            {
+            else
                 visibility = View.VISIBLE;
-            }
+
             eventDescription.setVisibility(visibility);
+            eventAddress.setVisibility(visibility);
 
             state.isExpanded = (View.VISIBLE == visibility);
             adapter.notifyItemChanged(getAdapterPosition());
