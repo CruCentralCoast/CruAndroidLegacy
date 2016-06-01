@@ -19,7 +19,6 @@ import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Passenger;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
-import org.androidcru.crucentralcoast.presentation.util.AlertDialogCreator;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 
@@ -87,7 +86,8 @@ public class MyRidesInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.context = itemView.getContext();
-
+            addToContacts.setVisibility(View.VISIBLE);
+            kickPassenger.setVisibility(View.VISIBLE);
             addToContacts.setImageDrawable(DrawableUtil.getDrawable(itemView.getContext(), R.drawable.contact_mail));
             kickPassenger.setImageDrawable(DrawableUtil.getDrawable(itemView.getContext(), R.drawable.ic_close_grey600));;
         }

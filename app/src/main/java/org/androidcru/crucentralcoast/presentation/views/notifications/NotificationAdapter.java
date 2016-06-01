@@ -13,6 +13,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
 {
     private List<Notification> notifications;
 
+    private final int WITHOUT_PAYLOAD = 0;
+    private final int WITH_PAYLOAD = 1;
+
+
     public NotificationAdapter(List<Notification> notifications)
     {
         this.notifications = notifications;
@@ -35,5 +39,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
     public int getItemCount()
     {
         return notifications.size();
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        return notifications.get(position).payload != null ? WITH_PAYLOAD : WITHOUT_PAYLOAD;
     }
 }

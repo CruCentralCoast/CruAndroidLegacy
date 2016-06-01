@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Notification;
 import org.androidcru.crucentralcoast.data.providers.NotificationProvider;
+import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class NotificationFragment extends ListFragment
         unbinder = ButterKnife.bind(this, view);
 
         informationalText.setText("No notifications at this time!");
+        helper.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
     }
 

@@ -12,7 +12,9 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.Notification;
 import org.androidcru.crucentralcoast.data.providers.NotificationProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
@@ -39,12 +41,29 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         Timber.d(data.keySet().toString());
 
-        String message = data.getBundle("notification").getString("body");
-        String title = data.getBundle("notification").getString("title");
+        String message;
+        String title;
+        CruUser payload = null;
+
+        if(data.containsKey("payload"))
+        {
+            message = data.getString("body");
+            title = data.getString("title");
+            payload = CruApplication.gson.fromJson(data.getString("payload"), CruUser.class);
+        }
+        else
+        {
+            message = data.getBundle("notification").getString("body");
+            title = data.getBundle("notification").getString("title");
+        }
+
+
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
-
-        NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now()));
+        if(payload == null)
+            NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now()));
+        else
+            NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now(), payload));
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.

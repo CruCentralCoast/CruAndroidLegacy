@@ -52,7 +52,7 @@ public interface CruApiService
     public Observable<ArrayList<Campus>> getCampuses();
 
     @GET("/api/ministryteams/")
-    public Observable<ArrayList<MinistryTeam>> getMinistryTeams();
+    public Observable<List<MinistryTeam>> getMinistryTeams();
 
     @POST("/api/ministryteams/{id}/join")
     public Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);

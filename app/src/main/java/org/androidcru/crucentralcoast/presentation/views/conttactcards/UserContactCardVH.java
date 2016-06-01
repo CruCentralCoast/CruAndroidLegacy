@@ -36,7 +36,7 @@ public class UserContactCardVH extends RecyclerView.ViewHolder
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.context = itemView.getContext();
-
+        addToContacts.setVisibility(View.VISIBLE);
         addToContacts.setImageDrawable(DrawableUtil.getDrawable(itemView.getContext(), R.drawable.contact_mail));
     }
 
