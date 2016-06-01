@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mobsandgeeks.saripaar.annotation.Max;
 import com.mobsandgeeks.saripaar.annotation.Min;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
@@ -68,7 +69,8 @@ public class DriverSignupVM extends BaseRideVM {
     @BindView(R.id.time_field) @NotEmpty EditText rideTime;
     @BindView(R.id.date_field) @NotEmpty EditText rideDate;
 
-    @BindView(R.id.car_capacity_field) @NotEmpty @Min(value = 1) EditText carCapacity;
+    @BindView(R.id.car_capacity_field) @NotEmpty @Min(value = 1) @Max(value = AppConstants.MAX_CAR_CAPACITY, message = "Should be less than " + AppConstants.MAX_CAR_CAPACITY)
+    EditText carCapacity;
 
     @BindView(R.id.radius_field) @NotEmpty TextView radiusField;
     @BindView(com.google.android.gms.R.id.place_autocomplete_search_input) @NotEmpty EditText searchInput;
@@ -175,7 +177,7 @@ public class DriverSignupVM extends BaseRideVM {
 
     @OnTextChanged(R.id.name_field)
     public void onNameChange(CharSequence s) {
-        String newName = s.toString().replaceAll("[^a-zA-Z]", "");
+        String newName = s.toString().replaceAll("[^a-zA-Z\\s]", "");
         Timber.d("newname is now " + newName + " vs " + s.toString());
         if (!newName.equals(s.toString())) {
             nameField.setText(newName);

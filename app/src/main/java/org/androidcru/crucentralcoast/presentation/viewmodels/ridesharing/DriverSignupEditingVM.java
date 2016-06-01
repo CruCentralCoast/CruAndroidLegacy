@@ -40,7 +40,7 @@ public class DriverSignupEditingVM extends DriverSignupVM {
 
     @Override
     protected void bindUI() {
-        phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        phoneField.setEnabled(false);
 
         genderField.setVisibility(View.GONE);
         genderView.setVisibility(View.VISIBLE);

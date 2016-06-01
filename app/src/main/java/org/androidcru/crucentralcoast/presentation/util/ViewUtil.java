@@ -1,5 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.util;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -8,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -55,8 +58,8 @@ public class ViewUtil
 
     public static void setSource(ImageView view, String url, int tintColor, Drawable placeholder, Drawable error, SCALE_TYPE scaleType)
     {
-        //Picasso can handle null images (use placeholder image), but throws exception on empty
-        if (url.isEmpty())
+        //Picasso can handle null images (uses placeholder image), but throws exception on empty
+        if (url != null && url.isEmpty())
             url = null;
 
         RequestCreator request = Picasso.with(view.getContext()).load(url);
@@ -93,6 +96,32 @@ public class ViewUtil
             request.transform(new ColorFilterTransformation(tintColor));
 
         request.into(view);
+    }
+
+    public static void debounceExpandingView(ViewGroup animatingLayout, View.OnClickListener onClickListener)
+    {
+        LayoutTransition mainLayoutTransition = animatingLayout.getLayoutTransition();
+        if(mainLayoutTransition != null)
+        {
+            mainLayoutTransition.addTransitionListener(new LayoutTransition.TransitionListener()
+            {
+
+                @Override
+                public void endTransition(LayoutTransition arg0, ViewGroup arg1,
+                                          View arg2, int arg3)
+                {
+                    animatingLayout.setOnClickListener(onClickListener);
+                }
+
+                @Override
+                public void startTransition(LayoutTransition transition,
+                                            ViewGroup container, View view, int transitionType)
+                {
+                    animatingLayout.setOnClickListener(null);
+
+                }
+            });
+        }
     }
 
     public enum SCALE_TYPE {

@@ -11,6 +11,7 @@
 
         <ImageView
             android:id="@+id/ministry_info_image"
+            android:adjustViewBounds="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"/>
@@ -20,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:textSize="14dp"/>
+            android:textSize="16dp"/>
 
 
     </LinearLayout>

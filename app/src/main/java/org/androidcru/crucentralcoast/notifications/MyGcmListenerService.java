@@ -16,10 +16,11 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Notification;
 import org.androidcru.crucentralcoast.data.providers.NotificationProvider;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
+import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 
 import rx.observers.Observers;
-import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
+import timber.log.Timber;
 
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -36,7 +37,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-
+        Timber.d(data.keySet().toString());
 
         String message = data.getBundle("notification").getString("body");
         String title = data.getBundle("notification").getString("title");
@@ -84,7 +85,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_cru_logo_cropped_grey600)
+                .setSmallIcon(R.drawable.ic_stat_cru_logo_cropped)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)

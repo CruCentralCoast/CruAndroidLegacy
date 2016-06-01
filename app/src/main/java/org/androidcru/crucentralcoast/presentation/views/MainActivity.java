@@ -1,6 +1,7 @@
 package org.androidcru.crucentralcoast.presentation.views;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -236,8 +237,23 @@ public class MainActivity extends BaseAppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AppConstants.DRIVER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.DRIVER_TAB);
+            switchToMyRides(bundle);
+        }
+        else if (requestCode == AppConstants.PASSENGER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConstants.MY_RIDES_TAB, AppConstants.PASSENGER_TAB);
+            switchToMyRides(bundle);
+        }
+
         FacebookProvider.tokenReceived(requestCode, resultCode, data);
     }
+
+
+
 
     public static void loginWithFacebook()
     {

@@ -12,6 +12,7 @@
     card_view:cardElevation="0dp">
 
     <LinearLayout
+        android:id="@+id/animating_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
@@ -25,9 +26,9 @@
 
         <ImageView
             android:id="@+id/video_thumb"
+            android:adjustViewBounds="true"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp"/>
 
         <RelativeLayout

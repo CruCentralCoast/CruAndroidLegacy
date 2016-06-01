@@ -15,11 +15,11 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginResult;
-import com.squareup.picasso.Picasso;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
@@ -61,6 +61,8 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.calButton) public ImageButton calButton;
     @BindView(R.id.rideSharingButton) public ImageButton rideSharingButton;
     @BindView(R.id.eventDescription) public TextView eventDescription;
+    @BindView(R.id.eventAddress) public TextView eventAddress;
+    @BindView(R.id.animating_layout) public LinearLayout animatingLayout;
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
@@ -76,10 +78,11 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         super(rootView);
         this.layoutManager = layoutManager;
         this.adapter = adapter;
+        this.rootView = rootView;
 
         ButterKnife.bind(this, rootView);
-        rootView.setOnClickListener(this);
-        this.rootView = rootView;
+        animatingLayout.setOnClickListener(this);
+        ViewUtil.debounceExpandingView(animatingLayout, this);
     }
     
     public void bind(ExpandableState<CruEvent> state)
@@ -99,15 +102,7 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         eventDate.setText(getDateTime());
         Context context = eventBanner.getContext();
 
-//        if(cruEvent.image != null && !cruEvent.image.isEmpty())
-//        {
-            ViewUtil.setSource(eventBanner, cruEvent.image, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
-//        }
-//        else
-//        {
-//            //clear ImageView of it's old content
-//            eventBanner.setImageResource(android.R.color.transparent);
-//        }
+        ViewUtil.setSource(eventBanner, cruEvent.image, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
 
 
         fbButton.setEnabled(cruEvent.url != null && !cruEvent.url.isEmpty());
@@ -130,6 +125,9 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
                 : DrawableUtil.getDrawable(context, R.drawable.ic_chevron_down_grey600));
         eventDescription.setText(cruEvent.description);
         eventDescription.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
+        eventAddress.setText(cruEvent.location.street1 + ", " + cruEvent.location.suburb +
+                ", " + cruEvent.location.state + " " + cruEvent.location.postcode);
+        eventAddress.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -146,14 +144,14 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
         if(state != null)
         {
             int visibility;
+
             if (eventDescription.getVisibility() == View.VISIBLE)
-            {
                 visibility = View.GONE;
-            } else
-            {
+            else
                 visibility = View.VISIBLE;
-            }
+
             eventDescription.setVisibility(visibility);
+            eventAddress.setVisibility(visibility);
 
             state.isExpanded = (View.VISIBLE == visibility);
             adapter.notifyItemChanged(getAdapterPosition());
