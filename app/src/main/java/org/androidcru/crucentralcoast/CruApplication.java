@@ -93,19 +93,14 @@ public class CruApplication extends Application
      */
     private void setupDebugConfig()
     {
-        if(BuildConfig.DEBUG)
-        {
-            Timber.plant(new PrettyDebugTree());
-        }
-        else
-        {
-            Fabric.with(this, new Crashlytics());
+        //TODO turn this back to release mode
+        Timber.plant(new PrettyDebugTree());
+        Fabric.with(this, new Crashlytics());
 
-            //Send all Timber logs with a level of INFO or higher to Fabric.io
-            Timber.plant(new CrashlyticsLogTree(Log.INFO));
-            //If there's a Exception sent to Timber.e(), it gets sent to Crashlytics as a non-fatal crash
-            Timber.plant(new CrashlyticsLogExceptionTree());
-        }
+        //Send all Timber logs with a level of INFO or higher to Fabric.io
+        Timber.plant(new CrashlyticsLogTree(Log.DEBUG));
+        //If there's a Exception sent to Timber.e(), it gets sent to Crashlytics as a non-fatal crash
+        Timber.plant(new CrashlyticsLogExceptionTree());
     }
 
     public static OkHttpClient setupOkHttp()
