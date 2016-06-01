@@ -12,6 +12,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolde
 import org.androidcru.crucentralcoast.util.MathUtil;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.Duration;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
@@ -51,7 +52,9 @@ public final class RideProvider
     {
         return rideObservable -> rideObservable
             .toSortedList((Ride ride1, Ride ride2) -> {
-                return Duration.between(ride2.time, dateTime).compareTo(Duration.between(ride1.time, dateTime));
+                //TODO remove if the server can ever handle the correct datetimes
+                ZonedDateTime adjusted = dateTime.withZoneSameLocal(ZoneOffset.UTC);
+                return Duration.between(ride1.time, adjusted).abs().compareTo(Duration.between(ride2.time, adjusted).abs());
             });
     }
 
