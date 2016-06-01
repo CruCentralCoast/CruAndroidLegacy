@@ -3,25 +3,25 @@ package org.androidcru.crucentralcoast.presentation.views.ministryteams;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.presentation.views.conttactcards.UserContactCardsAdapter;
-import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
+import org.androidcru.crucentralcoast.presentation.views.forms.FormContentListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MinistryTeamLeaderInformationFragment extends FormContentFragment
+public class MinistryTeamLeaderInformationFragment extends FormContentListFragment
 {
     private MinistryTeam ministryTeam;
 
-    @BindView(R.id.recyclerview) RecyclerView ministryTeamLeaderInfo;
+    @BindView(R.id.informational_text) TextView informationText;
 
 
     public MinistryTeamLeaderInformationFragment()
@@ -39,8 +39,11 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
+        helper.swipeRefreshLayout.setEnabled(false);
+        informationText.setText("No Leaders Assigned to this Ministry Team!");
     }
 
     @Override
@@ -51,10 +54,14 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 
         formHolder.setTitle(ministryTeam.name);
 
-        if (ministryTeam.ministryTeamLeaders != null)
+        if (ministryTeam.ministryTeamLeaders != null && !ministryTeam.ministryTeamLeaders.isEmpty())
         {
-            ministryTeamLeaderInfo.setLayoutManager(new LinearLayoutManager(getContext()));
-            ministryTeamLeaderInfo.setAdapter(new UserContactCardsAdapter(ministryTeam.ministryTeamLeaders));
+            helper.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            helper.recyclerView.setAdapter(new UserContactCardsAdapter(ministryTeam.ministryTeamLeaders));
+        }
+        else
+        {
+            helper.onEmpty(R.layout.empty_with_alert);
         }
     }
 }

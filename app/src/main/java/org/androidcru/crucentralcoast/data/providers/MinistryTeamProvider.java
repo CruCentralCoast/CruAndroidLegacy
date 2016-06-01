@@ -44,8 +44,10 @@ public final class MinistryTeamProvider
                                 if(ministryTeam.ministryTeamLeaders == null)
                                     ministryTeam.ministryTeamLeaders = new ArrayList<CruUser>();
                                 ministryTeam.ministryTeamLeaders.add(user);
-                                return ministryTeam;
+                                return user;
                             })
+                            .toList()
+                            .flatMap(leaders -> Observable.just(ministryTeam))
                             .switchIfEmpty(Observable.just(ministryTeam));
                 })
                 .compose(RxComposeUtil.toListOrEmpty())
