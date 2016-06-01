@@ -37,6 +37,7 @@ public class NotificationProvider
             return Reservoir
                     .getAsync(sNotifications, Notification.class, collectionType)
                     .compose(RxComposeUtil.network())
+                    .onBackpressureDrop()
                     .toSortedList((Notification n1, Notification n2) -> {
                         return n2.timestamp.compareTo(n1.timestamp);
                     });
@@ -63,18 +64,22 @@ public class NotificationProvider
             {
                 return Reservoir.getAsync(sNotifications, Notification.class, collectionType)
                     .compose(RxComposeUtil.network())
+                    .onBackpressureDrop()
                     .toList()
                     .flatMap(notifications -> {
                         notifications.add(notification);
                         return Reservoir.putAsync(sNotifications, notifications)
-                                .compose(RxComposeUtil.network());
+                                .compose(RxComposeUtil.network())
+                                .onBackpressureDrop();
                     });
             }
             else
             {
                 List<Notification> notifications = new ArrayList<>();
                 notifications.add(notification);
-                return Reservoir.putAsync(sNotifications, notifications).compose(RxComposeUtil.network());
+                return Reservoir.putAsync(sNotifications, notifications)
+                        .compose(RxComposeUtil.network())
+                        .onBackpressureDrop();
             }
         }
         catch(Exception e)

@@ -39,8 +39,8 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         Timber.d(data.keySet().toString());
 
-        String message = data.getString("body");
-        String title = data.getString("title");
+        String message = data.getBundle("notification").getString("body");
+        String title = data.getBundle("notification").getString("title");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
