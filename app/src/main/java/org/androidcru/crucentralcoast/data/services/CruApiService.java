@@ -132,4 +132,8 @@ public interface CruApiService
 
     @POST("/api/Ministries/{id}/communitygroups")
     Observable<List<CommunityGroup>> getCommunityGroups(@Path("id") String ministryId, @Body CommunityGroupRequest questionAnswers);
+
+    @FormUrlEncoded
+    @POST("/api/gcm")
+    Observable<Void> updateGcmId(@Field("old") String oldId, @Field("new") String newId);
 }

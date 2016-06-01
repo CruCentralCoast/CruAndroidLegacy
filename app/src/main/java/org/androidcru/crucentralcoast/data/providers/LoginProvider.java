@@ -39,4 +39,12 @@ public class LoginProvider
         return service.signout()
                 .compose(RxComposeUtil.network());
     }
+
+    public static void updateGcmId(String oldId, String newId)
+    {
+        service.updateGcmId(oldId, newId)
+                .compose(RxComposeUtil.network())
+                .compose(RxComposeUtil.ui())
+                .subscribe();
+    }
 }

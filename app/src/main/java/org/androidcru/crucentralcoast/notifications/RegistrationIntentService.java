@@ -12,6 +12,7 @@ import com.google.android.gms.iid.InstanceID;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
+import org.androidcru.crucentralcoast.data.providers.LoginProvider;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import rx.Observable;
@@ -57,8 +58,12 @@ public class RegistrationIntentService extends IntentService {
             // [END get_token]
             Timber.i(TAG, "GCM Registration Token: " + token);
 
-            // TODO: Implement this method to send any registration to your app's servers.
-            SharedPreferencesUtil.writeGCMID(token);
+            String gcmId = SharedPreferencesUtil.getGCMID();
+            if(!gcmId.equals(token))
+            {
+                LoginProvider.updateGcmId(gcmId, token);
+                SharedPreferencesUtil.writeGCMID(token);
+            }
 
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
