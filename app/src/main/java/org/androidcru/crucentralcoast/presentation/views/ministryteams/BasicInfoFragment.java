@@ -21,8 +21,10 @@ import org.androidcru.crucentralcoast.data.models.CruUser;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.providers.MinistryTeamProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.androidcru.crucentralcoast.util.AutoFill;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
@@ -52,10 +54,12 @@ public class BasicInfoFragment extends FormContentFragment
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        // Autofills the form if the information is available
-        nameField.setText(SharedPreferencesUtil.getUserName());
-        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
-        emailField.setText(SharedPreferencesUtil.getUserEmail());
+        AutoFill.setupAutoFillData((BaseAppCompatActivity)getActivity(), () -> {
+            // Autofills the form if the information is available
+            nameField.setText(SharedPreferencesUtil.getUserName());
+            phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+            emailField.setText(SharedPreferencesUtil.getUserEmail());
+        });
     }
 
     @Override

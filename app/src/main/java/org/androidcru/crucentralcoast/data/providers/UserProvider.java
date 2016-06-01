@@ -22,6 +22,14 @@ public class UserProvider
         holder.addSubscription(s);
     }
 
+    public static void requestCruUser(Observer<CruUser> observer, String phoneNumber)
+    {
+        requestCruUser(phoneNumber)
+                .compose(RxComposeUtil.ui())
+                .subscribe(observer);
+    }
+
+
     protected static Observable<CruUser> requestCruUser(String phoneNumber)
     {
         return cruService.getCruUser(phoneNumber)

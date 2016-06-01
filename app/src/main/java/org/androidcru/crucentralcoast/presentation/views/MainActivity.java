@@ -35,6 +35,7 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyR
 import org.androidcru.crucentralcoast.presentation.views.settings.SettingsActivity;
 import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
+import org.androidcru.crucentralcoast.util.AutoFill;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.Collections;
@@ -76,39 +77,6 @@ public class MainActivity extends BaseAppCompatActivity
         }
 
         checkPlayServicesCode();
-        setupAutoFillData();
-    }
-
-    /**
-     * If this is the first time the
-     */
-    private void setupAutoFillData()
-    {
-        if (!SharedPreferencesUtil.isFirstLaunch())
-        {
-            RxPermissions.getInstance(this)
-                .request(Manifest.permission.READ_PHONE_STATE)
-                .subscribe(granted -> {
-                    if (granted)
-                    {
-                        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                        String userPhoneNumber = telephonyManager.getLine1Number();
-                        if (userPhoneNumber != null && userPhoneNumber.length() >= 10)
-                        {
-                            userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
-
-                            SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
-
-                            Observer<CruUser> observer = Observers.create(cruUser -> {
-                                SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
-                            });
-
-                            UserProvider.requestCruUser(this, observer, userPhoneNumber);
-                        }
-                    }
-                });
-        }
-        SharedPreferencesUtil.writeFirstLaunch(true);
     }
 
     private void checkPlayServicesCode()
