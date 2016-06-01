@@ -13,8 +13,13 @@ import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CommunityGroup;
 import org.androidcru.crucentralcoast.data.providers.CommunityGroupProvider;
+import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,12 +29,15 @@ import rx.observers.Observers;
 
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.CommunityGroupViewHolder>
 {
-    List<CommunityGroup> communityGroups;
+    List<ExpandableState<CommunityGroup>> communityGroups;
     FormHolder formHolder;
 
     public ResultsAdapter(List<CommunityGroup> communityGroups, FormHolder formHolder)
     {
-        this.communityGroups = communityGroups;
+        this.communityGroups = new ArrayList<>();
+        for (CommunityGroup g : communityGroups)
+            this.communityGroups.add(new ExpandableState<CommunityGroup>(g));
+
         this.formHolder = formHolder;
     }
 
@@ -43,23 +51,27 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
     @Override
     public void onBindViewHolder(CommunityGroupViewHolder holder, int position)
     {
-        holder.communityGroup = communityGroups.get(position);
+        CommunityGroup cg = communityGroups.get(position).model;
 
-        holder.title.setText(communityGroups.get(position).dayOfWeek);
-        holder.name.setText(communityGroups.get(position).name);
+        holder.communityGroup = cg;
 
-        for (int i = 0; i < communityGroups.get(position).leaders.size(); i++)
+        holder.title.setText(cg.dayOfWeek + ", " + cg.meetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
+        holder.name.setText(cg.name);
+
+        holder.leaders.setText("");
+        for (int i = 0; i < cg.leaders.size(); i++)
         {
 
-            holder.leaders.setText(holder.leaders.getText().toString() + communityGroups.get(position).leaders.get(i));
+            holder.leaders.setText(holder.leaders.getText().toString() + cg.leaders.get(i).name.firstName +
+                    " " + cg.leaders.get(i).name.lastName);
 
-            if (i != communityGroups.get(position).leaders.size() - 1)
+            if (i != cg.leaders.size() - 1)
                 holder.leaders.setText(holder.leaders.getText().toString() + ", ");
         }
 
-        holder.description.setText(communityGroups.get(position).description);
+        holder.description.setText(cg.description);
 
-        holder.details.setVisibility(View.GONE);
+        holder.details.setVisibility(communityGroups.get(position).isExpanded ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -90,7 +102,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
         public void onTap()
         {
             // inverts the visibility of the description field
-            details.setVisibility(details.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            communityGroups.get(getAdapterPosition()).isExpanded = !communityGroups.get(getAdapterPosition()).isExpanded;
+            notifyItemChanged(getAdapterPosition());
         }
 
         @OnClick (R.id.join_community_group_button)
