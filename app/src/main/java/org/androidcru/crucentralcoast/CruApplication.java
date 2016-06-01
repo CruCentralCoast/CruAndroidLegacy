@@ -107,7 +107,7 @@ public class CruApplication extends Application
     {
         if(BuildConfig.DEBUG)
         {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").d(message));
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").v(message));
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             okHttpClient = new OkHttpClient.Builder()
                     //10MB cache
