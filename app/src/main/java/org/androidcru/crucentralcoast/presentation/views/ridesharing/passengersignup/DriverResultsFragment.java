@@ -17,6 +17,7 @@ import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.util.DividerItemDecoration;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentListFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class DriverResultsFragment extends FormContentListFragment
     @BindView(R.id.informational_text) protected TextView informationalText;
 
     private Query query;
+    private ZonedDateTime selectedTime;
     private List<Ride> results;
     private LatLng passengerLocation;
 
@@ -65,7 +67,7 @@ public class DriverResultsFragment extends FormContentListFragment
         helper.swipeRefreshLayout.setRefreshing(true);
         results.clear();
         RideProvider.searchRides(this, rideResultsObserver, query,
-                new double[]{passengerLocation.latitude, passengerLocation.longitude});
+                new double[]{passengerLocation.latitude, passengerLocation.longitude}, selectedTime);
     }
 
     private void handleResults(List<Ride> results)
@@ -80,6 +82,7 @@ public class DriverResultsFragment extends FormContentListFragment
         this.formHolder = formHolder;
         formHolder.setTitle(getString(R.string.passenger_pick_driver));
         query = (Query) formHolder.getDataObject(PassengerSignupActivity.QUERY);
+        selectedTime = (ZonedDateTime) formHolder.getDataObject(PassengerSignupActivity.SELECTED_TIME);
 
         results = new ArrayList<>();
         rideResultsObserver = createListObserver(R.layout.empty_with_alert,

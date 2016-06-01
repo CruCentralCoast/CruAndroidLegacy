@@ -11,6 +11,8 @@ import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
+import org.threeten.bp.Duration;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +47,13 @@ public final class RideProvider
                 });
     }
 
-    private static Observable.Transformer<Ride, List<Ride>> sortByDistance = rideObservable -> rideObservable
-            .toSortedList((Ride r1, Ride r2) -> {
-                return Double.compare(r2.distance, r1.distance);
+    private static Observable.Transformer<Ride, List<Ride>> sortByTime(ZonedDateTime dateTime)
+    {
+        return rideObservable -> rideObservable
+            .toSortedList((Ride ride1, Ride ride2) -> {
+                return Duration.between(ride2.time, dateTime).compareTo(Duration.between(ride1.time, dateTime));
             });
+    }
 
     public static void requestRides(SubscriptionsHolder holder, Observer<List<Ride>> observer)
     {
@@ -116,15 +121,15 @@ public final class RideProvider
 
 
 
-    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, double[] latlng)
+    public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, double[] latlng, ZonedDateTime dateTime)
     {
-        Subscription s = searchRides(query, latlng)
+        Subscription s = searchRides(query, latlng, dateTime)
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Ride>> searchRides(Query query, double[] latlng)
+    protected static Observable<List<Ride>> searchRides(Query query, double[] latlng, ZonedDateTime time)
     {
         return mCruService.searchRides(query)
                 .flatMap(rides -> {
@@ -132,7 +137,8 @@ public final class RideProvider
                 })
                 .compose(attachEvent)
                 .compose(attachDistance(latlng))
-                .compose(sortByDistance)
+                //.compose(sortByDistance)
+                .compose(sortByTime(time))
                 .flatMap(finalRides -> {
                     return finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides);
                 })

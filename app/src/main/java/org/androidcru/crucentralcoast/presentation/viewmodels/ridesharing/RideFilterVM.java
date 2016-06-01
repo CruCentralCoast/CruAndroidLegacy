@@ -78,27 +78,25 @@ public class RideFilterVM extends BaseRideVM
         if(!gender.equals(context.getString(R.string.any_gender)))
             genderId = Ride.Gender.getFromColloquial((String) genderField.getSelectedItem()).getId();
 
-        //ride time
-        ZonedDateTime dateTime = ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
-        ZonedDateTime threeHoursAfter = dateTime.plusHours(3l);
-        ZonedDateTime threeHoursBefore = dateTime.minusHours(3l);
-
         //conditions
-        ConditionsBuilder conditions = new ConditionsBuilder()
-            .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
-            .addRestriction(new ConditionsBuilder()
-                    .setField(Ride.sTime)
-                    .addRestriction(ConditionsBuilder.OPERATOR.LTE, CruApplication.gson.toJsonTree(threeHoursAfter))
-                    .addRestriction(ConditionsBuilder.OPERATOR.GTE, CruApplication.gson.toJsonTree(threeHoursBefore)))
-            .addRestriction(new ConditionsBuilder()
+        ConditionsBuilder conditions = new ConditionsBuilder();
+        ConditionsBuilder directionConditions = new ConditionsBuilder()
                     .setField(Ride.sDirection)
-                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, direction.getValue()));
+                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, direction.getValue());
 
         //don't include gender if it was "Any"
         if(genderId > -1)
-            conditions.addRestriction(new ConditionsBuilder()
-                    .setField(Ride.sGender)
-                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, genderId));
+        {
+            conditions.setCombineOperator(ConditionsBuilder.OPERATOR.AND)
+                    .addRestriction(directionConditions)
+                    .addRestriction(new ConditionsBuilder()
+                            .setField(Ride.sGender)
+                            .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, genderId));
+        }
+        else
+        {
+            conditions.addRestriction(directionConditions);
+        }
 
         //build query
         Query query = new Query.Builder()
@@ -111,6 +109,12 @@ public class RideFilterVM extends BaseRideVM
         Timber.d(CruApplication.gson.toJson(query));
 
         return new Pair<>(query, direction);
+    }
+
+    public ZonedDateTime getDateTime()
+    {
+        return ZonedDateTime.of(rideSetDate, rideSetTime, ZoneId.systemDefault());
+
     }
 
     @Override
