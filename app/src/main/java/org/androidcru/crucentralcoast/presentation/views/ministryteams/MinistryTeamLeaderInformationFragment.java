@@ -23,6 +23,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 
     @BindView(R.id.recyclerview) RecyclerView ministryTeamLeaderInfo;
 
+
     public MinistryTeamLeaderInformationFragment()
     {
         super();
@@ -32,7 +33,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_ministry_team_leader_info, container, false);
+        return inflater.inflate(R.layout.fragment_leader_info, container, false);
     }
 
     @Override
@@ -50,7 +51,10 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 
         formHolder.setTitle(ministryTeam.name);
 
-        ministryTeamLeaderInfo.setLayoutManager(new LinearLayoutManager(getContext()));
-        ministryTeamLeaderInfo.setAdapter(new UserContactCardsAdapter(ministryTeam.ministryTeamLeaders));
+        if (ministryTeam.ministryTeamLeaders != null)
+        {
+            ministryTeamLeaderInfo.setLayoutManager(new LinearLayoutManager(getContext()));
+            ministryTeamLeaderInfo.setAdapter(new UserContactCardsAdapter(ministryTeam.ministryTeamLeaders));
+        }
     }
 }

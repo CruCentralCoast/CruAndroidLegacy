@@ -57,6 +57,9 @@ public interface CruApiService
     @POST("/api/ministryteams/{id}/join")
     public Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);
 
+    @POST("/api/communitygroups/{id}/join")
+    public Observable<Void> joinCommunityGroup(@Path("id") String id, @Body CruUser user);
+
     @GET("/api/ministryquestions/")
     public Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
 

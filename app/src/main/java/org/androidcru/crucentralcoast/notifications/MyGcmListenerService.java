@@ -39,8 +39,8 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         Timber.d(data.keySet().toString());
 
-        String message = data.getBundle("notification").getString("body");
-        String title = data.getBundle("notification").getString("title");
+        String message = data.getString("body");
+        String title = data.getString("title");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -81,13 +81,18 @@ public class MyGcmListenerService extends GcmListenerService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_cru_logo_cropped)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setDefaults(android.app.Notification.DEFAULT_ALL)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

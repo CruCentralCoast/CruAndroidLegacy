@@ -4,17 +4,16 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your contact information has been sent to the following leaders."
+            android:textSize="16dp"
+            android:layout_margin="16dp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Your contact information has been sent to the following ministry team leaders."
-        android:textSize="16dp"
-        android:layout_margin="16dp"/>
-
-    <View android:layout_width="match_parent"
-          android:layout_height="2dip"
-          android:background="@color/cruGold" />
+        <View android:layout_width="match_parent"
+              android:layout_height="2dip"
+              android:background="@color/cruGold" />
 
     <TextView
         android:layout_width="match_parent"
