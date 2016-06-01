@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tags"
                 tools:text="hip, cool, prayer, intro"
-                android:textColor="@color/cruDarkBlue"
+                android:textColor="@color/cruOrange"
                 android:textSize="16dp"
                 android:paddingBottom="4dp" />
 
