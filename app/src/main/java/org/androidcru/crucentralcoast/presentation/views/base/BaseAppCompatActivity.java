@@ -56,7 +56,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
             alertDialog = new AlertDialog.Builder(this)
                     .setCancelable(false)
                     .setTitle("Loading...")
-                    .setView(R.layout.progress_layout)
+                    .setView(R.layout.progress_layout1)
                     .create();
         }
 
