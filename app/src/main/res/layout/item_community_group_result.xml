@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/community_group_result_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="0dp"
+    card_view:cardCornerRadius="0dp">
+
+    <View android:layout_width="match_parent"
+          android:id="@+id/resource_divider"
+          android:layout_height="2px"
+          android:background="@color/grey300"
+          android:minHeight="2px"/>
+
+    <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:animateLayoutChanges="true">
+
+        <TextView
+            android:id="@+id/community_group_meeting_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/grey800"/>
+
+        <TextView
+            android:id="@+id/community_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="16dp"/>
+
+        <RelativeLayout
+            android:id="@+id/community_group_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/community_group_leaders_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leaders: "
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"/>
+
+
+            <TextView
+                android:id="@+id/community_group_leaders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/community_group_leaders_text"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="16dp"/>
+
+            <TextView
+                android:id="@+id/community_group_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/community_group_leaders"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

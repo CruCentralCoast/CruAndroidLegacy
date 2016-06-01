@@ -76,10 +76,6 @@ public class MinistryQuestionsFragment extends FormContentFragment
                     adapter = new MinistryQuestionsAdapter(ministryQuestions, layoutManager, getActivity().getFragmentManager());
                     questionsList.setAdapter(adapter);
                 }
-//                else
-//                {
-//                    questions.addAll(ministryQuestions);
-//                }
             }
         };
     }

@@ -33,13 +33,27 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
     public CommunityGroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new CommunityGroupViewHolder(inflater.inflate(R.layout.item_resource, parent, false));
+        return new CommunityGroupViewHolder(inflater.inflate(R.layout.item_community_group_result, parent, false));
     }
 
     @Override
     public void onBindViewHolder(CommunityGroupViewHolder holder, int position)
     {
         holder.title.setText(communityGroups.get(position).meetingTime);
+        holder.name.setText(communityGroups.get(position).name);
+
+        for (int i = 0; i < communityGroups.get(position).leaders.size(); i++)
+        {
+
+            holder.leaders.setText(holder.leaders.getText() + communityGroups.get(position).leaders.get(i));
+
+            if (i != communityGroups.get(position).leaders.size() - 1)
+                holder.leaders.setText(holder.leaders.getText() + ", ");
+        }
+
+        holder.description.setText(communityGroups.get(position).description);
+
+        holder.details.setVisibility(View.GONE);
     }
 
     @Override
@@ -50,8 +64,11 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
 
     public class CommunityGroupViewHolder extends RecyclerView.ViewHolder
     {
-        @BindView(R.id.resource_icon) ImageView icon;
-        @BindView(R.id.title) TextView title;
+        @BindView(R.id.community_group_meeting_time) TextView title;
+        @BindView(R.id.community_group_name) TextView name;
+        @BindView(R.id.community_group_description) TextView description;
+        @BindView(R.id.community_group_leaders) TextView leaders;
+        @BindView(R.id.community_group_details) ViewGroup details;
 
         public CommunityGroupViewHolder(View itemView)
         {
@@ -59,11 +76,13 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
             ButterKnife.bind(this, itemView);
         }
 
-        @OnClick (R.id.title)
+        @OnClick (R.id.community_group_result_view)
         public void onClickTitle()
         {
-            // TODO Nothing, it's complete... jk
-            formHolder.next();
+            // inverts the visibility of the description field
+            details.setVisibility(details.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+            //formHolder.next();
         }
     }
 }
