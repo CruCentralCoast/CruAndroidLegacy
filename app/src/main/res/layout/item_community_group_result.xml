@@ -10,7 +10,6 @@
     card_view:cardCornerRadius="0dp">
 
     <View android:layout_width="match_parent"
-          android:id="@+id/resource_divider"
           android:layout_height="2px"
           android:background="@color/grey300"
           android:minHeight="2px"/>
@@ -28,7 +27,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/grey800"/>
 
@@ -40,19 +39,27 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="16dp"
-            android:textSize="16dp"/>
+            android:textSize="16sp"/>
 
         <RelativeLayout
             android:id="@+id/community_group_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <View android:layout_width="match_parent"
+                  android:layout_height="1px"
+                  android:background="@color/grey300"
+                  android:minHeight="1px"/>
+
             <TextView
                 android:id="@+id/community_group_leaders_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Leaders: "
+                android:textSize="14sp"
+                android:textStyle="bold"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"/>
 
@@ -62,6 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/community_group_leaders_text"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="16dp"/>
 
@@ -70,9 +79,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/community_group_leaders"
-                android:layout_marginBottom="16dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"/>
+
+            <Button
+                android:id="@+id/join_community_group_button"
+                android:minHeight="0dp"
+                android:text="Join this Community Group!"
+                android:textSize="14sp"
+                android:layout_below="@+id/community_group_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
     </LinearLayout>

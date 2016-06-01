@@ -20,7 +20,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
 {
     private MinistryTeam ministryTeam;
 
-    @BindView(R.id.ministry_leader_info_text_view) TextView ministryTeamLeaderInfo;
+    @BindView(R.id.leader_info_text_view) TextView ministryTeamLeaderInfo;
 
     public MinistryTeamLeaderInformationFragment()
     {
@@ -31,7 +31,7 @@ public class MinistryTeamLeaderInformationFragment extends FormContentFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_ministry_team_leader_info, container, false);
+        return inflater.inflate(R.layout.fragment_leader_info, container, false);
     }
 
     @Override

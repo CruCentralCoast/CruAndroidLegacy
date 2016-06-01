@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your contact information has been sent to the following ministry team leaders."
+            android:text="Your contact information has been sent to the following leaders."
             android:textSize="16dp"
             android:layout_margin="16dp"/>
 
@@ -28,7 +28,7 @@
             android:textSize="24dp"
             android:layout_margin="16dp"/>
         <TextView
-            android:id="@+id/ministry_leader_info_text_view"
+            android:id="@+id/leader_info_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
