@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 import org.threeten.bp.ZonedDateTime;
 
 import rx.observers.Observers;
+import timber.log.Timber;
 
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -36,7 +37,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-
+        Timber.d(data.keySet().toString());
 
         String message = data.getBundle("notification").getString("body");
         String title = data.getBundle("notification").getString("title");
