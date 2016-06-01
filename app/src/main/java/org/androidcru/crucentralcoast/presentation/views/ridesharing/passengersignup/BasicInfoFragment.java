@@ -21,16 +21,18 @@ import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.data.providers.PassengerProvider;
 import org.androidcru.crucentralcoast.data.providers.RideProvider;
 import org.androidcru.crucentralcoast.presentation.validator.BaseValidator;
+import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormContentFragment;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
+import org.androidcru.crucentralcoast.util.AutoFill;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.observers.Observers;
 
-public class BasicInfoFragment extends FormContentFragment {
-
+public class BasicInfoFragment extends FormContentFragment
+{
     private Ride ride;
     private BaseValidator validator;
     private Ride.Direction direction;
@@ -53,8 +55,10 @@ public class BasicInfoFragment extends FormContentFragment {
         validator = new BaseValidator(this);
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        nameField.setText(SharedPreferencesUtil.getUserName());
-        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        AutoFill.setupAutoFillData((BaseAppCompatActivity)getActivity(), () -> {
+            nameField.setText(SharedPreferencesUtil.getUserName());
+            phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        });
     }
 
     private Passenger getPassenger()
