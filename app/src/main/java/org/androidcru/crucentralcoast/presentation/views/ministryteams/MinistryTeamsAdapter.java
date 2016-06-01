@@ -46,7 +46,7 @@ public class MinistryTeamsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         // sets up the ministry team box logo for each ministry based on their position
         String image = ministryTeams.get(position).image;
-        ViewUtil.setSource(ministryTeamHolder.ministryImage, image, ContextCompat.getColor(parent, R.color.cruDarkBlue),
+        ViewUtil.setSource(ministryTeamHolder.ministryImage, image, ContextCompat.getColor(parent, R.color.cruGray),
                 DrawableUtil.getDrawable(ministryTeamHolder.ministryImage.getContext(), R.drawable.default_box),
                 DrawableUtil.getDrawable(ministryTeamHolder.ministryImage.getContext(), R.drawable.default_box),
                 null);

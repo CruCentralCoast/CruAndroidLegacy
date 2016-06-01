@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/title"
                 tools:text="Prayer 101"
-                android:textColor="@color/grey800"
+                android:textColor="@color/cruGray"
                 android:textSize="20dp"
                 android:layout_gravity="center_vertical" />
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tags"
                 tools:text="hip, cool, prayer, intro"
-                android:textColor="@color/grey600"
+                android:textColor="@color/cruDarkBlue"
                 android:textSize="16dp"
                 android:paddingBottom="4dp" />
 
