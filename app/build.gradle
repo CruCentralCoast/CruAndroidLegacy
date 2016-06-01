@@ -56,7 +56,7 @@ android {
             buildConfigField "String", "CRU_SERVER", '"http://androidcru-capstone.jonamireh.com"'
         }
         debug {
-            buildConfigField "String", "CRU_SERVER", '"http://androidcru-ridesharing.jonamireh.com"'
+            buildConfigField "String", "CRU_SERVER", '"http://androidcru-dev.jonamireh.com"'
         }
         staging {
             minifyEnabled true
