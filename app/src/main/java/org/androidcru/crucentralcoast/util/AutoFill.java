@@ -19,37 +19,45 @@ public class AutoFill
 {
     public static void setupAutoFillData(BaseAppCompatActivity activity, Action0 onSuccess)
     {
-        if (!SharedPreferencesUtil.isFirstLaunch())
-        {
-            RxPermissions.getInstance(activity)
-                    .request(Manifest.permission.READ_PHONE_STATE)
-                    .subscribe(granted -> {
-                        if (granted)
-                        {
-                            TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
-                            String userPhoneNumber = telephonyManager.getLine1Number();
-                            if (userPhoneNumber != null && userPhoneNumber.length() >= 10)
-                            {
-                                userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
-                                SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
+        RxPermissions.getInstance(activity)
+            .request(Manifest.permission.READ_PHONE_STATE)
+            .subscribe(granted -> {
+                if (granted)
+                {
+                    if (!SharedPreferencesUtil.isFirstLaunch())
+                    {
+                        TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+                        String userPhoneNumber = telephonyManager.getLine1Number();
+                        if (userPhoneNumber != null && userPhoneNumber.length() >= 10) {
+                            userPhoneNumber = userPhoneNumber.substring(userPhoneNumber.length() - 10, userPhoneNumber.length());
 
-                                Observer<CruUser> observer = Observers.create(cruUser -> {
-                                    SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
-                                }, e -> {
-                                    Timber.e(e, "Error validating phone number");
-                                    activity.hideAutoFillDialog();
-                                }, () -> {
-                                    activity.hideAutoFillDialog();
-                                    onSuccess.call();
-                                });
+                            SharedPreferencesUtil.writeBasicInfo(null, null, userPhoneNumber);
 
-                                activity.displayAutoFillDialog();
-                                UserProvider.requestCruUser(observer, userPhoneNumber);
-                            }
+                            Observer<CruUser> observer = Observers.create(cruUser -> {
+                                SharedPreferencesUtil.writeBasicInfo(cruUser.name.firstName + " " + cruUser.name.lastName, cruUser.email, null);
+                            }, e -> {
+                                Timber.e(e, "Error validating phone number");
+                                activity.hideAutoFillDialog();
+                            }, () -> {
+                                activity.hideAutoFillDialog();
+                                onSuccess.call();
+                            });
+
+                            activity.displayAutoFillDialog();
+                            UserProvider.requestCruUser(observer, userPhoneNumber);
+                            SharedPreferencesUtil.writeFirstLaunch(true);
                         }
-                    });
-        }
-        SharedPreferencesUtil.writeFirstLaunch(true);
+                    }
+                    else
+                    {
+                        onSuccess.call();
+                    }
+                }
+                else {
+                    onSuccess.call();
+                }
+            });
+
     }
 }
