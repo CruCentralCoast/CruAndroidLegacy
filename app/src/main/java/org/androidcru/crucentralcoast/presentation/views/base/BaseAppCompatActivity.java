@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 
@@ -21,6 +22,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
 {
     private CompositeSubscription subscriptions = new CompositeSubscription();
     public Unbinder unbinder;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onDestroy()
@@ -45,5 +47,25 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
     public Context getContext()
     {
         return this;
+    }
+
+    public void displayAutoFillDialog()
+    {
+        if(alertDialog == null)
+        {
+            alertDialog = new AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setTitle("Loading...")
+                    .setView(R.layout.progress_layout1)
+                    .create();
+        }
+
+        alertDialog.show();
+    }
+
+    public void hideAutoFillDialog() {
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
     }
 }

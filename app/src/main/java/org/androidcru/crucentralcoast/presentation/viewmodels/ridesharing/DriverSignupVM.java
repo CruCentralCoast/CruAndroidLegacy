@@ -32,6 +32,7 @@ import org.androidcru.crucentralcoast.data.models.Location;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
+import org.androidcru.crucentralcoast.util.AutoFill;
 import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 import org.androidcru.crucentralcoast.util.MathUtil;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
@@ -77,9 +78,11 @@ public class DriverSignupVM extends BaseRideVM {
 
     private String eventId;
     private Location location;
+    private BaseAppCompatActivity activity;
 
     public DriverSignupVM(BaseAppCompatActivity activity, FragmentManager fm, String eventId, ZonedDateTime eventEndTime) {
         super(activity, fm);
+        this.activity = activity;
         this.eventId = eventId;
         eventEndDate = DateTimeUtils.toGregorianCalendar(eventEndTime);
     }
@@ -98,8 +101,10 @@ public class DriverSignupVM extends BaseRideVM {
         rideTime.setOnKeyListener(null);
         rideDate.setOnKeyListener(null);
 
-        nameField.setText(SharedPreferencesUtil.getUserName());
-        phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        AutoFill.setupAutoFillData(activity, () -> {
+            nameField.setText(SharedPreferencesUtil.getUserName());
+            phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
+        });
     }
 
     protected int retrieveCarCapacity() {
