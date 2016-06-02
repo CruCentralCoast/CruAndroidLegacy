@@ -79,23 +79,21 @@ public class RideFilterVM extends BaseRideVM
             genderId = Ride.Gender.getFromColloquial((String) genderField.getSelectedItem()).getId();
 
         //conditions
-        ConditionsBuilder conditions = new ConditionsBuilder();
-        ConditionsBuilder directionConditions = new ConditionsBuilder()
+        ConditionsBuilder conditions = new ConditionsBuilder()
+                .setCombineOperator(ConditionsBuilder.OPERATOR.AND)
+                .addRestriction(new ConditionsBuilder()
+                    .setField(Ride.sEvent)
+                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, event.id))
+                .addRestriction(new ConditionsBuilder()
                     .setField(Ride.sDirection)
-                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, direction.getValue());
+                    .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, direction.getValue()));
 
         //don't include gender if it was "Any"
         if(genderId > -1)
         {
-            conditions.setCombineOperator(ConditionsBuilder.OPERATOR.AND)
-                    .addRestriction(directionConditions)
-                    .addRestriction(new ConditionsBuilder()
+            conditions.addRestriction(new ConditionsBuilder()
                             .setField(Ride.sGender)
                             .addRestriction(ConditionsBuilder.OPERATOR.EQUALS, genderId));
-        }
-        else
-        {
-            conditions.addRestriction(directionConditions);
         }
 
         //build query

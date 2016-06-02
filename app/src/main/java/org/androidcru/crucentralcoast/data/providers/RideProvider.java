@@ -6,6 +6,7 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.LocationUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
+import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
@@ -68,12 +69,13 @@ public final class RideProvider
     public static void requestMyRidesDriver(SubscriptionsHolder holder, Observer<List<Ride>> observer, String gcmId)
     {
         Subscription s = requestRides()
-                .compose(RxComposeUtil.ui())
+                .compose(RxLoggingUtil.log("RIDES"))
                 .flatMap(rides -> Observable.from(rides))
                 .filter(ride -> {
                     return ride.gcmID.equals(gcmId);
                 })
                 .compose(RxComposeUtil.toListOrEmpty())
+                .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
@@ -105,13 +107,18 @@ public final class RideProvider
                 .flatMap(rides -> Observable.from(rides))
                 .flatMap(ride -> {
                     return PassengerProvider.getPassengers(ride.passengerIds)
-                                .map(passengers -> {
+                                .flatMap(passengers -> {
                                     ride.passengers = passengers;
                                     if(ride.passengers == null)
                                         ride.passengers = new ArrayList<Passenger>();
-                                    return passengers;
+                                    return Observable.just(ride);
                                 })
-                                .flatMap(passengers1 ->  Observable.just(ride));
+                                .switchIfEmpty(Observable.just(ride)
+                                    .map(ride1 -> {
+                                        if(ride1.passengers == null)
+                                            ride1.passengers = new ArrayList<Passenger>();
+                                        return ride1;
+                                    }));
                 })
                 .compose(attachEvent)
                 .compose(RxComposeUtil.network())
