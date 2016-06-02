@@ -34,7 +34,10 @@ public final class ConditionsBuilder
         {
             JsonObject flattened = JsonUtil.flatten(operands);
             if(!JsonUtil.isEmpty(flattened))
-                condition.add(field, flattened);
+                if(field != null)
+                    condition.add(field, flattened);
+                else
+                    condition = flattened;
         }
         return condition;
     }

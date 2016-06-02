@@ -69,6 +69,7 @@ public class RideInfoFragment extends FormContentFragment {
             Pair<Query, Ride.Direction> queryDirectionPair = rideFilterVM.getQuery();
             formHolder.addDataObject(PassengerSignupActivity.QUERY, queryDirectionPair.first);
             formHolder.addDataObject(PassengerSignupActivity.DIRECTION, queryDirectionPair.second);
+            formHolder.addDataObject(PassengerSignupActivity.SELECTED_TIME, rideFilterVM.getDateTime());
             formHolder.addDataObject(PassengerSignupActivity.LATLNG, rideFilterVM.precisePlace);
 
             super.onNext(formHolder);
