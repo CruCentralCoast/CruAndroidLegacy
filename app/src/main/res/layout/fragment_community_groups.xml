@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Other Question Here?"
+        android:text="How do I Join?"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_margin="16dp"/>
@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="They exist to build your relationship with God and other students in a setting designed to deepen your knowledge of God’s truths, study the Bible, ask the hard questions, and live life together."
+        android:text="Hit the 'Join a Community Group!' button below. Fill out the form and select the community group that best fits you!"
         android:textSize="16dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="16dp"/>
