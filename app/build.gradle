@@ -29,7 +29,7 @@ android {
         targetSdkVersion 23
         versionCode 13
         versionName "1.2.3"
-        vectorDrawables.useSupportLibrary = true
+        //vectorDrawables.useSupportLibrary = true
 
         buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
         buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'

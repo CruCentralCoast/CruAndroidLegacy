@@ -1,5 +1,7 @@
 package org.androidcru.crucentralcoast.data.providers;
 
+import android.os.AsyncTask;
+
 import com.anupcowkur.reservoir.Reservoir;
 import com.google.gson.reflect.TypeToken;
 
@@ -13,6 +15,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class NotificationProvider
@@ -36,7 +39,7 @@ public class NotificationProvider
                 return Observable.empty();
             return Reservoir
                     .getAsync(sNotifications, Notification.class, collectionType)
-                    .compose(RxComposeUtil.network())
+                    .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                     .onBackpressureDrop()
                     .toSortedList((Notification n1, Notification n2) -> {
                         return n2.timestamp.compareTo(n1.timestamp);
@@ -63,13 +66,13 @@ public class NotificationProvider
             if (Reservoir.contains(sNotifications))
             {
                 return Reservoir.getAsync(sNotifications, Notification.class, collectionType)
-                    .compose(RxComposeUtil.network())
+                    .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                     .onBackpressureDrop()
                     .toList()
                     .flatMap(notifications -> {
                         notifications.add(notification);
                         return Reservoir.putAsync(sNotifications, notifications)
-                                .compose(RxComposeUtil.network())
+                                .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                                 .onBackpressureDrop();
                     });
             }
@@ -78,7 +81,7 @@ public class NotificationProvider
                 List<Notification> notifications = new ArrayList<>();
                 notifications.add(notification);
                 return Reservoir.putAsync(sNotifications, notifications)
-                        .compose(RxComposeUtil.network())
+                        .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                         .onBackpressureDrop();
             }
         }
