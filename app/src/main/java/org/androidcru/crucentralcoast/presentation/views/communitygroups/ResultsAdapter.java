@@ -1,12 +1,10 @@
 package org.androidcru.crucentralcoast.presentation.views.communitygroups;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.AppConstants;
@@ -18,12 +16,12 @@ import org.androidcru.crucentralcoast.data.providers.CommunityGroupProvider;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
 import org.androidcru.crucentralcoast.presentation.views.forms.FormHolder;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
-import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.TextStyle;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +56,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
 
         holder.communityGroup = cg;
 
-        holder.title.setText(cg.dayOfWeek + ", " + cg.meetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
+        holder.title.setText(cg.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()) + ", " + cg.meetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
         holder.name.setText(cg.name);
 
         holder.leaders.setText("");

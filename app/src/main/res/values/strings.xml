@@ -112,6 +112,16 @@
         <item>Roundtrip</item>
     </string-array>
 
+    <string-array name="days_of_week">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
     <string name="default_direction_op">Select Direction</string>
     <string name="default_gender_op">Select Gender</string>
     <string name="autocomplete_hint_driver">Pickup Location</string>

@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 @Parcel
@@ -25,7 +25,7 @@ public class CommunityGroup
     @SerializedName(sName) public String name;
     @SerializedName(sDescription) public String description;
     @SerializedName(sMeetingTime) public ZonedDateTime meetingTime;
-    @SerializedName(sDayOfWeek) public String dayOfWeek;
+    @SerializedName(sDayOfWeek) public DayOfWeek dayOfWeek;
     @SerializedName(sLeaders) public ArrayList<CruUser> leaders;
 
     @ParcelConstructor

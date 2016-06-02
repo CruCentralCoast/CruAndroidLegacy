@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
 import net.ypresto.timbertreeutils.CrashlyticsLogTree;
 
+import org.androidcru.crucentralcoast.data.converters.DayOfWeekConverter;
 import org.androidcru.crucentralcoast.data.converters.DirectionConverter;
 import org.androidcru.crucentralcoast.data.converters.GenderConverter;
 import org.androidcru.crucentralcoast.data.converters.QuestionTypeConverter;
@@ -36,6 +37,7 @@ import org.androidcru.crucentralcoast.notifications.RegistrationIntentService;
 import org.androidcru.crucentralcoast.util.PrettyDebugTree;
 import org.androidcru.crucentralcoast.util.SerializedNameExclusionStrategy;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
 import java.io.File;
@@ -168,6 +170,7 @@ public class CruApplication extends Application
         builder.registerTypeAdapter(RideCheckResponse.RideStatus.class, new RideStatusConverter());
         builder.registerTypeAdapter(MinistryQuestion.Type.class, new QuestionTypeConverter());
         builder.registerTypeAdapter(RideCheckResponse.RideStatus.class, new RideStatusConverter());
+        builder.registerTypeAdapter(DayOfWeek.class, new DayOfWeekConverter());
         builder.addDeserializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.addSerializationExclusionStrategy(new SerializedNameExclusionStrategy());
         builder.setPrettyPrinting();
