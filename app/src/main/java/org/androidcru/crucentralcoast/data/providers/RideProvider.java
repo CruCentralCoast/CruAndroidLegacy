@@ -6,7 +6,6 @@ import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.LocationUtil;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
-import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 import org.androidcru.crucentralcoast.util.MathUtil;
@@ -103,19 +102,16 @@ public final class RideProvider
     protected static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
-                .flatMap(rides -> {
-                    Timber.d("Rides found");
-                    return Observable.from(rides);
-                })
-                .map(ride -> {
-                    PassengerProvider.getPassengers(ride.passengerIds)
-                            .compose(RxLoggingUtil.log("PASSENGERS"))
-                            .map(passengers -> ride.passengers = passengers)
-                            .toBlocking()
-                            .subscribe();
-                    if(ride.passengers == null)
-                        ride.passengers = new ArrayList<Passenger>();
-                    return ride;
+                .flatMap(rides -> Observable.from(rides))
+                .flatMap(ride -> {
+                    return PassengerProvider.getPassengers(ride.passengerIds)
+                                .map(passengers -> {
+                                    ride.passengers = passengers;
+                                    if(ride.passengers == null)
+                                        ride.passengers = new ArrayList<Passenger>();
+                                    return passengers;
+                                })
+                                .flatMap(passengers1 ->  Observable.just(ride));
                 })
                 .compose(attachEvent)
                 .compose(RxComposeUtil.network())
