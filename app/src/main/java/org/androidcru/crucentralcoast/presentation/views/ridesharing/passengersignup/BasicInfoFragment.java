@@ -29,6 +29,7 @@ import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.grantland.widget.AutofitHelper;
 import rx.observers.Observers;
 
 public class BasicInfoFragment extends FormContentFragment
@@ -72,9 +73,9 @@ public class BasicInfoFragment extends FormContentFragment
             progressBar.setVisibility(View.VISIBLE);
             formHolder.setNavigationClickable(false);
 
-            PassengerProvider.addPassenger(this, Observers.create(passenger1 -> RideProvider.addPassengerToRide(this, Observers.empty(), ride.id, passenger1.id)), passenger);
-
-            super.onNext(formHolder);
+            PassengerProvider.addPassenger(this, Observers.create(passenger1 ->
+                    RideProvider.addPassengerToRide(this, Observers.create(x ->
+                            super.onNext(formHolder)), ride.id, passenger1.id)), passenger);
         }
 
     }
