@@ -15,7 +15,7 @@ public final class CruEvent implements Dateable
     public static final String sDescription = "description";
     public static final String sStartDate = "startDate";
     public static final String sEndDate = "endDate";
-    public static final String sRideSharingEnabled = "rideSharingEnabled";
+    public static final String sRideSharingEnabled = "rideSharing";
     public static final String sLocation = "location";
     public static final String sImage = "imageLink";
     public static final String sId = "_id";

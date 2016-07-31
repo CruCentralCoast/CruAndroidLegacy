@@ -1,4 +1,18 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'io.fabric'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
@@ -29,7 +43,7 @@ android {
         targetSdkVersion 23
         versionCode 14
         versionName "1.2.4"
-        //vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true
 
         buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyDOrCdWh_DX1DuoSvP4-os2tn_GIQDpVnw"'
         buildConfigField "String", "YOUTUBEBROWSERAPIKEY", '"AIzaSyAwJqxJqGojYiiM1Y81Vfy0bcuZIt6OQdg"'
@@ -53,10 +67,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "CRU_SERVER", '"http://androidcru-capstone.jonamireh.com"'
+            buildConfigField "String", "CRU_SERVER", '"http://ec2-52-39-130-135.us-west-2.compute.amazonaws.com:3001/"'
         }
         debug {
-            buildConfigField "String", "CRU_SERVER", '"http://androidcru-dev.jonamireh.com"'
+            buildConfigField "String", "CRU_SERVER", '"http://ec2-52-39-130-135.us-west-2.compute.amazonaws.com:3001/"'
         }
         staging {
             minifyEnabled true
@@ -137,7 +151,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
         transitive = true;
     }
 
