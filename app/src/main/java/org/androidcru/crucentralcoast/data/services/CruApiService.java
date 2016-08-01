@@ -5,12 +5,8 @@ import org.androidcru.crucentralcoast.data.models.CommunityGroup;
 import org.androidcru.crucentralcoast.data.models.CommunityGroupRequest;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.models.CruUser;
-
-
 import org.androidcru.crucentralcoast.data.models.LoginResponse;
-
 import org.androidcru.crucentralcoast.data.models.MinistryQuestion;
-
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
 import org.androidcru.crucentralcoast.data.models.MinistryTeam;
 import org.androidcru.crucentralcoast.data.models.Passenger;
@@ -83,6 +79,9 @@ public interface CruApiService
 
     @GET("/api/resourcetags")
     Observable<ArrayList<ResourceTag>> getResourceTag();
+
+    @POST("/api/passengers/search")
+    Observable<List<Passenger>> searchPassengers(@Body Query query);
 
     @FormUrlEncoded
     @POST("/api/rides/find")

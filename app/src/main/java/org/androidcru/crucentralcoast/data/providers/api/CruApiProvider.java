@@ -4,7 +4,6 @@ import org.androidcru.crucentralcoast.BuildConfig;
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,7 +28,8 @@ public class CruApiProvider
             setBaseUrl(BuildConfig.CRU_SERVER);
 
         if(networkScheduler == null)
-            setNetworkScheduler(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
+            //setNetworkScheduler(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
+            setNetworkScheduler(Schedulers.io());
 
         return service;
     }
