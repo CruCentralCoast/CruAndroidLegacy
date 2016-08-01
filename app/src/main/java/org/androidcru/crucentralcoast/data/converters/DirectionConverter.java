@@ -33,6 +33,7 @@ public class DirectionConverter implements JsonDeserializer<Ride.Direction>, Jso
                 toReturn = Ride.Direction.FROM;
                 break;
             case "both":
+            case "Round Trip":
                 toReturn = Ride.Direction.ROUNDTRIP;
                 break;
             default:

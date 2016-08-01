@@ -1,6 +1,8 @@
 package org.androidcru.crucentralcoast.data.providers;
 
 import org.androidcru.crucentralcoast.data.models.Passenger;
+import org.androidcru.crucentralcoast.data.models.queries.ConditionsBuilder;
+import org.androidcru.crucentralcoast.data.models.queries.Query;
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
@@ -11,7 +13,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public final class PassengerProvider
 {
@@ -42,16 +43,13 @@ public final class PassengerProvider
 
     protected static Observable<List<Passenger>> getPassengers(List<String> passengers)
     {
-        return Observable.from(passengers)
-                .compose(RxComposeUtil.network())
-                .flatMap(passengerId -> {
-                    return mCruService.findSinglePassenger(passengerId)
-                            .flatMap(passengers1 -> {
-                                return Observable.from(passengers1);
-                            })
-                            .subscribeOn(Schedulers.io());
-                })
-                .compose(RxComposeUtil.toListOrEmpty());
+        return mCruService.searchPassengers(new Query.Builder()
+                                                    .setCondition(new ConditionsBuilder()
+                                                        .setField(Passenger.sId)
+                                                        .addRestriction(ConditionsBuilder.OPERATOR.IN, passengers.toArray(new String[passengers.size()]))
+                                                        .build())
+                                                    .build())
+                .compose(RxComposeUtil.network());
     }
 
 }
