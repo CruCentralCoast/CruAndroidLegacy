@@ -8,14 +8,15 @@
     android:id="@+id/resource_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="0dp"
-    card_view:cardCornerRadius="0dp">
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="2dp">
 
     <View android:layout_width="match_parent"
           android:id="@+id/resource_divider"
-          android:layout_height="2px"
+          android:layout_height="2dp"
           android:background="@color/grey300"
-          android:minHeight="2px"/>
+          android:minHeight="2dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +54,7 @@
                 android:id="@+id/title"
                 tools:text="Prayer 101"
                 android:textColor="@color/cruGray"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_gravity="center_vertical" />
 
             <TextView
@@ -62,7 +63,7 @@
                 android:id="@+id/tags"
                 tools:text="hip, cool, prayer, intro"
                 android:textColor="@color/cruOrange"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:paddingBottom="4dp" />
 
         </LinearLayout>

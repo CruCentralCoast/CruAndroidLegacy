@@ -133,7 +133,8 @@
                   android:configChanges=
                       "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
+                  android:label="@string/app_name"
+                  tools:replace="android:theme"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAtg1903E6MHsHmfKb-ercAHppTvqDvLuM"/>

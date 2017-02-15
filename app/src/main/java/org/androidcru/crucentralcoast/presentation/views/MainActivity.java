@@ -1,8 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,18 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidcru.crucentralcoast.AppConstants;
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.data.models.CruUser;
-import org.androidcru.crucentralcoast.data.providers.UserProvider;
 import org.androidcru.crucentralcoast.presentation.providers.FacebookProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActivity;
 import org.androidcru.crucentralcoast.presentation.views.communitygroups.CommunityGroupsFragment;
@@ -35,42 +29,39 @@ import org.androidcru.crucentralcoast.presentation.views.ridesharing.myrides.MyR
 import org.androidcru.crucentralcoast.presentation.views.settings.SettingsActivity;
 import org.androidcru.crucentralcoast.presentation.views.summermissions.SummerMissionsFragment;
 import org.androidcru.crucentralcoast.presentation.views.videos.VideosFragment;
-import org.androidcru.crucentralcoast.util.AutoFill;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.Collections;
 
-import rx.Observer;
-import rx.observers.Observers;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends BaseAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-    private static MainActivity self;
-    private NavigationView navigationView;
-    private ConstructionFragment constructionFragment;
-    private Toolbar toolbar;
+    @BindView(R.id.nav_view) NavigationView mNavigationView;
+    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+
+    private static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        activity = this;
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
-        self = this;
-
-        constructionFragment = new ConstructionFragment();
         if(savedInstanceState == null)
         {
             switchToFeed();
@@ -102,23 +93,22 @@ public class MainActivity extends BaseAppCompatActivity
         }
     }
 
-    private void spawnConstructionFragment()
-    {
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, constructionFragment).commit();
-    }
-
     @Override
     public void onBackPressed()
     {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START))
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
         {
-            drawer.closeDrawer(GravityCompat.START);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
         else
         {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -130,39 +120,39 @@ public class MainActivity extends BaseAppCompatActivity
         switch (id)
         {
             case R.id.nav_feed:
-                toolbar.setTitle(R.string.nav_feed);
+                mToolbar.setTitle(R.string.nav_feed);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
                 break;
             case R.id.nav_events:
-                toolbar.setTitle(R.string.nav_events);
+                mToolbar.setTitle(R.string.nav_events);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
                 break;
             case R.id.nav_my_rides:
-                toolbar.setTitle(R.string.nav_my_rides);
+                mToolbar.setTitle(R.string.nav_my_rides);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new MyRidesFragment()).commit();
                 break;
             case R.id.nav_summer_missions:
-                toolbar.setTitle(R.string.nav_summer_missions);
+                mToolbar.setTitle(R.string.nav_summer_missions);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new SummerMissionsFragment()).commit();
                 break;
             case R.id.nav_community_groups:
-                toolbar.setTitle(R.string.community_groups);
+                mToolbar.setTitle(R.string.community_groups);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new CommunityGroupsFragment()).commit();
                 break;
             case R.id.nav_ministry_teams:
-                toolbar.setTitle(R.string.ministry_teams);
+                mToolbar.setTitle(R.string.ministry_teams);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new MinistryTeamsFragment()).commit();
                 break;
             case R.id.nav_resources:
-                toolbar.setTitle(R.string.resources);
+                mToolbar.setTitle(R.string.resources);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new ResourcesFragment()).commit();
                 break;
             case R.id.nav_videos:
-                toolbar.setTitle(R.string.nav_videos);
+                mToolbar.setTitle(R.string.nav_videos);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
                 break;
             case R.id.nav_notifications:
-                toolbar.setTitle(R.string.nav_notifications);
+                mToolbar.setTitle(R.string.nav_notifications);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new NotificationFragment()).commit();
                 break;
             case R.id.nav_settings:
@@ -171,15 +161,14 @@ public class MainActivity extends BaseAppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return displayAsSelectedItem;
     }
 
     public void switchToMyRides(Bundle b)
     {
-        navigationView.setCheckedItem(R.id.nav_my_rides);
-        toolbar.setTitle(R.string.nav_my_rides);
+        mNavigationView.setCheckedItem(R.id.nav_my_rides);
+        mToolbar.setTitle(R.string.nav_my_rides);
         MyRidesFragment fragment = new MyRidesFragment();
         fragment.setArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
@@ -188,18 +177,17 @@ public class MainActivity extends BaseAppCompatActivity
     //REVIEW this should be used in onNavigationItemSelected
     public void switchToEvents()
     {
-        navigationView.setCheckedItem(R.id.nav_events);
-        toolbar.setTitle(R.string.nav_events);
+        mNavigationView.setCheckedItem(R.id.nav_events);
+        mToolbar.setTitle(R.string.nav_events);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
     }
 
     public void switchToFeed()
     {
-        navigationView.setCheckedItem(R.id.nav_feed);
-        toolbar.setTitle(R.string.nav_feed);
+        mNavigationView.setCheckedItem(R.id.nav_feed);
+        mToolbar.setTitle(R.string.nav_feed);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -220,12 +208,8 @@ public class MainActivity extends BaseAppCompatActivity
         FacebookProvider.tokenReceived(requestCode, resultCode, data);
     }
 
-
-
-
     public static void loginWithFacebook()
     {
-        //REVIEW magic string, AppConstants
-        LoginManager.getInstance().logInWithPublishPermissions(self, Collections.singletonList("rsvp_event"));
+        LoginManager.getInstance().logInWithPublishPermissions(activity, Collections.singletonList("rsvp_event"));
     }
 }

@@ -2,7 +2,7 @@ package org.androidcru.crucentralcoast.presentation.views.feed;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +27,15 @@ import rx.Observer;
 
 public class FeedFragment extends ListFragment
 {
-    private LinearLayoutManager layoutManager;
+    private StaggeredGridLayoutManager layoutManager;
     private Observer<List<Dateable>> observer;
     private List<Dateable> items;
     private FeedAdapter adapter;
 
     private YouTubeVideoProvider youTubeVideoProvider;
     @BindView(R.id.informational_text) TextView informationalText;
+
+    private static final int SPAN_COUNT = 2;
 
     public FeedFragment()
     {
@@ -81,7 +83,9 @@ public class FeedFragment extends ListFragment
         unbinder = ButterKnife.bind(this, view);
         informationalText.setText(R.string.no_feed_items);
 
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
+        helper.recyclerView.addItemDecoration(new SpacesItemDecoration(
+              getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
         helper.recyclerView.setLayoutManager(layoutManager);
         helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
              @Override
@@ -91,7 +95,7 @@ public class FeedFragment extends ListFragment
              }
          });
 
-        helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate());
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     @Override

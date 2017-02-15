@@ -7,8 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    card_view:cardElevation="0dp"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardElevation="2dp">
 
     <LinearLayout
         android:id="@+id/animating_layout"
@@ -69,7 +70,7 @@
                 app:layout_widthPercent="20%"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
                 android:layout_toRightOf="@+id/chevParent">
 
                 <ImageButton
@@ -144,7 +145,6 @@
             android:textStyle="bold"
             android:textIsSelectable="true"
             android:layout_marginBottom="16dp"/>
-        <!--android:textColor="@color/grey800"-->
 
         <TextView
             android:layout_width="wrap_content"

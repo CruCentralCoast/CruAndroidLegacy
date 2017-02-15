@@ -1,4 +1,5 @@
-package org.androidcru.crucentralcoast.mocking;
+package org.androidcru.crucentralcoast.data.mocking;
+
 
 import org.androidcru.crucentralcoast.data.providers.api.CruApiProvider;
 import org.junit.AfterClass;
@@ -9,8 +10,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.mockwebserver.MockWebServer;
+import rx.schedulers.Schedulers;
 
-public class ServerInstrumentationTest
+public class ServerTest
 {
     protected static MockWebServer server = new MockWebServer();
 
@@ -19,6 +21,7 @@ public class ServerInstrumentationTest
     {
         server.start();
         CruApiProvider.setBaseUrl(server.url("/").toString());
+        CruApiProvider.setNetworkScheduler(Schedulers.io());
     }
 
     @Before

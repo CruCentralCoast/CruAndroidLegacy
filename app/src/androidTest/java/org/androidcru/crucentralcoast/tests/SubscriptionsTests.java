@@ -7,8 +7,8 @@ import android.support.test.rule.ActivityTestRule;
 import junit.framework.AssertionFailedError;
 
 import org.androidcru.crucentralcoast.R;
-import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
-import org.androidcru.crucentralcoast.mocking.ServerInstrumentationTest;
+import org.androidcru.crucentralcoast.data.mocking.ResourcesUtil;
+import org.androidcru.crucentralcoast.data.mocking.ServerInstrumentationTest;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.junit.Rule;
 import org.junit.Test;
