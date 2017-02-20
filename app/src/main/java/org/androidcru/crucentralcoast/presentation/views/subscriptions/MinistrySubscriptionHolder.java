@@ -57,9 +57,7 @@ public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
         if(model.image != null && !model.image.isEmpty())
         {
             Context context = ministryImage.getContext();
-            // TODO remove check for https prefix once the server is updated
-            RequestCreator creator = Picasso.with(context).load(model.image.contains(HTTPS) ?
-                    model.image : HTTPS + model.image);
+            RequestCreator creator = Picasso.with(context).load(model.image);
             if (!isChecked) {
                 creator = creator.transform(new ColorFilterTransformation(
                         ContextCompat.getColor(context, R.color.cruGray)));
