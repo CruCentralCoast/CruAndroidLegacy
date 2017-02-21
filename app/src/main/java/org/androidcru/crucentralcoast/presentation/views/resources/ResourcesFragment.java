@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +20,7 @@ import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.data.models.ResourceTag;
 import org.androidcru.crucentralcoast.data.providers.ResourceProvider;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
+import org.androidcru.crucentralcoast.presentation.views.feed.SpacesItemDecoration;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import timber.log.Timber;
 
 public class ResourcesFragment extends ListFragment
 {
+    private static final int RESOURCE_LIST_SPAN_COUNT = 2;
     private CustomTabsIntent.Builder customTabsIntentBuilder;
 
     private ArrayList<Resource> resources;
@@ -120,8 +122,11 @@ public class ResourcesFragment extends ListFragment
 
         helper.swipeRefreshLayout.setRefreshing(true);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        StaggeredGridLayoutManager layoutManager =
+                new StaggeredGridLayoutManager(RESOURCE_LIST_SPAN_COUNT,
+                        StaggeredGridLayoutManager.VERTICAL);
         helper.recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.addItemDecoration(new SpacesItemDecoration(getContext().getResources().getDimensionPixelSize(R.dimen.resource_item_spacing)));
 
         helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
