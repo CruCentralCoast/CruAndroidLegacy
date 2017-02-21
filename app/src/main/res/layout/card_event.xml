@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
@@ -14,34 +14,35 @@
         android:id="@+id/animating_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/eventName"
-            android:layout_marginLeft="12dp"
-            tools:text="Fall Retreat"
-            android:textColor="@color/grey800"
-            android:textSize="24dp"
-            android:layout_marginTop="8dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/eventDate"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="4dp"
-            android:textSize="16sp"/>
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/event_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:id="@+id/event_banner"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"/>
+
+        <TextView
+            android:id="@+id/eventName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
+            android:textColor="@color/grey800"
+            android:textSize="24sp"
+            tools:text="Fall Retreat"/>
+
+        <TextView
+            android:id="@+id/eventDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:textSize="16sp"/>
 
         <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
@@ -51,108 +52,114 @@
             <RelativeLayout
                 android:id="@+id/chevParent"
                 android:layout_width="0dp"
-                app:layout_widthPercent="20%"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_widthPercent="20%">
+
                 <ImageView
+                    android:id="@+id/chevView"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:id="@+id/chevView"
                     android:layout_centerInParent="true"
                     android:background="@null"
-                    android:scaleType="fitCenter" />
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/fbParent"
                 android:layout_width="0dp"
-                app:layout_widthPercent="20%"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_alignParentLeft="false"
-                android:layout_toRightOf="@+id/chevParent">
+                android:layout_alignParentStart="false"
+                android:layout_toRightOf="@+id/chevParent"
+                android:layout_toEndOf="@+id/chevParent"
+                android:orientation="horizontal"
+                app:layout_widthPercent="20%">
 
                 <ImageButton
+                    android:id="@+id/fbButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:id="@+id/fbButton"
                     android:layout_centerInParent="true"
                     android:background="@null"
-                    android:scaleType="fitCenter" />
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/mapParent"
                 android:layout_width="0dp"
-                app:layout_widthPercent="20%"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/fbParent">
+                android:layout_toRightOf="@+id/fbParent"
+                android:layout_toEndOf="@+id/fbParent"
+                app:layout_widthPercent="20%">
 
                 <ImageButton
+                    android:id="@+id/mapButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:id="@+id/mapButton"
                     android:layout_centerInParent="true"
                     android:background="@null"
-                    android:scaleType="fitCenter" />
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/calParent"
                 android:layout_width="0dp"
-                app:layout_widthPercent="20%"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/mapParent">
+                android:layout_toRightOf="@+id/mapParent"
+                android:layout_toEndOf="@+id/mapParent"
+                app:layout_widthPercent="20%">
 
                 <ImageButton
+                    android:id="@+id/calButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:id="@+id/calButton"
                     android:layout_centerInParent="true"
                     android:background="@null"
-                    android:scaleType="fitCenter" />
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rideSharingParent"
                 android:layout_width="0dp"
-                app:layout_widthPercent="20%"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/calParent">
+                android:layout_toRightOf="@+id/calParent"
+                android:layout_toEndOf="@+id/calParent"
+                app:layout_widthPercent="20%">
 
                 <ImageButton
+                    android:id="@+id/rideSharingButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:padding="8dp"
-                    android:id="@+id/rideSharingButton"
                     android:layout_centerInParent="true"
                     android:background="@null"
-                    android:scaleType="fitCenter" />
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"/>
             </RelativeLayout>
         </android.support.percent.PercentRelativeLayout>
 
         <TextView
+            android:id="@+id/eventAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/eventAddress"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            tools:text="1 Grand Avenue"
-            android:textStyle="bold"
             android:textIsSelectable="true"
-            android:layout_marginBottom="16dp"/>
+            android:textStyle="bold"
+            tools:text="1 Grand Avenue"/>
 
         <TextView
+            android:id="@+id/eventDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/eventDescription"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:textIsSelectable="true"
-            android:layout_marginBottom="16dp"/>
+            android:textIsSelectable="true"/>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

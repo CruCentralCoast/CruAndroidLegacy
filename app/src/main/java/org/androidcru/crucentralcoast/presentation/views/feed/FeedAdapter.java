@@ -47,7 +47,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case YOUTUBE_VIDEO:
                 return new CruVideoViewHolder(inflater.inflate(R.layout.card_video, parent, false), this, layoutManager);
             default:
-                return new ResourceViewHolder(inflater.inflate(R.layout.item_resource, parent, false), true);
+                return new ResourceViewHolder(inflater.inflate(R.layout.item_resource, parent, false));
         }
     }
 
@@ -86,6 +86,18 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void setRawItems(List<Dateable> dateables) {
+        rawItems = dateables;
+    }
+
+    public void addAllRawItems(List<Dateable> dateables) {
+        rawItems.addAll(dateables);
+    }
+
+    public List<Dateable> getRawItems() {
+        return rawItems;
     }
 
     public void syncItems() {

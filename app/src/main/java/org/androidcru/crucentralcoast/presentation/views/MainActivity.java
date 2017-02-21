@@ -107,11 +107,6 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
         // Handle navigation view item clicks here.

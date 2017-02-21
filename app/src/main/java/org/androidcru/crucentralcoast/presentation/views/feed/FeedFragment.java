@@ -28,7 +28,6 @@ import rx.Observer;
 public class FeedFragment extends ListFragment {
     private StaggeredGridLayoutManager layoutManager;
     private Observer<List<Dateable>> observer;
-    private List<Dateable> items;
     private FeedAdapter adapter;
 
     private YouTubeVideoProvider youTubeVideoProvider;
@@ -39,22 +38,19 @@ public class FeedFragment extends ListFragment {
 
     public FeedFragment() {
         youTubeVideoProvider = new YouTubeVideoProvider();
-        items = new ArrayList<>();
 
         observer = createListObserver(
                 dateables -> {
-                    if (items == null || items.isEmpty()) {
-                        items = dateables;
-                        adapter = new FeedAdapter(dateables, layoutManager);
-                        helper.recyclerView.setAdapter(adapter);
+                    if (adapter.getRawItems().isEmpty()) {
+                        adapter.setRawItems(dateables);
                     }
                     else {
-                        items.addAll(dateables);
-                        adapter.syncItems();
+                        adapter.addAllRawItems(dateables);
                     }
+                    adapter.syncItems();
                 },
                 () -> {
-                    if (items == null || items.isEmpty()) {
+                    if (adapter.getRawItems() == null || adapter.getRawItems().isEmpty()) {
                         onEmpty(R.layout.empty_with_alert);
                     }
                 }
@@ -81,6 +77,7 @@ public class FeedFragment extends ListFragment {
         helper.recyclerView.addItemDecoration(new SpacesItemDecoration(
                 getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
         helper.recyclerView.setLayoutManager(layoutManager);
+        helper.recyclerView.setHasFixedSize(true);
         helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -88,20 +85,17 @@ public class FeedFragment extends ListFragment {
             }
         });
 
-        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
-    }
+        adapter = new FeedAdapter(new ArrayList<>(), layoutManager);
+        helper.recyclerView.setAdapter(adapter);
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
+
         helper.swipeRefreshLayout.setRefreshing(true);
         forceUpdate();
     }
 
     private void forceUpdate() {
-        items.clear();
-        adapter = null;
-
+        adapter.getRawItems().clear();
         getMoreFeedItems(0);
     }
 
