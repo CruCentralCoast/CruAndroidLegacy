@@ -83,14 +83,17 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:text="Ever ask, God where are you? What exactly can you count on God for?"/>
-            <Button
+            <TextView
+                android:id="@+id/more_action"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end"
+                android:textAllCaps="true"
+                android:gravity="center"
                 android:textSize="12sp"
                 android:textColor="@color/cruOrange"
                 android:background="@null"
-                android:text="read"/>
+                tools:text="read"/>
         </LinearLayout>
     </LinearLayout>
 

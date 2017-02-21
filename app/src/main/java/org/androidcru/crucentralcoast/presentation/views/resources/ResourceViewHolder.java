@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.presentation.customtabs.CustomTabActivityHelper;
@@ -25,6 +26,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.title) TextView title;
     @BindView(R.id.tags) TextView tags;
     @BindView(R.id.resource_icon) ImageView typeIcon;
+    @BindView(R.id.more_action) TextView moreAction;
 
     private Resource model;
 
@@ -62,6 +64,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
         title.setText(model.title);
         tags.setText(model.formatTags());
         typeIcon.setImageResource(getResourceIconFromType(model.resourceType));
+        moreAction.setText(getActionTextFromType(model.resourceType));
     }
 
     private int getResourceIconFromType(Resource.ResourceType type)
@@ -77,6 +80,18 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
         }
 
         return -1;
+    }
+
+    private String getActionTextFromType(Resource.ResourceType type) {
+        switch (type) {
+            case ARTICLE:
+                return CruApplication.getContext().getString(R.string.read);
+            case AUDIO:
+                return CruApplication.getContext().getString(R.string.listen);
+            case VIDEO:
+                return CruApplication.getContext().getString(R.string.watch);
+        }
+        return null;
     }
 
     @Override
