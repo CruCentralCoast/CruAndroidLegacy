@@ -126,7 +126,7 @@ public class ResourcesFragment extends ListFragment
                 new StaggeredGridLayoutManager(RESOURCE_LIST_SPAN_COUNT,
                         StaggeredGridLayoutManager.VERTICAL);
         helper.recyclerView.setLayoutManager(layoutManager);
-        helper.recyclerView.addItemDecoration(new SpacesItemDecoration(getContext().getResources().getDimensionPixelSize(R.dimen.resource_item_spacing)));
+        helper.recyclerView.addItemDecoration(new SpacesItemDecoration(getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
 
         helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
