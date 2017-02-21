@@ -19,6 +19,7 @@ public final class Resource implements Dateable
     public static final String sUrl = "url";
     public static final String sResourceType = "type";
     public static final String sTagIds = "tags";
+    public static final String sAuthor = "author";
 
     @SerializedName(sId) public String id;
     @SerializedName(sTitle) public String title;
@@ -26,6 +27,7 @@ public final class Resource implements Dateable
     @SerializedName(sResourceType) public ResourceType resourceType;
     @SerializedName(sDate) ZonedDateTime date;
     @SerializedName(sTagIds) public List<String> tagIds;
+    @SerializedName(sAuthor) public String author;
 
     public ArrayList<ResourceTag> tags;
 

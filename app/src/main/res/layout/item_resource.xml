@@ -69,14 +69,14 @@
                 android:textColor="@color/cruGray"
                 android:textSize="20sp" />
             <TextView
-                android:id="@+id/source"
+                android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:textColor="@color/cruOrange"
                 android:textSize="11sp"
-                android:text="everystudent.com"/>
+                tools:text="everystudent.com"/>
             <TextView
                 android:id="@+id/info"
                 android:layout_width="wrap_content"

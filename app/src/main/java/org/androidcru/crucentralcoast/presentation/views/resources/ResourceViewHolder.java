@@ -25,6 +25,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.tags) TextView tags;
     @BindView(R.id.resource_icon) ImageView typeIcon;
     @BindView(R.id.more_action) TextView moreAction;
+    @BindView(R.id.author) TextView author;
 
     private Resource model;
 
@@ -46,6 +47,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
         tags.setText(model.formatTags());
         typeIcon.setImageResource(getResourceIconFromType(model.resourceType));
         moreAction.setText(getActionTextFromType(model.resourceType));
+        author.setText(model.author);
     }
 
     private int getResourceIconFromType(Resource.ResourceType type)
