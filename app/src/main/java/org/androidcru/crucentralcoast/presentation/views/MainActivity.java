@@ -37,17 +37,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseAppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
-{
-    @BindView(R.id.nav_view) NavigationView mNavigationView;
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+        implements NavigationView.OnNavigationItemSelectedListener {
+    @BindView(R.id.nav_view)
+    NavigationView mNavigationView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     private static Activity activity;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -62,27 +63,22 @@ public class MainActivity extends BaseAppCompatActivity
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        if(savedInstanceState == null)
-        {
+        if (savedInstanceState == null) {
             switchToFeed();
         }
 
         checkPlayServicesCode();
     }
 
-    private void checkPlayServicesCode()
-    {
+    private void checkPlayServicesCode() {
         int playServicesCode = SharedPreferencesUtil.getPlayServicesCode();
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        if(playServicesCode != ConnectionResult.SUCCESS)
-        {
-            if(apiAvailability.isUserResolvableError(playServicesCode))
-            {
+        if (playServicesCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(playServicesCode)) {
                 apiAvailability.getErrorDialog(this, playServicesCode, AppConstants.PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             }
-            else
-            {
+            else {
                 //REVIEW magic strings
                 new AlertDialog.Builder(this)
                         .setTitle("Unsupported Device")
@@ -94,26 +90,21 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
-        {
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
-        else
-        {
+        else {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
+    public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         boolean displayAsSelectedItem = true;
-        switch (id)
-        {
+        switch (id) {
             case R.id.nav_feed:
                 mToolbar.setTitle(R.string.nav_feed);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
@@ -161,8 +152,7 @@ public class MainActivity extends BaseAppCompatActivity
         return displayAsSelectedItem;
     }
 
-    public void switchToMyRides(Bundle b)
-    {
+    public void switchToMyRides(Bundle b) {
         mNavigationView.setCheckedItem(R.id.nav_my_rides);
         mToolbar.setTitle(R.string.nav_my_rides);
         MyRidesFragment fragment = new MyRidesFragment();
@@ -171,23 +161,20 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     //REVIEW this should be used in onNavigationItemSelected
-    public void switchToEvents()
-    {
+    public void switchToEvents() {
         mNavigationView.setCheckedItem(R.id.nav_events);
         mToolbar.setTitle(R.string.nav_events);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
     }
 
-    public void switchToFeed()
-    {
+    public void switchToFeed() {
         mNavigationView.setCheckedItem(R.id.nav_feed);
         mToolbar.setTitle(R.string.nav_feed);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == AppConstants.DRIVER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -204,8 +191,7 @@ public class MainActivity extends BaseAppCompatActivity
         FacebookProvider.tokenReceived(requestCode, resultCode, data);
     }
 
-    public static void loginWithFacebook()
-    {
+    public static void loginWithFacebook() {
         LoginManager.getInstance().logInWithPublishPermissions(activity, Collections.singletonList("rsvp_event"));
     }
 }
