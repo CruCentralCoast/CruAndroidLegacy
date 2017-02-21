@@ -40,22 +40,19 @@ public class EventProvider
     protected static Observable.Transformer<CruEvent, CruEvent> getRideCheckTransformer()
     {
         return cruEventObservable -> cruEventObservable
-                .flatMap(cruEvent -> {
-                    return Observable.concat(
+                .flatMap(cruEvent -> Observable.concat(
                                 (SharedPreferencesUtil.getGCMID().isEmpty()) ? Observable.empty() : Observable.just(SharedPreferencesUtil.getGCMID()),
                                 RegistrationIntentService.retrieveGCMId(CruApplication.getContext())
                             )
                             .take(1)
-                            .flatMap(gcmId -> {
-                                return cruService.checkRideStatus(cruEvent.id, gcmId)
+                            .flatMap(gcmId -> cruService.checkRideStatus(cruEvent.id, gcmId)
                                         .map(rideCheckResponse -> {
                                             cruEvent.rideStatus = rideCheckResponse.value;
                                             return rideCheckResponse;
                                         })
-                                        .flatMap(response -> Observable.just(cruEvent));
-                            });
+                                        .flatMap(response -> Observable.just(cruEvent)))
 
-                });
+                );
     }
 
     public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer)
@@ -69,7 +66,7 @@ public class EventProvider
     protected static Observable<List<CruEvent>> requestUsersEvents()
     {
         return requestAllEvents()
-                .flatMap(cruEvents -> Observable.from(cruEvents))
+                .flatMap(Observable::from)
                 .compose(getSubscriptionFilter())
                 .compose(getRideCheckTransformer())
                 .compose(FeedProvider.getSortDateable())
@@ -80,7 +77,7 @@ public class EventProvider
     protected static Observable<List<CruEvent>> requestAllEvents()
     {
         return cruService.getEvents()
-                .flatMap(cruEvents -> Observable.from(cruEvents))
+                .flatMap(Observable::from)
                 .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.network());
@@ -90,9 +87,7 @@ public class EventProvider
     {
         return cruService.findSingleCruEvent(id)
                 .compose(RxComposeUtil.network())
-                .flatMap(cruevents -> {
-                    return Observable.from(cruevents);
-                });
+                .flatMap(Observable::from);
     }
 
     protected static Observable<List<CruEvent>> getEventsPaginated(ZonedDateTime fromDate, int page, int pageSize)

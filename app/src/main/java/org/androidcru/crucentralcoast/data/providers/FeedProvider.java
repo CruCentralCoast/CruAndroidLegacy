@@ -15,12 +15,9 @@ public class FeedProvider
 {
 
     public static <T extends Dateable> Observable.Transformer<T, T> getSortDateable() {
-        return (Observable.Transformer<T, T>) tObservable -> {
-            return tObservable.toSortedList((T d1, T d2) -> {
-                return d2.getDate().compareTo(d1.getDate());
-            })
-            .flatMap(dateables -> Observable.from(dateables));
-        };
+        return tObservable ->
+              tObservable.toSortedList((T d1, T d2) ->
+                    d2.getDate().compareTo(d1.getDate())).flatMap(Observable::from);
     }
 
     public static void getFeedItems(SubscriptionsHolder holder, Observer<List<Dateable>> observer,
@@ -32,12 +29,13 @@ public class FeedProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Dateable>> getFeedItems(YouTubeVideoProvider youTubeVideoProvider, ZonedDateTime fromDate, String leaderAPIKey, int page, int pageSize)
+    protected static Observable<List<Dateable>> getFeedItems(YouTubeVideoProvider youTubeVideoProvider,
+                                                             ZonedDateTime fromDate, String leaderAPIKey, int page, int pageSize)
     {
         return Observable.merge(
                 //events
                 EventProvider.getEventsPaginated(fromDate, page, pageSize)
-                    .flatMap(events -> Observable.from(events))
+                    .flatMap(Observable::from)
                     .compose(EventProvider.getSubscriptionFilter()),
                 //resources
                 ResourceProvider.getResourcesPaginated(page, pageSize, leaderAPIKey),
@@ -45,7 +43,7 @@ public class FeedProvider
                 (page == 0
                         ? youTubeVideoProvider.refreshQuery()
                         : youTubeVideoProvider.requestChannelVideos())
-                    .flatMap(videoList -> Observable.from(videoList))
+                    .flatMap(Observable::from)
                 )
                 //sort everything
                 .compose(getSortDateable())

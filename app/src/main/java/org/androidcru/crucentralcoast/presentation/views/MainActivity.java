@@ -122,6 +122,7 @@ public class MainActivity extends BaseAppCompatActivity
             case R.id.nav_feed:
                 mToolbar.setTitle(R.string.nav_feed);
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.content, new HubFragment()).commit();
                 break;
             case R.id.nav_events:
                 mToolbar.setTitle(R.string.nav_events);

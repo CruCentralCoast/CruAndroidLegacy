@@ -95,7 +95,7 @@ public final class ResourceProvider
                 .setCondition(conditionsBuilder.build())
                 .build();
         return cruApiService.findResources(query, leaderAPIKey)
-                .flatMap(resources -> Observable.from(resources))
+                .flatMap(Observable::from)
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.toListOrEmpty())
@@ -119,7 +119,7 @@ public final class ResourceProvider
     protected static Observable<Resource> getResources()
     {
         return cruApiService.getResources()
-                .flatMap(resources -> Observable.from(resources))
+                .flatMap(Observable::from)
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.network());
@@ -134,7 +134,7 @@ public final class ResourceProvider
                 .build();
 
         return cruApiService.findResources(query, leaderAPIKey)
-                .flatMap(resources -> Observable.from(resources))
+                .flatMap(Observable::from)
                 .compose(tagRetriever)
                 .compose(FeedProvider.getSortDateable())
                 .compose(RxComposeUtil.network());

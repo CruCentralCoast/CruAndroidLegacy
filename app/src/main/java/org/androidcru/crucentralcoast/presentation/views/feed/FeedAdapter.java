@@ -18,8 +18,7 @@ import org.androidcru.crucentralcoast.presentation.views.videos.CruVideoViewHold
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-{
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Dateable> rawItems;
     private List<FeedState<Dateable>> items;
 
@@ -29,12 +28,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private RecyclerView.LayoutManager layoutManager;
 
-    public FeedAdapter(List<Dateable> items, RecyclerView.LayoutManager layoutManager)
-    {
+    public FeedAdapter(List<Dateable> items, RecyclerView.LayoutManager layoutManager) {
         this.rawItems = items;
         this.items = new ArrayList<>();
-        for(Dateable d : items)
-        {
+        for (Dateable d : items) {
             this.items.add(new FeedState<>(d));
         }
         this.layoutManager = layoutManager;
@@ -42,66 +39,59 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        switch (viewType)
-        {
+        switch (viewType) {
             case CRU_EVENT:
                 return new CruEventViewHolder(inflater.inflate(R.layout.card_event, parent, false), this, layoutManager);
             case YOUTUBE_VIDEO:
-                return new CruVideoViewHolder(inflater.inflate(R.layout.card_video, parent, false), this, layoutManager, true);
+                return new CruVideoViewHolder(inflater.inflate(R.layout.card_video, parent, false), this, layoutManager);
             default:
                 return new ResourceViewHolder(inflater.inflate(R.layout.item_resource, parent, false), true);
         }
     }
 
     @Override
-    public int getItemViewType(int position)
-    {
-        if(items.get(position).model instanceof CruEvent)
-        {
+    public int getItemViewType(int position) {
+        if (items.get(position).model.getClass().getSimpleName().equals(
+                CruEvent.class.getSimpleName())) {
             return CRU_EVENT;
         }
-        if(items.get(position).model instanceof Snippet)
-        {
+        if (items.get(position).model.getClass().getSimpleName().equals(
+                Snippet.class.getSimpleName())) {
             return YOUTUBE_VIDEO;
         }
         return RESOURCE;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-    {
-        if(holder instanceof CruEventViewHolder)
-        {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder.getClass().getSimpleName().equals(
+                CruEventViewHolder.class.getSimpleName())) {
             CruEventViewHolder viewHolder = (CruEventViewHolder) holder;
             viewHolder.bind((ExpandableState) items.get(position));
         }
-        if(holder instanceof CruVideoViewHolder)
-        {
+        if (holder.getClass().getSimpleName().equals(
+                CruVideoViewHolder.class.getSimpleName())) {
             CruVideoViewHolder viewHolder = (CruVideoViewHolder) holder;
             viewHolder.bindSnippet((ExpandableState) items.get(position));
         }
-        if(holder instanceof ResourceViewHolder)
-        {
+        if (holder.getClass().getSimpleName().equals(
+                ResourceViewHolder.class.getSimpleName())) {
             ResourceViewHolder viewHolder = (ResourceViewHolder) holder;
             viewHolder.bind((Resource) items.get(position).model);
         }
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return items.size();
     }
 
-    public void syncItems()
-    {
+    public void syncItems() {
         int oldSize = items.size();
         int newSize = rawItems.size();
-        for(int i = oldSize; i < newSize; i++)
-        {
+        for (int i = oldSize; i < newSize; i++) {
             this.items.add(new FeedState<>(rawItems.get(i)));
         }
         notifyItemRangeInserted(oldSize, newSize);

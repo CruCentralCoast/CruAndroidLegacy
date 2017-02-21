@@ -9,7 +9,6 @@ import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolde
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import rx.Observable;
 import rx.Observer;
@@ -28,10 +27,8 @@ public final class MinistryQuestionsProvider {
     protected static Observable<List<MinistryQuestion>> getMinistryQuestions(String id)
     {
         return getAllQuestions()
-                .flatMap(ministryQuestions -> Observable.from(ministryQuestions))
-                .filter(ministryQuestion -> {
-                    return ministryQuestion.ministry.equals(id);
-                })
+                .flatMap(Observable::from)
+                .filter(ministryQuestion -> ministryQuestion.ministry.equals(id))
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 

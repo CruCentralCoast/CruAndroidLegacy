@@ -25,40 +25,36 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 
-public class FeedFragment extends ListFragment
-{
+public class FeedFragment extends ListFragment {
     private StaggeredGridLayoutManager layoutManager;
     private Observer<List<Dateable>> observer;
     private List<Dateable> items;
     private FeedAdapter adapter;
 
     private YouTubeVideoProvider youTubeVideoProvider;
-    @BindView(R.id.informational_text) TextView informationalText;
+    @BindView(R.id.informational_text)
+    TextView informationalText;
 
     private static final int SPAN_COUNT = 2;
 
-    public FeedFragment()
-    {
+    public FeedFragment() {
         youTubeVideoProvider = new YouTubeVideoProvider();
         items = new ArrayList<>();
 
         observer = createListObserver(
-                (dateables) -> {
-                    if(items == null || items.isEmpty())
-                    {
+                dateables -> {
+                    if (items == null || items.isEmpty()) {
                         items = dateables;
                         adapter = new FeedAdapter(dateables, layoutManager);
                         helper.recyclerView.setAdapter(adapter);
                     }
-                    else
-                    {
+                    else {
                         items.addAll(dateables);
                         adapter.syncItems();
                     }
                 },
                 () -> {
-                    if(items == null || items.isEmpty())
-                    {
+                    if (items == null || items.isEmpty()) {
                         onEmpty(R.layout.empty_with_alert);
                     }
                 }
@@ -67,15 +63,13 @@ public class FeedFragment extends ListFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         inflateEmptyView(view, R.layout.empty_with_alert);
 
         super.onViewCreated(view, savedInstanceState);
@@ -85,38 +79,35 @@ public class FeedFragment extends ListFragment
 
         layoutManager = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
         helper.recyclerView.addItemDecoration(new SpacesItemDecoration(
-              getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
+                getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
         helper.recyclerView.setLayoutManager(layoutManager);
         helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-             @Override
-             public void onLoadMore(int page, int totalItemsCount)
-             {
-                 getMoreFeedItems(page);
-             }
-         });
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                getMoreFeedItems(page);
+            }
+        });
 
         helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         helper.swipeRefreshLayout.setRefreshing(true);
         forceUpdate();
     }
 
-    private void forceUpdate()
-    {
+    private void forceUpdate() {
         items.clear();
         adapter = null;
 
         getMoreFeedItems(0);
     }
 
-    private void getMoreFeedItems(int page)
-    {
+    private void getMoreFeedItems(int page) {
         helper.swipeRefreshLayout.setRefreshing(true);
-        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, ZonedDateTime.now(), SharedPreferencesUtil.getLeaderAPIKey(), page, (int) AppConstants.PAGE_SIZE);
+        FeedProvider.getFeedItems(this, observer, youTubeVideoProvider, ZonedDateTime.now(),
+                SharedPreferencesUtil.getLeaderAPIKey(), page, (int) AppConstants.PAGE_SIZE);
     }
 }
