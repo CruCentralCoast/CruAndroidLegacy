@@ -33,7 +33,7 @@ public final class MinistryTeamProvider
     {
         return cruService.getMinistryTeams()
                 .compose(RxComposeUtil.network())
-                .flatMap(teams -> Observable.from(teams))
+                .flatMap(Observable::from)
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 

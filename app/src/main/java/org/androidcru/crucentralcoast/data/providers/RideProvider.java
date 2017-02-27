@@ -27,13 +27,13 @@ public final class RideProvider
 {
     private static CruApiService mCruService = CruApiProvider.getService();
 
-    private static Observable.Transformer<Ride, Ride> attachEvent = rideObservable -> rideObservable.flatMap(ride -> {
-        return EventProvider.requestCruEventByID(ride.eventId)
+    private static Observable.Transformer<Ride, Ride> attachEvent = rideObservable -> rideObservable.flatMap(ride ->
+          EventProvider.requestCruEventByID(ride.eventId)
                 .flatMap(event -> {
                     ride.event = event;
                     return Observable.just(ride);
-                });
-    });
+                })
+    );
 
     private static Observable.Transformer<Ride, Ride> attachDistance(double[] location)
     {
@@ -43,9 +43,7 @@ public final class RideProvider
                             ride.location.geo[0]));
                     return ride;
                 })
-                .filter(ride1 -> {
-                    return ride1.distance <= ride1.radius;
-                });
+                .filter(ride1 -> ride1.distance <= ride1.radius);
     }
 
     private static Observable.Transformer<Ride, List<Ride>> sortByTime(ZonedDateTime dateTime)
@@ -70,10 +68,8 @@ public final class RideProvider
     {
         Subscription s = requestRides()
                 .compose(RxLoggingUtil.log("RIDES"))
-                .flatMap(rides -> Observable.from(rides))
-                .filter(ride -> {
-                    return ride.gcmID.equals(gcmId);
-                })
+                .flatMap(Observable::from)
+                .filter(ride -> ride.gcmID.equals(gcmId))
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
@@ -84,7 +80,7 @@ public final class RideProvider
     {
         Subscription s = requestRides()
                 .compose(RxComposeUtil.ui())
-                .flatMap(rides -> Observable.from(rides))
+                .flatMap(Observable::from)
                 .filter(ride -> {
                     boolean status = false;
                     for (Passenger p : ride.passengers)
@@ -104,22 +100,21 @@ public final class RideProvider
     protected static Observable<List<Ride>> requestRides()
     {
         return mCruService.getRides()
-                .flatMap(rides -> Observable.from(rides))
-                .flatMap(ride -> {
-                    return PassengerProvider.getPassengers(ride.passengerIds)
+                .flatMap(Observable::from)
+                .flatMap(ride -> PassengerProvider.getPassengers(ride.passengerIds)
                                 .flatMap(passengers -> {
                                     ride.passengers = passengers;
                                     if(ride.passengers == null)
-                                        ride.passengers = new ArrayList<Passenger>();
+                                        ride.passengers = new ArrayList<>();
                                     return Observable.just(ride);
                                 })
                                 .switchIfEmpty(Observable.just(ride)
                                     .map(ride1 -> {
                                         if(ride1.passengers == null)
-                                            ride1.passengers = new ArrayList<Passenger>();
+                                            ride1.passengers = new ArrayList<>();
                                         return ride1;
-                                    }));
-                })
+                                    }))
+                )
                 .compose(attachEvent)
                 .compose(RxComposeUtil.network())
                 .compose(RxComposeUtil.toListOrEmpty());
@@ -138,16 +133,12 @@ public final class RideProvider
     protected static Observable<List<Ride>> searchRides(Query query, double[] latlng, ZonedDateTime time)
     {
         return mCruService.searchRides(query)
-                .flatMap(rides -> {
-                    return Observable.from(rides);
-                })
+                .flatMap(Observable::from)
                 .compose(attachEvent)
                 .compose(attachDistance(latlng))
                 //.compose(sortByDistance)
                 .compose(sortByTime(time))
-                .flatMap(finalRides -> {
-                    return finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides);
-                })
+                .flatMap(finalRides -> finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides))
                 .compose(RxComposeUtil.network());
     }
 
@@ -247,12 +238,11 @@ public final class RideProvider
                     return Observable.from(rides);
                 })
                 .take(1)
-                .flatMap(ride -> {
-                    return PassengerProvider.getPassengers(ride.passengerIds)
+                .flatMap(ride -> PassengerProvider.getPassengers(ride.passengerIds)
                             .defaultIfEmpty(new ArrayList<>())
                             .map(passengers -> ride.passengers = passengers)
-                            .flatMap(passengers1 -> Observable.just(ride));
-                })
+                            .flatMap(passengers1 -> Observable.just(ride))
+                )
                 .compose(attachEvent)
                 .compose(RxComposeUtil.network());
 

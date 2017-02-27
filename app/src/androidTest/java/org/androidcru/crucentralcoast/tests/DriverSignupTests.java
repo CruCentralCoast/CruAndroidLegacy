@@ -18,8 +18,8 @@ import android.view.View;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.common.NCVScrollToAction;
-import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
-import org.androidcru.crucentralcoast.mocking.ServerTest;
+import org.androidcru.crucentralcoast.data.mocking.ResourcesUtil;
+import org.androidcru.crucentralcoast.data.mocking.ServerTest;
 import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

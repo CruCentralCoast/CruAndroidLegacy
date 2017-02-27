@@ -144,10 +144,8 @@ public class ListHelperImpl implements ListHelper
                 },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
-                () -> {
-                    onEmpty.call();
-                },
-                () -> child.onNoNetwork(), () -> onNetworkError());
+                onEmpty::call,
+                () -> child.onNoNetwork(), this::onNetworkError);
     }
 
     @Override

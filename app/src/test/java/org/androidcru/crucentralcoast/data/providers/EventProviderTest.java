@@ -6,8 +6,8 @@ import com.google.gson.reflect.TypeToken;
 
 import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
-import org.androidcru.crucentralcoast.mocking.ResourcesUtil;
-import org.androidcru.crucentralcoast.mocking.ServerTest;
+import org.androidcru.crucentralcoast.data.mocking.ResourcesUtil;
+import org.androidcru.crucentralcoast.data.mocking.ServerTest;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.threeten.bp.Month;
@@ -51,8 +51,8 @@ public class EventProviderTest extends ServerTest
 
         ArrayList<CruEvent> events = CruApplication.gson.fromJson(eventsJson, new TypeToken<ArrayList<CruEvent>>(){}.getType());
 
-        TestObserver<ArrayList<CruEvent>> observer = new TestObserver<>();
-        ArrayList<ArrayList<CruEvent>> wrapper = new ArrayList<>();
+        TestObserver<List<CruEvent>> observer = new TestObserver<>();
+        ArrayList<List<CruEvent>> wrapper = new ArrayList<>();
         wrapper.add(events);
         EventProvider.requestAllEvents()
                 .toBlocking()

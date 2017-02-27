@@ -33,34 +33,34 @@ import rx.Observable;
 public interface CruApiService
 {
     @GET("/api/users/phone/{phone}")
-    public Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
+    Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
 
     @GET("/api/events/")
-    public Observable<ArrayList<CruEvent>> getEvents();
+    Observable<ArrayList<CruEvent>> getEvents();
 
     @POST("/api/events/search")
     Observable<List<CruEvent>> searchEvents(@Body Query query);
 
     @GET("/api/ministries/")
-    public Observable<ArrayList<MinistrySubscription>> getMinistries();
+    Observable<ArrayList<MinistrySubscription>> getMinistries();
 
     @GET("/api/campuses/")
-    public Observable<ArrayList<Campus>> getCampuses();
+    Observable<ArrayList<Campus>> getCampuses();
 
     @GET("/api/ministryteams/")
-    public Observable<List<MinistryTeam>> getMinistryTeams();
+    Observable<List<MinistryTeam>> getMinistryTeams();
 
     @POST("/api/ministryteams/{id}/join")
-    public Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);
+    Observable<Void> joinMinistryTeam(@Path("id") String id, @Body CruUser user);
 
     @POST("/api/communitygroups/{id}/join")
-    public Observable<Void> joinCommunityGroup(@Path("id") String id, @Body CruUser user);
+    Observable<Void> joinCommunityGroup(@Path("id") String id, @Body CruUser user);
 
     @GET("/api/ministryquestions/")
-    public Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
+    Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
 
     @POST("/api/users/search")
-    public Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Body Query query);
+    Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Body Query query);
 
     @GET("/api/rides/")
     Observable<ArrayList<Ride>> getRides();

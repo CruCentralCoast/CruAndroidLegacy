@@ -41,9 +41,7 @@ public class NotificationProvider
                     .getAsync(sNotifications, Notification.class, collectionType)
                     .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                     .onBackpressureDrop()
-                    .toSortedList((Notification n1, Notification n2) -> {
-                        return n2.timestamp.compareTo(n1.timestamp);
-                    });
+                    .toSortedList((Notification n1, Notification n2) -> n2.timestamp.compareTo(n1.timestamp));
         }
         catch (Exception e)
         {

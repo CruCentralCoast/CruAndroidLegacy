@@ -128,12 +128,15 @@
             android:value="@integer/google_play_services_version"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <activity android:name=".presentation.views.subscriptions.SubscriptionActivity"/>
+        <activity
+            android:name=".presentation.views.subscriptions.SubscriptionActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.facebook.FacebookActivity"
                   android:configChanges=
                       "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
+                  android:label="@string/app_name"
+                  tools:replace="android:theme"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAtg1903E6MHsHmfKb-ercAHppTvqDvLuM"/>

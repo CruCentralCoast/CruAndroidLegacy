@@ -19,22 +19,29 @@ import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.presentation.util.DrawableUtil;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.viewmodels.ExpandableState;
-import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-{
-    @BindView(R.id.card_video_view) CardView cardView;
-    @BindView(R.id.videos_divider) View divider;
-    @BindView(R.id.video_title) TextView videoTitle;
-    @BindView(R.id.video_thumb) ImageView videoThumb;
-    @BindView(R.id.video_description) TextView videoDescription;
-    @BindView(R.id.video_chev) ImageView videoChev;
-    @BindView(R.id.video_id_and_views) TextView videoIdAndViews;
-    @BindView(R.id.video_expand_description_layout) RelativeLayout videoExpandDescriptionLayout;
-    @BindView(R.id.animating_layout) public LinearLayout animatingLayout;
+public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @BindView(R.id.card_video_view)
+    CardView cardView;
+    @BindView(R.id.videos_divider)
+    View divider;
+    @BindView(R.id.video_title)
+    TextView videoTitle;
+    @BindView(R.id.video_thumb)
+    ImageView videoThumb;
+    @BindView(R.id.video_description)
+    TextView videoDescription;
+    @BindView(R.id.video_chev)
+    ImageView videoChev;
+    @BindView(R.id.video_id_and_views)
+    TextView videoIdAndViews;
+    @BindView(R.id.video_expand_description_layout)
+    RelativeLayout videoExpandDescriptionLayout;
+    @BindView(R.id.animating_layout)
+    public LinearLayout animatingLayout;
 
     public Snippet model;
     private ExpandableState<Snippet> state;
@@ -42,26 +49,11 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.
     public RecyclerView.LayoutManager layoutManager;
     public View rootView;
 
-    public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager, Boolean isFeed)
-    {
+    public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager, Boolean isFeed) {
         this(rootView, adapter, layoutManager);
-
-        if (isFeed)
-        {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            int topMargin = DisplayMetricsUtil.dpToPx(rootView.getContext(), 16);
-            params.setMargins(0, topMargin, 0, 0);
-            cardView.setLayoutParams(params);
-
-            divider.setVisibility(View.GONE);
-        }
     }
 
-    public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager)
-    {
+    public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager) {
         super(rootView);
         this.rootView = rootView;
         this.adapter = adapter;
@@ -71,16 +63,14 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.
         animatingLayout.setOnClickListener(this);
         ViewUtil.debounceExpandingView(animatingLayout, this);
     }
-    
-    public void bindSnippet(ExpandableState<Snippet> state)
-    {
+
+    public void bindSnippet(ExpandableState<Snippet> state) {
         this.model = state.model;
         this.state = state;
         bindUI(state);
     }
 
-    private void bindUI(ExpandableState state)
-    {
+    private void bindUI(ExpandableState state) {
         // Set the card title to the video title
         videoTitle.setText(model.title);
 
@@ -104,7 +94,8 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.
             if (YouTubeIntents.canResolvePlayVideoIntentWithOptions(context)) {
                 context.startActivity(YouTubeIntents
                         .createPlayVideoIntentWithOptions(context, model.getVideoId(), true, true));
-            } else {
+            }
+            else {
                 Toast.makeText(context, AppConstants.VIDEO_PLAY_FAILED_MESSAGE,
                         Toast.LENGTH_SHORT).show();
             }
@@ -112,19 +103,19 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.
 
         // Set the video description to the card's TextView
         videoDescription.setText(model.description);
-        if(videoDescription.getText().length() == 0)
+        if (videoDescription.getText().length() == 0)
             videoDescription.setText(R.string.videos_no_description);
 
         videoDescription.setVisibility(state.isExpanded ? View.VISIBLE : View.GONE);
     }
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         int visibility;
         if (videoDescription.getVisibility() == View.VISIBLE) {
             visibility = View.GONE;
-        } else {
+        }
+        else {
             visibility = View.VISIBLE;
         }
         videoDescription.setVisibility(visibility);

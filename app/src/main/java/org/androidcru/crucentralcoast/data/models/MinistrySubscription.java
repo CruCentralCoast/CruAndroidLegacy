@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @Parcel
 public final class MinistrySubscription
 {
-    public static final String sCruImage = "squareImageLink";
+    public static final String sCruImage = "imageLink";
     public static final String sSubscriptionId = "_id";
     public static final String sCampusId = "campuses";
 

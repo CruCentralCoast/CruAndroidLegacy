@@ -1,4 +1,4 @@
-package org.androidcru.crucentralcoast.mocking;
+package org.androidcru.crucentralcoast.data.mocking;
 
 import java.io.InputStream;
 import java.util.Scanner;

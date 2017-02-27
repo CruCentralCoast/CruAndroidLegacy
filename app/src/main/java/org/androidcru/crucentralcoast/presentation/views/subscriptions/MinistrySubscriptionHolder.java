@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.MinistrySubscription;
@@ -24,6 +25,7 @@ import timber.log.Timber;
 
 public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
 {
+    private static final String HTTPS = "https:";
     protected @BindView(R.id.ministry_image) ImageView ministryImage;
     protected @BindView(R.id.checkbox) CheckBox checkBox;
 
@@ -55,10 +57,12 @@ public class MinistrySubscriptionHolder extends RecyclerView.ViewHolder
         if(model.image != null && !model.image.isEmpty())
         {
             Context context = ministryImage.getContext();
-            Picasso.with(context)
-                    .load(model.image)
-                    .transform(new ColorFilterTransformation(ContextCompat.getColor(context, isChecked ? R.color.cruDarkBlue : R.color.cruGray)))
-                    .into(ministryImage);
+            RequestCreator creator = Picasso.with(context).load(model.image);
+            if (!isChecked) {
+                creator = creator.transform(new ColorFilterTransformation(
+                        ContextCompat.getColor(context, R.color.cruGray)));
+            }
+            creator.into(ministryImage);
         }
         else
         {

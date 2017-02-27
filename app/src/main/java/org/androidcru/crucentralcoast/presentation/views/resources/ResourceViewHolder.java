@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.androidcru.crucentralcoast.CruApplication;
@@ -16,7 +14,6 @@ import org.androidcru.crucentralcoast.data.models.Resource;
 import org.androidcru.crucentralcoast.presentation.customtabs.CustomTabActivityHelper;
 import org.androidcru.crucentralcoast.presentation.util.ViewUtil;
 import org.androidcru.crucentralcoast.presentation.views.webview.WebviewFallback;
-import org.androidcru.crucentralcoast.util.DisplayMetricsUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,34 +21,13 @@ import butterknife.ButterKnife;
 public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
     @BindView(R.id.resource_card_view) CardView cardView;
-    @BindView(R.id.resource_divider) View divider;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.tags) TextView tags;
     @BindView(R.id.resource_icon) ImageView typeIcon;
+    @BindView(R.id.more_action) TextView moreAction;
+    @BindView(R.id.author) TextView author;
 
     private Resource model;
-
-
-    public ResourceViewHolder(View rootView, Boolean isFeed)
-    {
-        this(rootView);
-
-        if (isFeed)
-        {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            int margin = DisplayMetricsUtil.dpToPx(rootView.getContext(), 16);
-            params.setMargins(0, margin, 0, 0);
-            cardView.setLayoutParams(params);
-            divider.setVisibility(View.GONE);
-        }
-        else
-        {
-            divider.setVisibility(View.VISIBLE);
-        }
-    }
 
     public ResourceViewHolder(View rootView) {
         super(rootView);
@@ -68,8 +44,10 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     private void bindUI()
     {
         title.setText(model.title);
-        tags.setText(CruApplication.getContext().getString(R.string.tags, model.formatTags()));
+        tags.setText(model.formatTags());
         typeIcon.setImageResource(getResourceIconFromType(model.resourceType));
+        moreAction.setText(getActionTextFromType(model.resourceType));
+        author.setText(model.author);
     }
 
     private int getResourceIconFromType(Resource.ResourceType type)
@@ -85,6 +63,18 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
         }
 
         return -1;
+    }
+
+    private String getActionTextFromType(Resource.ResourceType type) {
+        switch (type) {
+            case ARTICLE:
+                return CruApplication.getContext().getString(R.string.read);
+            case AUDIO:
+                return CruApplication.getContext().getString(R.string.listen);
+            case VIDEO:
+                return CruApplication.getContext().getString(R.string.watch);
+        }
+        return null;
     }
 
     @Override
