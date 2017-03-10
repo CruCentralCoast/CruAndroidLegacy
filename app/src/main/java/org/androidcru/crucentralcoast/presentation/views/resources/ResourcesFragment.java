@@ -31,9 +31,7 @@ import rx.Observer;
 import timber.log.Timber;
 
 
-
-public class ResourcesFragment extends ListFragment
-{
+public class ResourcesFragment extends ListFragment {
     private static final int RESOURCE_LIST_SPAN_COUNT = 2;
     private CustomTabsIntent.Builder customTabsIntentBuilder;
 
@@ -55,41 +53,38 @@ public class ResourcesFragment extends ListFragment
     private boolean loadedTags = false;
     private boolean checkedSpecial = true;
 
-    public ResourcesFragment()
-    {
+    public static ResourcesFragment newInstance() {
+        return new ResourcesFragment();
+    }
+
+    public ResourcesFragment() {
         resources = new ArrayList<>();
-        filterTypesList =  new ArrayList<Resource.ResourceType>(Arrays.asList(Resource.ResourceType.values()));
+        filterTypesList = new ArrayList<>(Arrays.asList(Resource.ResourceType.values()));
         selectedTypes = new boolean[filterTypesList.size()];
         Arrays.fill(selectedTypes, true);
         setupResourceObserver();
         setupResourceTagObserver();
     }
 
-    void setupResourceTagObserver()
-    {
-        resourceTagSubscriber = new Observer<List<ResourceTag>>()
-        {
+    void setupResourceTagObserver() {
+        resourceTagSubscriber = new Observer<List<ResourceTag>>() {
             @Override
-            public void onCompleted()
-            {
+            public void onCompleted() {
                 Timber.d("resourceTag onCompleted: OAKS");
             }
 
             @Override
-            public void onError(Throwable e)
-            {
-                if(!CruApplication.isOnline())
-                {
+            public void onError(Throwable e) {
+                if (!CruApplication.isOnline()) {
                     onNoNetwork();
                 }
                 Timber.e(e, "Resource Tags failed to retrieve.");
             }
 
             @Override
-            public void onNext(List<ResourceTag> resourceTags)
-            {
+            public void onNext(List<ResourceTag> resourceTags) {
                 filterTagsList = new ArrayList<>(resourceTags);
-                if(!SharedPreferencesUtil.getLeaderAPIKey().isEmpty())
+                if (!SharedPreferencesUtil.getLeaderAPIKey().isEmpty())
                     filterTagsList.add(0, new ResourceTag(ResourceTag.SPECIAL_LEADER_ID, "Special Leader"));
                 selectedTags = new boolean[filterTagsList.size()];
                 Arrays.fill(selectedTags, true);
@@ -102,22 +97,19 @@ public class ResourcesFragment extends ListFragment
         };
     }
 
-    void setupResourceObserver()
-    {
+    void setupResourceObserver() {
         resourceSubscriber = createListObserver(R.layout.empty_articles_view, resources -> setResources(resources));
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         helper.swipeRefreshLayout.setRefreshing(true);
@@ -132,12 +124,11 @@ public class ResourcesFragment extends ListFragment
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
 
-    private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags)
-    {
+    private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags) {
         helper.swipeRefreshLayout.setRefreshing(true);
         //Start listening for stream data from network call
         this.resources.clear();
-        if(loadedTags)
+        if (loadedTags)
             ResourceProvider.findResources(this, resourceSubscriber, types, tags,
                     (checkedSpecial && SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
                             ? SharedPreferencesUtil.getLeaderAPIKey()
@@ -146,8 +137,7 @@ public class ResourcesFragment extends ListFragment
             ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
     }
 
-    private void setResources(List<Resource> resources)
-    {
+    private void setResources(List<Resource> resources) {
         //Adapter for RecyclerView
         ResourcesAdapter resourcesAdapter = new ResourcesAdapter(new ArrayList<>(resources), customTabsIntentBuilder);
         helper.recyclerView.setAdapter(resourcesAdapter);
@@ -158,13 +148,12 @@ public class ResourcesFragment extends ListFragment
     private void displayFilterTagAlertDialog() {
         String[] tagStrings = getResourceTagStrings(filterTagsList);
 
-        if(tagDialog == null)
-        {
+        if (tagDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMultiChoiceItems(tagStrings, selectedTags,
                     new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            if(filterTagsList.get(which).id.equals(ResourceTag.SPECIAL_LEADER_ID))
+                            if (filterTagsList.get(which).id.equals(ResourceTag.SPECIAL_LEADER_ID))
                                 checkedSpecial = isChecked;
                             else
                                 selectedTags[which] = isChecked;
@@ -195,8 +184,7 @@ public class ResourcesFragment extends ListFragment
 
     //Display dialog for filtering resources by type
     private void displayFilterTypeAlertDialog() {
-        if(typeDialog == null)
-        {
+        if (typeDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMultiChoiceItems(
                     getResourceTypeStrings(Resource.ResourceType.values()), selectedTypes,
                     new DialogInterface.OnMultiChoiceClickListener() {
@@ -228,8 +216,7 @@ public class ResourcesFragment extends ListFragment
 
     //Todo: make two generic methods out of these four
     //Extract String field from list of ResourceType
-    private String[] getResourceTypeStrings(Resource.ResourceType[] types)
-    {
+    private String[] getResourceTypeStrings(Resource.ResourceType[] types) {
         ArrayList<String> strings = new ArrayList<>();
         for (Resource.ResourceType type : types)
             strings.add(type.toString());
@@ -237,11 +224,9 @@ public class ResourcesFragment extends ListFragment
     }
 
     //Generate list of ResourceTags from tags selected in dialog
-    private List<ResourceTag> getFilteredTags()
-    {
+    private List<ResourceTag> getFilteredTags() {
         ArrayList<ResourceTag> toReturn = new ArrayList<>();
-        if(selectedTags != null && filterTagsList != null)
-        {
+        if (selectedTags != null && filterTagsList != null) {
             for (int i = 0; i < selectedTags.length; i++)
                 if (selectedTags[i])
                     toReturn.add(filterTagsList.get(i));
@@ -253,11 +238,9 @@ public class ResourcesFragment extends ListFragment
     }
 
     //Generate list of ResourceTypes from tags selected in dialog
-    private List<Resource.ResourceType> getFilteredTypes()
-    {
+    private List<Resource.ResourceType> getFilteredTypes() {
         ArrayList<Resource.ResourceType> toReturn = new ArrayList<>();
-        if(selectedTypes != null && filterTypesList != null)
-        {
+        if (selectedTypes != null && filterTypesList != null) {
             for (int i = 0; i < selectedTypes.length; i++)
                 if (selectedTypes[i])
                     toReturn.add(filterTypesList.get(i));
@@ -268,8 +251,7 @@ public class ResourcesFragment extends ListFragment
     }
 
     //Extract String field from list of ResourceTags
-    private String[] getResourceTagStrings(List<ResourceTag> tags)
-    {
+    private String[] getResourceTagStrings(List<ResourceTag> tags) {
         ArrayList<String> strings = new ArrayList<>();
         for (ResourceTag tag : tags)
             strings.add(tag.title);

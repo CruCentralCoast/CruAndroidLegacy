@@ -45,8 +45,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     //login
     private AlertDialog loginDialog;
     private View loginView;
-    @NotEmpty @Email(messageResId = R.string.invalid_email)EditText loginName;
-    @NotEmpty EditText loginPassword;
+    @NotEmpty
+    @Email(messageResId = R.string.invalid_email)
+    EditText loginName;
+    @NotEmpty
+    EditText loginPassword;
     private BaseValidator loginValidator;
     private ProgressBar loginProgress;
     private TextView loginFailed;
@@ -57,8 +60,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     private Observer<LoginResponse> loginObserver;
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
-    {
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.fragment_settings);
 
         //subscription button listener
@@ -81,8 +83,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         loginValidator = new BaseValidator(this);
 
         loginObserver = Observers.create(response -> {
-            if(response.success)
-            {
+            if (response.success) {
                 SharedPreferencesUtil.writeLoginInformation(loginName.getText().toString(), response.leaderAPIKey);
                 loginName.setText("");
                 loginName.setError(null);
@@ -112,8 +113,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         loginDialog.setOnShowListener(dialog -> {
             Button posButton = loginDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             posButton.setOnClickListener(view -> {
-                if(loginValidator.validate())
-                {
+                if (loginValidator.validate()) {
                     //login api call
                     String name = loginName.getText().toString();
                     String password = loginPassword.getText().toString();
@@ -127,17 +127,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
         loginDialog.setView(loginView);
 
-        loginButton = (Preference) getPreferenceManager().findPreference(getString(R.string.login_button_key));
+        loginButton = getPreferenceManager().findPreference(getString(R.string.login_button_key));
         setLoginButtonTitle();
-        loginButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
-                    logoutDialog.show();
-                else
-                    loginDialog.show();
-                return true;
-            }
+        loginButton.setOnPreferenceClickListener(preference -> {
+            if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
+                logoutDialog.show();
+            else
+                loginDialog.show();
+            return true;
         });
 
         //logout button
@@ -151,9 +148,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                     setLoginButtonTitle();
                     logoutDialog.dismiss();
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
-                    logoutDialog.dismiss();
-                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> logoutDialog.dismiss())
                 .create();
 
         //notification
@@ -172,14 +167,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     }
 
     @Override
-    public void addSubscription(Subscription s)
-    {
+    public void addSubscription(Subscription s) {
         subscription.add(s);
     }
 
     @Override
-    public void clearSubscriptions()
-    {
+    public void clearSubscriptions() {
         subscription.clear();
     }
 

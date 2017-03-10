@@ -6,7 +6,6 @@ import org.androidcru.crucentralcoast.data.providers.util.RxComposeUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -25,7 +24,7 @@ public final class SummerMissionProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<ArrayList<SummerMission>> requestSummerMissions()
+    protected static Observable<List<SummerMission>> requestSummerMissions()
     {
         return mCruService.getSummerMissions()
                 .compose(RxComposeUtil.network());

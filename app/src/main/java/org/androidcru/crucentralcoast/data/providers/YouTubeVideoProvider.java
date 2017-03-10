@@ -77,7 +77,7 @@ public final class YouTubeVideoProvider
 
     // Returns a video response to its observer. The response contains a list of 20 videos,
     // including the videos' ids and snippets.
-    protected Observable<List<Snippet>> requestChannelVideos()
+    public Observable<List<Snippet>> requestChannelVideos()
     {
         if(!first && nextPageToken == null)
             return Observable.empty();

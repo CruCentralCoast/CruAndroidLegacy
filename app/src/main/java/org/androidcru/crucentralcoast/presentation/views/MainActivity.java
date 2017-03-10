@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +23,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.BaseAppCompatActiv
 import org.androidcru.crucentralcoast.presentation.views.communitygroups.CommunityGroupsFragment;
 import org.androidcru.crucentralcoast.presentation.views.events.EventsFragment;
 import org.androidcru.crucentralcoast.presentation.views.feed.FeedFragment;
+import org.androidcru.crucentralcoast.presentation.views.hub.HubFragment;
 import org.androidcru.crucentralcoast.presentation.views.ministryteams.MinistryTeamsFragment;
 import org.androidcru.crucentralcoast.presentation.views.notifications.NotificationFragment;
 import org.androidcru.crucentralcoast.presentation.views.resources.ResourcesFragment;
@@ -104,43 +106,47 @@ public class MainActivity extends BaseAppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         boolean displayAsSelectedItem = true;
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+
         switch (id) {
             case R.id.nav_feed:
-                mToolbar.setTitle(R.string.nav_feed);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
-                //getSupportFragmentManager().beginTransaction().replace(R.id.content, new HubFragment()).commit();
+                // mToolbar.setTitle(R.string.nav_feed);
+                // transaction.replace(R.id.content, new FeedFragment()).commit();
+                mToolbar.setTitle(R.string.nav_hub);
+                transaction.replace(R.id.content, HubFragment.newInstance()).commit();
                 break;
             case R.id.nav_events:
                 mToolbar.setTitle(R.string.nav_events);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+                transaction.replace(R.id.content, EventsFragment.newInstance()).commit();
                 break;
             case R.id.nav_my_rides:
                 mToolbar.setTitle(R.string.nav_my_rides);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new MyRidesFragment()).commit();
+                transaction.replace(R.id.content, MyRidesFragment.newInstance()).commit();
                 break;
             case R.id.nav_summer_missions:
                 mToolbar.setTitle(R.string.nav_summer_missions);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new SummerMissionsFragment()).commit();
+                transaction.replace(R.id.content, SummerMissionsFragment.newInstance()).commit();
                 break;
             case R.id.nav_community_groups:
                 mToolbar.setTitle(R.string.community_groups);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new CommunityGroupsFragment()).commit();
+                transaction.replace(R.id.content, CommunityGroupsFragment.newInstance()).commit();
                 break;
             case R.id.nav_ministry_teams:
                 mToolbar.setTitle(R.string.ministry_teams);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new MinistryTeamsFragment()).commit();
+                transaction.replace(R.id.content, MinistryTeamsFragment.newInstance()).commit();
                 break;
             case R.id.nav_resources:
                 mToolbar.setTitle(R.string.resources);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new ResourcesFragment()).commit();
+                transaction.replace(R.id.content, ResourcesFragment.newInstance()).commit();
                 break;
             case R.id.nav_videos:
                 mToolbar.setTitle(R.string.nav_videos);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
+                transaction.replace(R.id.content, VideosFragment.newInstance()).commit();
                 break;
             case R.id.nav_notifications:
                 mToolbar.setTitle(R.string.nav_notifications);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content, new NotificationFragment()).commit();
+                transaction.replace(R.id.content, NotificationFragment.newInstance()).commit();
                 break;
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -165,6 +171,12 @@ public class MainActivity extends BaseAppCompatActivity
         mNavigationView.setCheckedItem(R.id.nav_events);
         mToolbar.setTitle(R.string.nav_events);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+    }
+
+    public void switchToVideos() {
+        mNavigationView.setCheckedItem(R.id.nav_videos);
+        mToolbar.setTitle(R.string.nav_videos);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
     }
 
     public void switchToFeed() {

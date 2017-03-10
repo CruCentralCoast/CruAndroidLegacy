@@ -20,14 +20,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 
-public class NotificationFragment extends ListFragment
-{
+public class NotificationFragment extends ListFragment {
+    @BindView(R.id.informational_text)
+    TextView informationalText;
+
     private Observer<List<Notification>> observer;
-    @BindView(R.id.informational_text) TextView informationalText;
 
+    public static NotificationFragment newInstance() {
+        return new NotificationFragment();
+    }
 
-    public NotificationFragment()
-    {
+    public NotificationFragment() {
         observer = createListObserver(R.layout.empty_with_alert,
                 notifications -> {
                     setupList(notifications);
@@ -36,15 +39,13 @@ public class NotificationFragment extends ListFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
@@ -55,20 +56,17 @@ public class NotificationFragment extends ListFragment
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         forceUpdate();
     }
 
-    private void forceUpdate()
-    {
+    private void forceUpdate() {
         helper.swipeRefreshLayout.setRefreshing(true);
         NotificationProvider.getNotifications(this, observer);
     }
 
-    private void setupList(List<Notification> notifications)
-    {
+    private void setupList(List<Notification> notifications) {
         NotificationAdapter adapter = new NotificationAdapter(notifications);
         helper.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         helper.recyclerView.setAdapter(adapter);

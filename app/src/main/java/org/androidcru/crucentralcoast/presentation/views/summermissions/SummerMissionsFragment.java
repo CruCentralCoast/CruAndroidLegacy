@@ -20,14 +20,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
 
-public class SummerMissionsFragment extends ListFragment
-{
+public class SummerMissionsFragment extends ListFragment {
+    @BindView(R.id.informational_text)
+    TextView informationalText;
+
     private RecyclerView.LayoutManager layoutManager;
     private Observer<List<SummerMission>> observer;
-    @BindView(R.id.informational_text) TextView inforomationalText;
 
-    public SummerMissionsFragment()
-    {
+    public static SummerMissionsFragment newInstance() {
+        return new SummerMissionsFragment();
+    }
+
+    public SummerMissionsFragment() {
         observer = createListObserver(R.layout.empty_with_alert, summerMissions -> {
             helper.recyclerView.setAdapter(new SummerMissionAdapter(getContext(), summerMissions, layoutManager));
         });
@@ -35,20 +39,18 @@ public class SummerMissionsFragment extends ListFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
 
         unbinder = ButterKnife.bind(this, view);
-        inforomationalText.setText(R.string.empty_summer_missions);
+        informationalText.setText(R.string.empty_summer_missions);
 
         layoutManager = new LinearLayoutManager(getContext());
         helper.recyclerView.setLayoutManager(layoutManager);
@@ -57,14 +59,12 @@ public class SummerMissionsFragment extends ListFragment
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         getSummerMissions();
     }
 
-    private void getSummerMissions()
-    {
+    private void getSummerMissions() {
         helper.swipeRefreshLayout.setRefreshing(true);
         SummerMissionProvider.requestSummerMissions(this, observer);
     }

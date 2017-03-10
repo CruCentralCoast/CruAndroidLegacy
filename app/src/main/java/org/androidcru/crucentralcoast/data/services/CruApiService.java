@@ -17,7 +17,6 @@ import org.androidcru.crucentralcoast.data.models.RideCheckResponse;
 import org.androidcru.crucentralcoast.data.models.SummerMission;
 import org.androidcru.crucentralcoast.data.models.queries.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.http.Body;
@@ -36,16 +35,16 @@ public interface CruApiService
     Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
 
     @GET("/api/events/")
-    Observable<ArrayList<CruEvent>> getEvents();
+    Observable<List<CruEvent>> getEvents();
 
     @POST("/api/events/search")
     Observable<List<CruEvent>> searchEvents(@Body Query query);
 
     @GET("/api/ministries/")
-    Observable<ArrayList<MinistrySubscription>> getMinistries();
+    Observable<List<MinistrySubscription>> getMinistries();
 
     @GET("/api/campuses/")
-    Observable<ArrayList<Campus>> getCampuses();
+    Observable<List<Campus>> getCampuses();
 
     @GET("/api/ministryteams/")
     Observable<List<MinistryTeam>> getMinistryTeams();
@@ -57,43 +56,43 @@ public interface CruApiService
     Observable<Void> joinCommunityGroup(@Path("id") String id, @Body CruUser user);
 
     @GET("/api/ministryquestions/")
-    Observable<ArrayList<MinistryQuestion>> getMinistryQuestions();
+    Observable<List<MinistryQuestion>> getMinistryQuestions();
 
     @POST("/api/users/search")
-    Observable<ArrayList<CruUser>> getMinistryTeamLeaders(@Body Query query);
+    Observable<List<CruUser>> getMinistryTeamLeaders(@Body Query query);
 
     @GET("/api/rides/")
-    Observable<ArrayList<Ride>> getRides();
+    Observable<List<Ride>> getRides();
 
     @POST("/api/rides/search")
-    Observable<ArrayList<Ride>> searchRides(@Body Query query);
+    Observable<List<Ride>> searchRides(@Body Query query);
 
     @POST("api/resources/search")
-    Observable<ArrayList<Resource>> findResources(@Body Query query, @retrofit2.http.Query("LeaderAPIKey") String leaderAPIKey);
+    Observable<List<Resource>> findResources(@Body Query query, @retrofit2.http.Query("LeaderAPIKey") String leaderAPIKey);
 
     @GET("api/resources")
-    Observable<ArrayList<Resource>> getResources();
+    Observable<List<Resource>> getResources();
 
     @POST("/api/resourcetags/search")
-    Observable<ArrayList<ResourceTag>> findResourceTag(@Body Query query);
+    Observable<List<ResourceTag>> findResourceTag(@Body Query query);
 
     @GET("/api/resourcetags")
-    Observable<ArrayList<ResourceTag>> getResourceTag();
+    Observable<List<ResourceTag>> getResourceTag();
 
     @POST("/api/passengers/search")
     Observable<List<Passenger>> searchPassengers(@Body Query query);
 
     @FormUrlEncoded
     @POST("/api/rides/find")
-    Observable<ArrayList<Ride>> findSingleRide(@Field("_id") String id);
+    Observable<List<Ride>> findSingleRide(@Field("_id") String id);
 
     @FormUrlEncoded
     @POST("/api/passengers/find")
-    Observable<ArrayList<Passenger>> findSinglePassenger(@Field("_id") String id);
+    Observable<List<Passenger>> findSinglePassenger(@Field("_id") String id);
 
     @FormUrlEncoded
     @POST("/api/events/find")
-    Observable<ArrayList<CruEvent>> findSingleCruEvent(@Field("_id") String id);
+    Observable<List<CruEvent>> findSingleCruEvent(@Field("_id") String id);
 
     @POST("/api/rides")
     Observable<Ride> postRide(@Body Ride ride);
@@ -115,7 +114,7 @@ public interface CruApiService
     Observable<Void> dropRide(@Path("ride_id") String rideId);
 
     @GET("/api/summermissions/")
-    Observable<ArrayList<SummerMission>> getSummerMissions();
+    Observable<List<SummerMission>> getSummerMissions();
 
     @FormUrlEncoded
     @POST("/api/signin")

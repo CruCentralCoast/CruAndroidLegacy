@@ -63,7 +63,7 @@ public class EventProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<CruEvent>> requestUsersEvents()
+    public static Observable<List<CruEvent>> requestUsersEvents()
     {
         return requestAllEvents()
                 .flatMap(Observable::from)

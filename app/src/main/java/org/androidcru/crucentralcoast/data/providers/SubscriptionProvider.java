@@ -10,6 +10,7 @@ import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolde
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -24,7 +25,7 @@ public final class SubscriptionProvider
 {
     private static CruApiService mCruService = CruApiProvider.getService();
 
-    public static void requestMinistries(SubscriptionsHolder holder, Observer<ArrayList<MinistrySubscription>> observer)
+    public static void requestMinistries(SubscriptionsHolder holder, Observer<List<MinistrySubscription>> observer)
     {
         Subscription s = requestMinistries()
                 .compose(RxComposeUtil.ui())
@@ -36,14 +37,14 @@ public final class SubscriptionProvider
      * Gets the list of available ministries from the server.
      * @return list of ministries
      */
-    protected static Observable<ArrayList<MinistrySubscription>> requestMinistries()
+    protected static Observable<List<MinistrySubscription>> requestMinistries()
     {
         return mCruService.getMinistries()
                 .compose(RxLoggingUtil.log("MINISTRIES"))
                 .compose(RxComposeUtil.network());
     }
 
-    public static void requestCampuses(SubscriptionsHolder holder, Observer<ArrayList<Campus>> observer)
+    public static void requestCampuses(SubscriptionsHolder holder, Observer<List<Campus>> observer)
     {
         Subscription s = requestCampuses()
                 .compose(RxComposeUtil.ui())
@@ -54,7 +55,7 @@ public final class SubscriptionProvider
     /**
      * Gets the list of campuses from the server.
      */
-    protected static Observable<ArrayList<Campus>> requestCampuses()
+    protected static Observable<List<Campus>> requestCampuses()
     {
         return mCruService.getCampuses()
                 .compose(RxComposeUtil.network());
@@ -71,8 +72,8 @@ public final class SubscriptionProvider
     protected static Observable<HashMap<Campus, ArrayList<MinistrySubscription>>> requestCampusMinistryMap()
     {
         return Observable.fromCallable(() -> {
-            ArrayList<Campus> campuses = requestCampuses().toBlocking().single();
-            ArrayList<MinistrySubscription> ministries = requestMinistries().toBlocking().single();
+            List<Campus> campuses = requestCampuses().toBlocking().single();
+            List<MinistrySubscription> ministries = requestMinistries().toBlocking().single();
 
             HashMap<Campus, ArrayList<MinistrySubscription>> campusMinistryMap = new HashMap<>();
 

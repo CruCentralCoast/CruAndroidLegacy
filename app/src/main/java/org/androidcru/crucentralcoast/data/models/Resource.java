@@ -7,7 +7,6 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 import org.threeten.bp.ZonedDateTime;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
@@ -29,7 +28,7 @@ public final class Resource implements Dateable
     @SerializedName(sTagIds) public List<String> tagIds;
     @SerializedName(sAuthor) public String author;
 
-    public ArrayList<ResourceTag> tags;
+    public List<ResourceTag> tags;
 
     private static final String delimiter = ", ";
 

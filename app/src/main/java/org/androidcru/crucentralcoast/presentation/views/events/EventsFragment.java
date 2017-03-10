@@ -1,9 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.events;
 
-
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.androidcru.crucentralcoast.AppConstants;
-import org.androidcru.crucentralcoast.CruApplication;
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.CruEvent;
 import org.androidcru.crucentralcoast.data.providers.EventProvider;
 import org.androidcru.crucentralcoast.presentation.providers.CalendarProvider;
-import org.androidcru.crucentralcoast.presentation.views.MainActivity;
 import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import org.androidcru.crucentralcoast.presentation.views.subscriptions.SubscriptionActivity;
 import org.androidcru.crucentralcoast.util.SharedPreferencesUtil;
@@ -36,6 +30,10 @@ public class EventsFragment extends ListFragment
     private ArrayList<CruEvent> eventList;
     private LinearLayoutManager layoutManager;
     private Observer<List<CruEvent>> eventSubscriber;
+
+    public static EventsFragment newInstance() {
+        return new EventsFragment();
+    }
 
     /**
      * Invoked early on from the Android framework during rendering.
@@ -87,7 +85,7 @@ public class EventsFragment extends ListFragment
 
     private void setupObserver()
     {
-        eventSubscriber = createListObserver(R.layout.empty_events_view, cruEvents -> setEvents(cruEvents));
+        eventSubscriber = createListObserver(R.layout.empty_events_view, this::setEvents);
     }
 
     @OnClick(R.id.subscription_button)

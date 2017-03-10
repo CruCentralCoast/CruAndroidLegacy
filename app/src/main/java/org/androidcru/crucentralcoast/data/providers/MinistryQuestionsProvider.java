@@ -7,7 +7,6 @@ import org.androidcru.crucentralcoast.data.providers.util.RxLoggingUtil;
 import org.androidcru.crucentralcoast.data.services.CruApiService;
 import org.androidcru.crucentralcoast.presentation.views.base.SubscriptionsHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -32,7 +31,7 @@ public final class MinistryQuestionsProvider {
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 
-    protected static Observable<ArrayList<MinistryQuestion>> getAllQuestions() {
+    protected static Observable<List<MinistryQuestion>> getAllQuestions() {
         return cruApiService.getMinistryQuestions()
                 .compose(RxComposeUtil.network())
                 .compose(RxLoggingUtil.log("MINISTRY_QUESTIONS"));

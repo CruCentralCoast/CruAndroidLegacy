@@ -66,18 +66,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getClass().getSimpleName().equals(
-                CruEventViewHolder.class.getSimpleName())) {
+        if (holder instanceof CruEventViewHolder) {
             CruEventViewHolder viewHolder = (CruEventViewHolder) holder;
             viewHolder.bind((ExpandableState) items.get(position));
         }
-        if (holder.getClass().getSimpleName().equals(
-                CruVideoViewHolder.class.getSimpleName())) {
+        if (holder instanceof CruVideoViewHolder) {
             CruVideoViewHolder viewHolder = (CruVideoViewHolder) holder;
             viewHolder.bindSnippet((ExpandableState) items.get(position));
         }
-        if (holder.getClass().getSimpleName().equals(
-                ResourceViewHolder.class.getSimpleName())) {
+        if (holder instanceof ResourceViewHolder) {
             ResourceViewHolder viewHolder = (ResourceViewHolder) holder;
             viewHolder.bind((Resource) items.get(position).model);
         }

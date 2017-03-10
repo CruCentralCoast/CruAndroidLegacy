@@ -15,24 +15,24 @@ import org.androidcru.crucentralcoast.presentation.views.base.ListFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import rx.Observer;
 
-public class MinistryTeamsFragment extends ListFragment
-{
+public class MinistryTeamsFragment extends ListFragment {
     private MinistryTeamsAdapter ministryTeamsAdapter;
     private Observer<List<MinistryTeam>> observer;
 
+    public static MinistryTeamsFragment newInstance() {
+        return new MinistryTeamsFragment();
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         inflateEmptyView(view, R.layout.empty_with_alert);
 
         super.onViewCreated(view, savedInstanceState);
@@ -52,8 +52,7 @@ public class MinistryTeamsFragment extends ListFragment
     }
 
 
-    public void getMinistryTeamsList()
-    {
+    public void getMinistryTeamsList() {
         helper.swipeRefreshLayout.setRefreshing(true);
         MinistryTeamProvider.requestMinistryTeams(this, observer);
     }

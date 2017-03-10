@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,7 @@ import timber.log.Timber;
  */
 public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    @BindView(R.id.bottom_buttons) public PercentRelativeLayout bottomButtons;
     @BindView(R.id.eventName) public TextView eventName;
     @BindView(R.id.eventDate) public TextView eventDate;
     @BindView(R.id.event_banner) public ImageView eventBanner;
@@ -68,7 +70,7 @@ public class CruEventViewHolder extends RecyclerView.ViewHolder implements View.
     private RecyclerView.Adapter adapter;
     private ExpandableState<CruEvent> state;
     private CruEvent cruEvent;
-    private View rootView;
+    public View rootView;
 
     public boolean addedToCalendar;
     public long localEventId;

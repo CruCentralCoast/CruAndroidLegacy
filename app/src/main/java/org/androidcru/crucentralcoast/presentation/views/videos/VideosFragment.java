@@ -12,8 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
-
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.youtube.Snippet;
 import org.androidcru.crucentralcoast.data.providers.YouTubeVideoProvider;
@@ -26,8 +24,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import rx.Observer;
 
-public class VideosFragment extends ListFragment
-{
+public class VideosFragment extends ListFragment {
     private LinearLayoutManager layoutManager;
     private Observer<List<Snippet>> videoSubscriber;
     private List<Snippet> videos;
@@ -37,8 +34,11 @@ public class VideosFragment extends ListFragment
     private boolean searchEnabled;
     private String searchQuery;
 
-    public VideosFragment()
-    {
+    public static VideosFragment newInstance() {
+        return new VideosFragment();
+    }
+
+    public VideosFragment() {
         curSize = 0;
         videos = new ArrayList<>();
         youtubeProvider = new YouTubeVideoProvider();
@@ -46,8 +46,7 @@ public class VideosFragment extends ListFragment
         // Display text notifying the user if there are no videos to load, else show the videos
         videoSubscriber = createListObserver(searchResults -> setVideos(searchResults),
                 () -> {
-                    if(videos == null || videos.isEmpty())
-                    {
+                    if (videos == null || videos.isEmpty()) {
                         onEmpty(R.layout.empty_videos);
                     }
                 });
@@ -55,8 +54,7 @@ public class VideosFragment extends ListFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
@@ -113,9 +111,8 @@ public class VideosFragment extends ListFragment
         // can be returned by the provider.
         helper.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount)
-            {
-                if(searchEnabled)
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (searchEnabled)
                     youtubeProvider.requestVideoSearch(VideosFragment.this, videoSubscriber, searchQuery);
                 else
                     getCruVideos();
@@ -126,19 +123,16 @@ public class VideosFragment extends ListFragment
         helper.swipeRefreshLayout.setOnRefreshListener(this::forceUpdate);
     }
 
-    private void getCruVideos()
-    {
+    private void getCruVideos() {
         helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
     // Places the videos in the returned response into the Adapter's list of videos
-    public void setVideos (List<Snippet> newVideos)
-    {
+    public void setVideos(List<Snippet> newVideos) {
         // Only set the Adapter once - on the first video request
         // Otherwise, the Adapter resets the scroll progression to the top of the list
-        if(videosAdapter == null)
-        {
+        if (videosAdapter == null) {
             videosAdapter = new VideosAdapter(videos, layoutManager);
             helper.recyclerView.setAdapter(videosAdapter);
         }
@@ -164,23 +158,21 @@ public class VideosFragment extends ListFragment
         youtubeProvider.requestVideoSearch(this, videoSubscriber, query);
     }
 
-    private void forceUpdate()
-    {
+    private void forceUpdate() {
         // Reset the Adapter and video-related isExpanded
         videos.clear();
         curSize = 0;
         videosAdapter = null;
         helper.swipeRefreshLayout.setRefreshing(true);
         youtubeProvider.resetQuery();
-        if(searchEnabled)
+        if (searchEnabled)
             youtubeProvider.requestVideoSearch(this, videoSubscriber, searchQuery);
         else
             youtubeProvider.requestChannelVideos(this, videoSubscriber);
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         // TODO this sets the user back at the top of the list. Should resume at the position of where the user left the activity.
         super.onResume();
         getCruVideos();

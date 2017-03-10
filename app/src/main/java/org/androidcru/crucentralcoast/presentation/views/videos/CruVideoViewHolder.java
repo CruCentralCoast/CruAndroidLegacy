@@ -35,7 +35,7 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.video_description)
     TextView videoDescription;
     @BindView(R.id.video_chev)
-    ImageView videoChev;
+    public ImageView videoChev;
     @BindView(R.id.video_id_and_views)
     TextView videoIdAndViews;
     @BindView(R.id.video_expand_description_layout)
@@ -48,10 +48,6 @@ public class CruVideoViewHolder extends RecyclerView.ViewHolder implements View.
     public RecyclerView.Adapter adapter;
     public RecyclerView.LayoutManager layoutManager;
     public View rootView;
-
-    public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager, Boolean isFeed) {
-        this(rootView, adapter, layoutManager);
-    }
 
     public CruVideoViewHolder(View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager) {
         super(rootView);
