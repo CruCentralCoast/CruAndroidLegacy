@@ -16,8 +16,22 @@ public class FeedProvider
 
     public static <T extends Dateable> Observable.Transformer<T, T> getSortDateable() {
         return tObservable ->
-              tObservable.toSortedList((T d1, T d2) ->
-                    d2.getDate().compareTo(d1.getDate())).flatMap(Observable::from);
+              tObservable
+                      .toSortedList((T d1, T d2) -> {
+                          if (d2.getDate() == null && d1.getDate() == null) {
+                              return 0;
+                          }
+                          else if (d2.getDate() == null) {
+                              return -1;
+                          }
+                          else if (d1.getDate() == null){
+                              return 1;
+                          }
+                          else {
+                              return d2.getDate().compareTo(d1.getDate());
+                          }
+                      })
+                      .flatMap(Observable::from);
     }
 
     public static void getFeedItems(SubscriptionsHolder holder, Observer<List<Dateable>> observer,

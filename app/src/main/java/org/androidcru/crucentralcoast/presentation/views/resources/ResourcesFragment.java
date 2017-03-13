@@ -3,7 +3,6 @@ package org.androidcru.crucentralcoast.presentation.views.resources;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -33,9 +32,9 @@ import timber.log.Timber;
 
 public class ResourcesFragment extends ListFragment {
     private static final int RESOURCE_LIST_SPAN_COUNT = 2;
-    private CustomTabsIntent.Builder customTabsIntentBuilder;
 
     private ArrayList<Resource> resources;
+    private ResourcesAdapter resourceAdapter;
     private Observer<List<Resource>> resourceSubscriber;
     private Observer<List<ResourceTag>> resourceTagSubscriber;
 
@@ -101,6 +100,11 @@ public class ResourcesFragment extends ListFragment {
         resourceSubscriber = createListObserver(R.layout.empty_articles_view, resources -> setResources(resources));
     }
 
+    private void setupResourceAdapter() {
+        resourceAdapter = new ResourcesAdapter(new ArrayList<>());
+        helper.recyclerView.setAdapter(resourceAdapter);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -122,6 +126,7 @@ public class ResourcesFragment extends ListFragment {
 
         helper.swipeRefreshLayout.setOnRefreshListener(() -> forceUpdate(getFilteredTypes(), getFilteredTags()));
         ResourceProvider.getResourceTags(ResourcesFragment.this, resourceTagSubscriber);
+        setupResourceAdapter();
     }
 
     private void forceUpdate(List<Resource.ResourceType> types, List<ResourceTag> tags) {
@@ -138,10 +143,8 @@ public class ResourcesFragment extends ListFragment {
     }
 
     private void setResources(List<Resource> resources) {
-        //Adapter for RecyclerView
-        ResourcesAdapter resourcesAdapter = new ResourcesAdapter(new ArrayList<>(resources), customTabsIntentBuilder);
-        helper.recyclerView.setAdapter(resourcesAdapter);
         this.resources = new ArrayList<>(resources);
+        resourceAdapter.refreshResources(this.resources);
     }
 
     //Display dialog for filtering resources by tag

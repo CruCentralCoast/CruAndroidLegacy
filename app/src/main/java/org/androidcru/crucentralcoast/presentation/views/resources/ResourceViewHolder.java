@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.resource_icon) ImageView typeIcon;
     @BindView(R.id.more_action) TextView moreAction;
     @BindView(R.id.author) TextView author;
+    @BindView(R.id.description) TextView description;
+    @BindView(R.id.resource_image) ImageView resourceImage;
 
     private Resource model;
 
@@ -48,6 +51,10 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
         typeIcon.setImageResource(getResourceIconFromType(model.resourceType));
         moreAction.setText(getActionTextFromType(model.resourceType));
         author.setText(model.author);
+        author.setVisibility(TextUtils.isEmpty(model.author) ? View.GONE : View.VISIBLE);
+        description.setText(model.description);
+        description.setVisibility(TextUtils.isEmpty(model.description) ? View.GONE : View.VISIBLE);
+        ViewUtil.setSource(resourceImage, model.imageLink, 0, null, null, ViewUtil.SCALE_TYPE.FIT);
     }
 
     private int getResourceIconFromType(Resource.ResourceType type)

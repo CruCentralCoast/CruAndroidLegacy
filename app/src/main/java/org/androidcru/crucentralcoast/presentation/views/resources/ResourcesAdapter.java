@@ -1,7 +1,6 @@
 package org.androidcru.crucentralcoast.presentation.views.resources;
 
 
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,16 +9,15 @@ import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Resource;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResourcesAdapter extends RecyclerView.Adapter<ResourceViewHolder>
 {
     private ArrayList<Resource> resources;
-    private CustomTabsIntent.Builder customTabsIntentBuilder;
 
-    public ResourcesAdapter(ArrayList<Resource> resources, CustomTabsIntent.Builder customTabsIntentBuilder)
+    public ResourcesAdapter(ArrayList<Resource> resources)
     {
-        this.resources = resources;
-        this.customTabsIntentBuilder = customTabsIntentBuilder;
+        this.resources = new ArrayList<>(resources);
     }
 
     @Override
@@ -38,5 +36,11 @@ public class ResourcesAdapter extends RecyclerView.Adapter<ResourceViewHolder>
     public int getItemCount()
     {
         return resources.size();
+    }
+
+    public void refreshResources(List<Resource> resources) {
+        this.resources.clear();
+        this.resources.addAll(resources);
+        notifyDataSetChanged();
     }
 }
