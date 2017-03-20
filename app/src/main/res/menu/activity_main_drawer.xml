@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single" android:id="@+id/main_options">
+        <!--<item-->
+            <!--android:id="@+id/nav_feed"-->
+            <!--android:icon="@drawable/ic_view_dashboard_grey600"-->
+            <!--android:title="@string/nav_feed"/>-->
         <item
-            android:id="@+id/nav_feed"
-            android:icon="@drawable/ic_view_dashboard_grey600"
-            android:title="@string/nav_feed"/>
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_grey_600_24dp"
+            android:title="@string/nav_home"/>
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_action_event_grey600"

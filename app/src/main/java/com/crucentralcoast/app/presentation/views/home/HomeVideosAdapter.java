@@ -1,4 +1,4 @@
-package com.crucentralcoast.app.presentation.views.hub;
+package com.crucentralcoast.app.presentation.views.home;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,11 +16,11 @@ import java.util.List;
  * @author Tyler Wong
  */
 
-public class HubVideosAdapter extends VideosAdapter {
+public class HomeVideosAdapter extends VideosAdapter {
 
     private Context mContext;
 
-    public HubVideosAdapter(Context context, List<Snippet> videos, LinearLayoutManager layoutManager) {
+    public HomeVideosAdapter(Context context, List<Snippet> videos, LinearLayoutManager layoutManager) {
         super(videos, layoutManager);
         mContext = context;
     }

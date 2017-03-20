@@ -1,4 +1,4 @@
-package com.crucentralcoast.app.presentation.views.hub;
+package com.crucentralcoast.app.presentation.views.home;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
@@ -8,12 +8,10 @@ import android.view.View;
  * @author Tyler Wong
  */
 
-public class HubItemDecoration extends RecyclerView.ItemDecoration {
+public class HomeItemDecoration extends RecyclerView.ItemDecoration {
     private final int mSpace;
 
-    private static final int NUM_ITEMS = 5;
-
-    public HubItemDecoration(int space) {
+    public HomeItemDecoration(int space) {
         this.mSpace = space;
     }
 

@@ -120,7 +120,7 @@ public interface CruApiService
     @POST("/api/signin")
     Observable<LoginResponse> signin(@Field("username") String user,
                                      @Field("password") String password,
-                                     @Field("gcmId") String gcmId);
+                                     @Field("fcmId") String gcmId);
 
     @GET("/api/signout")
     Observable<LoginResponse> signout();

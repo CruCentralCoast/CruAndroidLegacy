@@ -18,8 +18,7 @@ import com.crucentralcoast.app.presentation.providers.FacebookProvider;
 import com.crucentralcoast.app.presentation.views.base.BaseAppCompatActivity;
 import com.crucentralcoast.app.presentation.views.communitygroups.CommunityGroupsFragment;
 import com.crucentralcoast.app.presentation.views.events.EventsFragment;
-import com.crucentralcoast.app.presentation.views.feed.FeedFragment;
-import com.crucentralcoast.app.presentation.views.hub.HubFragment;
+import com.crucentralcoast.app.presentation.views.home.HomeFragment;
 import com.crucentralcoast.app.presentation.views.ministryteams.MinistryTeamsFragment;
 import com.crucentralcoast.app.presentation.views.notifications.NotificationFragment;
 import com.crucentralcoast.app.presentation.views.resources.ResourcesFragment;
@@ -66,7 +65,7 @@ public class MainActivity extends BaseAppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
-            switchToFeed();
+            switchToHome();
         }
 
         checkPlayServicesCode();
@@ -97,7 +96,7 @@ public class MainActivity extends BaseAppCompatActivity
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
         else {
-            super.onBackPressed();
+            // Don't close app
         }
     }
 
@@ -110,11 +109,11 @@ public class MainActivity extends BaseAppCompatActivity
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
         switch (id) {
-            case R.id.nav_feed:
+            case R.id.nav_home:
                 // mToolbar.setTitle(R.string.nav_feed);
                 // transaction.replace(R.id.content, new FeedFragment()).commit();
-                mToolbar.setTitle(R.string.nav_hub);
-                transaction.replace(R.id.content, HubFragment.newInstance()).commit();
+                mToolbar.setTitle(R.string.nav_home);
+                transaction.replace(R.id.content, HomeFragment.newInstance()).commit();
                 break;
             case R.id.nav_events:
                 mToolbar.setTitle(R.string.nav_events);
@@ -158,11 +157,11 @@ public class MainActivity extends BaseAppCompatActivity
         return displayAsSelectedItem;
     }
 
-    public void switchToMyRides(Bundle b) {
+    public void switchToMyRides(Bundle bundle) {
         mNavigationView.setCheckedItem(R.id.nav_my_rides);
         mToolbar.setTitle(R.string.nav_my_rides);
         MyRidesFragment fragment = new MyRidesFragment();
-        fragment.setArguments(b);
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
     }
 
@@ -170,19 +169,25 @@ public class MainActivity extends BaseAppCompatActivity
     public void switchToEvents() {
         mNavigationView.setCheckedItem(R.id.nav_events);
         mToolbar.setTitle(R.string.nav_events);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new EventsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, EventsFragment.newInstance()).commit();
     }
 
     public void switchToVideos() {
         mNavigationView.setCheckedItem(R.id.nav_videos);
         mToolbar.setTitle(R.string.nav_videos);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new VideosFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, VideosFragment.newInstance()).commit();
     }
 
-    public void switchToFeed() {
-        mNavigationView.setCheckedItem(R.id.nav_feed);
-        mToolbar.setTitle(R.string.nav_feed);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
+//    public void switchToFeed() {
+//        mNavigationView.setCheckedItem(R.id.nav_feed);
+//        mToolbar.setTitle(R.string.nav_feed);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
+//    }
+
+    public void switchToHome() {
+        mNavigationView.setCheckedItem(R.id.nav_home);
+        mToolbar.setTitle(R.string.nav_home);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, HomeFragment.newInstance()).commit();
     }
 
     @Override

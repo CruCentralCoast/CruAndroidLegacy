@@ -1,8 +1,9 @@
-package com.crucentralcoast.app.presentation.views.hub;
+package com.crucentralcoast.app.presentation.views.home;
 
 import android.support.annotation.NonNull;
 
 import com.crucentralcoast.app.data.providers.EventProvider;
+import com.crucentralcoast.app.data.providers.RideProvider;
 import com.crucentralcoast.app.data.providers.YouTubeVideoProvider;
 
 import rx.Subscription;
@@ -14,10 +15,10 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 
-public class HubPresenter implements HubContract.Presenter {
+public class HomePresenter implements HomeContract.Presenter {
 
     @NonNull
-    private final HubContract.View mHubView;
+    private final HomeContract.View mHomeView;
     @NonNull
     private CompositeSubscription mSubscriptions;
     @NonNull
@@ -25,8 +26,8 @@ public class HubPresenter implements HubContract.Presenter {
 
     private static final int NUM_ITEMS = 5;
 
-    public HubPresenter(@NonNull HubContract.View hubView) {
-        mHubView = hubView;
+    public HomePresenter(@NonNull HomeContract.View hubView) {
+        mHomeView = hubView;
         mYouTubeProvider = new YouTubeVideoProvider();
         mSubscriptions = new CompositeSubscription();
     }
@@ -36,7 +37,7 @@ public class HubPresenter implements HubContract.Presenter {
         Subscription subscription = EventProvider.requestUsersEvents()
                 .map(events -> events.subList(0, NUM_ITEMS))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mHubView::showEvents, Timber::e);
+                .subscribe(mHomeView::showEvents, Timber::e);
         mSubscriptions.add(subscription);
     }
 
@@ -45,13 +46,22 @@ public class HubPresenter implements HubContract.Presenter {
         Subscription subscription = mYouTubeProvider.requestChannelVideos()
                 .map(videos -> videos.subList(0, NUM_ITEMS))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mHubView::showVideos, Timber::e);
+                .subscribe(mHomeView::showVideos, Timber::e);
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void loadRides() {
+        Subscription subscription = RideProvider.requestAllRides()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mHomeView::showRides, Timber::e);
         mSubscriptions.add(subscription);
     }
 
     @Override
     public void subscribe() {
         loadEvents();
+        loadRides();
         loadVideos();
     }
 

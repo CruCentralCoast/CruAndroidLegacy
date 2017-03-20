@@ -33,8 +33,7 @@ public class MyRidesPassengerVM {
         initAlertDialog();
     }
 
-    public String getDateTime()
-    {
+    public String getDateTime() {
         return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
                 + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
     }
@@ -61,7 +60,7 @@ public class MyRidesPassengerVM {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (Passenger p : ride.passengers) {
-                            if (p.gcmId.equals(SharedPreferencesUtil.getFCMID())) {
+                            if (p.fcmId.equals(SharedPreferencesUtil.getFCMID())) {
                                 RideProvider.dropPassengerFromRide(parent, Observers.create(v -> {}, e -> {}, () -> parent.forceUpdate()), ride.id, p.id);
                             }
                         }

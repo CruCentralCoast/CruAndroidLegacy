@@ -70,7 +70,7 @@ public final class RideProvider
         Subscription s = requestRides()
                 .compose(RxLoggingUtil.log("RIDES"))
                 .flatMap(Observable::from)
-                .filter(ride -> ride.gcmID.equals(gcmId))
+                .filter(ride -> ride.fcmId.equals(gcmId))
                 .compose(RxComposeUtil.toListOrEmpty())
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
@@ -86,7 +86,7 @@ public final class RideProvider
                     boolean status = false;
                     for (Passenger p : ride.passengers)
                     {
-                        if (p.gcmId != null && p.gcmId.equals(SharedPreferencesUtil.getFCMID()))
+                        if (p.fcmId != null && p.fcmId.equals(SharedPreferencesUtil.getFCMID()))
                         {
                             status = true;
                         }
@@ -98,8 +98,7 @@ public final class RideProvider
         holder.addSubscription(s);
     }
 
-    protected static Observable<List<Ride>> requestRides()
-    {
+    public static Observable<List<Ride>> requestRides() {
         return mCruService.getRides()
                 .flatMap(Observable::from)
                 .flatMap(ride -> PassengerProvider.getPassengers(ride.passengerIds)
@@ -121,7 +120,25 @@ public final class RideProvider
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 
-
+    public static Observable<List<Ride>> requestAllRides() {
+        return requestRides()
+                .compose(RxComposeUtil.ui())
+                .flatMap(Observable::from)
+                .filter(ride -> {
+                    boolean status = false;
+                    String fcmId = SharedPreferencesUtil.getFCMID();
+                    for (Passenger pass : ride.passengers) {
+                        if (pass.fcmId != null && pass.fcmId.equals(fcmId)) {
+                            status = true;
+                        }
+                    }
+                    if (ride.fcmId.equals(fcmId)) {
+                        status = true;
+                    }
+                    return status;
+                })
+                .compose(RxComposeUtil.toListOrEmpty());
+    }
 
     public static void searchRides(SubscriptionsHolder holder, Observer<List<Ride>> observer, Query query, double[] latlng, ZonedDateTime dateTime)
     {

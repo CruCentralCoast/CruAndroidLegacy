@@ -16,18 +16,18 @@ public final class Passenger
 
     @SerializedName(sName) public String name;
     @SerializedName(sPhone) public String phone;
-    @SerializedName(sGcmId) public String gcmId;
+    @SerializedName(sGcmId) public String fcmId;
     @SerializedName(sDirection) public Ride.Direction direction;
     @SerializedName(sId) public String id;
 
     @ParcelConstructor
     public Passenger(String name, String phone,
-                     String gcmId,
+                     String fcmId,
                      Ride.Direction direction)
     {
         this.name = name;
         this.phone = phone;
-        this.gcmId = gcmId;
+        this.fcmId = fcmId;
         this.direction = direction;
     }
 }

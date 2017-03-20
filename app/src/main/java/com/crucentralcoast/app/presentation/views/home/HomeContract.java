@@ -1,9 +1,10 @@
-package com.crucentralcoast.app.presentation.views.hub;
+package com.crucentralcoast.app.presentation.views.home;
 
 import com.crucentralcoast.app.data.models.CruEvent;
+import com.crucentralcoast.app.data.models.Ride;
+import com.crucentralcoast.app.data.models.youtube.Snippet;
 import com.crucentralcoast.app.presentation.views.BasePresenter;
 import com.crucentralcoast.app.presentation.views.BaseView;
-import com.crucentralcoast.app.data.models.youtube.Snippet;
 
 import java.util.List;
 
@@ -11,9 +12,11 @@ import java.util.List;
  * @author Tyler Wong
  */
 
-public class HubContract {
+public class HomeContract {
     interface View extends BaseView<Presenter> {
         void showEvents(List<CruEvent> events);
+
+        void showRides(List<Ride> rides);
 
         void showVideos(List<Snippet> videos);
     }
@@ -22,5 +25,7 @@ public class HubContract {
         void loadEvents();
 
         void loadVideos();
+
+        void loadRides();
     }
 }

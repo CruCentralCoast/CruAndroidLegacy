@@ -1,4 +1,4 @@
-package com.crucentralcoast.app.presentation.views.hub;
+package com.crucentralcoast.app.presentation.views.home;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,11 +16,11 @@ import java.util.List;
  * @author Tyler Wong
  */
 
-public class HubEventsAdapter extends EventsAdapter {
+public class HomeEventsAdapter extends EventsAdapter {
 
     private Context mContext;
 
-    public HubEventsAdapter(Context context, List<CruEvent> cruEvents, LinearLayoutManager layoutManager) {
+    public HomeEventsAdapter(Context context, List<CruEvent> cruEvents, LinearLayoutManager layoutManager) {
         super(cruEvents, layoutManager);
         mContext = context;
     }

@@ -35,7 +35,7 @@ public final class Ride
     @SerializedName(sPassengers) public ArrayList<String> passengerIds;
     @SerializedName(sRadius) public double radius;
     @SerializedName(sDirection) public Direction direction;
-    @SerializedName(sGcmId) public String gcmID;
+    @SerializedName(sGcmId) public String fcmId;
     @SerializedName(sId) public String id;
     @SerializedName(sSeats) public int carCapacity;
 
@@ -46,7 +46,7 @@ public final class Ride
     @ParcelConstructor
     public Ride(String driverName, String driverNumber, Gender gender, String eventId,
                 ZonedDateTime time, Location location, double radius, Direction direction,
-                String gcmID, int carCapacity)
+                String fcmId, int carCapacity)
     {
         this.driverName = driverName;
         this.driverNumber = driverNumber;
@@ -56,7 +56,7 @@ public final class Ride
         this.location = location;
         this.radius = radius;
         this.direction = direction;
-        this.gcmID = gcmID;
+        this.fcmId = fcmId;
         this.carCapacity = carCapacity;
     }
 
