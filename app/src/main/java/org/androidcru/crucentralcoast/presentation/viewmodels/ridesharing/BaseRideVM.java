@@ -1,6 +1,8 @@
 package org.androidcru.crucentralcoast.presentation.viewmodels.ridesharing;
 
+import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -9,12 +11,10 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
 import org.androidcru.crucentralcoast.AppConstants;
-
 import org.androidcru.crucentralcoast.R;
 import org.androidcru.crucentralcoast.data.models.Ride;
 import org.androidcru.crucentralcoast.presentation.viewmodels.BaseVM;
@@ -69,18 +69,16 @@ public abstract class BaseRideVM extends BaseVM
 
     protected abstract void placeSelected(LatLng precisePlace, String placeAddress);
 
-    private DatePickerDialog getDateDialog(GregorianCalendar c)
+    private DatePickerDialog getDateDialog(Context context, GregorianCalendar c,
+                                           DatePickerDialog.OnDateSetListener listener)
     {
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
-                null,
-                c.get(Calendar.YEAR),
-                c.get(Calendar.MONTH),
-                c.get(Calendar.DAY_OF_MONTH)
-        );
-        dpd.vibrate(false);
-        dpd.setMinDate(new GregorianCalendar(c.get(Calendar.YEAR) - 1, c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
-        dpd.setMaxDate(eventEndDate);
-        return dpd;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, listener,
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        Calendar minDate = new GregorianCalendar(c.get(Calendar.YEAR) - 1,
+                c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
+        datePickerDialog.getDatePicker().setMaxDate(eventEndDate.getTimeInMillis());
+        return datePickerDialog;
     }
 
     private TimePickerDialog getTimeDialog(GregorianCalendar c)
@@ -91,7 +89,6 @@ public abstract class BaseRideVM extends BaseVM
                 c.get(Calendar.MINUTE),
                 false
         );
-        tpd.vibrate(false);
         tpd.setSelectableTimes(timepoints);
         return tpd;
     }
@@ -99,19 +96,20 @@ public abstract class BaseRideVM extends BaseVM
     protected void onEventDateClicked(View v, GregorianCalendar gc)
     {
         DatePickerDialog dpd;
-        //use Ride's start time if editing a Ride
-        if (rideSetDate == null)
-            dpd = getDateDialog(gc);
-        else
-            dpd = getDateDialog(new GregorianCalendar(rideSetDate.getYear(), rideSetDate.getMonthValue() - 1, rideSetDate.getDayOfMonth()));
         //sets the text of the DatePicker EditText
-        dpd.setOnDateSetListener((view, year, monthOfYear, dayOfMonth) -> {
+        DatePickerDialog.OnDateSetListener listener = (view, year, monthOfYear, dayOfMonth) -> {
             rideSetDate = LocalDate.of(year, Month.values()[monthOfYear], dayOfMonth);
             String yyyymmdd = rideSetDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
             ((EditText) v).setText(convertToddMMyyyy(yyyymmdd));
-        });
-
-        dpd.show(fm, AppConstants.SUPER_SPECIAL_STRING);
+        };
+        //use Ride's start time if editing a Ride
+        if (rideSetDate == null)
+            dpd = getDateDialog(v.getContext(), gc, listener);
+        else
+            dpd = getDateDialog(v.getContext(),
+                    new GregorianCalendar(rideSetDate.getYear(), rideSetDate.getMonthValue() - 1,
+                            rideSetDate.getDayOfMonth()), listener);
+        dpd.show();
     }
 
     protected void onEventTimeClicked(View v, GregorianCalendar gc)
