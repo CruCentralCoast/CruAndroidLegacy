@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <org.androidcru.crucentralcoast.presentation.customviews.NonSwipeableViewPager
+        <com.crucentralcoast.app.presentation.customviews.NonSwipeableViewPager
             android:id="@+id/form_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
