@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:background="@null">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@null">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_marginStart="16dp"
                 android:text="@string/nav_events"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/more_events_button"
@@ -38,7 +38,7 @@
                 android:layout_centerVertical="true"
                 android:background="@null"
                 android:text="@string/more"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary" />
         </RelativeLayout>
 
         <FrameLayout
@@ -51,14 +51,14 @@
                 android:id="@+id/events_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/event_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </FrameLayout>
 
         <RelativeLayout
@@ -78,7 +78,7 @@
                 android:layout_marginStart="16dp"
                 android:text="@string/nav_my_rides"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/more_rides_button"
@@ -89,7 +89,7 @@
                 android:layout_centerVertical="true"
                 android:background="@null"
                 android:text="@string/more"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary" />
         </RelativeLayout>
 
         <FrameLayout
@@ -98,18 +98,28 @@
             android:background="@null"
             android:minHeight="250dp">
 
+            <TextView
+                android:id="@+id/no_rides_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_user_rides"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:visibility="gone" />
+
             <ProgressBar
                 android:id="@+id/rides_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ride_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </FrameLayout>
 
         <RelativeLayout
@@ -129,7 +139,7 @@
                 android:layout_marginStart="16dp"
                 android:text="@string/nav_videos"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/more_videos_button"
@@ -140,7 +150,7 @@
                 android:layout_centerVertical="true"
                 android:background="@null"
                 android:text="@string/more"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary" />
         </RelativeLayout>
 
         <FrameLayout
@@ -153,14 +163,14 @@
                 android:id="@+id/videos_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/video_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -18,6 +18,8 @@ public class HomeContract {
 
         void showRides(List<Ride> rides);
 
+        void showRidesCompleted();
+
         void showVideos(List<Snippet> videos);
     }
 

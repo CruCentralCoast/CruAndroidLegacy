@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.presentation.util.ViewUtil;
 import com.crucentralcoast.app.presentation.views.base.BaseAppCompatActivity;
-import com.crucentralcoast.app.presentation.views.subscriptions.SubscriptionActivity;
+import com.crucentralcoast.app.presentation.views.onboarding.OnboardingActivity;
 import com.crucentralcoast.app.util.SharedPreferencesUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -42,7 +42,7 @@ public class SplashActivity extends BaseAppCompatActivity
         if (SharedPreferencesUtil.isFirstLaunch())
             intent.setClass(this, MainActivity.class);
         else
-            intent.setClass(this, SubscriptionActivity.class);
+            intent.setClass(this, OnboardingActivity.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

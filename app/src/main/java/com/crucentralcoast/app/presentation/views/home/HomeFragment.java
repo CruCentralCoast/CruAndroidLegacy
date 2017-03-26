@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crucentralcoast.app.AppConstants;
 import com.crucentralcoast.app.R;
@@ -38,6 +39,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     RecyclerView mRideList;
     @BindView(R.id.rides_progress)
     ProgressBar mRidesProgress;
+    @BindView(R.id.no_rides_view)
+    TextView mNoRidesView;
     @BindView(R.id.video_list)
     RecyclerView mVideoList;
     @BindView(R.id.videos_progress)
@@ -135,6 +138,15 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         mVideosAdapter.setVideos(videos);
         mVideoList.setVisibility(View.VISIBLE);
         mVideosProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showRidesCompleted() {
+        if (mRidesAdapter.getRides() == null || mRidesAdapter.getRides().isEmpty()) {
+            mNoRidesView.setVisibility(View.VISIBLE);
+        }
+        mRideList.setVisibility(View.VISIBLE);
+        mRidesProgress.setVisibility(View.GONE);
     }
 
     @Override

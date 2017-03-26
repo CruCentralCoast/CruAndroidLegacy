@@ -45,6 +45,7 @@
     <string name="close">Close</string>
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>
+    <string name="skip">Skip</string>
     <string name="driver">Driver</string>
     <string name="passenger">Passenger</string>
     <string name="edit">Edit</string>
@@ -159,6 +160,7 @@
     <string name="video_search_hint">Search Cru Cal Poly SLO</string>
     <string name="nav_feed">Feed</string>
     <string name="no_rides">No rides match your criteria!</string>
+    <string name="no_user_rides">No rides!</string>
     <string name="no_feed_items">No feed items at this time!</string>
 
     <string-array name="myrides_titles">
@@ -193,4 +195,13 @@
     <string name="read">Read</string>
     <string name="watch">Watch</string>
     <string name="listen">Listen</string>
+
+    <string name="onboarding_shared_transition">onboarding_transition</string>
+
+    <!--Onboarding info-->
+    <string name="cru_cc_desc">A family of ministries giving every student and faculty on California\'s Central Coast the opportunity to hear the Good News of Jesus Christ</string>
+    <string name="get_connected_title">Get connected</string>
+    <string name="get_connected_desc">Join a local ministry team and get plugged into a community group</string>
+    <string name="find_a_ride_title">Find a ride</string>
+    <string name="find_a_ride_desc">Sign up to give and receive rides to upcoming events</string>
 </resources>

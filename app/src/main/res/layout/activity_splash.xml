@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         app:layout_marginTopPercent="25%"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:transitionName="@string/onboarding_shared_transition">
 
         <ImageView
             android:id="@+id/logo"

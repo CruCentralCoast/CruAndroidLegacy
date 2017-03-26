@@ -83,6 +83,7 @@ public class SubscriptionsFragment extends ListFragment
 
             if (!SharedPreferencesUtil.isFirstLaunch())
             {
+                SharedPreferencesUtil.writeFirstLaunch(true);
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

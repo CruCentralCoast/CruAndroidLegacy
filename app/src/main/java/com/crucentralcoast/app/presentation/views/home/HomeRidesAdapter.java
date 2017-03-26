@@ -36,6 +36,10 @@ public class HomeRidesAdapter extends RecyclerView.Adapter<HomeRidesViewHolder> 
         return mRides.size();
     }
 
+    public List<Ride> getRides() {
+        return mRides;
+    }
+
     public void setRides(List<Ride> rides) {
         mRides = rides;
         notifyDataSetChanged();
