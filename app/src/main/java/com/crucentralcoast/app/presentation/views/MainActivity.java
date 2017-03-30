@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -56,7 +55,6 @@ public class MainActivity extends BaseAppCompatActivity
     @BindView(R.id.banner_image)
     ImageView mBannerImage;
 
-    private ActionBar mActionBar;
     private static Activity activity;
 
     private static final String BANNER_IMAGE = "https://s3-us-west-1.amazonaws.com/" +
@@ -68,7 +66,6 @@ public class MainActivity extends BaseAppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
 
         Picasso.with(getContext())
                 .load(BANNER_IMAGE)
@@ -133,8 +130,6 @@ public class MainActivity extends BaseAppCompatActivity
 
         switch (id) {
             case R.id.nav_home:
-                // mToolbar.setTitle(R.string.nav_feed);
-                // transaction.replace(R.id.content, new FeedFragment()).commit();
                 mCollapsingToolbar.setTitle(getString(R.string.nav_home));
                 transaction.replace(R.id.content, HomeFragment.newInstance()).commit();
                 isNavHome = true;
@@ -186,14 +181,24 @@ public class MainActivity extends BaseAppCompatActivity
         }
 
         if (isNavHome) {
+            unlockCollapsingToolbar();
             mAppBarLayout.setExpanded(true, true);
         }
         else {
             mAppBarLayout.setExpanded(false, true);
+            lockCollapsingToolbar();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return displayAsSelectedItem;
+    }
+
+    private void lockCollapsingToolbar() {
+
+    }
+
+    private void unlockCollapsingToolbar() {
+
     }
 
     public void switchToMyRides(Bundle bundle) {
@@ -203,6 +208,7 @@ public class MainActivity extends BaseAppCompatActivity
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
         mAppBarLayout.setExpanded(false, true);
+        lockCollapsingToolbar();
     }
 
     //REVIEW this should be used in onNavigationItemSelected
@@ -211,6 +217,7 @@ public class MainActivity extends BaseAppCompatActivity
         mCollapsingToolbar.setTitle(getString(R.string.nav_events));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, EventsFragment.newInstance()).commit();
         mAppBarLayout.setExpanded(false, true);
+        lockCollapsingToolbar();
     }
 
     public void switchToVideos() {
@@ -218,18 +225,14 @@ public class MainActivity extends BaseAppCompatActivity
         mCollapsingToolbar.setTitle(getString(R.string.nav_videos));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, VideosFragment.newInstance()).commit();
         mAppBarLayout.setExpanded(false, true);
+        lockCollapsingToolbar();
     }
-
-//    public void switchToFeed() {
-//        mNavigationView.setCheckedItem(R.id.nav_feed);
-//        mToolbar.setTitle(R.string.nav_feed);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FeedFragment()).commit();
-//    }
 
     public void switchToHome() {
         mNavigationView.setCheckedItem(R.id.nav_home);
         mCollapsingToolbar.setTitle(getString(R.string.nav_home));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, HomeFragment.newInstance()).commit();
+        unlockCollapsingToolbar();
         mAppBarLayout.setExpanded(true, true);
     }
 
