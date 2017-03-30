@@ -2,11 +2,13 @@ package com.crucentralcoast.app.presentation.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -55,6 +57,8 @@ public class MainActivity extends BaseAppCompatActivity
     @BindView(R.id.banner_image)
     ImageView mBannerImage;
 
+    private boolean isNavHome = true;
+
     private static Activity activity;
 
     private static final String BANNER_IMAGE = "https://s3-us-west-1.amazonaws.com/" +
@@ -69,6 +73,7 @@ public class MainActivity extends BaseAppCompatActivity
 
         Picasso.with(getContext())
                 .load(BANNER_IMAGE)
+                .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary)))
                 .fit()
                 .centerCrop()
                 .into(mBannerImage);
@@ -124,7 +129,6 @@ public class MainActivity extends BaseAppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         boolean displayAsSelectedItem = true;
-        boolean isNavHome = false;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
