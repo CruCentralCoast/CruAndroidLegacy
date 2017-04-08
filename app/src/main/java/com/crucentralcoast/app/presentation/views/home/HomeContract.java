@@ -29,5 +29,7 @@ public class HomeContract {
         void loadVideos();
 
         void loadRides();
+
+        void refresh();
     }
 }

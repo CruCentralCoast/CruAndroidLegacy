@@ -54,8 +54,21 @@ public class HomePresenter implements HomeContract.Presenter {
     public void loadRides() {
         Subscription subscription = RideProvider.requestAllRides()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mHomeView::showRides, Timber::e, mHomeView::showRidesCompleted);
+                .subscribe(
+                        mHomeView::showRides,
+                        e -> {
+                            Timber.e(e);
+                            mHomeView.showRidesCompleted();
+                        },
+                        mHomeView::showRidesCompleted
+                );
         mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void refresh() {
+        mSubscriptions.clear();
+        subscribe();
     }
 
     @Override

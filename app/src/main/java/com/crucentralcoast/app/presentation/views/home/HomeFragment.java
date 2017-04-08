@@ -3,6 +3,7 @@ package com.crucentralcoast.app.presentation.views.home;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import butterknife.Unbinder;
  */
 
 public class HomeFragment extends Fragment implements HomeContract.View {
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.event_list)
     RecyclerView mEventList;
     @BindView(R.id.events_progress)
@@ -100,6 +103,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
         mVideoList.addItemDecoration(new HomeItemDecoration(
                 getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
+
+        mRefreshLayout.setOnRefreshListener(mPresenter::refresh);
     }
 
     @OnClick(R.id.more_events_button)
@@ -147,6 +152,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         }
         mRideList.setVisibility(View.VISIBLE);
         mRidesProgress.setVisibility(View.GONE);
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -157,6 +163,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void onResume() {
         super.onResume();
+        mRefreshLayout.setRefreshing(true);
         mPresenter.subscribe();
     }
 
