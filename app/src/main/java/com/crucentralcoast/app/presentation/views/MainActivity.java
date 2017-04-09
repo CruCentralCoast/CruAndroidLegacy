@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -15,7 +16,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.crucentralcoast.app.AppConstants;
 import com.crucentralcoast.app.R;
@@ -48,10 +52,14 @@ public class MainActivity extends BaseAppCompatActivity
     NavigationView mNavigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.toolbar_title)
+    TextView mToolbarTitle;
     @BindView(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
     @BindView(R.id.banner_image)
@@ -61,6 +69,9 @@ public class MainActivity extends BaseAppCompatActivity
 
     private static Activity activity;
 
+    private static final String STATUS_BAR_HEIGHT = "status_bar_height";
+    private static final String DIMEN = "dimen";
+    private static final String ANDROID = "android";
     private static final String BANNER_IMAGE = "https://s3-us-west-1.amazonaws.com/" +
             "static.crucentralcoast.com/images/misc/banner.png";
 
@@ -70,6 +81,10 @@ public class MainActivity extends BaseAppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         Picasso.with(getContext())
                 .load(BANNER_IMAGE)
@@ -119,9 +134,6 @@ public class MainActivity extends BaseAppCompatActivity
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
-        else {
-            // Don't close app
-        }
     }
 
     @Override
@@ -134,47 +146,47 @@ public class MainActivity extends BaseAppCompatActivity
 
         switch (id) {
             case R.id.nav_home:
-                mCollapsingToolbar.setTitle(getString(R.string.nav_home));
+                mToolbarTitle.setText(getString(R.string.nav_home));
                 transaction.replace(R.id.content, HomeFragment.newInstance()).commit();
                 isNavHome = true;
                 break;
             case R.id.nav_events:
-                mCollapsingToolbar.setTitle(getString(R.string.nav_events));
+                mToolbarTitle.setText(getString(R.string.nav_events));
                 transaction.replace(R.id.content, EventsFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_my_rides:
-                mCollapsingToolbar.setTitle(getString(R.string.nav_my_rides));
+                mToolbarTitle.setText(getString(R.string.nav_my_rides));
                 transaction.replace(R.id.content, MyRidesFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_summer_missions:
-                mCollapsingToolbar.setTitle(getString(R.string.nav_summer_missions));
+                mToolbarTitle.setText(getString(R.string.nav_summer_missions));
                 transaction.replace(R.id.content, SummerMissionsFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_community_groups:
-                mCollapsingToolbar.setTitle(getString(R.string.community_groups));
+                mToolbarTitle.setText(getString(R.string.community_groups));
                 transaction.replace(R.id.content, CommunityGroupsFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_ministry_teams:
-                mCollapsingToolbar.setTitle(getString(R.string.ministry_teams));
+                mToolbarTitle.setText(getString(R.string.ministry_teams));
                 transaction.replace(R.id.content, MinistryTeamsFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_resources:
-                mCollapsingToolbar.setTitle(getString(R.string.resources));
+                mToolbarTitle.setText(getString(R.string.resources));
                 transaction.replace(R.id.content, ResourcesFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_videos:
-                mCollapsingToolbar.setTitle(getString(R.string.nav_videos));
+                mToolbarTitle.setText(getString(R.string.nav_videos));
                 transaction.replace(R.id.content, VideosFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_notifications:
-                mCollapsingToolbar.setTitle(getString(R.string.nav_notifications));
+                mToolbarTitle.setText(getString(R.string.nav_notifications));
                 transaction.replace(R.id.content, NotificationFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
@@ -186,11 +198,15 @@ public class MainActivity extends BaseAppCompatActivity
 
         if (isNavHome) {
             unlockCollapsingToolbar();
-            mAppBarLayout.setExpanded(true, true);
+            mAppBarLayout.setExpanded(true, false);
+            ViewGroup.MarginLayoutParams params =(ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+            params.topMargin = 0;
         }
         else {
-            mAppBarLayout.setExpanded(false, true);
             lockCollapsingToolbar();
+            mAppBarLayout.setExpanded(false, false);
+            ViewGroup.MarginLayoutParams params =(ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+            params.topMargin = getStatusBarHeight();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -198,16 +214,18 @@ public class MainActivity extends BaseAppCompatActivity
     }
 
     private void lockCollapsingToolbar() {
-
+        mBannerImage.setVisibility(View.GONE);
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
     private void unlockCollapsingToolbar() {
-
+        mBannerImage.setVisibility(View.VISIBLE);
+        mToolbar.setBackgroundColor(0);
     }
 
     public void switchToMyRides(Bundle bundle) {
         mNavigationView.setCheckedItem(R.id.nav_my_rides);
-        mCollapsingToolbar.setTitle(getString(R.string.nav_my_rides));
+        mToolbarTitle.setText(getString(R.string.nav_my_rides));
         MyRidesFragment fragment = new MyRidesFragment();
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
@@ -218,7 +236,7 @@ public class MainActivity extends BaseAppCompatActivity
     //REVIEW this should be used in onNavigationItemSelected
     public void switchToEvents() {
         mNavigationView.setCheckedItem(R.id.nav_events);
-        mCollapsingToolbar.setTitle(getString(R.string.nav_events));
+        mToolbarTitle.setText(getString(R.string.nav_events));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, EventsFragment.newInstance()).commit();
         mAppBarLayout.setExpanded(false, true);
         lockCollapsingToolbar();
@@ -226,7 +244,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     public void switchToVideos() {
         mNavigationView.setCheckedItem(R.id.nav_videos);
-        mCollapsingToolbar.setTitle(getString(R.string.nav_videos));
+        mToolbarTitle.setText(getString(R.string.nav_videos));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, VideosFragment.newInstance()).commit();
         mAppBarLayout.setExpanded(false, true);
         lockCollapsingToolbar();
@@ -234,7 +252,7 @@ public class MainActivity extends BaseAppCompatActivity
 
     public void switchToHome() {
         mNavigationView.setCheckedItem(R.id.nav_home);
-        mCollapsingToolbar.setTitle(getString(R.string.nav_home));
+        mToolbarTitle.setText(getString(R.string.nav_home));
         getSupportFragmentManager().beginTransaction().replace(R.id.content, HomeFragment.newInstance()).commit();
         unlockCollapsingToolbar();
         mAppBarLayout.setExpanded(true, true);
@@ -260,5 +278,15 @@ public class MainActivity extends BaseAppCompatActivity
 
     public static void loginWithFacebook() {
         LoginManager.getInstance().logInWithPublishPermissions(activity, Collections.singletonList("rsvp_event"));
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier(STATUS_BAR_HEIGHT, DIMEN, ANDROID);
+
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
