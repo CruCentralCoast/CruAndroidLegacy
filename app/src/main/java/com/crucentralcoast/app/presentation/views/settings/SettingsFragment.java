@@ -63,13 +63,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         addPreferencesFromResource(R.xml.fragment_settings);
 
         //subscription button listener
-        subscriptionButton = (Preference) getPreferenceManager().findPreference(getString(R.string.subscription_button_key));
-        subscriptionButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                getActivity().startActivity(new Intent(SettingsFragment.this.getContext(), SubscriptionActivity.class));
-                return true;
-            }
+        subscriptionButton = getPreferenceManager().findPreference(getString(R.string.subscription_button_key));
+        subscriptionButton.setOnPreferenceClickListener(preference -> {
+            getActivity().startActivity(new Intent(SettingsFragment.this.getContext(), SubscriptionActivity.class));
+            return true;
         });
 
         //login button

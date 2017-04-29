@@ -9,7 +9,7 @@ import org.parceler.ParcelConstructor;
 public class LoginResponse
 {
     public static final String sSuccess = "success";
-    public static final String sLeaderAPIKey = "LeaderAPIKey";
+    public static final String sLeaderAPIKey = "leaderAPIKey";
 
     @SerializedName(sSuccess) public boolean success;
     @SerializedName(sLeaderAPIKey) public String leaderAPIKey;
