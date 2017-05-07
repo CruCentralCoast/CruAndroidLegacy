@@ -7,28 +7,18 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import com.crucentralcoast.app.CruApplication;
 import com.crucentralcoast.app.R;
-import com.crucentralcoast.app.data.models.CruUser;
-import com.crucentralcoast.app.data.models.Notification;
-import com.crucentralcoast.app.data.providers.NotificationProvider;
 import com.crucentralcoast.app.presentation.views.MainActivity;
 import com.crucentralcoast.app.util.SharedPreferencesUtil;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import org.threeten.bp.ZonedDateTime;
-
 import java.util.Map;
 
-import rx.observers.Observers;
+public class FcmListenerService extends FirebaseMessagingService {
 
-
-public class MyGcmListenerService extends FirebaseMessagingService {
-
-    private static final String TAG = "MyGcmListenerService";
+    private static final String TAG = "FcmListenerService";
 
     /**
      * Called when message is received.
@@ -38,36 +28,35 @@ public class MyGcmListenerService extends FirebaseMessagingService {
     // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        String message;
-        String title;
-        String from = remoteMessage.getFrom();
-        CruUser payload = null;
         Map<String, String> data = remoteMessage.getData();
+        String title = "";
+        String message = "";
 
-        if (data.containsKey("payload")) {
-            message = data.get("body");
+        if (data.size() > 0) {
+//            if (data.containsKey("payload")) {
+//                message = data.get("body");
+//                title = data.get("title");
+//                payload = CruApplication.gson.fromJson(data.get("payload"), CruUser.class);
+//            }
+//            else {
+//                message = data.get("body");
+//                title = data.get("title");
+//            }
             title = data.get("title");
-            payload = CruApplication.gson.fromJson(data.get("payload"), CruUser.class);
-        }
-        else {
-            message = data.get("body");
-            title = data.get("title");
+            message = data.get("message");
         }
 
-
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
-        if (payload == null)
-            NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now()));
-        else
-            NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now(), payload));
-
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        }
-        else {
-            // normal downstream message.
-        }
+//        if (payload == null)
+//            NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now()));
+//        else
+//            NotificationProvider.putNotification(Observers.empty(), new Notification(message, ZonedDateTime.now(), payload));
+//
+//        if (from.startsWith("/topics/")) {
+//            // message received from some topic.
+//        }
+//        else {
+//            // normal downstream message.
+//        }
 
         // [START_EXCLUDE]
         /**

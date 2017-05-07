@@ -160,7 +160,9 @@ public final class RideProvider
                 .compose(RxComposeUtil.network());
     }
 
-
+    public static Observable<List<Passenger>> getAvailablePassengers(String eventId) {
+        return mCruService.getAvailablePassengers(eventId);
+    }
 
     public static void createRide(Observer<Ride> observer, Ride ride)
     {

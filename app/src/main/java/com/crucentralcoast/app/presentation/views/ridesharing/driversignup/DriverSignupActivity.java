@@ -1,5 +1,6 @@
 package com.crucentralcoast.app.presentation.views.ridesharing.driversignup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -52,7 +53,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_driver_form);
         //get event from bundle
         Bundle bundle = getIntent().getExtras();
-        event = (CruEvent) Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
+        event = Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
         if (bundle == null || event == null) {
             Timber.e("DriverSignupActivity requires that you pass an event");
             Timber.e("Finishing activity...");
@@ -121,24 +122,32 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
         //new ride
         if (r == null)
             driverSignupVM = new DriverSignupVM(this, getFragmentManager(), event.id, event.startDate, event.endDate);
-        //editing an existing ride
+            //editing an existing ride
         else
             driverSignupVM = new DriverSignupEditingVM(this, getFragmentManager(), r, event.endDate);
         mapFragment.getMapAsync(driverSignupVM.onMapReady());
         setupPlacesAutocomplete();
     }
 
-    private void setupFab()
-    {
+    private void setupFab() {
         fab.setImageDrawable(DrawableUtil.getTintedDrawable(this, R.drawable.ic_check_grey600, android.R.color.white));
         fab.setOnClickListener(v -> {
             String number = convString(driverSignupVM.phoneField.getText().toString());
-            if (driverSignupVM.validator.validate() && autocompleteFragment.validate())
-                if (SharedPreferencesUtil.getAuthorizedDriver(number))
+            if (driverSignupVM.validator.validate() && autocompleteFragment.validate()) {
+                if (SharedPreferencesUtil.getAuthorizedDriver(number)) {
                     sendRide();
-                else
+                }
+                else {
                     UserProvider.requestCruUser(this, userObserver, number);
+                }
+            }
         });
+    }
+
+    public void goToAddPassenger() {
+        Intent addPassengerIntent = new Intent(this, AddPassengersActivity.class);
+        addPassengerIntent.putExtra(CruEvent.sId, event.id);
+        startActivity(addPassengerIntent);
     }
 
     private void sendRide() {
@@ -151,6 +160,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
 
         setResult(RESULT_OK);
         finish();
+        goToAddPassenger();
     }
 
     //remove anything that isn't a digit
@@ -173,8 +183,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
                 });
     }
 
-    private void displayFailure()
-    {
+    private void displayFailure() {
         AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.driver_authorization_title)
                 .setMessage(R.string.driver_authorization_msg)

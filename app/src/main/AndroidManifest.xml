@@ -58,6 +58,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
+            android:name=".presentation.views.ridesharing.driversignup.AddPassengersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".presentation.views.ridesharing.passengersignup.PassengerSignupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -81,7 +85,7 @@
             android:theme="@style/PreferenceTheme"/>
 
         <service
-            android:name=".notifications.MyGcmListenerService"
+            android:name=".notifications.FcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
