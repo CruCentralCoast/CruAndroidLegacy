@@ -41,6 +41,7 @@ public final class YouTubeVideoProvider
 
         return youTubeDataService.getSearchResults(BuildConfig.YOUTUBEAPIKEY, "snippet", search,
                 AppConstants.CRU_YOUTUBE_CHANNEL_ID, AppConstants.PAGE_SIZE, nextPageToken)
+                .compose(RxComposeUtil.network())
                 .flatMap(response -> {
                     if(!response.items.isEmpty())
                     {
@@ -50,8 +51,7 @@ public final class YouTubeVideoProvider
                     }
                     else
                         return Observable.empty();
-                })
-                .compose(RxComposeUtil.network());
+                });
     }
 
 
@@ -83,6 +83,7 @@ public final class YouTubeVideoProvider
             return Observable.empty();
 
         return youTubeDataService.getPlaylistVideos(BuildConfig.YOUTUBEAPIKEY, "snippet", AppConstants.CRU_YOUTUBE_UPLOADS_ID, AppConstants.PAGE_SIZE, nextPageToken)
+                .compose(RxComposeUtil.network())
                 .flatMap(response -> {
                     if(!response.items.isEmpty())
                     {
@@ -93,7 +94,6 @@ public final class YouTubeVideoProvider
                     else
                         return Observable.empty();
                 })
-                .compose(RxLoggingUtil.log("YOUTUBE_VIDEOS"))
-                .compose(RxComposeUtil.network());
+                .compose(RxLoggingUtil.log("YOUTUBE_VIDEOS"));
     }
 }

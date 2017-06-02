@@ -178,9 +178,7 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
                     }
                 },
                 e -> Timber.e(e, "Failed to retrieve User.")),
-                () -> {
-                    displayFailure();
-                });
+                this::displayFailure);
     }
 
     private void displayFailure() {

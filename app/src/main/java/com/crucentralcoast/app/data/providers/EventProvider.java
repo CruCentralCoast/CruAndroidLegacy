@@ -22,31 +22,27 @@ import rx.Observer;
 import rx.Subscription;
 import timber.log.Timber;
 
-public class EventProvider
-{
+public class EventProvider {
     private static CruApiService cruService = CruApiProvider.getService();
 
-    protected static Observable.Transformer<CruEvent, CruEvent> getSubscriptionFilter()
-    {
+    protected static Observable.Transformer<CruEvent, CruEvent> getSubscriptionFilter() {
         return (Observable<CruEvent> o) -> o.filter(cruEvent -> {
-            for(String parentMinistry : cruEvent.parentMinistrySubscriptions)
-            {
-                if(SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(parentMinistry))
+            for (String parentMinistry : cruEvent.parentMinistrySubscriptions) {
+                if (SharedPreferencesUtil.getMinistrySubscriptionIsSubscribed(parentMinistry))
                     return true;
             }
             return false;
         });
     }
 
-    protected static Observable.Transformer<CruEvent, CruEvent> getRideCheckTransformer()
-    {
+    protected static Observable.Transformer<CruEvent, CruEvent> getRideCheckTransformer() {
         return cruEventObservable -> cruEventObservable
                 .flatMap(cruEvent -> Observable.concat(
-                                (SharedPreferencesUtil.getFCMID().isEmpty()) ? Observable.empty() : Observable.just(SharedPreferencesUtil.getFCMID()),
-                                RegistrationIntentService.retrieveFCMId(CruApplication.getContext())
-                            )
-                            .take(1)
-                            .flatMap(gcmId -> cruService.checkRideStatus(cruEvent.id, gcmId)
+                        (SharedPreferencesUtil.getFCMID().isEmpty()) ? Observable.empty() : Observable.just(SharedPreferencesUtil.getFCMID()),
+                        RegistrationIntentService.retrieveFCMId(CruApplication.getContext())
+                        )
+                                .take(1)
+                                .flatMap(gcmId -> cruService.checkRideStatus(cruEvent.id, gcmId)
                                         .map(rideCheckResponse -> {
                                             cruEvent.rideStatus = rideCheckResponse.value;
                                             return rideCheckResponse;
@@ -56,45 +52,38 @@ public class EventProvider
                 );
     }
 
-    public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer)
-    {
+    public static void requestUsersEvents(SubscriptionsHolder holder, Observer<List<CruEvent>> observer) {
         Subscription s = requestUsersEvents()
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);
         holder.addSubscription(s);
     }
 
-    public static Observable<List<CruEvent>> requestUsersEvents()
-    {
+    public static Observable<List<CruEvent>> requestUsersEvents() {
         return requestAllEvents()
                 .flatMap(Observable::from)
                 .compose(getSubscriptionFilter())
                 .compose(getRideCheckTransformer())
                 .compose(FeedProvider.getSortDateable())
-                .compose(RxComposeUtil.toListOrEmpty())
-                .compose(RxComposeUtil.network());
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
-    protected static Observable<List<CruEvent>> requestAllEvents()
-    {
+    protected static Observable<List<CruEvent>> requestAllEvents() {
         return cruService.getEvents()
+                .compose(RxComposeUtil.network())
                 .flatMap(Observable::from)
                 .compose(FeedProvider.getSortDateable())
-                .compose(RxComposeUtil.toListOrEmpty())
-                .compose(RxComposeUtil.network());
+                .compose(RxComposeUtil.toListOrEmpty());
     }
 
-    protected static Observable<CruEvent> requestCruEventByID(String id)
-    {
+    protected static Observable<CruEvent> requestCruEventByID(String id) {
         return cruService.findSingleCruEvent(id)
                 .compose(RxComposeUtil.network())
                 .flatMap(Observable::from);
     }
 
-    protected static Observable<List<CruEvent>> getEventsPaginated(ZonedDateTime fromDate, int page, int pageSize)
-    {
-        if(fromDate == null || page < 0 || pageSize <= 0)
-        {
+    protected static Observable<List<CruEvent>> getEventsPaginated(ZonedDateTime fromDate, int page, int pageSize) {
+        if (fromDate == null || page < 0 || pageSize <= 0) {
             Timber.e("fromDate: %s, page: %i, pageSize: %i", fromDate, page, pageSize);
             return Observable.error(new IllegalArgumentException("Invalid arguments"));
         }

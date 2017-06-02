@@ -25,8 +25,7 @@ import rx.Observer;
 import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
-public class EventsFragment extends ListFragment
-{
+public class EventsFragment extends ListFragment {
     private ArrayList<CruEvent> eventList;
     private LinearLayoutManager layoutManager;
     private Observer<List<CruEvent>> eventSubscriber;
@@ -45,8 +44,7 @@ public class EventsFragment extends ListFragment
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
@@ -54,12 +52,11 @@ public class EventsFragment extends ListFragment
     /**
      * Invoked after onCreateView() and deals with binding view references after the
      * view has already been inflated.
-     *  @param view               Inflated View created by onCreateView()
      *
+     * @param view Inflated View created by onCreateView()
      */
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState)
-    {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         //Due to @OnClick, this Fragment requires that the emptyView be inflated before any ButterKnife calls
         inflateEmptyView(view, R.layout.empty_events_view);
         //parent class calls ButterKnife for view injection and setups SwipeRefreshLayout
@@ -77,25 +74,21 @@ public class EventsFragment extends ListFragment
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         getCruEvents();
     }
 
-    private void setupObserver()
-    {
+    private void setupObserver() {
         eventSubscriber = createListObserver(R.layout.empty_events_view, this::setEvents);
     }
 
     @OnClick(R.id.subscription_button)
-    public void onManageSubscriptionsClicked()
-    {
+    public void onManageSubscriptionsClicked() {
         startActivity(new Intent(getContext(), SubscriptionActivity.class));
     }
 
-    private void getCruEvents()
-    {
+    private void getCruEvents() {
         helper.swipeRefreshLayout.setRefreshing(true);
         EventProvider.requestUsersEvents(this, eventSubscriber);
     }
@@ -106,13 +99,11 @@ public class EventsFragment extends ListFragment
      *
      * @param cruEvents List of new Events the UI should adhere to
      */
-    public void setEvents(List<CruEvent> cruEvents)
-    {
+    public void setEvents(List<CruEvent> cruEvents) {
         eventList.clear();
         rx.Observable.from(cruEvents)
                 .map(cruEvent -> {
-                    if (CalendarProvider.hasCalendarPermission(getContext()))
-                    {
+                    if (CalendarProvider.hasCalendarPermission(getContext())) {
                         CalendarProvider.updateEvent(getContext(), cruEvent, SharedPreferencesUtil.getCalendarEventId(cruEvent.id), Observers.empty());
                     }
                     return cruEvent;
@@ -123,8 +114,7 @@ public class EventsFragment extends ListFragment
     }
 
 
-    public void refreshAdapter()
-    {
+    public void refreshAdapter() {
         helper.recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

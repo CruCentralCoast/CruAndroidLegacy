@@ -46,4 +46,17 @@
         android:textIsSelectable="true"
         android:textSize="16sp"
         tools:text="(111) 222-3333"/>
+
+    <ImageView
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_check_cru_orange_24dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 </RelativeLayout>

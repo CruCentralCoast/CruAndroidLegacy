@@ -16,9 +16,11 @@ import java.util.List;
 public class PassengerResultsAdapter extends RecyclerView.Adapter {
 
     private List<Passenger> passengers;
+    private String rideId;
 
-    public PassengerResultsAdapter(List<Passenger> passengers) {
+    public PassengerResultsAdapter(List<Passenger> passengers, String rideId) {
         this.passengers = passengers;
+        this.rideId = rideId;
     }
 
     @Override
@@ -32,6 +34,8 @@ public class PassengerResultsAdapter extends RecyclerView.Adapter {
         AddPassengerViewHolder addPassengerViewHolder = (AddPassengerViewHolder) holder;
         Passenger passenger = passengers.get(position);
 
+        addPassengerViewHolder.rideId = rideId;
+        addPassengerViewHolder.passengerId = passenger.id;
         addPassengerViewHolder.mPassengerName.setText(passenger.name);
         addPassengerViewHolder.mPhone.setText(passenger.phone);
     }

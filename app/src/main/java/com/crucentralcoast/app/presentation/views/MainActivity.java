@@ -134,6 +134,9 @@ public class MainActivity extends BaseAppCompatActivity
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
+        else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -226,36 +229,52 @@ public class MainActivity extends BaseAppCompatActivity
     public void switchToMyRides(Bundle bundle) {
         mNavigationView.setCheckedItem(R.id.nav_my_rides);
         mToolbarTitle.setText(getString(R.string.nav_my_rides));
-        MyRidesFragment fragment = new MyRidesFragment();
+        MyRidesFragment fragment = MyRidesFragment.newInstance();
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        transaction.replace(R.id.content, fragment).commit();
         mAppBarLayout.setExpanded(false, true);
         lockCollapsingToolbar();
+        ViewGroup.MarginLayoutParams params =(ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+        params.topMargin = getStatusBarHeight();
     }
 
     //REVIEW this should be used in onNavigationItemSelected
     public void switchToEvents() {
         mNavigationView.setCheckedItem(R.id.nav_events);
         mToolbarTitle.setText(getString(R.string.nav_events));
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, EventsFragment.newInstance()).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        transaction.replace(R.id.content, EventsFragment.newInstance()).commit();
         mAppBarLayout.setExpanded(false, true);
         lockCollapsingToolbar();
+        ViewGroup.MarginLayoutParams params =(ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+        params.topMargin = getStatusBarHeight();
     }
 
     public void switchToVideos() {
         mNavigationView.setCheckedItem(R.id.nav_videos);
         mToolbarTitle.setText(getString(R.string.nav_videos));
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, VideosFragment.newInstance()).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        transaction.replace(R.id.content, VideosFragment.newInstance()).commit();
         mAppBarLayout.setExpanded(false, true);
         lockCollapsingToolbar();
+        ViewGroup.MarginLayoutParams params =(ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+        params.topMargin = getStatusBarHeight();
     }
 
     public void switchToHome() {
         mNavigationView.setCheckedItem(R.id.nav_home);
         mToolbarTitle.setText(getString(R.string.nav_home));
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, HomeFragment.newInstance()).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        transaction.replace(R.id.content, HomeFragment.newInstance()).commit();
         unlockCollapsingToolbar();
         mAppBarLayout.setExpanded(true, true);
+        ViewGroup.MarginLayoutParams params =(ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+        params.topMargin = 0;
     }
 
     @Override

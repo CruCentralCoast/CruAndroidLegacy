@@ -43,7 +43,7 @@ public class FcmListenerService extends FirebaseMessagingService {
 //                title = data.get("title");
 //            }
             title = data.get("title");
-            message = data.get("message");
+            message = data.get("body");
         }
 
 //        if (payload == null)

@@ -19,30 +19,26 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder>
-{
+public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdapter.DriverResultViewHolder> {
 
     private FormContent formContent;
     private List<Ride> rides;
     private FormHolder formHolder;
 
-    public DriverResultsAdapter(FormContent formContent, FormHolder holder, List<Ride> rides)
-    {
+    public DriverResultsAdapter(FormContent formContent, FormHolder holder, List<Ride> rides) {
         this.formContent = formContent;
         this.rides = rides;
         this.formHolder = holder;
     }
 
     @Override
-    public DriverResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public DriverResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new DriverResultViewHolder(inflater.inflate(R.layout.item_driver_result, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(DriverResultViewHolder holder, int position)
-    {
+    public void onBindViewHolder(DriverResultViewHolder holder, int position) {
         Ride currentRide = rides.get(position);
         holder.driverName.setText(currentRide.driverName);
         holder.rideDateTime.setText(currentRide.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER + " " + AppConstants.TIME_FORMATTER)));
@@ -50,28 +46,27 @@ public class DriverResultsAdapter extends RecyclerView.Adapter<DriverResultsAdap
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return rides.size();
     }
 
-    public class DriverResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-    {
+    public class DriverResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.driverName) TextView driverName;
-        @BindView(R.id.rideDateTime) TextView rideDateTime;
-        @BindView(R.id.distance) TextView distance;
+        @BindView(R.id.driverName)
+        TextView driverName;
+        @BindView(R.id.rideDateTime)
+        TextView rideDateTime;
+        @BindView(R.id.distance)
+        TextView distance;
 
-        public DriverResultViewHolder(View itemView)
-        {
+        public DriverResultViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View v)
-        {
+        public void onClick(View v) {
             formHolder.addDataObject(PassengerSignupActivity.SELECTED_RIDE, rides.get(getAdapterPosition()));
             formContent.onNext(formHolder);
         }

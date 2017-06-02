@@ -2,6 +2,7 @@ package com.crucentralcoast.app.presentation.views.ridesharing.driversignup;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,7 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mAvailablePassengerList.setLayoutManager(layoutManager);
-        mAdapter = new PassengerResultsAdapter(new ArrayList<>());
+        mAdapter = new PassengerResultsAdapter(new ArrayList<>(), "");
         mAvailablePassengerList.setAdapter(mAdapter);
 
         mPresenter = new AddPassengersPresenter(this);
@@ -50,6 +51,17 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
 
     @Override
     public void showAvailablePassengers(List<Passenger> passengers) {
-        mAdapter.setPassengers(passengers);
+        if (passengers.isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("No Passengers Waiting")
+                    .setMessage("There doesn't seem to be any passengers waiting! " +
+                            "You will receive a notification when someone joins your car.")
+                    .setPositiveButton("OK", (dialog1, which) -> finish())
+                    .create()
+                    .show();
+        }
+        else {
+            mAdapter.setPassengers(passengers);
+        }
     }
 }

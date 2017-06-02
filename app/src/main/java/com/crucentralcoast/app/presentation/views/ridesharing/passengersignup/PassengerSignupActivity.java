@@ -15,8 +15,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class PassengerSignupActivity extends FormActivity
-{
+public class PassengerSignupActivity extends FormActivity {
     private CruEvent event;
 
     public static final String CRU_EVENT = "CRU_EVENT";
@@ -31,15 +30,13 @@ public class PassengerSignupActivity extends FormActivity
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null || !bundle.containsKey(AppConstants.EVENT_KEY))
-        {
+        if (bundle == null || !bundle.containsKey(AppConstants.EVENT_KEY)) {
             Timber.e("PassengerSignupActivity requires that you pass an event");
             Timber.e("Finishing activity...");
             finish();
             return;
         }
-        else
-        {
+        else {
             event = Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_KEY));
             setSubtitle(event.name);
         }
@@ -52,8 +49,7 @@ public class PassengerSignupActivity extends FormActivity
     }
 
     @NonNull
-    private ArrayList<FormContentFragment> setupForm(Bundle bundle)
-    {
+    private ArrayList<FormContentFragment> setupForm(Bundle bundle) {
         ArrayList<FormContentFragment> fragments = new ArrayList<>();
 
         fragments.add(new RideInfoFragment());
@@ -66,8 +62,7 @@ public class PassengerSignupActivity extends FormActivity
     }
 
     @Override
-    public void complete()
-    {
+    public void complete() {
         setResult(Activity.RESULT_OK);
         super.complete();
     }

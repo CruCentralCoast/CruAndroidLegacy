@@ -27,21 +27,26 @@ import com.mobsandgeeks.saripaar.annotation.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.observers.Observers;
+import timber.log.Timber;
 
-public class BasicInfoFragment extends FormContentFragment
-{
+public class BasicInfoFragment extends FormContentFragment {
     private Ride ride;
     private BaseValidator validator;
     private Ride.Direction direction;
 
-    @BindView(R.id.name_field) @NotEmpty EditText nameField;
-    @BindView(R.id.phone_field) @NotEmpty @Pattern(regex = AppConstants.PHONE_REGEX) EditText phoneField;
-    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.name_field)
+    @NotEmpty
+    EditText nameField;
+    @BindView(R.id.phone_field)
+    @NotEmpty
+    @Pattern(regex = AppConstants.PHONE_REGEX)
+    EditText phoneField;
+    @BindView(R.id.progress)
+    ProgressBar progressBar;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.passenger_form_basic_info, container, false);
     }
 
@@ -53,36 +58,33 @@ public class BasicInfoFragment extends FormContentFragment
         phoneField.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 
-    private Passenger getPassenger()
-    {
-        return new Passenger(nameField.getText().toString(), phoneField.getText().toString(), SharedPreferencesUtil.getFCMID(), direction);
+    private Passenger getPassenger() {
+        return new Passenger(nameField.getText().toString(),
+                phoneField.getText().toString(), SharedPreferencesUtil.getFCMID(), direction, "");
     }
 
     @Override
-    public void onNext(FormHolder formHolder)
-    {
-        if(validator.validate())
-        {
+    public void onNext(FormHolder formHolder) {
+        if (validator.validate()) {
             SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), null, phoneField.getText().toString());
 
             Passenger passenger = getPassenger();
+            passenger.eventId = ride.eventId;
             progressBar.setVisibility(View.VISIBLE);
             formHolder.setNavigationClickable(false);
 
             PassengerProvider.addPassenger(this, Observers.create(passenger1 ->
                     RideProvider.addPassengerToRide(this, Observers.create(x ->
-                            super.onNext(formHolder)), ride.id, passenger1.id)), passenger);
+                            super.onNext(formHolder), Timber::e), ride.id, passenger1.id), Timber::e), passenger);
         }
-
     }
 
     @Override
-    public void setupData(FormHolder formHolder)
-    {
+    public void setupData(FormHolder formHolder) {
         formHolder.setTitle(getString(R.string.passenger_contact_info));
         ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
         direction = (Ride.Direction) formHolder.getDataObject(PassengerSignupActivity.DIRECTION);
-        AutoFill.setupAutoFillData((BaseAppCompatActivity)getActivity(), () -> {
+        AutoFill.setupAutoFillData((BaseAppCompatActivity) getActivity(), () -> {
             nameField.setText(SharedPreferencesUtil.getUserName());
             phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
         });
