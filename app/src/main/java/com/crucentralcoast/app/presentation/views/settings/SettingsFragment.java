@@ -80,7 +80,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
         loginObserver = Observers.create(response -> {
             if (response.success) {
-                SharedPreferencesUtil.writeLoginInformation(loginName.getText().toString(), response.leaderAPIKey);
+                SharedPreferencesUtil.writeLoginInformation(response.userId,
+                        loginName.getText().toString(), response.leaderAPIKey);
                 loginName.setText("");
                 loginName.setError(null);
 

@@ -9,13 +9,15 @@ import com.crucentralcoast.app.data.models.LoginResponse;
 import com.crucentralcoast.app.data.models.MinistryQuestion;
 import com.crucentralcoast.app.data.models.MinistrySubscription;
 import com.crucentralcoast.app.data.models.MinistryTeam;
+import com.crucentralcoast.app.data.models.Passenger;
+import com.crucentralcoast.app.data.models.PrayerRequest;
+import com.crucentralcoast.app.data.models.PrayerResponse;
+import com.crucentralcoast.app.data.models.Resource;
 import com.crucentralcoast.app.data.models.ResourceTag;
+import com.crucentralcoast.app.data.models.Ride;
 import com.crucentralcoast.app.data.models.RideCheckResponse;
 import com.crucentralcoast.app.data.models.SummerMission;
 import com.crucentralcoast.app.data.models.queries.Query;
-import com.crucentralcoast.app.data.models.Passenger;
-import com.crucentralcoast.app.data.models.Resource;
-import com.crucentralcoast.app.data.models.Ride;
 
 import java.util.List;
 
@@ -137,4 +139,27 @@ public interface CruApiService
     @FormUrlEncoded
     @POST("/api/gcm")
     Observable<Void> updateFcmId(@Field("old") String oldId, @Field("new") String newId);
+
+    @GET("/api/prayerrequest")
+    Observable<List<PrayerRequest>> getPrayerRequests(@retrofit2.http.Query("LeaderAPIKey") String leaderApiKey);
+
+    @POST("/api/prayerrequest")
+    Observable<PrayerRequest> postPrayerRequest(@Body PrayerRequest prayerRequest);
+
+    @GET("/api/prayerrequest/{request_id}")
+    Observable<PrayerRequest> getPrayerRequestDetails(@Path("request_id") String prayerRequestId, @retrofit2.http.Query("LeaderAPIKey") String leaderApiKey, @retrofit2.http.Query("fcm_id") String fcmId);
+
+    @GET("/api/prayerrequest/fcm_id")
+    Observable<List<PrayerRequest>> getUserPrayerRequests(@retrofit2.http.Query("fcm_id") String fcmId);
+
+    @POST("/api/prayerresponse")
+    Observable<PrayerResponse> postPrayerResponse(@Body PrayerResponse prayerResponse, @retrofit2.http.Query("LeaderAPIKey") String leaderApiKey);
+
+    @FormUrlEncoded
+    @PATCH("/api/prayerrequest/{request_id}")
+    Observable<PrayerRequest> patchPrayerRequestContactLeader(@Path("request_id") String prayerRequestId, @Field("LeaderAPIKey") String leaderAPIKey, @Field("contactLeader") String contactLeaderId);
+
+    @FormUrlEncoded
+    @PATCH("/api/prayerrequest/{request_id}")
+    Observable<PrayerRequest> patchPrayerRequestContacted(@Path("request_id") String prayerRequestId, @Field("LeaderAPIKey") String leaderAPIKey, @Field("contacted") boolean contacted);
 }

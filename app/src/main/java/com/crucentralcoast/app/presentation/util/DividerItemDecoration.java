@@ -34,6 +34,11 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     private Drawable mDivider;
     private int mOrientation;
+    private int mPadding;
+    public DividerItemDecoration(Context context, int mOrientation, int padding) {
+        this(context, mOrientation);
+        mPadding = padding;
+    }
     public DividerItemDecoration(Context context, int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
@@ -65,7 +70,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getBottom() + params.bottomMargin +
                     Math.round(ViewCompat.getTranslationY(child));
             final int bottom = top + mDivider.getIntrinsicHeight();
-            mDivider.setBounds(left, top, right, bottom);
+            mDivider.setBounds(left + mPadding, top, right, bottom);
             mDivider.draw(c);
         }
     }
@@ -80,7 +85,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             final int left = child.getRight() + params.rightMargin +
                     Math.round(ViewCompat.getTranslationX(child));
             final int right = left + mDivider.getIntrinsicHeight();
-            mDivider.setBounds(left, top, right, bottom);
+            mDivider.setBounds(left, top + mPadding, right, bottom);
             mDivider.draw(c);
         }
     }

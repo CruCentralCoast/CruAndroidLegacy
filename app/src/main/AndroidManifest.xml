@@ -118,6 +118,15 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".presentation.views.prayers.SubmitPrayerRequestActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".presentation.views.prayers.PrayerRequestDetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/details"/>
+
+        <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"

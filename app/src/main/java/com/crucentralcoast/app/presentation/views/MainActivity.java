@@ -30,6 +30,7 @@ import com.crucentralcoast.app.presentation.views.events.EventsFragment;
 import com.crucentralcoast.app.presentation.views.home.HomeFragment;
 import com.crucentralcoast.app.presentation.views.ministryteams.MinistryTeamsFragment;
 import com.crucentralcoast.app.presentation.views.notifications.NotificationFragment;
+import com.crucentralcoast.app.presentation.views.prayers.PrayerRequestsFragment;
 import com.crucentralcoast.app.presentation.views.resources.ResourcesFragment;
 import com.crucentralcoast.app.presentation.views.ridesharing.myrides.MyRidesFragment;
 import com.crucentralcoast.app.presentation.views.settings.SettingsActivity;
@@ -156,6 +157,11 @@ public class MainActivity extends BaseAppCompatActivity
             case R.id.nav_events:
                 mToolbarTitle.setText(getString(R.string.nav_events));
                 transaction.replace(R.id.content, EventsFragment.newInstance()).commit();
+                isNavHome = false;
+                break;
+            case R.id.prayer_requests:
+                mToolbarTitle.setText(getString(R.string.prayer_requests));
+                transaction.replace(R.id.content, PrayerRequestsFragment.newInstance()).commit();
                 isNavHome = false;
                 break;
             case R.id.nav_my_rides:

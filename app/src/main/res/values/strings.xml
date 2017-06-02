@@ -10,6 +10,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_home">Home</string>
     <string name="nav_events">Events</string>
+    <string name="prayer_requests">Prayer Requests</string>
     <string name="nav_cruber">Cruber</string>
     <string name="nav_summer_missions">Summer Missions</string>
     <string name="nav_get_involved">Get Involved</string>
@@ -71,6 +72,9 @@
     <string name="facebook_yes">SURE</string>
     <string name="no_articles_available">There are currently no articles available. Please check back later!</string>
     <string name="no_events_available">There are no events available for your current subscriptions, check that you\'re subscribed to the ministries you\'re interested in!</string>
+    <string name="no_prayer_requests">There are currently no prayer requests available. Please check back later!</string>
+    <string name="no_my_prayer_requests">You have yet to submit a prayer request.</string>
+    <string name="no_prayer_responses">There are no responses to this prayer request. Respond if you feel led.</string>
     <string name="manage_subscriptions">Manage Subscriptions</string>
     <string name="view_upcoming_events">View Upcoming Events</string>
     <string name="not_driving">You are not currently signed up to drive to an event.</string>
@@ -168,6 +172,11 @@
         <item>Driver</item>
     </string-array>
 
+    <string-array name="prayer_requests_titles">
+        <item>My Requests</item>
+        <item>All Requests</item>
+    </string-array>
+
     <string name="subscription_button_key">Subscription Key</string>
     <string name="subscription_button_text">Manage Subscriptions</string>
     <string name="login_button_key">Login Key</string>
@@ -204,4 +213,26 @@
     <string name="get_connected_desc">Join a local ministry team and get plugged into a community group</string>
     <string name="find_a_ride_title">Find a ride</string>
     <string name="find_a_ride_desc">Sign up to give and receive rides to upcoming events</string>
+
+    <!--Prayer request strings-->
+    <string name="prayer">Prayer</string>
+    <string name="visibility_public">Public</string>
+    <string name="visibility_leaders_only">Leaders only</string>
+    <string name="gender_preference">Gender Preference</string>
+    <string name="personally_contact_text">I\'d like to be personally contacted by a leader outside of the app</string>
+    <string name="contact_email">Contact Email</string>
+    <string name="contact_phone">Contact Phone Number</string>
+    <string name="details">Details</string>
+    <string name="respond">Respond</string>
+    <string name="no_leader">No Contact Leader</string>
+    <string name="not_contacted">Not Contacted</string>
+    <string name="contacted">Contacted</string>
+    <string name="contact_sign_up">Contact Sign-up</string>
+    <string name="contact_sign_up_details">Sign up as the leader responsible for personally contacting the author of this prayer request</string>
+    <string name="no_network_connection">No network connection</string>
+    <string name="network_error">Network error</string>
+    <string name="prayer_request_error">Error submitting prayer request</string>
+    <string name="prayer_response_error">Error submitting prayer response</string>
+    <string name="contact_leader_error">Error setting contact leader</string>
+    <string name="type_response">Type a response</string>
 </resources>
