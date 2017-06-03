@@ -59,7 +59,7 @@ public class PrayerRequestViewHolder extends RecyclerView.ViewHolder {
                         R.drawable.ic_alert_circle));
             } else if (!prayerRequest.contacted) {
                 alertIcon.setImageDrawable(AppCompatResources.getDrawable(alertIcon.getContext(),
-                        R.drawable.ic_report_problem_yellow_500_18dp));
+                        R.drawable.ic_report_problem));
             } else {
                 alertIcon.setImageDrawable(AppCompatResources.getDrawable(alertIcon.getContext(),
                         R.drawable.ic_check_all));

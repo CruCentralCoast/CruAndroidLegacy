@@ -12,7 +12,7 @@
             android:title="@string/nav_events"/>
         <item
             android:id="@+id/prayer_requests"
-            android:icon="@drawable/ic_headphones_grey600"
+            android:icon="@drawable/ic_book_open_page_variant"
             android:title="@string/prayer_requests"/>
         <item
             android:id="@+id/nav_my_rides"

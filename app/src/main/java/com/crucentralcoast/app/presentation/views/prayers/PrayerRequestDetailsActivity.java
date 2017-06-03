@@ -93,7 +93,7 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
                     alertInfo.setText(R.string.not_contacted);
                     alertInfo.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources
                                     .getDrawable(this,
-                                            R.drawable.ic_report_problem_yellow_500_18dp),
+                                            R.drawable.ic_report_problem),
                             null, null, null);
                 }
             } else {
