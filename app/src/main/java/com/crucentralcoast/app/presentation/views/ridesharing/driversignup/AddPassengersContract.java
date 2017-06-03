@@ -17,5 +17,7 @@ public class AddPassengersContract {
 
     interface Presenter extends BasePresenter {
         void loadAvailablePassengers(String eventId);
+
+        void addPassengers(String rideId, List<Passenger> passengers);
     }
 }

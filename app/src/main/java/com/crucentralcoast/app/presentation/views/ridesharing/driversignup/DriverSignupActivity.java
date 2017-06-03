@@ -93,7 +93,9 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
     }
 
     private void createDriver() {
-        RideProvider.createRide(Observers.empty(), completeRide(driverSignupVM.getRide()));
+        RideProvider.createRide(
+                Observers.create(ride -> goToAddPassenger(ride.id), Timber::e),
+                completeRide(driverSignupVM.getRide()));
     }
 
     private void updateDriver() {
@@ -144,23 +146,26 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
         });
     }
 
-    public void goToAddPassenger() {
+    public void goToAddPassenger(String rideId) {
         Intent addPassengerIntent = new Intent(this, AddPassengersActivity.class);
         addPassengerIntent.putExtra(CruEvent.sId, event.id);
+        addPassengerIntent.putExtra("rideId", rideId);
+        addPassengerIntent.putExtra("available", driverSignupVM.getRide().carCapacity);
         startActivity(addPassengerIntent);
     }
 
     private void sendRide() {
         SharedPreferencesUtil.writeBasicInfo(driverSignupVM.nameField.getText().toString(), null, driverSignupVM.phoneField.getText().toString());
 
-        if (driverSignupVM instanceof DriverSignupEditingVM)
+        if (driverSignupVM instanceof DriverSignupEditingVM) {
             updateDriver();
-        else
+        }
+        else {
             createDriver();
+        }
 
         setResult(RESULT_OK);
         finish();
-        goToAddPassenger();
     }
 
     //remove anything that isn't a digit

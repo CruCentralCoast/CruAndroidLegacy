@@ -1,6 +1,9 @@
 package com.crucentralcoast.app.presentation.views.ridesharing.driversignup;
 
+import com.crucentralcoast.app.data.models.Passenger;
 import com.crucentralcoast.app.data.providers.RideProvider;
+
+import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -27,6 +30,19 @@ public class AddPassengersPresenter implements AddPassengersContract.Presenter {
                         Timber::e,
                         () -> Timber.i("Successfully got available passengers")
                 );
+    }
+
+    @Override
+    public void addPassengers(String rideId, List<Passenger> passengers) {
+        for (Passenger passenger : passengers) {
+            RideProvider.addPassengerToRide(rideId, passenger.id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            aVoid -> {},
+                            Timber::e,
+                            () -> {}
+                    );
+        }
     }
 
     @Override

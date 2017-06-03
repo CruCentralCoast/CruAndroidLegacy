@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author Tyler Wong
@@ -28,6 +29,8 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
 
     private PassengerResultsAdapter mAdapter;
     private AddPassengersContract.Presenter mPresenter;
+    private String rideId;
+    private int numAvailable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,13 +38,21 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
         setContentView(R.layout.activity_add_passengers);
         ButterKnife.bind(this);
 
+        rideId = getIntent().getStringExtra("rideId");
+        numAvailable = getIntent().getIntExtra("available", 0);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mAvailablePassengerList.setLayoutManager(layoutManager);
-        mAdapter = new PassengerResultsAdapter(new ArrayList<>(), "");
+        mAdapter = new PassengerResultsAdapter(new ArrayList<>(), numAvailable);
         mAvailablePassengerList.setAdapter(mAdapter);
 
         mPresenter = new AddPassengersPresenter(this);
         mPresenter.loadAvailablePassengers(getIntent().getStringExtra(CruEvent.sId));
+    }
+
+    @OnClick(R.id.fab)
+    public void addPassengers() {
+        mPresenter.addPassengers(rideId, mAdapter.getSelectedPassengers());
     }
 
     @Override

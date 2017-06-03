@@ -6,13 +6,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crucentralcoast.app.R;
-import com.crucentralcoast.app.data.providers.RideProvider;
 import com.crucentralcoast.app.util.AnimUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -27,27 +24,36 @@ public class AddPassengerViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.check)
     ImageView mCheck;
 
+    private ItemClickListener mCallback;
+
     public String rideId;
     public String passengerId;
+    public boolean isChecked = false;
 
-    public AddPassengerViewHolder(View itemView) {
+    public AddPassengerViewHolder(View itemView, ItemClickListener callback) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        itemView.setOnClickListener(view -> addPassengerToRide());
+        mCallback = callback;
     }
 
-    private void showCheck() {
+    public void showCheck() {
         mCheck.setVisibility(View.VISIBLE);
         mCheck.startAnimation(AnimUtils.getGrowAnim());
     }
 
-    private void addPassengerToRide() {
-        RideProvider.addPassengerToRide(rideId, passengerId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        aVoid -> showCheck(),
-                        Timber::e,
-                        () -> Timber.i("Successfully added to ride")
-                );
+    public void hideCheck() {
+        mCheck.startAnimation(AnimUtils.getShrinkAnim());
+        mCheck.setVisibility(View.GONE);
+    }
+
+    public void addPassengerToRide() {
+        if (!isChecked) {
+            showCheck();
+            mCallback.setItemChecked(isChecked = true, getAdapterPosition());
+        }
+        else {
+            hideCheck();
+            mCallback.setItemChecked(isChecked = false, getAdapterPosition());
+        }
     }
 }

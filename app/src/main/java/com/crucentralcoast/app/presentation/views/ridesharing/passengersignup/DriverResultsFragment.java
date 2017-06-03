@@ -94,10 +94,9 @@ public class DriverResultsFragment extends FormContentListFragment {
                             passenger
                     );
                 })
-                .setNegativeButton("NO", (dialog1, which) ->
-                    // GO back to ride sharing tab
-                    ((PassengerSignupActivity) getActivity()).complete()
-                )
+                .setNegativeButton("NO", (dialog1, which) -> {
+                    // Close dialog
+                })
                 .create()
                 .show();
         return super.onEmpty(layoutId);

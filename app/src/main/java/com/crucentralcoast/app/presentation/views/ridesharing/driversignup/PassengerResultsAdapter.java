@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.data.models.Passenger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,17 +17,32 @@ import java.util.List;
 public class PassengerResultsAdapter extends RecyclerView.Adapter {
 
     private List<Passenger> passengers;
-    private String rideId;
+    private List<Passenger> selectedPassengers;
+    private boolean selectable = false;
+    private ItemClickListener mCallback;
 
-    public PassengerResultsAdapter(List<Passenger> passengers, String rideId) {
+    public PassengerResultsAdapter(List<Passenger> passengers, int numAvailable) {
         this.passengers = passengers;
-        this.rideId = rideId;
+        selectedPassengers = new ArrayList<>();
+
+        mCallback = (boolean isChecked, int position) -> {
+            if (isChecked) {
+                selectedPassengers.add(passengers.get(position));
+
+                if (selectedPassengers.size() == numAvailable) {
+                    selectable = false;
+                }
+            }
+            else {
+                selectedPassengers.remove(passengers.get(position));
+            }
+        };
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new AddPassengerViewHolder(inflater.inflate(R.layout.card_add_passenger, parent, false));
+        return new AddPassengerViewHolder(inflater.inflate(R.layout.card_add_passenger, parent, false), mCallback);
     }
 
     @Override
@@ -34,10 +50,19 @@ public class PassengerResultsAdapter extends RecyclerView.Adapter {
         AddPassengerViewHolder addPassengerViewHolder = (AddPassengerViewHolder) holder;
         Passenger passenger = passengers.get(position);
 
-        addPassengerViewHolder.rideId = rideId;
         addPassengerViewHolder.passengerId = passenger.id;
         addPassengerViewHolder.mPassengerName.setText(passenger.name);
         addPassengerViewHolder.mPhone.setText(passenger.phone);
+
+        addPassengerViewHolder.itemView.setOnClickListener(view -> {
+            if (selectable) {
+                addPassengerViewHolder.addPassengerToRide();
+            }
+        });
+    }
+
+    public List<Passenger> getSelectedPassengers() {
+        return selectedPassengers;
     }
 
     public void setPassengers(List<Passenger> passengers) {
