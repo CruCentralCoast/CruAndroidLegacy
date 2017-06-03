@@ -20,8 +20,9 @@ import rx.Subscription;
 public final class PrayerProvider {
     private static CruApiService cruApiService = CruApiProvider.getService();
 
-    private static Observable<List<PrayerRequest>> getPrayerRequests(String leaderAPIKey) {
-        return cruApiService.getPrayerRequests(leaderAPIKey);
+    private static Observable<List<PrayerRequest>> getPrayerRequests(String leaderAPIKey,
+                                                                     String leaderId) {
+        return cruApiService.getPrayerRequests(leaderAPIKey, leaderId);
     }
 
     private static Observable<PrayerRequest> getPrayerRequestDetails(String prayerRequestId,
@@ -93,8 +94,8 @@ public final class PrayerProvider {
 
     public static void requestPrayerRequests(SubscriptionsHolder holder,
                                              Observer<List<PrayerRequest>> observer,
-                                             String leaderAPIKey) {
-        Subscription s = getPrayerRequests(leaderAPIKey)
+                                             String leaderAPIKey, String leaderId) {
+        Subscription s = getPrayerRequests(leaderAPIKey, leaderId)
                 .compose(RxComposeUtil.network())
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);

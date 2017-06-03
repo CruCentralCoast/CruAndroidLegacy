@@ -31,7 +31,7 @@ public class PrayerRequest {
     @SerializedName(sFcmId) public String fcmId;
     @SerializedName(sCreatedAt) public Date creationDate;
     @SerializedName(sLeadersOnly) public boolean leadersOnly;
-    @SerializedName(sGenderPreference) public GenderPreference genderPreference;
+    @SerializedName(sGenderPreference) public Ride.Gender genderPreference;
     @SerializedName(sContact) public boolean contact;
     @SerializedName(sContactLeader) public String contactLeader;
     @SerializedName(sContacted) public boolean contacted;
@@ -45,11 +45,5 @@ public class PrayerRequest {
         this.fcmId = fcmId;
         this.leadersOnly = leadersOnly;
         this.prayer = prayer;
-    }
-
-    public enum GenderPreference {
-        MALE,
-        FEMALE,
-        NO_PREFERENCE
     }
 }

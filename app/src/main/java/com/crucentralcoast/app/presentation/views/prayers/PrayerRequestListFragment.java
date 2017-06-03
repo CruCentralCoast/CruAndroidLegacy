@@ -95,7 +95,7 @@ public class PrayerRequestListFragment extends ListFragment {
                     SharedPreferencesUtil.getFCMID());
         } else {
             PrayerProvider.requestPrayerRequests(this, prayerRequestSubscriber,
-                    SharedPreferencesUtil.getLeaderAPIKey());
+                    SharedPreferencesUtil.getLeaderAPIKey(), SharedPreferencesUtil.getUserId());
         }
     }
 

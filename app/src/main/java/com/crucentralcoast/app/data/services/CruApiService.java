@@ -141,7 +141,7 @@ public interface CruApiService
     Observable<Void> updateFcmId(@Field("old") String oldId, @Field("new") String newId);
 
     @GET("/api/prayerrequest")
-    Observable<List<PrayerRequest>> getPrayerRequests(@retrofit2.http.Query("LeaderAPIKey") String leaderApiKey);
+    Observable<List<PrayerRequest>> getPrayerRequests(@retrofit2.http.Query("LeaderAPIKey") String leaderApiKey, @retrofit2.http.Query("userId") String leaderId);
 
     @POST("/api/prayerrequest")
     Observable<PrayerRequest> postPrayerRequest(@Body PrayerRequest prayerRequest);
