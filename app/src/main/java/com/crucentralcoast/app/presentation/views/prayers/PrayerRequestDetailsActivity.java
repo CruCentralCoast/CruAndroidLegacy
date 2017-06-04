@@ -54,6 +54,40 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
     private PrayerResponseListFragment prayerResponseListFragment;
     private DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,
             DateFormat.SHORT);
+    private Observer<PrayerRequest> prayerRequestSubscriber =
+            ObserverUtil.create(Observers.create(t -> {
+                        if (prayerRequest.contactLeader == null) {
+                            showContactInfoDialog();
+                        }
+                        prayerRequest = t;
+                        bind();
+                    },
+                    (e) -> {
+                        Timber.e(e, "Failed to update prayer request.");
+                        if (getCurrentFocus() != null) {
+                            Snackbar.make(getCurrentFocus(),
+                                    R.string.update_error,
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                    }, () -> {
+                    }),
+                    () -> {
+                    },
+                    () -> {
+                        // no network
+                        if (getCurrentFocus() != null) {
+                            Snackbar.make(getCurrentFocus(),
+                                    R.string.no_network_connection,
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                    }, () -> {
+                        // network error
+                        if (getCurrentFocus() != null) {
+                            Snackbar.make(getCurrentFocus(),
+                                    R.string.network_error,
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,43 +142,20 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
             new AlertDialog.Builder(this).setTitle(R.string.contact_sign_up)
                     .setMessage(R.string.contact_sign_up_details).setPositiveButton(R.string.ok,
                     (DialogInterface dialog, int which) -> {
-                        Observer<PrayerRequest> prayerRequestSubscriber =
-                                ObserverUtil.create(Observers.create(t -> {
-                                            prayerRequest = t;
-                                            bind();
-                                        },
-                                        (e) -> {
-                                            Timber.e(e, "Failed to post prayer response.");
-                                            if (getCurrentFocus() != null) {
-                                                Snackbar.make(getCurrentFocus(),
-                                                        R.string.contact_leader_error,
-                                                        Snackbar.LENGTH_SHORT).show();
-                                            }
-                                        }, () -> {
-                                        }),
-                                        () -> {
-                                        },
-                                        () -> {
-                                            // no network
-                                            if (getCurrentFocus() != null) {
-                                                Snackbar.make(getCurrentFocus(),
-                                                        R.string.no_network_connection,
-                                                        Snackbar.LENGTH_SHORT).show();
-                                            }
-                                        }, () -> {
-                                            // network error
-                                            if (getCurrentFocus() != null) {
-                                                Snackbar.make(getCurrentFocus(),
-                                                        R.string.network_error,
-                                                        Snackbar.LENGTH_SHORT).show();
-                                            }
-                                        });
                         PrayerProvider.setPrayerRequestContactLeader(prayerRequestSubscriber,
                                 prayerRequest.id, SharedPreferencesUtil.getLeaderAPIKey(),
                                 SharedPreferencesUtil.getUserId());
                     })
                     .setNegativeButton(R.string.cancel, null).create().show();
+        } else if (prayerRequest.contactLeader.equals(SharedPreferencesUtil.getUserId())) {
+            showContactInfoDialog();
         }
+    }
+
+    private void showContactInfoDialog() {
+        ContactInfoAlertDialog dialog = ContactInfoAlertDialog.newInstance(prayerRequest);
+        dialog.setPrayerRequestSubscriber(prayerRequestSubscriber);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     @OnClick(R.id.respond)
