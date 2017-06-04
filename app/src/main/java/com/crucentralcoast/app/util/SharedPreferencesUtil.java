@@ -107,7 +107,7 @@ public class SharedPreferencesUtil
 
     public static String getUserName()
     {
-        return getSharedPreferences().getString(AppConstants.USER_NAME, null);
+        return getSharedPreferences().getString(AppConstants.USER_NAME, "");
     }
 
     public static String getUserEmail()
@@ -117,7 +117,7 @@ public class SharedPreferencesUtil
 
     public static String getUserPhoneNumber()
     {
-        return getSharedPreferences().getString(AppConstants.USER_PHONE_NUMBER, null);
+        return getSharedPreferences().getString(AppConstants.USER_PHONE_NUMBER, "");
     }
 
     public static String getFCMID()

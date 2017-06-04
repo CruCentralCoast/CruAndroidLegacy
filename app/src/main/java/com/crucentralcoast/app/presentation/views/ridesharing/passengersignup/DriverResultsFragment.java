@@ -83,7 +83,7 @@ public class DriverResultsFragment extends FormContentListFragment {
                 .setTitle("No Drivers Available")
                 .setMessage("There doesn't seem to be any drivers available for your location! " +
                         "Would you like to request a ride anyways? You will receive a notification" +
-                        "when a closer driver chooses you.")
+                        " when a closer driver chooses you.")
                 .setPositiveButton("YES", (dialog1, which) -> {
                     // We want to add the passenger to the database to be picked up later by a driver
                     PassengerProvider.addPassenger(this,

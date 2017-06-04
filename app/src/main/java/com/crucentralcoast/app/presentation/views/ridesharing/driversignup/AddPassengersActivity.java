@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.data.models.CruEvent;
 import com.crucentralcoast.app.data.models.Passenger;
+import com.crucentralcoast.app.data.models.Ride;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,9 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
 
     private PassengerResultsAdapter mAdapter;
     private AddPassengersContract.Presenter mPresenter;
+    private String eventId;
     private String rideId;
+    private Ride.Gender gender;
     private int numAvailable;
 
     @Override
@@ -38,7 +41,9 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
         setContentView(R.layout.activity_add_passengers);
         ButterKnife.bind(this);
 
+        eventId = getIntent().getStringExtra(CruEvent.sId);
         rideId = getIntent().getStringExtra("rideId");
+        gender = (Ride.Gender) getIntent().getSerializableExtra("gender");
         numAvailable = getIntent().getIntExtra("available", 0);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -47,12 +52,17 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
         mAvailablePassengerList.setAdapter(mAdapter);
 
         mPresenter = new AddPassengersPresenter(this);
-        mPresenter.loadAvailablePassengers(getIntent().getStringExtra(CruEvent.sId));
+        mPresenter.loadAvailablePassengers(eventId, gender);
     }
 
     @OnClick(R.id.fab)
     public void addPassengers() {
         mPresenter.addPassengers(rideId, mAdapter.getSelectedPassengers());
+    }
+
+    @Override
+    public void completed() {
+        finish();
     }
 
     @Override

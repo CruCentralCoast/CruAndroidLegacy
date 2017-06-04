@@ -60,7 +60,7 @@ public class BasicInfoFragment extends FormContentFragment {
 
     private Passenger getPassenger() {
         return new Passenger(nameField.getText().toString(),
-                phoneField.getText().toString(), SharedPreferencesUtil.getFCMID(), direction, "");
+                phoneField.getText().toString(), SharedPreferencesUtil.getFCMID(), direction, ride.eventId);
     }
 
     @Override
@@ -69,7 +69,6 @@ public class BasicInfoFragment extends FormContentFragment {
             SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), null, phoneField.getText().toString());
 
             Passenger passenger = getPassenger();
-            passenger.eventId = ride.eventId;
             progressBar.setVisibility(View.VISIBLE);
             formHolder.setNavigationClickable(false);
 

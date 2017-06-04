@@ -1,6 +1,7 @@
 package com.crucentralcoast.app.presentation.views.ridesharing.driversignup;
 
 import com.crucentralcoast.app.data.models.Passenger;
+import com.crucentralcoast.app.data.models.Ride;
 import com.crucentralcoast.app.data.providers.RideProvider;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class AddPassengersPresenter implements AddPassengersContract.Presenter {
     }
 
     @Override
-    public void loadAvailablePassengers(String eventId) {
-        RideProvider.getAvailablePassengers(eventId)
+    public void loadAvailablePassengers(String eventId, Ride.Gender gender) {
+        RideProvider.getAvailablePassengers(eventId, gender)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mAddPassengersView::showAvailablePassengers,
@@ -34,15 +35,13 @@ public class AddPassengersPresenter implements AddPassengersContract.Presenter {
 
     @Override
     public void addPassengers(String rideId, List<Passenger> passengers) {
-        for (Passenger passenger : passengers) {
-            RideProvider.addPassengerToRide(rideId, passenger.id)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            aVoid -> {},
-                            Timber::e,
-                            () -> {}
-                    );
-        }
+        RideProvider.addPassengersToRide(rideId, passengers)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        aVoid -> {},
+                        Timber::e,
+                        mAddPassengersView::completed
+                );
     }
 
     @Override

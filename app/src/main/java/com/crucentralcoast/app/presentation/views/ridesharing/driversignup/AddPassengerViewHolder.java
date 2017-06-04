@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crucentralcoast.app.R;
-import com.crucentralcoast.app.util.AnimUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +25,6 @@ public class AddPassengerViewHolder extends RecyclerView.ViewHolder {
 
     private ItemClickListener mCallback;
 
-    public String rideId;
     public String passengerId;
     public boolean isChecked = false;
 
@@ -36,23 +34,13 @@ public class AddPassengerViewHolder extends RecyclerView.ViewHolder {
         mCallback = callback;
     }
 
-    public void showCheck() {
-        mCheck.setVisibility(View.VISIBLE);
-        mCheck.startAnimation(AnimUtils.getGrowAnim());
-    }
-
-    public void hideCheck() {
-        mCheck.startAnimation(AnimUtils.getShrinkAnim());
-        mCheck.setVisibility(View.GONE);
-    }
-
-    public void addPassengerToRide() {
+    public void setSelected() {
         if (!isChecked) {
-            showCheck();
+            mCheck.setVisibility(View.VISIBLE);
             mCallback.setItemChecked(isChecked = true, getAdapterPosition());
         }
         else {
-            hideCheck();
+            mCheck.setVisibility(View.GONE);
             mCallback.setItemChecked(isChecked = false, getAdapterPosition());
         }
     }

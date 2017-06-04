@@ -18,7 +18,7 @@ public class PassengerResultsAdapter extends RecyclerView.Adapter {
 
     private List<Passenger> passengers;
     private List<Passenger> selectedPassengers;
-    private boolean selectable = false;
+    private boolean selectable = true;
     private ItemClickListener mCallback;
 
     public PassengerResultsAdapter(List<Passenger> passengers, int numAvailable) {
@@ -26,16 +26,16 @@ public class PassengerResultsAdapter extends RecyclerView.Adapter {
         selectedPassengers = new ArrayList<>();
 
         mCallback = (boolean isChecked, int position) -> {
-            if (isChecked) {
-                selectedPassengers.add(passengers.get(position));
+            Passenger selected = this.passengers.get(position);
 
-                if (selectedPassengers.size() == numAvailable) {
-                    selectable = false;
-                }
+            if (isChecked) {
+                selectedPassengers.add(selected);
             }
             else {
-                selectedPassengers.remove(passengers.get(position));
+                selectedPassengers.remove(selected);
             }
+
+            selectable = selectedPassengers.size() < numAvailable;
         };
     }
 
@@ -55,8 +55,8 @@ public class PassengerResultsAdapter extends RecyclerView.Adapter {
         addPassengerViewHolder.mPhone.setText(passenger.phone);
 
         addPassengerViewHolder.itemView.setOnClickListener(view -> {
-            if (selectable) {
-                addPassengerViewHolder.addPassengerToRide();
+            if (selectable || selectedPassengers.contains(passenger)) {
+                addPassengerViewHolder.setSelected();
             }
         });
     }

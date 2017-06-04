@@ -85,7 +85,8 @@ public interface CruApiService
     Observable<List<Passenger>> searchPassengers(@Body Query query);
 
     @GET("/api/passengers/available")
-    Observable<List<Passenger>> getAvailablePassengers(@retrofit2.http.Query("eventId") String eventId);
+    Observable<List<Passenger>> getAvailablePassengers(@retrofit2.http.Query("eventId") String eventId,
+                                                       @retrofit2.http.Query("gender_pref") Ride.Gender gender);
 
     @FormUrlEncoded
     @POST("/api/rides/find")

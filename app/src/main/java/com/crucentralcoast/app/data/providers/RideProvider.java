@@ -1,16 +1,16 @@
 package com.crucentralcoast.app.data.providers;
 
+import com.crucentralcoast.app.data.models.Passenger;
+import com.crucentralcoast.app.data.models.Ride;
 import com.crucentralcoast.app.data.models.queries.Query;
 import com.crucentralcoast.app.data.providers.api.CruApiProvider;
 import com.crucentralcoast.app.data.providers.util.LocationUtil;
-import com.crucentralcoast.app.data.models.Ride;
-import com.crucentralcoast.app.data.services.CruApiService;
-import com.crucentralcoast.app.presentation.views.base.SubscriptionsHolder;
-import com.crucentralcoast.app.util.SharedPreferencesUtil;
-import com.crucentralcoast.app.data.models.Passenger;
 import com.crucentralcoast.app.data.providers.util.RxComposeUtil;
 import com.crucentralcoast.app.data.providers.util.RxLoggingUtil;
+import com.crucentralcoast.app.data.services.CruApiService;
+import com.crucentralcoast.app.presentation.views.base.SubscriptionsHolder;
 import com.crucentralcoast.app.util.MathUtil;
+import com.crucentralcoast.app.util.SharedPreferencesUtil;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.ZoneOffset;
@@ -22,6 +22,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public final class RideProvider {
@@ -150,8 +151,8 @@ public final class RideProvider {
                 .flatMap(finalRides -> finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides));
     }
 
-    public static Observable<List<Passenger>> getAvailablePassengers(String eventId) {
-        return mCruService.getAvailablePassengers(eventId);
+    public static Observable<List<Passenger>> getAvailablePassengers(String eventId, Ride.Gender gender) {
+        return mCruService.getAvailablePassengers(eventId, gender);
     }
 
     public static void createRide(Observer<Ride> observer, Ride ride) {
@@ -192,6 +193,18 @@ public final class RideProvider {
                 .compose(RxComposeUtil.network());
     }
 
+    public static Observable<Void> addPassengersToRide(String rideId, List<Passenger> passengers) {
+        for (Passenger passenger : passengers) {
+            addPassengerToRide(rideId, passenger.id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            aVoid -> {},
+                            Timber::e,
+                            () -> Timber.i("Added passenger " + passenger.id)
+                    );
+        }
+        return Observable.empty();
+    }
 
     public static void dropPassengerFromRide(SubscriptionsHolder holder, Observer<Void> observer, String rideId, String passengerId) {
         Subscription s = dropPassengerFromRide(rideId, passengerId)

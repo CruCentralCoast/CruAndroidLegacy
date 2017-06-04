@@ -35,4 +35,10 @@ public final class Passenger {
         this.direction = direction;
         this.eventId = eventId;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Passenger
+                && this.id.equals(((Passenger) obj).id);
+    }
 }

@@ -150,6 +150,8 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
         Intent addPassengerIntent = new Intent(this, AddPassengersActivity.class);
         addPassengerIntent.putExtra(CruEvent.sId, event.id);
         addPassengerIntent.putExtra("rideId", rideId);
+        addPassengerIntent.putExtra("direction", driverSignupVM.getRide().direction);
+        addPassengerIntent.putExtra("gender", driverSignupVM.getRide().gender);
         addPassengerIntent.putExtra("available", driverSignupVM.getRide().carCapacity);
         startActivity(addPassengerIntent);
     }
