@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.mobsandgeeks.saripaar.QuickRule;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 
@@ -72,5 +73,9 @@ public class BaseValidator implements Validator.ValidationListener
     {
         validator.validate(false);
         return isValid;
+    }
+
+    public void put(View view, QuickRule quickRule) {
+        validator.put(view, quickRule);
     }
 }

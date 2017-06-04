@@ -40,8 +40,9 @@ public final class PrayerProvider {
     }
 
     private static Observable<PrayerResponse> createPrayerResponse(PrayerResponse prayerResponse,
-                                                                   String leaderAPIKey) {
-        return cruApiService.postPrayerResponse(prayerResponse, leaderAPIKey);
+                                                                   String leaderAPIKey,
+                                                                   String fcmId) {
+        return cruApiService.postPrayerResponse(prayerResponse, leaderAPIKey, fcmId);
     }
 
     private static Observable<PrayerRequest> setPrayerRequestContactLeader(String prayerRequestId,
@@ -85,8 +86,9 @@ public final class PrayerProvider {
     }
 
     public static void createPrayerResponse(Observer<PrayerResponse> observer,
-                                            PrayerResponse prayerResponse, String leaderAPIKey) {
-        createPrayerResponse(prayerResponse, leaderAPIKey)
+                                            PrayerResponse prayerResponse, String leaderAPIKey,
+                                            String fcmId) {
+        createPrayerResponse(prayerResponse, leaderAPIKey, fcmId)
                 .compose(RxComposeUtil.network())
                 .compose(RxComposeUtil.ui())
                 .subscribe(observer);

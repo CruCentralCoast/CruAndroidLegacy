@@ -119,7 +119,8 @@
 
         <activity
             android:name=".presentation.views.prayers.SubmitPrayerRequestActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:label="@string/create_prayer_request"/>
 
         <activity
             android:name=".presentation.views.prayers.PrayerRequestDetailsActivity"

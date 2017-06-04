@@ -31,8 +31,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
 
-public interface CruApiService
-{
+public interface CruApiService {
     @GET("/api/users/phone/{phone}")
     Observable<CruUser> getCruUser(@Path("phone") String phoneNumber);
 
@@ -154,7 +153,7 @@ public interface CruApiService
     Observable<List<PrayerRequest>> getUserPrayerRequests(@retrofit2.http.Query("fcm_id") String fcmId);
 
     @POST("/api/prayerresponse")
-    Observable<PrayerResponse> postPrayerResponse(@Body PrayerResponse prayerResponse, @retrofit2.http.Query("LeaderAPIKey") String leaderApiKey);
+    Observable<PrayerResponse> postPrayerResponse(@Body PrayerResponse prayerResponse, @retrofit2.http.Query("LeaderAPIKey") String leaderApiKey, @retrofit2.http.Query("fcm_id") String fcmId);
 
     @FormUrlEncoded
     @PATCH("/api/prayerrequest/{request_id}")

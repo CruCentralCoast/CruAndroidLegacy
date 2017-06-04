@@ -235,4 +235,9 @@
     <string name="prayer_response_error">Error submitting prayer response</string>
     <string name="contact_leader_error">Error setting contact leader</string>
     <string name="type_response">Type a response</string>
+    <string name="no_preference">No Gender Preference</string>
+    <string name="create_prayer_request">Create a Prayer Request</string>
+    <string name="empty_field_message">This field cannot be empty</string>
+    <string name="invalid_contact_message">At least one of these fields cannot be empty</string>
+    <string name="invalid_email_message">Invalid email</string>
 </resources>

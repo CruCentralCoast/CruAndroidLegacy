@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.content.res.AppCompatResources;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -62,10 +61,7 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_prayer_request_details);
         ButterKnife.bind(this);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-        }
+        enableHomeBackArrow();
 
         prayerRequest = Parcels.unwrap(getIntent().getParcelableExtra(PRAYER_REQ_EXTRA));
         bind();
@@ -104,16 +100,6 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
         } else {
             alertInfo.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return false;
     }
 
     @OnClick(R.id.alert_info)
@@ -196,7 +182,8 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
                             });
             PrayerProvider.createPrayerResponse(prayerResponseSubscriber,
                     new PrayerResponse(SharedPreferencesUtil.getFCMID(), responseText,
-                            prayerRequest.id), SharedPreferencesUtil.getLeaderAPIKey());
+                            prayerRequest.id), SharedPreferencesUtil.getLeaderAPIKey(),
+                    SharedPreferencesUtil.getFCMID());
         }
     }
 }

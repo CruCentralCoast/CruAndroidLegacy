@@ -3,6 +3,7 @@ package com.crucentralcoast.app.presentation.views.base;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.crucentralcoast.app.R;
 
@@ -15,6 +16,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
     private CompositeSubscription subscriptions = new CompositeSubscription();
     public Unbinder unbinder;
     private AlertDialog alertDialog;
+    private boolean homeBackArrow;
 
     @Override
     protected void onDestroy()
@@ -59,5 +61,23 @@ public class BaseAppCompatActivity extends AppCompatActivity implements Subscrip
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
+    }
+
+    public void enableHomeBackArrow() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+        homeBackArrow = true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean consumed = super.onOptionsItemSelected(item);
+        if (!consumed && homeBackArrow && item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            consumed = true;
+        }
+        return consumed;
     }
 }
