@@ -31,4 +31,14 @@
             android:title="@string/notification_checkbox_text"/>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/about">
+
+        <Preference
+            android:key="@string/about"
+            android:id="@+id/about"
+            android:title="@string/about"/>
+
+    </PreferenceCategory>
 </PreferenceScreen>

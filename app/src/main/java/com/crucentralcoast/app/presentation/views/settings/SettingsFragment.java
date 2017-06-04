@@ -18,6 +18,7 @@ import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.data.models.LoginResponse;
 import com.crucentralcoast.app.data.providers.LoginProvider;
 import com.crucentralcoast.app.presentation.validator.BaseValidator;
+import com.crucentralcoast.app.presentation.views.about.AboutActivity;
 import com.crucentralcoast.app.presentation.views.base.SubscriptionsHolder;
 import com.crucentralcoast.app.presentation.views.subscriptions.SubscriptionActivity;
 import com.crucentralcoast.app.util.SharedPreferencesUtil;
@@ -39,6 +40,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
     private Preference subscriptionButton;
     private Preference loginButton;
+    private Preference aboutButton;
     private CheckBoxPreference notificationCheckbox;
 
     //login
@@ -154,6 +156,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         notificationCheckbox.setOnPreferenceChangeListener((preference, o) -> {
             SharedPreferencesUtil.setNotificationEnable(!notificationCheckbox.isChecked());
             return true;
+        });
+
+        aboutButton = getPreferenceManager().findPreference(getString(R.string.about));
+        aboutButton.setOnPreferenceClickListener(preference -> {
+            Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
+            startActivity(aboutIntent);
+            return false;
         });
     }
 

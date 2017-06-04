@@ -84,6 +84,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/PreferenceTheme"/>
 
+        <activity
+            android:name=".presentation.views.about.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
         <service
             android:name=".notifications.FcmListenerService"
             android:exported="false">
