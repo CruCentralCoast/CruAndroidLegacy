@@ -19,7 +19,7 @@ public class AddPassengersContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadAvailablePassengers(String eventId, Ride.Gender gender);
+        void loadAvailablePassengers(String eventId, Ride.Gender gender, double[] location, double radius);
 
         void addPassengers(String rideId, List<Passenger> passengers);
     }

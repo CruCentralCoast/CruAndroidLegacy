@@ -34,6 +34,9 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
     private String rideId;
     private Ride.Gender gender;
     private int numAvailable;
+    private double latitude;
+    private double longitude;
+    private double radius;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,10 +44,17 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
         setContentView(R.layout.activity_add_passengers);
         ButterKnife.bind(this);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Select Passengers");
+        }
+
         eventId = getIntent().getStringExtra(CruEvent.sId);
         rideId = getIntent().getStringExtra("rideId");
         gender = (Ride.Gender) getIntent().getSerializableExtra("gender");
         numAvailable = getIntent().getIntExtra("available", 0);
+        latitude = getIntent().getDoubleExtra("latitude", 0.0);
+        longitude = getIntent().getDoubleExtra("longitude", 0.0);
+        radius = getIntent().getDoubleExtra("radius", 0);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mAvailablePassengerList.setLayoutManager(layoutManager);
@@ -52,7 +62,12 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
         mAvailablePassengerList.setAdapter(mAdapter);
 
         mPresenter = new AddPassengersPresenter(this);
-        mPresenter.loadAvailablePassengers(eventId, gender);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.loadAvailablePassengers(eventId, gender, new double[]{latitude, longitude}, radius);
     }
 
     @OnClick(R.id.fab)
@@ -78,6 +93,7 @@ public class AddPassengersActivity extends AppCompatActivity implements AddPasse
                     .setMessage("There doesn't seem to be any passengers waiting! " +
                             "You will receive a notification when someone joins your car.")
                     .setPositiveButton("OK", (dialog1, which) -> finish())
+                    .setCancelable(false)
                     .create()
                     .show();
         }

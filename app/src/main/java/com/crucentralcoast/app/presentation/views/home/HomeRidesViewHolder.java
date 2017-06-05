@@ -50,7 +50,10 @@ public class HomeRidesViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String getDateTime(Ride ride) {
-        return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
-                + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
+        if (ride.time != null) {
+            return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+                    + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
+        }
+        return "";
     }
 }

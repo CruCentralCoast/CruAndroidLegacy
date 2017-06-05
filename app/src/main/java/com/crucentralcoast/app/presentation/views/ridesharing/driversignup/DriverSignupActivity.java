@@ -153,6 +153,9 @@ public class DriverSignupActivity extends BaseAppCompatActivity {
         addPassengerIntent.putExtra("direction", driverSignupVM.getRide().direction);
         addPassengerIntent.putExtra("gender", driverSignupVM.getRide().gender);
         addPassengerIntent.putExtra("available", driverSignupVM.getRide().carCapacity);
+        addPassengerIntent.putExtra("latitude", driverSignupVM.getRide().location.geo[1]);
+        addPassengerIntent.putExtra("longitude", driverSignupVM.getRide().location.geo[0]);
+        addPassengerIntent.putExtra("radius", driverSignupVM.radius);
         startActivity(addPassengerIntent);
     }
 

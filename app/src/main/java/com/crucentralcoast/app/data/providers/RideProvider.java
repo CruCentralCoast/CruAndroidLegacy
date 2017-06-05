@@ -39,7 +39,7 @@ public final class RideProvider {
     private static Observable.Transformer<Ride, Ride> attachDistance(double[] location) {
         return rideObservable -> rideObservable
                 .map(ride -> {
-                    ride.distance = MathUtil.convertMeterToMiles(LocationUtil.distance(location[0], location[1], ride.location.geo[1],
+                    ride.distance = MathUtil.convertMeterToMiles(LocationUtil.distance(location[1], location[0], ride.location.geo[1],
                             ride.location.geo[0]));
                     return ride;
                 })
@@ -149,10 +149,6 @@ public final class RideProvider {
                 //.compose(sortByDistance)
                 .compose(sortByTime(time))
                 .flatMap(finalRides -> finalRides.isEmpty() ? Observable.empty() : Observable.just(finalRides));
-    }
-
-    public static Observable<List<Passenger>> getAvailablePassengers(String eventId, Ride.Gender gender) {
-        return mCruService.getAvailablePassengers(eventId, gender);
     }
 
     public static void createRide(Observer<Ride> observer, Ride ride) {

@@ -62,13 +62,13 @@ public class RideInfoFragment extends FormContentFragment {
             formHolder.addDataObject(PassengerSignupActivity.QUERY, queryDirectionPair.first);
             formHolder.addDataObject(PassengerSignupActivity.DIRECTION, queryDirectionPair.second);
             formHolder.addDataObject(PassengerSignupActivity.SELECTED_TIME, rideFilterVM.getDateTime());
-            formHolder.addDataObject(PassengerSignupActivity.LATLNG, rideFilterVM.precisePlace);
 
             Passenger passenger = new Passenger(SharedPreferencesUtil.getUserName(),
                     SharedPreferencesUtil.getUserPhoneNumber(),
                     SharedPreferencesUtil.getFCMID(), queryDirectionPair.second,
                     ((CruEvent) formHolder.getDataObject(PassengerSignupActivity.CRU_EVENT)).id);
-
+            passenger.location = rideFilterVM.location;
+            passenger.genderPref = rideFilterVM.getGender().getId();
             formHolder.addDataObject("passenger", passenger);
 
             super.onNext(formHolder);

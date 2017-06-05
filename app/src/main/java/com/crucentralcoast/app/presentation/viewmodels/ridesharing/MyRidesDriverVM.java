@@ -44,8 +44,11 @@ public class MyRidesDriverVM {
 
     public String getDateTime()
     {
-        return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
-                + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
+        if (ride.time != null) {
+            return ride.time.format(DateTimeFormatter.ofPattern(AppConstants.DATE_FORMATTER))
+                    + " " + ride.time.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMATTER));
+        }
+        return "";
     }
 
     public String getLocation() {

@@ -13,12 +13,10 @@ import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.data.models.Passenger;
 import com.crucentralcoast.app.data.models.Ride;
 import com.crucentralcoast.app.data.models.queries.Query;
-import com.crucentralcoast.app.data.providers.PassengerProvider;
 import com.crucentralcoast.app.data.providers.RideProvider;
 import com.crucentralcoast.app.presentation.util.DividerItemDecoration;
 import com.crucentralcoast.app.presentation.views.forms.FormContentListFragment;
 import com.crucentralcoast.app.presentation.views.forms.FormHolder;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.threeten.bp.ZonedDateTime;
 
@@ -28,8 +26,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.observers.Observers;
-import timber.log.Timber;
 
 public class DriverResultsFragment extends FormContentListFragment {
     @BindView(R.id.informational_text)
@@ -38,7 +34,6 @@ public class DriverResultsFragment extends FormContentListFragment {
     private Query query;
     private ZonedDateTime selectedTime;
     private List<Ride> results;
-    private LatLng passengerLocation;
     private Passenger passenger;
 
     private FormHolder formHolder;
@@ -68,8 +63,7 @@ public class DriverResultsFragment extends FormContentListFragment {
     private void getRides() {
         helper.swipeRefreshLayout.setRefreshing(true);
         results.clear();
-        RideProvider.searchRides(this, rideResultsObserver, query,
-                new double[]{passengerLocation.latitude, passengerLocation.longitude}, selectedTime);
+        RideProvider.searchRides(this, rideResultsObserver, query, passenger.location.geo, selectedTime);
     }
 
     private void handleResults(List<Ride> results) {
@@ -84,22 +78,23 @@ public class DriverResultsFragment extends FormContentListFragment {
                 .setMessage("There doesn't seem to be any drivers available for your location! " +
                         "Would you like to request a ride anyways? You will receive a notification" +
                         " when a closer driver chooses you.")
-                .setPositiveButton("YES", (dialog1, which) -> {
+                .setPositiveButton("YES", (dialog, which) -> {
                     // We want to add the passenger to the database to be picked up later by a driver
-                    PassengerProvider.addPassenger(this,
-                            Observers.create(
-                                    next -> ((PassengerSignupActivity) getActivity()).complete(),
-                                    Timber::e
-                            ),
-                            passenger
-                    );
+                    formHolder.addDataObject("fromDialog", true);
+                    onNext(formHolder);
                 })
-                .setNegativeButton("NO", (dialog1, which) -> {
+                .setNegativeButton("NO", (dialog, which) -> {
                     // Close dialog
                 })
                 .create()
                 .show();
         return super.onEmpty(layoutId);
+    }
+
+    @Override
+    public void onNext(FormHolder formHolder) {
+        formHolder.addDataObject("passenger", passenger);
+        super.onNext(formHolder);
     }
 
     @Override
@@ -112,8 +107,6 @@ public class DriverResultsFragment extends FormContentListFragment {
 
         results = new ArrayList<>();
         rideResultsObserver = createListObserver(R.layout.empty_with_alert, this::handleResults);
-
-        passengerLocation = (LatLng) formHolder.getDataObject(PassengerSignupActivity.LATLNG);
 
         formHolder.setNavigationVisibility(View.VISIBLE);
         formHolder.setNextVisibility(View.GONE);

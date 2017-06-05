@@ -130,10 +130,8 @@ public class ListHelperImpl implements ListHelper
                 },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),
-                () -> {
-                    child.onEmpty(emptyLayoutId);
-                },
-                () -> child.onNoNetwork(), () -> onNetworkError());
+                () -> child.onEmpty(emptyLayoutId),
+                () -> child.onNoNetwork(), this::onNetworkError);
     }
 
     public <T> CruObserver<T> createListObserver(Action1<T> onNext, Action0 onEmpty)

@@ -33,6 +33,8 @@ public class BasicInfoFragment extends FormContentFragment {
     private Ride ride;
     private BaseValidator validator;
     private Ride.Direction direction;
+    private Passenger passenger;
+    private boolean isFromDialog = false;
 
     @BindView(R.id.name_field)
     @NotEmpty
@@ -67,14 +69,28 @@ public class BasicInfoFragment extends FormContentFragment {
     public void onNext(FormHolder formHolder) {
         if (validator.validate()) {
             SharedPreferencesUtil.writeBasicInfo(nameField.getText().toString(), null, phoneField.getText().toString());
-
-            Passenger passenger = getPassenger();
             progressBar.setVisibility(View.VISIBLE);
-            formHolder.setNavigationClickable(false);
 
-            PassengerProvider.addPassenger(this, Observers.create(passenger1 ->
-                    RideProvider.addPassengerToRide(this, Observers.create(x ->
-                            super.onNext(formHolder), Timber::e), ride.id, passenger1.id), Timber::e), passenger);
+            if (!isFromDialog) {
+                Passenger passenger = getPassenger();
+                formHolder.setNavigationClickable(false);
+
+                PassengerProvider.addPassenger(this, Observers.create(passenger1 ->
+                        RideProvider.addPassengerToRide(this, Observers.create(x ->
+                                super.onNext(formHolder), Timber::e), ride.id, passenger1.id), Timber::e), passenger);
+            }
+            else {
+                passenger.name = nameField.getText().toString();
+                passenger.phone = phoneField.getText().toString();
+
+                PassengerProvider.addPassenger(this,
+                        Observers.create(
+                                next -> super.onNext(formHolder),
+                                Timber::e
+                        ),
+                        passenger
+                );
+            }
         }
     }
 
@@ -83,6 +99,12 @@ public class BasicInfoFragment extends FormContentFragment {
         formHolder.setTitle(getString(R.string.passenger_contact_info));
         ride = (Ride) formHolder.getDataObject(PassengerSignupActivity.SELECTED_RIDE);
         direction = (Ride.Direction) formHolder.getDataObject(PassengerSignupActivity.DIRECTION);
+        passenger = (Passenger) formHolder.getDataObject("passenger");
+
+        if ((Boolean) formHolder.getDataObject("fromDialog")) {
+            isFromDialog = true;
+        }
+
         AutoFill.setupAutoFillData((BaseAppCompatActivity) getActivity(), () -> {
             nameField.setText(SharedPreferencesUtil.getUserName());
             phoneField.setText(SharedPreferencesUtil.getUserPhoneNumber());
