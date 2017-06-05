@@ -39,6 +39,8 @@ public class DriverResultsFragment extends FormContentListFragment {
     private FormHolder formHolder;
     private Observer<List<Ride>> rideResultsObserver;
 
+    private boolean dialogShown = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,21 +75,24 @@ public class DriverResultsFragment extends FormContentListFragment {
 
     @Override
     public View onEmpty(int layoutId) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("No Drivers Available")
-                .setMessage("There doesn't seem to be any drivers available for your location! " +
-                        "Would you like to request a ride anyways? You will receive a notification" +
-                        " when a closer driver chooses you.")
-                .setPositiveButton("YES", (dialog, which) -> {
-                    // We want to add the passenger to the database to be picked up later by a driver
-                    formHolder.addDataObject("fromDialog", true);
-                    onNext(formHolder);
-                })
-                .setNegativeButton("NO", (dialog, which) -> {
-                    // Close dialog
-                })
-                .create()
-                .show();
+        if (!dialogShown) {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("No Drivers Available")
+                    .setMessage("There doesn't seem to be any drivers available for your location! " +
+                            "Would you like to request a ride anyways? You will receive a notification" +
+                            " when a closer driver chooses you.")
+                    .setPositiveButton("YES", (dialog, which) -> {
+                        // We want to add the passenger to the database to be picked up later by a driver
+                        formHolder.addDataObject("fromDialog", true);
+                        onNext(formHolder);
+                    })
+                    .setNegativeButton("NO", (dialog, which) -> {
+                        // Close dialog
+                    })
+                    .create()
+                    .show();
+            dialogShown = true;
+        }
         return super.onEmpty(layoutId);
     }
 
