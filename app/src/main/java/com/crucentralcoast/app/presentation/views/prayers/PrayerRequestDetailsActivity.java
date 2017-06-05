@@ -45,6 +45,8 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
     protected TextView creationDate;
     @BindView(R.id.leaders_info)
     protected TextView leadersInfo;
+    @BindView(R.id.contact_leader_info)
+    protected TextView contactLeaderInfo;
     @BindView(R.id.alert_info)
     protected TextView alertInfo;
     @BindView(R.id.response)
@@ -125,11 +127,23 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
                                     .getDrawable(this,
                                             R.drawable.ic_report_problem),
                             null, null, null);
+                    contactLeaderInfo.setVisibility(View.VISIBLE);
+                    contactLeaderInfo.setText(prayerRequest.contactLeader.id
+                            .equals(SharedPreferencesUtil.getUserId()) ?
+                            getString(R.string.contact_leader_present_info_you) :
+                            String.format(getString(R.string.contact_leader_present_info),
+                                    prayerRequest.contactLeader.name.toString()));
                 }
             } else {
                 alertInfo.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources
                         .getDrawable(this, R.drawable.ic_check_all), null, null, null);
                 alertInfo.setText(R.string.contacted);
+                contactLeaderInfo.setVisibility(View.VISIBLE);
+                contactLeaderInfo.setText(prayerRequest.contactLeader.id
+                        .equals(SharedPreferencesUtil.getUserId()) ?
+                        getString(R.string.contact_leader_past_info_you) :
+                        String.format(getString(R.string.contact_leader_past_info),
+                                prayerRequest.contactLeader.name.toString()));
             }
         } else {
             alertInfo.setVisibility(View.GONE);
@@ -147,7 +161,7 @@ public class PrayerRequestDetailsActivity extends BaseAppCompatActivity {
                                 SharedPreferencesUtil.getUserId());
                     })
                     .setNegativeButton(R.string.cancel, null).create().show();
-        } else if (prayerRequest.contactLeader.equals(SharedPreferencesUtil.getUserId())) {
+        } else if (prayerRequest.contactLeader.id.equals(SharedPreferencesUtil.getUserId())) {
             showContactInfoDialog();
         }
     }

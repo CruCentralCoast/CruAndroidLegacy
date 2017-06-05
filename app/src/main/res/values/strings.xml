@@ -244,6 +244,10 @@
     <string name="author_contact_info">Author Contact Information</string>
     <string name="email">Email</string>
     <string name="phone_number">Phone Number</string>
+    <string name="contact_leader_present_info_you">You are the contact leader</string>
+    <string name="contact_leader_present_info">%s is the contact leader</string>
+    <string name="contact_leader_past_info_you">You were the contact leader</string>
+    <string name="contact_leader_past_info">%s was the contact leader</string>
 
     <!-- Third-Party Libraries -->
     <string name="text_drawable">TextDrawable</string>

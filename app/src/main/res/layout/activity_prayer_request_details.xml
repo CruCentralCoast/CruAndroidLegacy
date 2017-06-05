@@ -48,7 +48,18 @@
                 android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_account_multiple"
                 android:text="@string/visibility_leaders_only"
-                android:visibility="gone" />
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/contact_leader_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/ic_account_grey600_48dp"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_account_grey600_48dp"
+                android:visibility="gone"
+                tools:text="You are the contact leader" />
 
             <TextView
                 android:id="@+id/alert_info"

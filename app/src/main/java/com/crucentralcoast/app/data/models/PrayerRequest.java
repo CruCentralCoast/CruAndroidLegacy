@@ -36,7 +36,7 @@ public class PrayerRequest {
     @SerializedName(sLeadersOnly) public boolean leadersOnly;
     @SerializedName(sGenderPreference) public Ride.Gender genderPreference;
     @SerializedName(sContact) public boolean contact;
-    @SerializedName(sContactLeader) public String contactLeader;
+    @SerializedName(sContactLeader) public CruUser contactLeader;
     @SerializedName(sContacted) public boolean contacted;
     @SerializedName(sContactPhone) public String contactPhone;
     @SerializedName(sContactEmail) public String contactEmail;
