@@ -3,6 +3,7 @@ package com.crucentralcoast.app.data.providers.observer;
 import com.crucentralcoast.app.CruApplication;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
@@ -69,7 +70,15 @@ public class ObserverUtil
             @Override
             public void onNext(T t)
             {
-                streamEmpty = false;
+                //determine if an empty list is returned
+                if (t instanceof List) {
+                    if (!((List) t).isEmpty()) {
+                        streamEmpty = false;
+                    }
+                }
+                else {
+                    streamEmpty = false;
+                }
                 observer.onNext(t);
             }
         };

@@ -60,7 +60,6 @@ public class PrayerRequestListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        inflateEmptyView(view, R.layout.empty_with_alert);
         unbinder = ButterKnife.bind(this, view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

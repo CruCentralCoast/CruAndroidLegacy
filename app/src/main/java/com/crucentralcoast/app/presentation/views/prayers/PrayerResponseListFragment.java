@@ -62,7 +62,6 @@ public class PrayerResponseListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        inflateEmptyView(view, R.layout.empty_with_alert);
         unbinder = ButterKnife.bind(this, view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -70,9 +69,9 @@ public class PrayerResponseListFragment extends ListFragment {
         helper.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 linearLayoutManager.getOrientation(), getResources()
                 .getDimensionPixelSize(R.dimen.activity_horizontal_margin)));
+        helper.swipeRefreshLayout.setOnRefreshListener(this::getPrayerResponses);
         prayerResponseSubscriber = createListObserver(R.layout.empty_prayer_response_view,
                 this::setPrayerResponses);
-        helper.swipeRefreshLayout.setOnRefreshListener(this::getPrayerResponses);
     }
 
     @Override
@@ -98,6 +97,11 @@ public class PrayerResponseListFragment extends ListFragment {
             prayerResponseAdapter = new PrayerResponseAdapter(new ArrayList<>());
             helper.recyclerView.setAdapter(prayerResponseAdapter);
         }
-        prayerResponseAdapter.setPrayerResponses(prayerRequest.prayerResponses);
+        if (prayerRequest.prayerResponses.isEmpty()) {
+            onEmpty(R.layout.empty_prayer_response_view);
+        }
+        else {
+            prayerResponseAdapter.setPrayerResponses(prayerRequest.prayerResponses);
+        }
     }
 }

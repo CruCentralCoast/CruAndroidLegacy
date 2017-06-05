@@ -125,8 +125,12 @@ public class ListHelperImpl implements ListHelper
     public <T> CruObserver<T> createListObserver(int emptyLayoutId, Action1<T> onNext)
     {
         return ObserverUtil.create(Observers.create(t -> {
-                    onNext.call(t);
+                    // needed to swap the two calls in order to show the empty view after the model
+                    // object is received. (E.g. The list within an item is used and that list is
+                    // empty. Because there's an item, the recycler view will be shown, but onNext
+                    // can hide it if necessary)
                     child.showContent();
+                    onNext.call(t);
                 },
                 e -> Timber.e(e, "Failed to retrieve."),
                 () -> swipeRefreshLayout.setRefreshing(false)),

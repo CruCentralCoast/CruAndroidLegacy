@@ -12,7 +12,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:gravity="center_horizontal"
-        android:text="@string/no_prayer_requests"
-        android:textSize="18sp" />
+        android:text="@string/no_prayer_responses"
+        android:textSize="16sp" />
 
 </FrameLayout>
