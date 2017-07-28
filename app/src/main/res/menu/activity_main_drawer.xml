@@ -3,13 +3,17 @@
 
     <group android:checkableBehavior="single" android:id="@+id/main_options">
         <item
-            android:id="@+id/nav_feed"
-            android:icon="@drawable/ic_view_dashboard_grey600"
-            android:title="@string/nav_feed"/>
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_grey_600_24dp"
+            android:title="@string/nav_home"/>
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_action_event_grey600"
             android:title="@string/nav_events"/>
+        <item
+            android:id="@+id/prayer_requests"
+            android:icon="@drawable/ic_book_open_page_variant"
+            android:title="@string/prayer_requests"/>
         <item
             android:id="@+id/nav_my_rides"
             android:icon="@drawable/ic_car_grey600"

@@ -7,15 +7,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/app_bar_main"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <org.androidcru.crucentralcoast.presentation.customviews.NonSwipeableViewPager
+        <com.crucentralcoast.app.presentation.customviews.NonSwipeableViewPager
             android:id="@+id/form_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"

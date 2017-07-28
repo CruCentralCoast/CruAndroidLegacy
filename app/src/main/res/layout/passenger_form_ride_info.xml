@@ -15,7 +15,7 @@
             android:id="@+id/place_autocomplete_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            class="org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment"/>
+            class="com.crucentralcoast.app.presentation.customviews.CruSupportPlaceAutocompleteFragment"/>
 
         <include layout="@layout/ride_datetime"/>
 

@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="-8dp"
                     android:layout_gravity="center_vertical"
-                    class="org.androidcru.crucentralcoast.presentation.customviews.CruSupportPlaceAutocompleteFragment"
+                    class="com.crucentralcoast.app.presentation.customviews.CruSupportPlaceAutocompleteFragment"
                     android:layout_centerVertical="true"/>
             </org.androidcru.crucentralcoast.presentation.customviews.NoTouchLinearLayout>
 

@@ -8,7 +8,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_home">Home</string>
     <string name="nav_events">Events</string>
+    <string name="prayer_requests">Prayer Requests</string>
     <string name="nav_cruber">Cruber</string>
     <string name="nav_summer_missions">Summer Missions</string>
     <string name="nav_get_involved">Get Involved</string>
@@ -44,6 +46,7 @@
     <string name="close">Close</string>
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>
+    <string name="skip">Skip</string>
     <string name="driver">Driver</string>
     <string name="passenger">Passenger</string>
     <string name="edit">Edit</string>
@@ -56,6 +59,7 @@
     <string name="YourDriver">Your Driver</string>
 
     <string name="learn_more">Learn More</string>
+    <string name="more">More</string>
 
     <string name="mission_leaders">Leaders: <xliff:g name="names">%s</xliff:g></string>
     <string name="until"><xliff:g name="date">%s</xliff:g> until <xliff:g name="date">%s</xliff:g></string>
@@ -68,6 +72,9 @@
     <string name="facebook_yes">SURE</string>
     <string name="no_articles_available">There are currently no articles available. Please check back later!</string>
     <string name="no_events_available">There are no events available for your current subscriptions, check that you\'re subscribed to the ministries you\'re interested in!</string>
+    <string name="no_prayer_requests">There are currently no prayer requests available. Please check back later!</string>
+    <string name="no_my_prayer_requests">You have yet to submit a prayer request.</string>
+    <string name="no_prayer_responses">There are no responses to this prayer request. Respond if you feel led.</string>
     <string name="manage_subscriptions">Manage Subscriptions</string>
     <string name="view_upcoming_events">View Upcoming Events</string>
     <string name="not_driving">You are not currently signed up to drive to an event.</string>
@@ -76,7 +83,8 @@
     <string name="view_upcoming_events_driver">View Upcoming Events</string>
     <string name="phone_number_error">Input is not a phone number</string>
     <string name="car_capacity_error">Value is below original car capacity</string>
-
+    <string name="about">About</string>
+    <string name="third_party">Third-Party Libraries We Are Using</string>
 
     <string-array name="genders">
         <item>Male</item>
@@ -157,11 +165,17 @@
     <string name="video_search_hint">Search Cru Cal Poly SLO</string>
     <string name="nav_feed">Feed</string>
     <string name="no_rides">No rides match your criteria!</string>
+    <string name="no_user_rides">No rides!</string>
     <string name="no_feed_items">No feed items at this time!</string>
 
     <string-array name="myrides_titles">
         <item>Passenger</item>
         <item>Driver</item>
+    </string-array>
+
+    <string-array name="prayer_requests_titles">
+        <item>My Requests</item>
+        <item>All Requests</item>
     </string-array>
 
     <string name="subscription_button_key">Subscription Key</string>
@@ -188,5 +202,138 @@
     <string name="driver_authorization_title">Oops!</string>
     <string name="driver_authorization_msg">You are not a verified driver.  Please contact Cru</string>
     <string name="driver_authorization_dismiss">Ok</string>
+    <string name="read">Read</string>
+    <string name="watch">Watch</string>
+    <string name="listen">Listen</string>
 
+    <string name="onboarding_shared_transition">onboarding_transition</string>
+
+    <!--Onboarding info-->
+    <string name="cru_cc_desc">A family of ministries giving every student and faculty on California\'s Central Coast the opportunity to hear the Good News of Jesus Christ</string>
+    <string name="get_connected_title">Get connected</string>
+    <string name="get_connected_desc">Join a local ministry team and get plugged into a community group</string>
+    <string name="find_a_ride_title">Find a ride</string>
+    <string name="find_a_ride_desc">Sign up to give and receive rides to upcoming events</string>
+
+    <!--Prayer request strings-->
+    <string name="prayer">Prayer</string>
+    <string name="visibility_public">Public</string>
+    <string name="visibility_leaders_only">Leaders only</string>
+    <string name="gender_preference">Gender Preference</string>
+    <string name="personally_contact_text">I\'d like to be personally contacted by a leader outside of the app</string>
+    <string name="contact_email">Contact Email</string>
+    <string name="contact_phone">Contact Phone Number</string>
+    <string name="details">Details</string>
+    <string name="respond">Respond</string>
+    <string name="no_leader">No Contact Leader</string>
+    <string name="not_contacted">Not Contacted</string>
+    <string name="contacted">Contacted</string>
+    <string name="contact_sign_up">Contact Sign-up</string>
+    <string name="contact_sign_up_details">Sign up as the leader responsible for personally contacting the author of this prayer request</string>
+    <string name="no_network_connection">No network connection</string>
+    <string name="network_error">Network error</string>
+    <string name="prayer_request_error">Error submitting prayer request</string>
+    <string name="prayer_response_error">Error submitting prayer response</string>
+    <string name="update_error">Error updating prayer request</string>
+    <string name="type_response">Type a response</string>
+    <string name="no_preference">No Gender Preference</string>
+    <string name="create_prayer_request">Create a Prayer Request</string>
+    <string name="empty_field_message">This field cannot be empty</string>
+    <string name="invalid_contact_message">At least one of these fields cannot be empty</string>
+    <string name="invalid_email_message">Invalid email</string>
+    <string name="author_contact_info">Author Contact Information</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="contact_leader_present_info_you">You are the contact leader</string>
+    <string name="contact_leader_present_info">%s is the contact leader</string>
+    <string name="contact_leader_past_info_you">You were the contact leader</string>
+    <string name="contact_leader_past_info">%s was the contact leader</string>
+
+    <!-- Third-Party Libraries -->
+    <string name="text_drawable">TextDrawable</string>
+    <string name="text_drawable_copyright">Copyright &#169; 2014 Amulya Khare</string>
+    <string name="saripaar">android-saripaar</string>
+    <string name="saripaar_copyright">Copyright 2012&#8211;2015 Mobs &amp; Geeks</string>
+    <string name="date_time_picker">MaterialDateTimePicker</string>
+    <string name="date_time_picker_copyright">Copyright &#169; 2015 Wouter Dullaert</string>
+    <string name="autofittextview">android-autofittextview</string>
+    <string name="autofittextview_copyright">Copyright 2014 Grantland Chew</string>
+    <string name="butterknife">butterknife</string>
+    <string name="butterknife_copyright">Copyright 2013 Jake Wharton</string>
+    <string name="threeten">ThreeTenABP</string>
+    <string name="threeten_copyright">Copyright &#169; 2015 Jake Wharton</string>
+    <string name="threetengson">ThreeTen-Backport-Gson-Adapter</string>
+    <string name="threetengson_copyright">Copyright &#169; 2015 Aaron He</string>
+    <string name="retrofit">retrofit</string>
+    <string name="retrofit_copyright">Copyright 2013 Square, Inc.</string>
+    <string name="okhttp">okhttp</string>
+    <string name="okhttp_copyright">Copyright 2013 Square, Inc.</string>
+    <string name="facebook">facebook-android-sdk</string>
+    <string name="facebook_copyright">Copyright &#169; 2014-present, Facebook, Inc. All rights reserved.</string>
+    <string name="facebook_license">
+        You are hereby granted a non-exclusive, worldwide, royalty-free license to use,
+        copy, modify, and distribute this software in source code or binary form for use
+        in connection with the web services and APIs provided by Facebook.\n\n
+
+        As with any software that integrates with the Facebook platform, your use of
+        this software is subject to the Facebook Developer Principles and Policies
+        [http://developers.facebook.com/policy/]. This copyright notice shall be
+        included in all copies or substantial portions of the software.\n\n
+
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+        FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+        COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+        IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+        CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    </string>
+    <string name="reservoir">Reservoir</string>
+    <string name="reservoir_copyright">Copyright &#169; 2014 Anup Cowkur</string>
+    <string name="parceler">parceler</string>
+    <string name="parceler_copyright">Copyright 2011&#8211;2015 John Ericksen</string>
+    <string name="rxandroid">RxAndroid</string>
+    <string name="rxandroid_copyright">Copyright 2015 The RxAndroid authors</string>
+    <string name="rxjava">RxJava</string>
+    <string name="rxjava_copyright">opyright &#169; 2016-present, RxJava Contributors.</string>
+    <string name="rxpermissions">RxPermissions</string>
+    <string name="rxpermissions_copyright">Copyright 2017 Thomas Bruyelle</string>
+    <string name="picasso_transformations">picasso-transformations</string>
+    <string name="picasso_transformations_copyright">Copyright 2017 Wasabeef</string>
+    <string name="picasso">picasso</string>
+    <string name="picasso_copyright">Copyright 2013 Square, Inc.</string>
+
+    <string name="apache_license">
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at\n\n
+
+           http://www.apache.org/licenses/LICENSE-2.0\n\n
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    </string>
+    <string name="mit_license">
+        The MIT License (MIT)\n
+
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:\n\n
+
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.\n\n
+
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+    </string>
 </resources>

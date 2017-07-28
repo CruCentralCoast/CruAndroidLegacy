@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/cruDarkBlue</color>
-    <color name="colorPrimaryDark">@android:color/black</color>
+    <color name="colorPrimaryDark">@color/cruDarkerBlue</color>
     <color name="colorAccent">@color/cruOrange</color>
     <!-- this is needed as preference_category_material layout uses this color as the text color -->
     <color name="preference_fallback_accent_color">@color/colorAccent</color>
@@ -9,6 +9,7 @@
 
     <color name="cruGray">#666062</color>
     <color name="cruDarkBlue">#007398</color>
+    <color name="cruDarkerBlue">#005c7a</color>
     <color name="cruBrightBlue">#3EB1C8</color>
     <color name="cruGold">#f9b625</color>
     <color name="cruOrange">#dd7d1b</color>
@@ -19,4 +20,6 @@
     <color name="grey300">#E0E0E0</color>
     <color name="fbBlue">#3B5999</color>
     <color name="red600">#E53935</color>
+    <color name="green500">#4CAF50</color>
+    <color name="yellow500">#FFEB3B</color>
 </resources>

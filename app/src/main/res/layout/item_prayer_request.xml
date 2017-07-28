@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/creation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="Nov. 1, 2017 10:30am" />
+
+    <TextView
+        android:id="@+id/prayer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/creation_date"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="2"
+        android:textSize="14sp"
+        tools:text="Prayer request text" />
+
+    <ImageView
+        android:id="@+id/leaders_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/prayer_text"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_account_multiple" />
+
+    <ImageView
+        android:id="@+id/alert_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/prayer_text"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/leaders_icon"
+        android:layout_toRightOf="@+id/leaders_icon"
+        android:gravity="center_vertical"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/responses_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/prayer_text"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:textAllCaps="true"
+        android:textColor="?attr/colorAccent"
+        tools:text="responses(5)" />
+</RelativeLayout>
