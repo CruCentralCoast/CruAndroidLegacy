@@ -159,8 +159,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:10.2.6'
 
     //Network and JSON
-    debugCompile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-    releaseCompile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
     compile('org.aaronhe:threetenbp-gson-adapter:1.0.2') {
         transitive = false
     }
