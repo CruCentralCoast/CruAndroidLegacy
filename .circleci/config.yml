@@ -18,8 +18,8 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Run Build
-          command: ./gradlew build assembleAndroidTest --stacktrace
+          name: Run Tests
+          command: ./gradlew lint test
       - store_artifacts:
           path: app/build/reports
           destination: reports
