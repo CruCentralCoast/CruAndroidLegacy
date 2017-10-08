@@ -16,7 +16,6 @@ import com.crucentralcoast.app.AppConstants;
 import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.data.models.OnboardingInfo;
 import com.crucentralcoast.app.presentation.util.ViewUtil;
-import com.crucentralcoast.app.presentation.views.subscriptions.SubscriptionActivity;
 
 import java.util.List;
 
@@ -26,6 +25,7 @@ import butterknife.OnClick;
 
 /**
  * Created by brittanyberlanga on 3/20/17.
+ * Updated by Dylan Sun on 10/2/17.
  */
 
 public class OnboardingActivity extends AppCompatActivity {
@@ -81,7 +81,7 @@ public class OnboardingActivity extends AppCompatActivity {
         int currItem = viewPager.getCurrentItem();
         if (currItem == 0) {
             // skip
-            continueToSubscriptions();
+            continueToTermsAndCondition();
         }
         else {
             viewPager.setCurrentItem(currItem - 1);
@@ -96,17 +96,27 @@ public class OnboardingActivity extends AppCompatActivity {
         }
         else {
             // done
-            continueToSubscriptions();
+            continueToTermsAndCondition();
         }
     }
 
-    private void continueToSubscriptions() {
-        Intent intent = new Intent(this, SubscriptionActivity.class);
+    //adds landing page for terms and conditions
+    private void continueToTermsAndCondition() {
+        Intent intent = new Intent(this, TermsAndConditionsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
+
     }
+//
+//    private void continueToSubscriptions() {
+//        Intent intent = new Intent(this, SubscriptionActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//        finish();
+//    }
 
     private class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
         OnboardingPagerAdapter(FragmentManager fm) {
