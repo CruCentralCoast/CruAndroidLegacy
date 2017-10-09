@@ -41,6 +41,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".presentation.views.onboarding.TermsAndConditionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".presentation.views.webview.WebViewActivity"
             android:screenOrientation="portrait">
         </activity>

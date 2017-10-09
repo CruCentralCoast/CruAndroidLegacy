@@ -107,4 +107,5 @@ public class AppConstants
     public static final int MAX_CAR_CAPACITY = 20;
     public static final double MAX_RADIUS = 25.0;
     public static final String FREIG_SAN_PRO_LIGHT = "FreigSanProLig.otf";
+    public static final String FREIG_SAN_PRO_MEDIUM = "FreigSanProMed.otf";
 }
