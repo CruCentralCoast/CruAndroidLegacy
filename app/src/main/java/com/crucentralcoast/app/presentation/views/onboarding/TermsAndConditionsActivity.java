@@ -33,10 +33,12 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
 
       TextView infoView = findViewById(R.id.terms_and_conditions_text_view);
       TextView titleView = findViewById(R.id.service_and_condition_title);
+
+
+
       ViewUtil.setFont(titleView, AppConstants.FREIG_SAN_PRO_MEDIUM);
       ViewUtil.setFont(infoView, AppConstants.FREIG_SAN_PRO_LIGHT);
-      Typeface font = Typeface.createFromAsset(getAssets(), "fonts/FreigSanProLig.otf");
-      acceptButton.setTypeface(font);
+      ViewUtil.setFont(acceptButton, AppConstants.FREIG_SAN_PRO_LIGHT);
    }
 
    @OnClick(R.id.accept_button)

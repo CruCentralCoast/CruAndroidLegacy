@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_bar"
-        android:paddingTop="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:scrollbarStyle="outsideInset"
         android:id="@+id/terms_and_conditions_layout">
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,13 +26,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="28sp"
-                android:paddingBottom="4dp"
                 android:text="@string/terms_and_conditions_title"
                 android:id="@+id/service_and_condition_title"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="4dp"
                 android:textSize="16sp"
                 android:text="@string/terms_and_conditions"
                 android:id="@+id/terms_and_conditions_text_view"/>
@@ -44,11 +46,9 @@
         android:layout_alignParentBottom="true">
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#c0c0c0"
-            android:paddingBottom="8dp"
-            />
+            android:background="@color/grey300"/>
 
         <Button
             android:id="@+id/accept_button"
