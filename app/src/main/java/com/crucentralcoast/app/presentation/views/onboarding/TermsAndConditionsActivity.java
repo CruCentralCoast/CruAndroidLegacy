@@ -1,6 +1,7 @@
 package com.crucentralcoast.app.presentation.views.onboarding;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,21 +22,21 @@ import butterknife.OnClick;
  */
 
 public class TermsAndConditionsActivity extends AppCompatActivity {
-   @BindView(R.id.accept_button)
-   protected Button acceptButton;
+
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState)
    {
-
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_terms_and_conditions);
+      Button acceptButton = findViewById(R.id.accept_button);
       ButterKnife.bind(this);
 
-      ViewUtil.setFont(acceptButton, AppConstants.FREIG_SAN_PRO_LIGHT);
       TextView infoView = findViewById(R.id.terms_and_conditions_text_view);
       TextView titleView = findViewById(R.id.service_and_condition_title);
       ViewUtil.setFont(titleView, AppConstants.FREIG_SAN_PRO_MEDIUM);
       ViewUtil.setFont(infoView, AppConstants.FREIG_SAN_PRO_LIGHT);
+      Typeface font = Typeface.createFromAsset(getAssets(), "fonts/FreigSanProLig.otf");
+      acceptButton.setTypeface(font);
    }
 
    @OnClick(R.id.accept_button)
