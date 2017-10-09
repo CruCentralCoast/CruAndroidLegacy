@@ -28,13 +28,11 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
    {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_terms_and_conditions);
-      Button acceptButton = findViewById(R.id.accept_button);
       ButterKnife.bind(this);
 
       TextView infoView = findViewById(R.id.terms_and_conditions_text_view);
       TextView titleView = findViewById(R.id.service_and_condition_title);
-
-
+      Button acceptButton = findViewById(R.id.accept_button);
 
       ViewUtil.setFont(titleView, AppConstants.FREIG_SAN_PRO_MEDIUM);
       ViewUtil.setFont(infoView, AppConstants.FREIG_SAN_PRO_LIGHT);
