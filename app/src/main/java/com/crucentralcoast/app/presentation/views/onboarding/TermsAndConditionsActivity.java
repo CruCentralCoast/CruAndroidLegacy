@@ -36,10 +36,6 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
       TextView titleView = findViewById(R.id.service_and_condition_title);
       ViewUtil.setFont(titleView, AppConstants.FREIG_SAN_PRO_MEDIUM);
       ViewUtil.setFont(infoView, AppConstants.FREIG_SAN_PRO_LIGHT);
-      titleView.setText("Terms of Agreement");
-      infoView.setText(getString(R.string.terms_and_conditions));
-
-
    }
 
    @OnClick(R.id.accept_button)

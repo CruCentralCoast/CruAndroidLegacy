@@ -5,15 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingRight="5dp"
-    android:paddingLeft="5dp">
+    android:paddingRight="4dp"
+    android:paddingLeft="4dp">
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_bar"
-        android:paddingTop="10dp"
+        android:paddingTop="8dp"
         android:id="@+id/terms_and_conditions_layout">
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,14 +23,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:paddingBottom="5dp"
+                android:textSize="28sp"
+                android:paddingBottom="4dp"
+                android:text="@string/terms_and_conditions_title"
                 android:id="@+id/service_and_condition_title"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="16sp"
+                android:text="@string/terms_and_conditions"
                 android:id="@+id/terms_and_conditions_text_view"/>
         </LinearLayout>
     </ScrollView>
@@ -45,7 +47,7 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="#c0c0c0"
-            android:paddingBottom="10dp"
+            android:paddingBottom="8dp"
             />
 
         <Button

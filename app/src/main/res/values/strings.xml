@@ -339,6 +339,7 @@
     </string>
 
     <!--Service and Condition-->
+    <string name = "terms_and_conditions_title">Terms of Agreement</string>
     <string name = "terms_and_conditions" tools:ignore="TypographyOther"><![CDATA[
         Thank you for using this Mobile App!  This Mobile App is provided by Cru.
         These Terms of Use (“Terms”) govern your access to and use of this Mobile App.
