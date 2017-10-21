@@ -87,6 +87,12 @@
     <string name="about">About</string>
     <string name="third_party">Third-Party Libraries We Are Using</string>
 
+    <string name="first_name_hint">First Name</string>
+    <string name="last_name_hint">Last Name</string>
+    <string name="gender_hint">Gender</string>
+    <string name="create_hint">Create</string>
+
+
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>
@@ -199,6 +205,8 @@
     <string name="nav_notifications">Notifications</string>
     <string name="failed_login">Login Failed</string>
     <string name="nav_settings">Settings</string>
+    <string name="create_account_key">Create Key</string>
+    <string name="create_account_title">Create Account</string>
 
     <string name="driver_authorization_title">Oops!</string>
     <string name="driver_authorization_msg">You are not a verified driver.  Please contact Cru</string>
