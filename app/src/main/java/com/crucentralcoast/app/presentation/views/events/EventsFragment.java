@@ -2,6 +2,7 @@ package com.crucentralcoast.app.presentation.views.events;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class EventsFragment extends ListFragment {
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.list_with_empty_view, container, false);
     }
@@ -111,10 +112,5 @@ public class EventsFragment extends ListFragment {
                 .subscribeOn(Schedulers.immediate())
                 .subscribe(eventList::add);
         helper.recyclerView.setAdapter(new EventsAdapter(eventList, layoutManager));
-    }
-
-
-    public void refreshAdapter() {
-        helper.recyclerView.getAdapter().notifyDataSetChanged();
     }
 }
