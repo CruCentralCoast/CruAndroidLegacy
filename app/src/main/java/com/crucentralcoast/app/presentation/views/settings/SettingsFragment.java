@@ -159,8 +159,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
             return true;
         });
 
-        //create account
-//        createAccountButton.set
+
         createAccountButton = getPreferenceManager().findPreference(getString(R.string.create_account_key));
         createAccountButton.setOnPreferenceClickListener(preference -> {
            Intent createAccountIntent = new Intent(SettingsFragment.this.getContext(), CreateAccountActivity.class);

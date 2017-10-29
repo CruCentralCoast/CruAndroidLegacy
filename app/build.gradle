@@ -31,7 +31,7 @@ android {
         versionName "1.2.4"
         vectorDrawables.useSupportLibrary = true
 
-        buildConfigField "String", "CRU_SERVER", "\"http://cru-server-dev.herokuapp.com/\""
+        buildConfigField "String", "CRU_SERVER", "\"http://secure-oasis-4438.herokuapp.com/\""
         buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyAvDgE8_fkv5yjz7qk9iE1qBo68YtVOHvY"'
         buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
     }

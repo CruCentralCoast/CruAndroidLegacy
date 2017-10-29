@@ -19,11 +19,13 @@
         <Preference
             android:key="@string/login_button_key"
             android:id="@+id/login_button"/>
+
         <Preference
             android:key="@string/create_account_key"
             android:id="@+id/create_account_button"
-            />
+            android:title="@string/create_account_title"
 
+            />
     </PreferenceCategory>
 
     <PreferenceCategory
