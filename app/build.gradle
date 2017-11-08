@@ -55,7 +55,7 @@ android {
             buildConfigField "String", "CRU_SERVER", "\"http://secure-oasis-4438.herokuapp.com/\""
         }
         debug {
-            buildConfigField "String", "CRU_SERVER", "\"http://secure-oasis-4438.herokuapp.com/\""
+            buildConfigField "String", "CRU_SERVER", "\"http://cru-server-dev.herokuapp.com/\""
         }
         staging {
             minifyEnabled true
