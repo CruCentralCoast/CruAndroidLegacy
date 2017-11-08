@@ -20,6 +20,7 @@ public final class CruUser
     @SerializedName(sEmail) public String email;
     @SerializedName(sPhone) public String phone;
 
+
     @ParcelConstructor
     public CruUser(CruName name, String email, String phone)
     {

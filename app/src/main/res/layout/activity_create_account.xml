@@ -26,7 +26,8 @@
                 android:maxLength="45"
                 android:layout_centerVertical="true"
                 android:hint="@string/first_name_hint"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:importantForAutofill="noExcludeDescendants"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:id="@+id/create_account_last_name"
@@ -41,7 +42,8 @@
                 android:maxLength="45"
                 android:layout_centerVertical="true"
                 android:hint="@string/last_name_hint"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:importantForAutofill="noExcludeDescendants"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatSpinner
@@ -49,6 +51,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_account_gender"
             android:prompt="@string/gender_hint"
+            android:paddingTop="8dp"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+
             android:layout_below="@id/create_account_last_name"
             />
 
@@ -66,7 +71,8 @@
                 android:maxLength="10"
                 android:layout_centerVertical="true"
                 android:hint="@string/phone_number"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:importantForAutofill="noExcludeDescendants"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -82,7 +88,8 @@
                 android:maxLength="45"
                 android:layout_centerVertical="true"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:importantForAutofill="noExcludeDescendants"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -98,7 +105,8 @@
                 android:maxLength="30"
                 android:layout_centerVertical="true"
                 android:hint="@string/login_password_hint"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:importantForAutofill="noExcludeDescendants"/>
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
@@ -111,7 +119,7 @@
         android:layout_alignParentBottom="true">
 
         <Button
-            android:id="@+id/cancel_button"
+            android:id="@+id/create_account_cancel_button"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

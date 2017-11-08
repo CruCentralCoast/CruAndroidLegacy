@@ -82,7 +82,7 @@
     <string name="not_getting_a_ride">You are not currently signed up to get a ride to an event.</string>
     <string name="resources">Resources</string>
     <string name="view_upcoming_events_driver">View Upcoming Events</string>
-    <string name="phone_number_error">Input is not a phone number</string>
+    <string name="phone_number_error">Please enter a valid phone number</string>
     <string name="car_capacity_error">Value is below original car capacity</string>
     <string name="about">About</string>
     <string name="third_party">Third-Party Libraries We Are Using</string>
@@ -91,6 +91,14 @@
     <string name="last_name_hint">Last Name</string>
     <string name="gender_hint">Gender</string>
     <string name="create_hint">Create</string>
+
+    <string name="create_account_success">Successfully Created Account</string>
+    <string name="create_account_failure_title">Failed to Create Account</string>
+    <string name="create_account_failure_message">Please make sure your information is correct</string>
+    <string name="create_account_cancel">Cancel Account Creation</string>
+    <string name="create_account_cancel_message">Are you sure you want to cancel account creation? This will discard any information you've entered so far.</string>
+    <string name="password_error">Password must be at least 7 characters, contains an uppercase, lowercase, and a unique character.</string>
+
 
 
     <string-array name="genders">
