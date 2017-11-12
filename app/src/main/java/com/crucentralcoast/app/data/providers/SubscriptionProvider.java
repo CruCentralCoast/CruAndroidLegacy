@@ -40,8 +40,7 @@ public final class SubscriptionProvider
     protected static Observable<List<MinistrySubscription>> requestMinistries()
     {
         return mCruService.getMinistries()
-                .compose(RxLoggingUtil.log("MINISTRIES"))
-                .compose(RxComposeUtil.network());
+                .compose(RxLoggingUtil.log("MINISTRIES"));
     }
 
     public static void requestCampuses(SubscriptionsHolder holder, Observer<List<Campus>> observer)
@@ -83,8 +82,11 @@ public final class SubscriptionProvider
 
                 // set the selected campus for this ministry
                 for (Campus c : campuses)
-                    if (m.campusId.get(0).equals(c.id))
+                    if (m.campusId.get(0).equals(c.id)) {
                         selectedCampus = c;
+                        break;
+
+                    }
 
                 if (campusMinistryMap.containsKey(selectedCampus))
                 {

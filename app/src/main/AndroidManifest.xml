@@ -47,7 +47,8 @@
         <activity
             android:name=".presentation.views.settings.CreateAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".presentation.views.webview.WebViewActivity"
             android:screenOrientation="portrait">

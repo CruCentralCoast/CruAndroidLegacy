@@ -96,9 +96,11 @@
     <string name="create_account_failure_title">Failed to Create Account</string>
     <string name="create_account_failure_message">Please make sure your information is correct</string>
     <string name="create_account_cancel">Cancel Account Creation</string>
-    <string name="create_account_cancel_message">Are you sure you want to cancel account creation? This will discard any information you've entered so far.</string>
+    <string name="create_account_cancel_message">Are you sure you want to cancel account creation? All your information will be deleted</string>
+    <string name="create_account_cancel_message_confirm">Account cancled</string>
     <string name="password_error">Password must be at least 7 characters, contains an uppercase, lowercase, and a unique character.</string>
-
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
 
     <string-array name="genders">

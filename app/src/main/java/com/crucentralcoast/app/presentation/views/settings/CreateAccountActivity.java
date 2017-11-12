@@ -55,8 +55,6 @@ public class CreateAccountActivity extends AppCompatActivity {
    @BindView(R.id.create_account_password_field)
    protected EditText password;
 
-//   public Resources resources = ge/Resources();
-
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -67,7 +65,9 @@ public class CreateAccountActivity extends AppCompatActivity {
       ViewUtil.setFont(createButton, AppConstants.FREIG_SAN_PRO_LIGHT);
 
       ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
-            android.R.layout.simple_spinner_dropdown_item, new String[] {"Gender", "Male", "Female"}) {
+            android.R.layout.simple_spinner_dropdown_item, new String[] {getResources().getString(R.string.default_gender_op),
+                                                                           getResources().getString(R.string.male),
+                                                                           getResources().getString(R.string.female)}) {
          @Override
          public boolean isEnabled(int position) {
             if (position == 0) {
@@ -85,7 +85,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                tv.setTextColor(getResources().getColor(R.color.grey600));
             }
             else {
-               tv.setTextColor(getResources().getColor(R.color.black));
+               tv.setTextColor(getResources().getColor(android.R.color.black));
             }
             return view;
          }
@@ -128,7 +128,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
    @OnClick(R.id.create_account_cancel_button)
    public void onClickCancelButton() {
-      createAlertDialog(getString(R.string.create_account_cancel), getString(R.string.create_account_cancel_message), getString(R.string.alert_dialog_yes), getString(R.string.alert_dialog_yes),
+      createAlertDialog(getString(R.string.create_account_cancel), getString(R.string.create_account_cancel_message), getString(R.string.alert_dialog_yes), getString(R.string.alert_dialog_no),
 
       new DialogInterface.OnClickListener(){
          @Override
@@ -146,18 +146,18 @@ public class CreateAccountActivity extends AppCompatActivity {
    }
 
    public void createAlertDialog (String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {
-      AlertDialog alertDialog = new AlertDialog.Builder(CreateAccountActivity.this).create();
-
-      alertDialog.setTitle(title);
-      alertDialog.setMessage(message);
+      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(CreateAccountActivity.this);
+      alertBuilder.setTitle(title);
+      alertBuilder.setMessage(message);
 
       if (negativeText != null) {
-         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negativeText,
+         alertBuilder.setNegativeButton(negativeText,
                negativeDialogListener);
       }
-      alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, postiveText,
+      alertBuilder.setPositiveButton( postiveText,
             positveDialogListener);
-      alertDialog.show();
+
+      alertBuilder.show();
    }
 
    public boolean validateAllCreateAccountFields(){
@@ -200,9 +200,9 @@ public class CreateAccountActivity extends AppCompatActivity {
    public static boolean isValidPassword(final String password) {
       Pattern pattern;
       Matcher matcher;
+      final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
       boolean isValid = false;
       if (password.length() > 6) {
-         final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
          pattern = Pattern.compile(PASSWORD_PATTERN);
          matcher = pattern.matcher(password);
          isValid = matcher.matches();
