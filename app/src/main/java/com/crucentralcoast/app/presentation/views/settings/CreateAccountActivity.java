@@ -55,6 +55,10 @@ public class CreateAccountActivity extends AppCompatActivity {
    @BindView(R.id.create_account_password_field)
    protected EditText password;
 
+   static final String male = "Male";
+   static final String female = "Female";
+   static final String notApplicable = "Not Applicable";
+
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -65,9 +69,7 @@ public class CreateAccountActivity extends AppCompatActivity {
       ViewUtil.setFont(createButton, AppConstants.FREIG_SAN_PRO_LIGHT);
 
       ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
-            android.R.layout.simple_spinner_dropdown_item, new String[] {getResources().getString(R.string.default_gender_op),
-                                                                           getResources().getString(R.string.male),
-                                                                           getResources().getString(R.string.female)}) {
+            android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.gender_list)) {
          @Override
          public boolean isEnabled(int position) {
             if (position == 0) {
@@ -212,11 +214,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
    public static int getGender(String genderString) {
       switch(genderString) {
-         case "Male": return 1;
-         case "Female": return 2;
-         case "Not Applicable": return 9;
+         case male: return 1;
+         case female: return 2;
+         case notApplicable: return 9;
+         default:
+            return 0;
       }
-      return 0;
    }
 
 }

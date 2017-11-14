@@ -83,6 +83,7 @@ public final class SubscriptionProvider
                 // set the selected campus for this ministry
                 for (Campus c : campuses)
                     if (m.campusId.get(0).equals(c.id)) {
+                        System.out.println(m.campusId.toString());
                         selectedCampus = c;
                         break;
 
