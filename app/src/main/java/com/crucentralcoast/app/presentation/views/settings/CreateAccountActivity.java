@@ -55,9 +55,9 @@ public class CreateAccountActivity extends AppCompatActivity {
    @BindView(R.id.create_account_password_field)
    protected EditText password;
 
-   static final String male = "Male";
-   static final String female = "Female";
-   static final String notApplicable = "Not Applicable";
+   static final String MALE = "Male";
+   static final String FEMALE = "Female";
+   static final String NOTAPPLICABLE = "Not Applicable";
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -214,9 +214,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 
    public static int getGender(String genderString) {
       switch(genderString) {
-         case male: return 1;
-         case female: return 2;
-         case notApplicable: return 9;
+         case MALE: return 1;
+         case FEMALE: return 2;
+         case NOTAPPLICABLE: return 9;
          default:
             return 0;
       }
