@@ -3,7 +3,9 @@ package com.crucentralcoast.app.data.services;
 import com.crucentralcoast.app.data.models.Campus;
 import com.crucentralcoast.app.data.models.CommunityGroup;
 import com.crucentralcoast.app.data.models.CommunityGroupRequest;
+import com.crucentralcoast.app.data.models.CreateAccount;
 import com.crucentralcoast.app.data.models.CruEvent;
+import com.crucentralcoast.app.data.models.CruName;
 import com.crucentralcoast.app.data.models.CruUser;
 import com.crucentralcoast.app.data.models.LoginResponse;
 import com.crucentralcoast.app.data.models.MinistryQuestion;
@@ -61,6 +63,9 @@ public interface CruApiService {
 
     @POST("/api/users/search")
     Observable<List<CruUser>> getMinistryTeamLeaders(@Body Query query);
+
+    @POST("/api/users")
+    Observable<CreateAccount> createNewUser(@Body CreateAccount userAccount);
 
     @GET("/api/rides/")
     Observable<List<Ride>> getRides();

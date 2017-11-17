@@ -41,6 +41,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     private Preference subscriptionButton;
     private Preference loginButton;
     private Preference aboutButton;
+    private Preference createAccountButton;
     private CheckBoxPreference notificationCheckbox;
 
     //login
@@ -158,6 +159,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
             return true;
         });
 
+
+        createAccountButton = getPreferenceManager().findPreference(getString(R.string.create_account_key));
+        createAccountButton.setOnPreferenceClickListener(preference -> {
+           Intent createAccountIntent = new Intent(SettingsFragment.this.getContext(), CreateAccountActivity.class);
+           startActivity(createAccountIntent);
+           return true;
+        });
+
+
+
+        //about
         aboutButton = getPreferenceManager().findPreference(getString(R.string.about));
         aboutButton.setOnPreferenceClickListener(preference -> {
             Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);

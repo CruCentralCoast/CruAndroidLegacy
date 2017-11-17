@@ -29,7 +29,7 @@ android {
         versionName "1.2.4"
         vectorDrawables.useSupportLibrary = true
 
-        buildConfigField "String", "CRU_SERVER", "\"http://cru-server-dev.herokuapp.com/\""
+        buildConfigField "String", "CRU_SERVER", "\"http://cru-central-coast-staging.herokuapp.com/\""
         buildConfigField "String", "YOUTUBEAPIKEY", '"AIzaSyAvDgE8_fkv5yjz7qk9iE1qBo68YtVOHvY"'
         buildConfigField "String", "YOUTUBEBASEURL", '"https://www.googleapis.com"'
     }
@@ -52,10 +52,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "CRU_SERVER", "\"http://secure-oasis-4438.herokuapp.com/\""
+            buildConfigField "String", "CRU_SERVER", "\"http://cru-central-coast-staging.herokuapp.com/\""
         }
         debug {
-            buildConfigField "String", "CRU_SERVER", "\"http://cru-server-dev.herokuapp.com/\""
+            buildConfigField "String", "CRU_SERVER", "\"http://cru-central-coast-staging.herokuapp.com/\""
         }
         staging {
             minifyEnabled true
