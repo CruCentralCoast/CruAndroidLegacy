@@ -54,4 +54,26 @@ public class CommunityGroupProvider
                 .compose(RxComposeUtil.network())
                 .subscribe(observer);
     }
+
+    public static Observable<CommunityGroup> getCommunityGroup(String id) {
+        return cruApiService.getCommunityGroup(id)
+                .flatMap(group -> {
+                   if(group != null) {
+                       return Observable.just(group);
+                   }
+                   else {
+                       return Observable.empty();
+                   }
+                });
+
+    }
+
+    public static void getCommunityGroup(SubscriptionsHolder holder,
+                                         Observer<CommunityGroup> observer,
+                                         String id) {
+        Subscription s = getCommunityGroup(id)
+                            .compose(RxComposeUtil.network())
+                            .subscribe(observer);
+        holder.addSubscription(s);
+    }
 }

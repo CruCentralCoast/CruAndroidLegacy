@@ -222,6 +222,15 @@
     <string name="create_account_key">Create Key</string>
     <string name="create_account_title">Create Account</string>
 
+
+    <string name="test_key">test</string>
+    <string name="test_title">Test Title</string>
+
+
+    <!--Update Information-->
+    <string name="update_key">Update</string>
+
+
     <string name="driver_authorization_title">Oops!</string>
     <string name="driver_authorization_msg">You are not a verified driver.  Please contact Cru</string>
     <string name="driver_authorization_dismiss">Ok</string>

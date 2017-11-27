@@ -53,6 +53,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "CRU_SERVER", "\"http://cru-central-coast-staging.herokuapp.com/\""
+//            http://secure-oasis-4438.herokuapp.com
         }
         debug {
             buildConfigField "String", "CRU_SERVER", "\"http://cru-central-coast-staging.herokuapp.com/\""
