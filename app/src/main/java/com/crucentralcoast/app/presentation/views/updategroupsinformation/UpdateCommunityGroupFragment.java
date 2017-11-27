@@ -138,15 +138,10 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgDescription = communityGroup.description;
         cgMeetingTime = communityGroup.meetingTime;
         cgDayOfWeek = communityGroup.dayOfWeek;
-//
-        try {
-            groupName.setText(cgName);
-        }
-        catch (Exception e) {
-            Log.e("error", e.toString());
-        }
 
-//        description.setText(cgDescription);
+        groupName.setText(cgName);
+        description.setText(cgDescription);
+
 
     }
 

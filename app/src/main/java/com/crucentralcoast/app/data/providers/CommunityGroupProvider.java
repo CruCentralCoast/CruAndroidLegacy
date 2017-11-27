@@ -15,6 +15,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class CommunityGroupProvider
 {
@@ -73,6 +74,7 @@ public class CommunityGroupProvider
                                          String id) {
         Subscription s = getCommunityGroup(id)
                             .compose(RxComposeUtil.network())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(observer);
         holder.addSubscription(s);
     }
