@@ -2,6 +2,7 @@ package com.crucentralcoast.app.presentation.views.updategroupsinformation;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,12 @@ import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
 import com.crucentralcoast.app.presentation.views.base.ListFragment;
 
 
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.ZonedDateTime;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import rx.Observer;
 import rx.observers.Observers;
@@ -53,6 +58,11 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     @BindView(R.id.update_name_field)
     protected EditText groupName;
 
+    private static String cgName;
+    private static String cgDescription;
+    private static ZonedDateTime cgMeetingTime;
+    private static DayOfWeek cgDayOfWeek;
+
     private Unbinder unbinder;
 
     public UpdateCommunityGroupFragment newInstance() {
@@ -78,9 +88,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view =  inflater.inflate(R.layout.fragment_update_community_group, container, false);
-        CommunityGroupProvider.getCommunityGroup(UpdateCommunityGroupFragment.this, communityGroupObserver, communityGroupID);
         unbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 
@@ -90,28 +98,24 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         super.onViewCreated(view, savedInstanceState);
         System.out.println("in view created");
 
+
+        CommunityGroupProvider.getCommunityGroup(UpdateCommunityGroupFragment.this, communityGroupObserver, communityGroupID);
         ViewUtil.setFont(cancelButton, AppConstants.FREIG_SAN_PRO_LIGHT);
         ViewUtil.setFont(updateButton, AppConstants.FREIG_SAN_PRO_LIGHT);
-
-
-        if (communityGroup == null) {
-            System.out.println("here");
-        }
-
-
     }
 
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        unbinder.unbind();
-//    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
     public void setupCommunityGroupObserver() {
         communityGroupObserver = new Observer<CommunityGroup>() {
             @Override
             public void onCompleted() {
                 Timber.d("");
+                setFieldText();
             }
 
             @Override
@@ -122,8 +126,38 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
             @Override
             public void onNext(CommunityGroup retrievedCommunityGroup) {
                 communityGroup = retrievedCommunityGroup;
+
             }
         };
+
+    }
+
+    private void setFieldText() {
+        System.out.println("here");
+        cgName = communityGroup.name;
+        cgDescription = communityGroup.description;
+        cgMeetingTime = communityGroup.meetingTime;
+        cgDayOfWeek = communityGroup.dayOfWeek;
+//
+        try {
+            groupName.setText(cgName);
+        }
+        catch (Exception e) {
+            Log.e("error", e.toString());
+        }
+
+//        description.setText(cgDescription);
+
+    }
+
+
+    @OnClick(R.id.update_community_group_button)
+    public void onClickUpdateCommunityGroupButton() {
+
+    }
+
+    @OnClick(R.id.update_community_group_cancel_button)
+    public void onCLickUpdateCommunityGroupCancelButton() {
 
     }
 }
