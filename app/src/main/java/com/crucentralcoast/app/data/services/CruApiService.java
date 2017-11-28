@@ -168,7 +168,7 @@ public interface CruApiService {
     @PATCH("/api/prayerrequest/{request_id}")
     Observable<PrayerRequest> patchPrayerRequestContacted(@Path("request_id") String prayerRequestId, @Field("LeaderAPIKey") String leaderAPIKey, @Field("contacted") boolean contacted);
 
-    @PATCH("/api/communitygroups/{communityGroupID}")
+    @PATCH("/api/communitygroups/{group_id}")
     Observable<CommunityGroup> updateCommunityGroup(@Path("group_id") String communityGroupID, @Body CommunityGroup communityGroup);
 
     @GET("/api/communitygroups/{group_id}")

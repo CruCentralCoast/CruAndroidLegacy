@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crucentralcoast.app.R;
+import com.crucentralcoast.app.data.providers.UpdateGroupsInformationProvider;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
+
+import butterknife.OnClick;
 
 
 /**
@@ -57,6 +60,4 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         return fragment;
     }
-
-
 }
