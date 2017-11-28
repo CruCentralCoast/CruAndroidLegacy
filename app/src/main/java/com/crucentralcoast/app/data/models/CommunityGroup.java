@@ -20,7 +20,6 @@ public class CommunityGroup
     public static final String sMeetingTime = "meetingTime";
     public static final String sDayOfWeek = "dayOfWeek";
     public static final String sLeaders = "leaders";
-//    public static final String sGender = "gender";
 
     @SerializedName(sId) public String id;
     @SerializedName(sMinistry) public String ministry;
@@ -29,7 +28,6 @@ public class CommunityGroup
     @SerializedName(sMeetingTime) public ZonedDateTime meetingTime;
     @SerializedName(sDayOfWeek) public DayOfWeek dayOfWeek;
     @SerializedName(sLeaders) public ArrayList<CruUser> leaders;
-//    @SerializedName(sGender) public int gender;
 
     @ParcelConstructor
     CommunityGroup() {}
@@ -43,6 +41,5 @@ public class CommunityGroup
         this.description = cgDescription;
         this.meetingTime = cgMeetingTime;
         this.dayOfWeek = cgDayOfWeek;
-//        this.gender = cgGender;
     }
 }

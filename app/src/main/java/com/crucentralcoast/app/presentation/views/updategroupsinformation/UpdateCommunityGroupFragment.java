@@ -105,32 +105,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         unbinder = ButterKnife.bind(this, view);
         dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.days_of_week));
         genderAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.genders));
-//        {
-//            @Override
-//            public boolean isEnabled(int position) {
-//                if (position == 0) {
-//                    return false;
-//                }
-//                else {
-//                    return true;
-//                }
-//            }
-//
-//            @Override
-//            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-//                View view = super.getDropDownView(position, convertView, parent);
-//                TextView tv = (TextView) view;
-//                if(position==0) {
-//                    tv.setTextColor(getResources().getColor(R.color.grey600));
-//                }
-//                else {
-//                    tv.setTextColor(getResources().getColor(android.R.color.black));
-//                }
-//                return view;
-//            }
-//        }
-        ;
-
         return view;
     }
 
@@ -184,19 +158,25 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgDayOfWeek = communityGroup.dayOfWeek;
 //        cgGender = communityGroup.gender;
 
+
         groupName.setText(cgName);
         description.setText(cgDescription);
         dayOfWeekSpinner.setAdapter(dayOfWeekAdapter);
         genderSpinner.setAdapter(genderAdapter);
 
+
         if(!cgDayOfWeek.equals(null)) {
-            spinnerPosition = dayOfWeekAdapter.getPosition(cgDayOfWeek.toString());
-            dayOfWeekSpinner.setSelection(spinnerPosition);
+
+
+            System.out.println("spinner pos: " + cgDayOfWeek.name());
+            dayOfWeekSpinner.setSelection(5);
         }
-        if (cgGender == 0 || cgGender == 1) {
-            spinnerPosition = genderAdapter.getPosition(String.valueOf(cgGender));
-            genderSpinner.setSelection(spinnerPosition);
-        }
+
+
+//        if (cgGender == 0 || cgGender == 1) {
+//            spinnerPosition = genderAdapter.getPosition(String.valueOf(cgGender));
+//            genderSpinner.setSelection(spinnerPosition);
+//        }
 
 
     }
@@ -207,6 +187,10 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 //        if(validateUpdateFields())
         String cgNameString = groupName.getText().toString();
         String cgDescriptionString = description.getText().toString();
+        getDayOfWeek();
+//        DayOfWeek cgDayOfWeek = getDayOfWeek();
+
+//              dayOfWeekSpinner.getSelectedItem();
 
 
         CommunityGroup updateCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek );
@@ -242,6 +226,11 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
                 }
         );
 
+    }
+
+    private void getDayOfWeek() {
+        System.out.println("date selected" + DayOfWeek.of(dayOfWeekSpinner.getSelectedItemPosition() + 1).toString());
+//        return DayOfWeek.of(dayOfWeekSpinner.getSelectedItemPosition());
     }
 
     public void createAlertDialog (String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {
