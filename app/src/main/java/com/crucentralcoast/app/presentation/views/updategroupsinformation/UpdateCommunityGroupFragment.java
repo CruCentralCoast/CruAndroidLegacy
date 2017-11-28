@@ -182,7 +182,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgDescription = communityGroup.description;
         cgMeetingTime = communityGroup.meetingTime;
         cgDayOfWeek = communityGroup.dayOfWeek;
-        cgGender = communityGroup.gender;
+//        cgGender = communityGroup.gender;
 
         groupName.setText(cgName);
         description.setText(cgDescription);
@@ -209,7 +209,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         String cgDescriptionString = description.getText().toString();
 
 
-        CommunityGroup updateCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgGender);
+        CommunityGroup updateCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek );
         System.out.println(cgName);
         UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updateCommunityGroup)
                 .observeOn(AndroidSchedulers.mainThread())
