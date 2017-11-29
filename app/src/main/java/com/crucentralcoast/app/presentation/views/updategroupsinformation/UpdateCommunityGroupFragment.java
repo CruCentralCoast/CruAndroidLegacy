@@ -65,7 +65,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     @BindView(R.id.update_day_of_week_field)
     protected Spinner dayOfWeekSpinner;
     @BindView(R.id.update_group_type)
-    protected Spinner genderSpinner;
+    protected Spinner typeSpinner;
 
     private static String cgID;
     private static String cgMinistry;
@@ -75,10 +75,12 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     private static DayOfWeek cgDayOfWeek;
     private static ArrayList<String> cgLeaders;
     private static int cgGender;
+    private static String cgType;
 
     private Unbinder unbinder;
     private ArrayAdapter<String> dayOfWeekAdapter;
-    private ArrayAdapter<String> genderAdapter;
+    private ArrayAdapter<String> typeAdapter;
+
 
     public UpdateCommunityGroupFragment newInstance() {
         return new UpdateCommunityGroupFragment();
@@ -104,7 +106,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         View view =  inflater.inflate(R.layout.fragment_update_community_group, container, false);
         unbinder = ButterKnife.bind(this, view);
         dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.days_of_week));
-        genderAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.genders));
+        typeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.community_group_types));
         return view;
     }
 
@@ -156,82 +158,69 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgDescription = communityGroup.description;
         cgMeetingTime = communityGroup.meetingTime;
         cgDayOfWeek = communityGroup.dayOfWeek;
-//        cgGender = communityGroup.gender;
-
+        cgType = communityGroup.type;
 
         groupName.setText(cgName);
         description.setText(cgDescription);
         dayOfWeekSpinner.setAdapter(dayOfWeekAdapter);
-        genderSpinner.setAdapter(genderAdapter);
-
+        typeSpinner.setAdapter(typeAdapter);
 
         if(!cgDayOfWeek.equals(null)) {
-
-
-            System.out.println("spinner pos: " + cgDayOfWeek.name());
-            dayOfWeekSpinner.setSelection(5);
+            spinnerPosition = dayOfWeekAdapter.getPosition(getDayFromObjectAsString(cgDayOfWeek));
+            dayOfWeekSpinner.setSelection(spinnerPosition);
         }
+        if(!cgType.equals(null)) {
+            spinnerPosition = typeAdapter.getPosition(cgType);
 
-
-//        if (cgGender == 0 || cgGender == 1) {
-//            spinnerPosition = genderAdapter.getPosition(String.valueOf(cgGender));
-//            genderSpinner.setSelection(spinnerPosition);
-//        }
-
-
+            System.out.println("type pos: " + cgType);
+            typeSpinner.setSelection(spinnerPosition);
+        }
     }
 
 
     @OnClick(R.id.update_community_group_button)
     public void onClickUpdateCommunityGroupButton() {
-//        if(validateUpdateFields())
         String cgNameString = groupName.getText().toString();
         String cgDescriptionString = description.getText().toString();
-        getDayOfWeek();
-//        DayOfWeek cgDayOfWeek = getDayOfWeek();
+        DayOfWeek cgDayOfWeek = getDayOfWeek();
+        String cgType = typeSpinner.getSelectedItem().toString();
+        System.out.println("selected type: " + cgType);
 
-//              dayOfWeekSpinner.getSelectedItem();
-
-
-        CommunityGroup updateCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek );
+        CommunityGroup updateCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType );
         System.out.println(cgName);
         UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updateCommunityGroup)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> {
-                            getActivity().finish();
-                            Toast.makeText(getActivity(), getString(R.string.create_account_success), Toast.LENGTH_LONG).show();
-                        },
-                        error -> {
-                            Timber.e(error);
-                        }
-                );
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(
+                    response -> {
+                        getActivity().finish();
+                        Toast.makeText(getActivity(), getString(R.string.create_account_success), Toast.LENGTH_LONG).show();
+                    },
+                    error -> {
+                        Timber.e(error);
+                    }
+              );
     }
 
     @OnClick(R.id.update_community_group_cancel_button)
     public void onCLickUpdateCommunityGroupCancelButton() {
         createAlertDialog(getString(R.string.create_account_cancel), getString(R.string.create_account_cancel_message), getString(R.string.alert_dialog_yes), getString(R.string.alert_dialog_no),
-                new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        getActivity().finish();
+              new DialogInterface.OnClickListener(){
+                  @Override
+                  public void onClick(DialogInterface dialogInterface, int i) {
+                      getActivity().finish();
 
-                    }
-                },
-                new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                  }
+              },
+              new DialogInterface.OnClickListener(){
+                  @Override
+                  public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }
+                  }
+              }
         );
 
     }
 
-    private void getDayOfWeek() {
-        System.out.println("date selected" + DayOfWeek.of(dayOfWeekSpinner.getSelectedItemPosition() + 1).toString());
-//        return DayOfWeek.of(dayOfWeekSpinner.getSelectedItemPosition());
-    }
 
     public void createAlertDialog (String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
@@ -240,14 +229,24 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
         if (negativeText != null) {
             alertBuilder.setNegativeButton(negativeText,
-                    negativeDialogListener);
+                  negativeDialogListener);
         }
         alertBuilder.setPositiveButton( postiveText,
-                positveDialogListener);
+              positveDialogListener);
 
         alertBuilder.show();
     }
 
+    private String getDayFromObjectAsString(DayOfWeek dayOfWeek) {
+        String day = dayOfWeek.name();
+        day = day.substring(0, 1).toUpperCase() + day.substring(1).toLowerCase();
+        return day;
+    }
+
+    private DayOfWeek getDayOfWeek() {
+        // adds 1 because DayOfWeek Enum starts at 1 while spinner array starts at 0
+        return DayOfWeek.of(dayOfWeekSpinner.getSelectedItemPosition() + 1);
+    }
 
 }
 
