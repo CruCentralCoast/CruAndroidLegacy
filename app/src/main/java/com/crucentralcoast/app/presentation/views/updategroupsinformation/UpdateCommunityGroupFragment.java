@@ -105,8 +105,8 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view =  inflater.inflate(R.layout.fragment_update_community_group, container, false);
         unbinder = ButterKnife.bind(this, view);
-        dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.days_of_week));
-        typeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.community_group_types));
+        dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.days_of_week));
+        typeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.community_group_types));
         return view;
     }
 
@@ -184,11 +184,10 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         String cgDescriptionString = description.getText().toString();
         DayOfWeek cgDayOfWeek = getDayOfWeek();
         String cgType = typeSpinner.getSelectedItem().toString();
-        System.out.println("selected type: " + cgType);
 
-        CommunityGroup updateCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType );
-        System.out.println(cgName);
-        UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updateCommunityGroup)
+        CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType);
+
+        UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updatedCommunityGroup)
               .observeOn(AndroidSchedulers.mainThread())
               .subscribe(
                     response -> {
