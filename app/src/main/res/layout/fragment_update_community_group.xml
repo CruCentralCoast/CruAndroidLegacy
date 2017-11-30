@@ -15,10 +15,19 @@
         android:paddingTop="16dp"
         android:layout_above="@+id/bottom_bar">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_group_title_field"
+            android:textSize="20dp"
+            />
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/update_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/update_group_title_field"
+            android:paddingTop="50dp"
             >
             <EditText
                 android:layout_width="match_parent"
@@ -49,14 +58,43 @@
         </android.support.design.widget.TextInputLayout>
 
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_group_type"
+            android:paddingTop="16dp"
+            android:orientation="vertical"
+            android:layout_below="@id/update_description">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Group Type"
+                android:paddingLeft="4dp"
+                />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/update_group_type_field"
+                android:prompt="@string/gender_hint"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:layout_below="@id/update_day_of_week"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/update_day_of_week"
-            android:paddingTop="8dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
             android:orientation="vertical"
-            android:layout_below="@id/update_description">
+            android:layout_below="@id/update_group_type">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,26 +108,37 @@
                 android:id="@+id/update_day_of_week_field"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
         </LinearLayout>
 
-
-        <android.support.v7.widget.AppCompatSpinner
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/update_group_type"
-            android:prompt="@string/gender_hint"
+            android:id="@+id/update_meeting_time"
             android:paddingTop="16dp"
-            style="@style/Widget.AppCompat.DropDownItem.Spinner"
-            android:layout_below="@id/update_day_of_week"
-            />
+            android:orientation="vertical"
+            android:layout_below="@id/update_day_of_week">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Meeting Time"
+                android:paddingLeft="4dp"
+                />
 
-
-
-
-
-
-
-
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/update_meeting_time_field"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
 
 
     </RelativeLayout>

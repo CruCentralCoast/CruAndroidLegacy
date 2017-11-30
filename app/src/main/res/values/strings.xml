@@ -159,6 +159,14 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="meeting_time_types">
+        <item>7:00AM</item>
+        <item>8:00AM</item>
+        <item>9:00AM</item>
+        <item>10:00AM</item>
+        <item>11:00AM</item>
+    </string-array>
+
     <string name="default_direction_op">Select Direction</string>
     <string name="default_gender_op">Select Gender</string>
     <string name="autocomplete_hint_driver">Pickup Location</string>
