@@ -1,8 +1,10 @@
 package com.crucentralcoast.app.presentation.views.updategroupsinformation;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +29,12 @@ import com.crucentralcoast.app.presentation.util.ViewUtil;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
 import com.crucentralcoast.app.presentation.views.base.ListFragment;
 import com.crucentralcoast.app.presentation.views.settings.CreateAccountActivity;
+import com.squareup.picasso.Picasso;
 
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
@@ -40,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.Observers;
@@ -53,7 +58,7 @@ import timber.log.Timber;
 public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
     private static String communityGroupID;
-    private static CommunityGroup communityGroup;
+    private static CommunityGroup communityGroup = null;
     public static Observer<CommunityGroup> communityGroupObserver;
 
     @BindView(R.id.update_community_group_button)
@@ -102,7 +107,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         setupCommunityGroupObserver();
         if (!getArguments().isEmpty())
             communityGroupID = getArguments().getString("groupID");
-
     }
 
     @Nullable
@@ -141,6 +145,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
             @Override
             public void onCompleted() {
                 Timber.d("");
+
                 setFieldText();
             }
 
@@ -168,7 +173,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgDayOfWeek = communityGroup.dayOfWeek;
         cgType = communityGroup.type;
         cgLeaders = communityGroup.leaders;
-        cgMeetingTime = communityGroup.meetingTime;
 
         try {
             groupTitle.setText(getGroupTitle(cgLeaders, cgName));
@@ -193,9 +197,20 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
             spinnerPosition = typeAdapter.getPosition(cgType);
             typeSpinner.setSelection(spinnerPosition);
         }
-        if(!cgMeetingTime.equals(null)) {
-            spinnerPosition = meetingTimeAdapter.getPosition(getMeetingTimeFromObjectAsString(cgMeetingTime));
-        }
+
+//        if (!cgMeetingTime.equals(null)) {
+//            System.out.println("hererereadscadfere");
+//        }
+//        System.out.println("time is: " + cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
+//        if(!cgMeetingTime.equals(null)) {
+////            spinnerPosition = meetingTimeAdapter.getPosition
+//            try {
+//                getMeetingTimeFromObjectAsString(cgMeetingTime);
+//            }
+//            catch (Exception e) {
+//                Timber.e("errorrrrr: ", e.toString());
+//            }
+//        }
     }
 
 
@@ -205,10 +220,11 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         String cgDescriptionString = description.getText().toString();
         DayOfWeek cgDayOfWeek = getDayOfWeek();
         String cgType = typeSpinner.getSelectedItem().toString();
-//        ZonedDateTime cgMeetingTime =
+//        ZonedDateTime cgMeetingTime = getMeetingTimeFromObjectAsString(meetingTimeSpiner.getSelectedItem().toString());
+
+
 
         CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType);
-
         UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updatedCommunityGroup)
               .observeOn(AndroidSchedulers.mainThread())
               .subscribe(
@@ -264,10 +280,10 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         return day;
     }
 
-    private String getMeetingTimeFromObjectAsString(ZonedDateTime cgMeetingTime) {
-        String time = cgMeetingTime.toString();
-        System.out.println("time selected: " + time);
-        return time;
+    private void getMeetingTimeFromObjectAsString(ZonedDateTime cgMeetingTime) {
+
+        System.out.println("the time: " +  cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
+//        return time;
     }
 
     private DayOfWeek getDayOfWeek() {
