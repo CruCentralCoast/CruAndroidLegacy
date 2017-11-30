@@ -75,8 +75,8 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     protected Spinner typeSpinner;
     @BindView(R.id.update_group_title_field)
     protected TextView groupTitle;
-    @BindView(R.id.update_meeting_time_field)
-    protected Spinner meetingTimeSpiner;
+//    @BindView(R.id.update_meeting_time_field)
+//    protected Spinner meetingTimeSpiner;
 
     private static String cgID;
     private static String cgMinistry;
@@ -91,7 +91,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     private Unbinder unbinder;
     private ArrayAdapter<String> dayOfWeekAdapter;
     private ArrayAdapter<String> typeAdapter;
-    private ArrayAdapter<String> meetingTimeAdapter;
+//    private ArrayAdapter<String> meetingTimeAdapter;
 
 
     public UpdateCommunityGroupFragment newInstance() {
@@ -118,10 +118,9 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         unbinder = ButterKnife.bind(this, view);
         dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.days_of_week));
         typeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.community_group_types));
-        meetingTimeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.meeting_time_types));
+//        meetingTimeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.meeting_time_types));
         return view;
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -169,7 +168,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgMinistry = communityGroup.ministry;
         cgName = communityGroup.name;
         cgDescription = communityGroup.description;
-        cgMeetingTime = communityGroup.meetingTime;
+//        cgMeetingTime = communityGroup.meetingTime;
         cgDayOfWeek = communityGroup.dayOfWeek;
         cgType = communityGroup.type;
         cgLeaders = communityGroup.leaders;
@@ -187,7 +186,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         description.setText(cgDescription);
         dayOfWeekSpinner.setAdapter(dayOfWeekAdapter);
         typeSpinner.setAdapter(typeAdapter);
-        meetingTimeSpiner.setAdapter(meetingTimeAdapter);
+//        meetingTimeSpiner.setAdapter(meetingTimeAdapter);
 
         if(!cgDayOfWeek.equals(null)) {
             spinnerPosition = dayOfWeekAdapter.getPosition(getDayFromObjectAsString(cgDayOfWeek));
@@ -211,7 +210,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 //        }
     }
 
-
     @OnClick(R.id.update_community_group_button)
     public void onClickUpdateCommunityGroupButton() {
         String cgNameString = groupName.getText().toString();
@@ -219,8 +217,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         DayOfWeek cgDayOfWeek = getDayOfWeek();
         String cgType = typeSpinner.getSelectedItem().toString();
 //        ZonedDateTime cgMeetingTime = getMeetingTimeFromObjectAsString(meetingTimeSpiner.getSelectedItem().toString());
-
-
+        System.out.println("cg type: " + cgType);
 
         CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType, cgLeaders);
         UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updatedCommunityGroup)
@@ -278,11 +275,11 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         return day;
     }
 
-    private void getMeetingTimeFromObjectAsString(ZonedDateTime cgMeetingTime) {
-
-        System.out.println("the time: " +  cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
-//        return time;
-    }
+//    private void getMeetingTimeFromObjectAsString(ZonedDateTime cgMeetingTime) {
+//
+//        System.out.println("the time: " +  cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
+////        return time;
+//    }
 
     private DayOfWeek getDayOfWeek() {
         // adds 1 because DayOfWeek Enum starts at 1 while spinner array starts at 0

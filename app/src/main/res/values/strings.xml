@@ -152,11 +152,11 @@
     </string-array>
 
     <string-array name="community_group_types">
-        <item>Freshman</item>
-        <item>Sophmore</item>
+        <item>Freshmen</item>
+        <item>Sophomore</item>
         <item>Junior</item>
         <item>Senior</item>
-        <item>Other</item>
+        <item>Mixed Ages</item>
     </string-array>
 
     <string-array name="meeting_time_types">
@@ -245,6 +245,10 @@
 
     <!--Update Information-->
     <string name="update_key">Update</string>
+    <string name="update_community_group_name">Group Name</string>
+    <string name="update_community_group_team_description">Team Description</string>
+    <string name="update_community_group_type">Group Type</string>
+    <string name="update_community_group_meeting_day">Meeting Day</string>
 
 
     <string name="driver_authorization_title">Oops!</string>
