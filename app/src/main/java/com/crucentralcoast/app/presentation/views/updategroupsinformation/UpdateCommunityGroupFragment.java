@@ -198,9 +198,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
             typeSpinner.setSelection(spinnerPosition);
         }
 
-//        if (!cgMeetingTime.equals(null)) {
-//            System.out.println("hererereadscadfere");
-//        }
+//
 //        System.out.println("time is: " + cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
 //        if(!cgMeetingTime.equals(null)) {
 ////            spinnerPosition = meetingTimeAdapter.getPosition
@@ -224,7 +222,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
 
 
-        CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType);
+        CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType, cgLeaders);
         UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updatedCommunityGroup)
               .observeOn(AndroidSchedulers.mainThread())
               .subscribe(
@@ -310,6 +308,17 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         }
         System.out.println("title is: " + title);
         return title;
+    }
+
+    public boolean isCGLeader(CruUser accessUser) {
+        boolean isCGLeader = false;
+        for(CruUser user: cgLeaders ) {
+            if(accessUser.id.equals(user.id)) {
+                isCGLeader = true;
+                break;
+            }
+        }
+        return isCGLeader;
     }
 
 

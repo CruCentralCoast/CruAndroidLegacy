@@ -36,7 +36,7 @@ public class CommunityGroup
 
     public CommunityGroup(String cgID, String cgMinistry, String cgName,
                           String cgDescription, ZonedDateTime cgMeetingTime,
-                          DayOfWeek cgDayOfWeek, String cgType) {
+                          DayOfWeek cgDayOfWeek, String cgType, ArrayList<CruUser> cgLeaders) {
         this.id = cgID;
         this.ministry = cgMinistry;
         this.name = cgName;
@@ -44,5 +44,6 @@ public class CommunityGroup
         this.meetingTime = cgMeetingTime;
         this.dayOfWeek = cgDayOfWeek;
         this.type = cgType;
+        this.leaders = cgLeaders;
     }
 }
