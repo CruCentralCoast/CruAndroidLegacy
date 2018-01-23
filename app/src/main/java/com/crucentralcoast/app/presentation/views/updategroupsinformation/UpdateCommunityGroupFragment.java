@@ -34,20 +34,15 @@ import com.squareup.picasso.Picasso;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.w3c.dom.Text;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.observers.Observers;
 import timber.log.Timber;
 
 
@@ -107,6 +102,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         setupCommunityGroupObserver();
         if (!getArguments().isEmpty())
             communityGroupID = getArguments().getString("groupID");
+
     }
 
     @Nullable
@@ -131,6 +127,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         CommunityGroupProvider.getCommunityGroup(UpdateCommunityGroupFragment.this, communityGroupObserver, communityGroupID);
         ViewUtil.setFont(cancelButton, AppConstants.FREIG_SAN_PRO_LIGHT);
         ViewUtil.setFont(updateButton, AppConstants.FREIG_SAN_PRO_LIGHT);
+        groupTitle.setText(getGroupTitle(cgLeaders, cgName));
     }
 
     @Override
@@ -150,7 +147,8 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "Failed to retrieve Community Group");
+//                Timber.e(e, "Failed to retrieve Community Group");
+                Timber.e(e, e.toString());
             }
 
             @Override
@@ -216,7 +214,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         String cgDescriptionString = description.getText().toString();
         DayOfWeek cgDayOfWeek = getDayOfWeek();
         String cgType = typeSpinner.getSelectedItem().toString();
-//        ZonedDateTime cgMeetingTime = getMeetingTimeFromObjectAsString(meetingTimeSpiner.getSelectedItem().toString());
         System.out.println("cg type: " + cgType);
 
         CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType, cgLeaders);
@@ -275,12 +272,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         return day;
     }
 
-//    private void getMeetingTimeFromObjectAsString(ZonedDateTime cgMeetingTime) {
-//
-//        System.out.println("the time: " +  cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
-////        return time;
-//    }
-
     private DayOfWeek getDayOfWeek() {
         // adds 1 because DayOfWeek Enum starts at 1 while spinner array starts at 0
         return DayOfWeek.of(dayOfWeekSpinner.getSelectedItemPosition() + 1);
@@ -289,7 +280,10 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     private String getGroupTitle(ArrayList<CruUser>cgLeaders, String cgName) {
         String title;
         title = "Updating ";
-        if(!cgLeaders.isEmpty()){
+        if (cgLeaders == null && cgName == null) {
+            title += "Community Group";
+        }
+        else if(!cgLeaders.isEmpty()){
 
             for (int i = 0; i < cgLeaders.size(); i++) {
 
@@ -303,7 +297,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         else if(!cgName.isEmpty()) {
             title += cgName;
         }
-        System.out.println("title is: " + title);
         return title;
     }
 
