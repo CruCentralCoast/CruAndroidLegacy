@@ -70,8 +70,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     protected Spinner typeSpinner;
     @BindView(R.id.update_group_title_field)
     protected TextView groupTitle;
-//    @BindView(R.id.update_meeting_time_field)
-//    protected Spinner meetingTimeSpiner;
 
     private static String cgID;
     private static String cgMinistry;
@@ -86,7 +84,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     private Unbinder unbinder;
     private ArrayAdapter<String> dayOfWeekAdapter;
     private ArrayAdapter<String> typeAdapter;
-//    private ArrayAdapter<String> meetingTimeAdapter;
 
 
     public UpdateCommunityGroupFragment newInstance() {
@@ -147,7 +144,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
             @Override
             public void onError(Throwable e) {
-//                Timber.e(e, "Failed to retrieve Community Group");
                 Timber.e(e, e.toString());
             }
 
@@ -166,7 +162,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         cgMinistry = communityGroup.ministry;
         cgName = communityGroup.name;
         cgDescription = communityGroup.description;
-//        cgMeetingTime = communityGroup.meetingTime;
         cgDayOfWeek = communityGroup.dayOfWeek;
         cgType = communityGroup.type;
         cgLeaders = communityGroup.leaders;
@@ -288,7 +283,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
             for (int i = 0; i < cgLeaders.size(); i++) {
 
                 title += cgLeaders.get(i).name.firstName;
-                title += cgLeaders.size() > 1? " " : "";
+                title += cgLeaders.size() > 1 ? " " : "";
             }
             title += "'s Community Group";
 
@@ -301,17 +296,8 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     }
 
     public boolean isCGLeader(CruUser accessUser) {
-        boolean isCGLeader = false;
-        for(CruUser user: cgLeaders ) {
-            if(accessUser.id.equals(user.id)) {
-                isCGLeader = true;
-                break;
-            }
-        }
-        return isCGLeader;
+        return cgLeaders.contains(accessUser);
     }
-
-
 }
 
 

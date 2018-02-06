@@ -1,7 +1,6 @@
 package com.crucentralcoast.app.data.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.mobsandgeeks.saripaar.annotation.AssertFalse;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
