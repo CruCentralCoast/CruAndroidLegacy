@@ -87,12 +87,10 @@
             android:name=".presentation.views.ridesharing.myrides.MyRidesInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-
         <activity
             android:name=".presentation.views.settings.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/PreferenceTheme"/>
-
         <activity
             android:name=".presentation.views.about.AboutActivity"
             android:screenOrientation="portrait"
