@@ -15,12 +15,15 @@ import android.widget.TextView;
 
 import com.crucentralcoast.app.AppConstants;
 import com.crucentralcoast.app.R;
+import com.crucentralcoast.app.data.models.CommunityGroup;
 import com.crucentralcoast.app.data.models.LoginResponse;
 import com.crucentralcoast.app.data.providers.LoginProvider;
 import com.crucentralcoast.app.presentation.validator.BaseValidator;
 import com.crucentralcoast.app.presentation.views.about.AboutActivity;
 import com.crucentralcoast.app.presentation.views.base.SubscriptionsHolder;
 import com.crucentralcoast.app.presentation.views.subscriptions.SubscriptionActivity;
+import com.crucentralcoast.app.presentation.views.updategroupsinformation.UpdateCommunityGroupFragment;
+import com.crucentralcoast.app.presentation.views.updategroupsinformation.UpdateGroupsInformationActivity;
 import com.crucentralcoast.app.util.SharedPreferencesUtil;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -43,6 +46,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
     private Preference aboutButton;
     private Preference createAccountButton;
     private CheckBoxPreference notificationCheckbox;
+
+    private Preference tempTestButton;
 
     //login
     private AlertDialog loginDialog;
@@ -176,6 +181,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
             startActivity(aboutIntent);
             return false;
         });
+
+        tempTestButton = getPreferenceManager().findPreference(getString(R.string.test_key));
+        UpdateGroupsInformationActivity activity = new UpdateGroupsInformationActivity();
+        tempTestButton.setOnPreferenceClickListener(preference -> {
+            Intent testIntent = new Intent(SettingsFragment.this.getContext(), UpdateGroupsInformationActivity.class);
+            testIntent.putExtra("fragmentType", "community_group");
+            testIntent.putExtra("groupID", "59c1b1bca66f2404009f166a");
+            getActivity().startActivity(testIntent);
+            return true;
+        });
+
+
     }
 
 

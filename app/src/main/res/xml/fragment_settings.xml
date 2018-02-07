@@ -47,4 +47,12 @@
             android:title="@string/about"/>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Test">
+        <Preference
+            android:key="test"
+            android:id="@+id/test"
+            android:title="test"/>
+    </PreferenceCategory>
 </PreferenceScreen>

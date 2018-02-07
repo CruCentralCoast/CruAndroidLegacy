@@ -142,13 +142,29 @@
     </string-array>
 
     <string-array name="days_of_week">
-        <item>Sunday</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>
         <item>Thursday</item>
         <item>Friday</item>
         <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="community_group_types">
+        <item>Freshmen</item>
+        <item>Sophomore</item>
+        <item>Junior</item>
+        <item>Senior</item>
+        <item>Mixed Ages</item>
+    </string-array>
+
+    <string-array name="meeting_time_types">
+        <item>7:00AM</item>
+        <item>8:00AM</item>
+        <item>9:00AM</item>
+        <item>10:00AM</item>
+        <item>11:00AM</item>
     </string-array>
 
     <string name="default_direction_op">Select Direction</string>
@@ -221,6 +237,19 @@
     <string name="nav_settings">Settings</string>
     <string name="create_account_key">Create Key</string>
     <string name="create_account_title">Create Account</string>
+
+
+    <string name="test_key">test</string>
+    <string name="test_title">Test Title</string>
+
+
+    <!--Update Information-->
+    <string name="update_key">Update</string>
+    <string name="update_community_group_name">Group Name</string>
+    <string name="update_community_group_team_description">Team Description</string>
+    <string name="update_community_group_type">Group Type</string>
+    <string name="update_community_group_meeting_day">Meeting Day</string>
+
 
     <string name="driver_authorization_title">Oops!</string>
     <string name="driver_authorization_msg">You are not a verified driver.  Please contact Cru</string>

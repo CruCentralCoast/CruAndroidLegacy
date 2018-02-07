@@ -15,6 +15,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class CommunityGroupProvider
 {
@@ -53,5 +54,28 @@ public class CommunityGroupProvider
         cruApiService.joinCommunityGroup(id, user)
                 .compose(RxComposeUtil.network())
                 .subscribe(observer);
+    }
+
+    public static Observable<CommunityGroup> getCommunityGroup(String id) {
+        return cruApiService.getCommunityGroup(id)
+                .flatMap(group -> {
+                   if(group != null) {
+                       return Observable.just(group);
+                   }
+                   else {
+                       return Observable.empty();
+                   }
+                });
+
+    }
+
+    public static void getCommunityGroup(SubscriptionsHolder holder,
+                                         Observer<CommunityGroup> observer,
+                                         String id) {
+        Subscription s = getCommunityGroup(id)
+                            .compose(RxComposeUtil.network())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(observer);
+        holder.addSubscription(s);
     }
 }
