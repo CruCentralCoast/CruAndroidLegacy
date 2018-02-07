@@ -80,10 +80,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         //login button
         LayoutInflater factory = LayoutInflater.from(getContext());
         loginView = factory.inflate(R.layout.alert_login, null);
-        loginName = (EditText) loginView.findViewById(R.id.username_field);
-        loginPassword = (EditText) loginView.findViewById(R.id.password_field);
-        loginProgress = (ProgressBar) loginView.findViewById(R.id.progress);
-        loginFailed = (TextView) loginView.findViewById(R.id.login_failed);
+        loginName = loginView.findViewById(R.id.username_field);
+        loginPassword = loginView.findViewById(R.id.password_field);
+        loginProgress = loginView.findViewById(R.id.progress);
+        loginFailed = loginView.findViewById(R.id.login_failed);
         loginValidator = new BaseValidator(this);
 
         loginObserver = Observers.create(response -> {
@@ -100,6 +100,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
                 Timber.d("LOGIN SUCCEEDED");
                 setLoginButtonTitle();
                 loginDialog.dismiss();
+
+                System.out.println("user id: " + SharedPreferencesUtil.getUserId());
             }
             else {
                 loginFailed.setVisibility(View.VISIBLE);
@@ -167,6 +169,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
         createAccountButton = getPreferenceManager().findPreference(getString(R.string.create_account_key));
         createAccountButton.setOnPreferenceClickListener(preference -> {
+
+            System.out.println("user idasdfasdf: " + SharedPreferencesUtil.getUserId());
            Intent createAccountIntent = new Intent(SettingsFragment.this.getContext(), CreateAccountActivity.class);
            startActivity(createAccountIntent);
            return true;
@@ -213,8 +217,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 
     private void setLoginButtonTitle() {
         String str;
-        if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
+        System.out.println("in set login title");
+
+//        if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY)) {
+//            System.out.println("contains login key");
+//            str = getString(R.string.logged_in) + " " + SharedPreferencesUtil.getLoginUsername();
+//        }
+        if (SharedPreferencesUtil.getLeaderAPIKey().isEmpty()){
             str = getString(R.string.logged_in) + " " + SharedPreferencesUtil.getLoginUsername();
+        }
         else
             str = getString(R.string.login);
         loginButton.setTitle(str);
