@@ -97,9 +97,11 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        compSub = new CompositeSubscription();
         setupCommunityGroupObserver();
         if (!getArguments().isEmpty())
             communityGroupID = getArguments().getString("groupID");
+
 
     }
 
@@ -131,7 +133,9 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        compSub.unsubscribe();
+
+            compSub.unsubscribe();
+
         unbinder.unbind();
     }
 
@@ -207,7 +211,6 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
     @OnClick(R.id.update_community_group_button)
     public void onClickUpdateCommunityGroupButton() {
-        compSub = new CompositeSubscription();
         String cgNameString = groupName.getText().toString();
         String cgDescriptionString = description.getText().toString();
         DayOfWeek cgDayOfWeek = getDayOfWeek();
