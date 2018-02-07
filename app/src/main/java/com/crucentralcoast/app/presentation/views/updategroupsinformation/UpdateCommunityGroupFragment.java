@@ -43,6 +43,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 
@@ -84,7 +85,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     private Unbinder unbinder;
     private ArrayAdapter<String> dayOfWeekAdapter;
     private ArrayAdapter<String> typeAdapter;
-
+    private CompositeSubscription compSub;
 
     public UpdateCommunityGroupFragment newInstance() {
         return new UpdateCommunityGroupFragment();
@@ -130,6 +131,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        compSub.unsubscribe();
         unbinder.unbind();
     }
 
@@ -205,6 +207,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
     @OnClick(R.id.update_community_group_button)
     public void onClickUpdateCommunityGroupButton() {
+        compSub = new CompositeSubscription();
         String cgNameString = groupName.getText().toString();
         String cgDescriptionString = description.getText().toString();
         DayOfWeek cgDayOfWeek = getDayOfWeek();
@@ -212,17 +215,22 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         System.out.println("cg type: " + cgType);
 
         CommunityGroup updatedCommunityGroup = new CommunityGroup(cgID, cgMinistry, cgNameString, cgDescriptionString, cgMeetingTime, cgDayOfWeek, cgType, cgLeaders);
-        UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updatedCommunityGroup)
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(
-                    response -> {
-                        getActivity().finish();
-                        Toast.makeText(getActivity(), getString(R.string.create_account_success), Toast.LENGTH_LONG).show();
-                    },
-                    error -> {
-                        Timber.e(error);
-                    }
-              );
+
+
+
+        compSub.add(
+                UpdateGroupsInformationProvider.updateCommunityGroup(communityGroupID,  updatedCommunityGroup)
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .subscribe(
+                           response -> {
+                                getActivity().finish();
+                                 Toast.makeText(getActivity(), getString(R.string.create_account_success), Toast.LENGTH_LONG).show();
+                            },
+                            error -> {
+                                Timber.e(error);
+                            }
+                     )
+        );
     }
 
     @OnClick(R.id.update_community_group_cancel_button)
