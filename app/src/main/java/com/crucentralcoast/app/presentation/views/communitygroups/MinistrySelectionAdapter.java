@@ -68,10 +68,16 @@ public class MinistrySelectionAdapter extends RecyclerView.Adapter<RecyclerView.
         //adds each campus and each ministry in that campus to the ministries ArrayList in order
         for (android.support.v4.util.Pair<Campus, Integer> campusPair : sortableList)
         {
-            ministries.add(new Item<>(campusPair.first, null));
-            for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
-                ministries.add(new Item(null, m));
+            if (campusPair.first != null) {
+                ministries.add(new Item<>(campusPair.first, null));
+
+
+                for (MinistrySubscription m : campusMinistryMap.get(campusPair.first))
+                    ministries.add(new Item(null, m));
+            }
         }
+
+
 
     }
 

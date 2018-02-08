@@ -65,7 +65,10 @@ public class SubscriptionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             if (holder instanceof MinistrySubscriptionHolder)
             {
                 MinistrySubscriptionHolder ministrySubscriptionHolder = (MinistrySubscriptionHolder) holder;
-                ministrySubscriptionHolder.bindUI(item.item);
+                if(item.item != null) {
+                    ministrySubscriptionHolder.bindUI(item.item);
+                }
+
             }
             else if (holder instanceof HeaderHolder)
             {
