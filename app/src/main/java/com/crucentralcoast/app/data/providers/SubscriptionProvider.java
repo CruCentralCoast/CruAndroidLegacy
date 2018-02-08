@@ -15,6 +15,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import timber.log.Timber;
 
 /**
  * @author Connor Batch
@@ -81,12 +82,13 @@ public final class SubscriptionProvider
                 Campus selectedCampus = null;
 
                 // set the selected campus for this ministry
-                for (Campus c : campuses)
-                    if (m.campusId.get(0).equals(c.id)) {
+                for (Campus c : campuses) {
+
+                    if (m.campusId != null && m.campusId.get(0).equals(c.id)) {
                         selectedCampus = c;
                         break;
-
                     }
+                }
 
                 if (campusMinistryMap.containsKey(selectedCampus))
                 {
