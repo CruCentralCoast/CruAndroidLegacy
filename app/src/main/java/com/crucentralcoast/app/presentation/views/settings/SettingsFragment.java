@@ -137,8 +137,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         loginButton = getPreferenceManager().findPreference(getString(R.string.login_button_key));
         setLoginButtonTitle();
         loginButton.setOnPreferenceClickListener(preference -> {
-            if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
-                logoutDialog.show();
+//            if (SharedPreferencesUtil.containsKey(AppConstants.LOGIN_KEY))
+//            {}
+            System.out.println("logout button api key: " + SharedPreferencesUtil.getLeaderAPIKey());
+            if (!SharedPreferencesUtil.getLeaderAPIKey().isEmpty()) {
+               logoutDialog.show();
+               System.out.println("logout should show");
+            }
             else
                 loginDialog.show();
             return true;
@@ -223,7 +228,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
 //            System.out.println("contains login key");
 //            str = getString(R.string.logged_in) + " " + SharedPreferencesUtil.getLoginUsername();
 //        }
-        if (SharedPreferencesUtil.getLeaderAPIKey().isEmpty()){
+        if (!SharedPreferencesUtil.getLeaderAPIKey().isEmpty()){
             str = getString(R.string.logged_in) + " " + SharedPreferencesUtil.getLoginUsername();
         }
         else
