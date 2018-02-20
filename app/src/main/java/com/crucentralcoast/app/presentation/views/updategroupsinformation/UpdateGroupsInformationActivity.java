@@ -10,6 +10,7 @@ import com.crucentralcoast.app.data.providers.UpdateGroupsInformationProvider;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
 
 import butterknife.OnClick;
+import timber.log.Timber;
 
 
 /**
@@ -43,6 +44,9 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         switch(fragmentType) {
             case "community_group":
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, createCommunityGroupFragment()).commit();
+
+            case "ministry_team":
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, createMinistryTeamFragment()).commit();
         }
     }
 
@@ -56,6 +60,15 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         if (bundle.isEmpty()) {
             System.out.println("error");
             return null;
+        }
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    private UpdateMinistryTeamFragment createMinistryTeamFragment() {
+        UpdateMinistryTeamFragment fragment = new UpdateMinistryTeamFragment();
+        if (bundle.isEmpty()) {
+            Timber.e("ministry team bundle is empty");
         }
         fragment.setArguments(bundle);
         return fragment;
