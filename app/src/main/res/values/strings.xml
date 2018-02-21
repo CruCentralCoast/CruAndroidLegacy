@@ -249,6 +249,7 @@
     <string name="update_community_group_team_description">Team Description</string>
     <string name="update_community_group_type">Group Type</string>
     <string name="update_community_group_meeting_day">Meeting Day</string>
+    <string name="update_ministry_team_name">Team Name</string>
 
 
     <string name="driver_authorization_title">Oops!</string>

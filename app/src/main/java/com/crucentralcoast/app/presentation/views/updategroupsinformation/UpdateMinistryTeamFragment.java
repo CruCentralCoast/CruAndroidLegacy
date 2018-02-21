@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crucentralcoast.app.AppConstants;
@@ -18,6 +19,7 @@ import com.crucentralcoast.app.data.providers.CommunityGroupProvider;
 import com.crucentralcoast.app.data.providers.MinistryTeamProvider;
 import com.crucentralcoast.app.presentation.util.ViewUtil;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,17 +37,27 @@ import timber.log.Timber;
 
 public class UpdateMinistryTeamFragment extends BaseSupportFragment {
 
-   @BindView(R.id.update_community_group_button)
+   @BindView(R.id.update_ministry_team_button)
    protected Button updateButton;
-   @BindView(R.id.update_community_group_cancel_button)
+   @BindView(R.id.update_ministy_team_cancel_button)
    protected Button cancelButton;
-   @BindView(R.id.update_group_title_field)
+   @BindView(R.id.update_team_title_field)
    protected TextView groupTitle;
+   @BindView(R.id.update_name_field)
+   protected TextView updateTeamNameField;
+   @BindView(R.id.update_description_field)
+   protected TextView updateTeamDescriptionField;
+   @BindView(R.id.ministry_team_image)
+   protected ImageView teamImageField;
 
 
    private static String ministryTeamID;
    private static MinistryTeam ministryTeam = null;
    public static Observer<MinistryTeam> ministryTeamObserver;
+
+   private String teamName;
+   private String teamDescription;
+   private String teamImageLink;
 
 
 
@@ -69,7 +81,7 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
       super.onCreateView(inflater, container, savedInstanceState);
-      View view =  inflater.inflate(R.layout.fragment_update_community_group, container, false);
+      View view =  inflater.inflate(R.layout.fragment_update_ministry_team, container, false);
       unbinder = ButterKnife.bind(this, view);
 //      dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.days_of_week));
 //      typeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.community_group_types));
@@ -83,12 +95,10 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
       System.out.println("in view created");
 
 
-//      CommunityGroupProvider.g(UpdateMinistryTeamFragment.this, ministryTeamObserver, ministryTeamID);
-
-      MinistryTeamProvider.getMinistryTeam(ministryTeamID);
+      MinistryTeamProvider.getMinistryTeam(UpdateMinistryTeamFragment.this, ministryTeamObserver, ministryTeamID);
       ViewUtil.setFont(cancelButton, AppConstants.FREIG_SAN_PRO_LIGHT);
       ViewUtil.setFont(updateButton, AppConstants.FREIG_SAN_PRO_LIGHT);
-      groupTitle.setText("Updating " + ministryTeam.name);
+
    }
 
 
@@ -96,22 +106,37 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
       ministryTeamObserver = new Observer<MinistryTeam>() {
          @Override
          public void onCompleted() {
-            Timber.d("");
+            Timber.d("hello on complete");
+            setFieldText();
 
-            //setFieldText();
+
          }
 
          @Override
          public void onError(Throwable e) {
-            Timber.e(e, e.toString());
+            Timber.e(e, "error bruh:" +  e.toString());
          }
 
          @Override
-         public void onNext(MinistryTeam retrievedCommunityGroup) {
-            ministryTeam = retrievedCommunityGroup;
-
+         public void onNext(MinistryTeam retrievedMinistryTeam) {
+            ministryTeam = retrievedMinistryTeam;
          }
       };
+
+   }
+
+   public void setFieldText() {
+      groupTitle.setText("Updating " + ministryTeam.name);
+      teamName = ministryTeam.name;
+      teamDescription = ministryTeam.description;
+      teamImageLink = ministryTeam.teamImage;
+
+
+      updateTeamNameField.setText(teamName);
+      updateTeamDescriptionField.setText(teamDescription);
+
+      Picasso.with(this.getContext()).load(teamImageLink).into(teamImageField);
+
 
    }
 }
