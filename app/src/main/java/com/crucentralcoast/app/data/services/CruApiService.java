@@ -174,6 +174,7 @@ public interface CruApiService {
     @GET("/api/communitygroups/{group_id}")
     Observable<CommunityGroup>getCommunityGroup(@Path("group_id") String communityGroupID);
 
-
+    @GET("/api/ministryteams/{team_id}")
+    Observable<MinistryTeam> getMinistryTeam(@Path("team_id") String ministryTeamID);
 
 }
