@@ -58,17 +58,44 @@
         </android.support.design.widget.TextInputLayout>
 
 
-
-        <android.support.v7.widget.AppCompatImageView
-
+        <TextView
+            android:id="@+id/update_team_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/update_description"
             android:paddingTop="16dp"
-            android:id="@+id/ministry_team_image"
-
+            android:text="Team Photo"
+            android:textColor="@color/cruGray"
             />
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@id/update_team_photo"
+                     android:layout_centerInParent="true">
 
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerInParent="true"
+                android:id="@+id/ministry_team_image"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="200dp"
+                >
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:background="@color/grey200"
+                    android:alpha="0.5"/>
+            </LinearLayout>
+
+
+        </FrameLayout>
 
 
         <!--<LinearLayout-->
