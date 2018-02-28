@@ -1,7 +1,18 @@
 package com.crucentralcoast.app.presentation.views.updategroupsinformation;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +20,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crucentralcoast.app.AppConstants;
+import com.crucentralcoast.app.Manifest;
 import com.crucentralcoast.app.R;
 import com.crucentralcoast.app.data.models.CommunityGroup;
 import com.crucentralcoast.app.data.models.CruUser;
@@ -21,6 +34,9 @@ import com.crucentralcoast.app.presentation.util.ViewUtil;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -28,6 +44,9 @@ import butterknife.ButterKnife;
 import rx.Observer;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Dylan on 2/15/18.
@@ -59,6 +78,11 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
    private String teamDescription;
    private String teamImageLink;
 
+   private static final int UPLOAD_FROM_GALLERY = 2;
+   private static final int REQUEST_IMAGE_CAPTURE = 4;
+
+   private Uri mImageUri;
+
 
 
    private CompositeSubscription compSub;
@@ -83,9 +107,6 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
       super.onCreateView(inflater, container, savedInstanceState);
       View view =  inflater.inflate(R.layout.fragment_update_ministry_team, container, false);
       unbinder = ButterKnife.bind(this, view);
-//      dayOfWeekAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.days_of_week));
-//      typeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.community_group_types));
-////        meetingTimeAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_update_group_item, getResources().getStringArray(R.array.meeting_time_types));
       return view;
    }
 
@@ -135,8 +156,102 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
       updateTeamNameField.setText(teamName);
       updateTeamDescriptionField.setText(teamDescription);
 
-      Picasso.with(this.getContext()).load(teamImageLink).into(teamImageField);
+      Picasso.with(this.getContext()).load(teamImageLink).fit().centerCrop().into(teamImageField);
+
+      teamImageField.isClickable();
+      teamImageField.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            getNewImage();
+         }
+      });
 
 
    }
+
+   public void getNewImage() {
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+      Timber.d("in get new image!!!");
+      builder.setTitle("Choose Image Source");
+      builder.setItems(new CharSequence[]{"Gallery"},
+              new DialogInterface.OnClickListener() {
+                 @Override
+                 public void onClick(DialogInterface dialogInterface, int selectedOption) {
+                    switch (selectedOption) {
+                       case 0:
+                          getImageFromGallery();
+                          break;
+//                       case 1:
+//                          getImageFromCamera();
+//                          break;
+                       default:
+                          break;
+                    }
+                 }
+              });
+      builder.show();
+
+   }
+
+   private void getImageFromGallery() {
+      Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+      intent.setType("image/*");
+      intent.setAction(Intent.ACTION_GET_CONTENT);
+      Intent chooser = Intent.createChooser(intent, "Choose a Picture");
+      startActivityForResult(chooser, UPLOAD_FROM_GALLERY);
+   }
+
+   @Override
+   public void onActivityResult(int reqCode, int resultCode, Intent data) {
+      if (reqCode == UPLOAD_FROM_GALLERY && resultCode == RESULT_OK) {
+
+         try {
+            final Uri uri = data.getData();
+            final InputStream imageInputStream  = getActivity().getContentResolver().openInputStream(uri);
+
+
+            final Bitmap selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageInputStream), 400, 400, true);
+
+
+            teamImageField.setImageBitmap(selectedImage);
+         }
+         catch (Exception e) {}
+
+
+
+      }
+   }
+
+//   private void getImageFromCamera() {
+//      Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//      String path = Environment.getExternalStorageDirectory() + File
+//              .separator + "test.jpg";
+//      if (imageIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//         File photo = null;
+//         try {
+//            // place where to store camera taken picture
+//            photo = createTemporaryFile("picture", ".jpg");
+//            photo.delete();
+//         } catch (Exception e) {
+//            Toast.makeText(getApplicationContext(), "Please check SD " +
+//                    "card! Image shot is " +
+//                    "impossible!", Toast.LENGTH_LONG);
+//         }
+//         mImageUri = Uri.fromFile(photo);
+//         imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+//         startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
+//      }
+//   }
+
+//   private File createTemporaryFile(String part, String ext) throws Exception
+//   {
+//      File tempDir = Environment.getExternalStorageDirectory();
+//      tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+//      if (!tempDir.exists())
+//      {
+//         tempDir.mkdirs();
+//      }
+//      return File.createTempFile(part, ext, tempDir);
+//   }
 }
