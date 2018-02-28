@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Observer;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
@@ -165,8 +166,6 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
             getNewImage();
          }
       });
-
-
    }
 
    public void getNewImage() {
@@ -174,7 +173,7 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
       Timber.d("in get new image!!!");
       builder.setTitle("Choose Image Source");
-      builder.setItems(new CharSequence[]{"Gallery"},
+      builder.setItems(new CharSequence[]{"Gallery", "Camera"},
               new DialogInterface.OnClickListener() {
                  @Override
                  public void onClick(DialogInterface dialogInterface, int selectedOption) {
@@ -211,20 +210,26 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
             final InputStream imageInputStream  = getActivity().getContentResolver().openInputStream(uri);
 
 
-            final Bitmap selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageInputStream), 400, 400, true);
-
+            Bitmap selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageInputStream), 400, 400, false);
 
             teamImageField.setImageBitmap(selectedImage);
          }
          catch (Exception e) {}
-
-
 
       }
    }
 
 //   private void getImageFromCamera() {
 //      Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//      startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
+//
+//
+//
+//
+//
+//
+//
+//
 //      String path = Environment.getExternalStorageDirectory() + File
 //              .separator + "test.jpg";
 //      if (imageIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -243,7 +248,7 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
 //         startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
 //      }
 //   }
-
+//
 //   private File createTemporaryFile(String part, String ext) throws Exception
 //   {
 //      File tempDir = Environment.getExternalStorageDirectory();
@@ -254,4 +259,39 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
 //      }
 //      return File.createTempFile(part, ext, tempDir);
 //   }
+
+
+   @OnClick(R.id.update_ministy_team_cancel_button)
+   public void onCLickUpdateCommunityGroupCancelButton() {
+      createAlertDialog(getString(R.string.create_account_cancel), getString(R.string.create_account_cancel_message), getString(R.string.alert_dialog_yes), getString(R.string.alert_dialog_no),
+            new DialogInterface.OnClickListener(){
+               @Override
+               public void onClick(DialogInterface dialogInterface, int i) {
+                  getActivity().finish();
+
+               }
+            },
+            new DialogInterface.OnClickListener(){
+               @Override
+               public void onClick(DialogInterface dialogInterface, int i) {
+
+               }
+            }
+      );
+
+   }
+   public void createAlertDialog (String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {
+      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+      alertBuilder.setTitle(title);
+      alertBuilder.setMessage(message);
+
+      if (negativeText != null) {
+         alertBuilder.setNegativeButton(negativeText,
+               negativeDialogListener);
+      }
+      alertBuilder.setPositiveButton( postiveText,
+            positveDialogListener);
+
+      alertBuilder.show();
+   }
 }

@@ -45,16 +45,16 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/update_name"
             android:paddingTop="16dp">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/update_description_field"
-                android:maxLength="45"
-                android:layout_centerVertical="true"
-                android:hint="@string/update_community_group_team_description"
-                android:importantForAutofill="noExcludeDescendants"
-                android:inputType="textMultiLine"
-                />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/update_description_field"
+                    android:maxLength="45"
+                    android:layout_centerVertical="true"
+                    android:hint="@string/update_community_group_team_description"
+                    android:importantForAutofill="noExcludeDescendants"
+                    android:inputType="textMultiLine"
+                    />
         </android.support.design.widget.TextInputLayout>
 
 
