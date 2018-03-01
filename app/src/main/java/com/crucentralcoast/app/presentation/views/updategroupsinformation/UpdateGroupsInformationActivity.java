@@ -23,6 +23,7 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
     private String groupID;
     private Intent intent;
     private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +37,10 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
 
         System.out.println("groupID: " + groupID);
         System.out.println("fragmentType: " + fragmentType);
-
-
     }
 
     private void startFragment(String fragmentType) {
-        switch(fragmentType) {
+        switch (fragmentType) {
             case "community_group":
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, createCommunityGroupFragment()).commit();
 
@@ -50,7 +49,7 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         }
     }
 
-    private void createBundle (String groupID){
+    private void createBundle(String groupID) {
         bundle = new Bundle();
         bundle.putString("groupID", groupID);
     }

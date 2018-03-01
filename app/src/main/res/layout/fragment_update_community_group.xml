@@ -7,36 +7,35 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_bar"
         android:orientation="vertical"
-        android:spinnerMode="dialog"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="16dp"
-        android:layout_above="@+id/bottom_bar">
+        android:spinnerMode="dialog">
 
         <TextView
+            android:id="@+id/update_group_title_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/update_group_title_field"
-            android:textSize="20dp"
-            />
+            android:textSize="20dp" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/update_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/update_group_title_field"
-            android:paddingTop="50dp"
-            >
+            android:paddingTop="50dp">
+
             <EditText
+                android:id="@+id/update_name_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/update_name_field"
-                android:maxLength="45"
                 android:layout_centerVertical="true"
                 android:hint="@string/update_community_group_name"
+                android:importantForAutofill="noExcludeDescendants"
                 android:inputType="text"
-                android:importantForAutofill="noExcludeDescendants"/>
+                android:maxLength="45" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -45,102 +44,103 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/update_name"
             android:paddingTop="16dp">
+
             <EditText
+                android:id="@+id/update_description_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/update_description_field"
-                android:maxLength="45"
                 android:layout_centerVertical="true"
                 android:hint="@string/update_community_group_team_description"
+                android:importantForAutofill="noExcludeDescendants"
                 android:inputType="text"
-                android:importantForAutofill="noExcludeDescendants"/>
+                android:maxLength="45" />
         </android.support.design.widget.TextInputLayout>
 
 
-
         <LinearLayout
+            android:id="@+id/update_group_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/update_group_type"
-            android:paddingTop="16dp"
+            android:layout_below="@id/update_description"
             android:orientation="vertical"
-            android:layout_below="@id/update_description">
+            android:paddingTop="16dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/update_community_group_type"
-                android:paddingLeft="4dp"
-                />
+                android:paddingLeft="4dp" />
 
             <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/update_group_type_field"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/update_group_type_field"
-                android:prompt="@string/gender_hint"
-                style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_below="@id/update_day_of_week"
-                />
+                android:prompt="@string/gender_hint" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/update_day_of_week"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/update_day_of_week"
-            android:paddingTop="16dp"
+            android:layout_below="@id/update_group_type"
             android:orientation="vertical"
-            android:layout_below="@id/update_group_type">
+            android:paddingTop="16dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/update_community_group_meeting_day"
-                android:paddingLeft="4dp"
-                />
+                android:paddingLeft="4dp" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/update_day_of_week_field"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
         </LinearLayout>
 
         <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/update_meeting_time"-->
-            <!--android:paddingTop="16dp"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_below="@id/update_day_of_week">-->
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="Meeting Time"-->
-                <!--android:paddingLeft="4dp"-->
-                <!--/>-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/update_meeting_time"-->
+        <!--android:paddingTop="16dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_below="@id/update_day_of_week">-->
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="Meeting Time"-->
+        <!--android:paddingLeft="4dp"-->
+        <!--/>-->
 
-            <!--<android.support.v7.widget.AppCompatSpinner-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/update_meeting_time_field"-->
-                <!--style="@style/Widget.AppCompat.DropDownItem.Spinner"-->
-                <!--/>-->
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1dp"-->
-                <!--android:background="@android:color/darker_gray"/>-->
+        <!--<android.support.v7.widget.AppCompatSpinner-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/update_meeting_time_field"-->
+        <!--style="@style/Widget.AppCompat.DropDownItem.Spinner"-->
+        <!--/>-->
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@android:color/darker_gray"/>-->
         <!--</LinearLayout>-->
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
@@ -155,10 +155,10 @@
             android:layout_alignParentStart="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="start"
-            android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:paddingLeft="24dp"
             android:paddingStart="24dp"
+            android:paddingTop="16dp"
             android:text="@string/cancel"
             android:textAlignment="textStart"
             android:textAllCaps="true"
@@ -174,10 +174,10 @@
             android:layout_alignParentRight="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="end"
-            android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:paddingRight="24dp"
             android:paddingEnd="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="16dp"
             android:text="@string/update_key"
             android:textAlignment="textEnd"
             android:textAllCaps="true"

@@ -57,167 +57,161 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class UpdateMinistryTeamFragment extends BaseSupportFragment {
 
-   @BindView(R.id.update_ministry_team_button)
-   protected Button updateButton;
-   @BindView(R.id.update_ministy_team_cancel_button)
-   protected Button cancelButton;
-   @BindView(R.id.update_team_title_field)
-   protected TextView groupTitle;
-   @BindView(R.id.update_name_field)
-   protected TextView updateTeamNameField;
-   @BindView(R.id.update_description_field)
-   protected TextView updateTeamDescriptionField;
-   @BindView(R.id.ministry_team_image)
-   protected ImageView teamImageField;
+    @BindView(R.id.update_ministry_team_button)
+    protected Button updateButton;
+    @BindView(R.id.update_ministy_team_cancel_button)
+    protected Button cancelButton;
+    @BindView(R.id.update_team_title_field)
+    protected TextView groupTitle;
+    @BindView(R.id.update_name_field)
+    protected TextView updateTeamNameField;
+    @BindView(R.id.update_description_field)
+    protected TextView updateTeamDescriptionField;
+    @BindView(R.id.ministry_team_image)
+    protected ImageView teamImageField;
 
 
-   private static String ministryTeamID;
-   private static MinistryTeam ministryTeam = null;
-   public static Observer<MinistryTeam> ministryTeamObserver;
+    private static String ministryTeamID;
+    private static MinistryTeam ministryTeam = null;
+    public static Observer<MinistryTeam> ministryTeamObserver;
 
-   private String teamName;
-   private String teamDescription;
-   private String teamImageLink;
+    private String teamName;
+    private String teamDescription;
+    private String teamImageLink;
 
-   private static final int UPLOAD_FROM_GALLERY = 2;
-   private static final int REQUEST_IMAGE_CAPTURE = 4;
+    private static final int UPLOAD_FROM_GALLERY = 2;
+    private static final int REQUEST_IMAGE_CAPTURE = 4;
 
-   private Uri mImageUri;
-
-
-
-   private CompositeSubscription compSub;
-
-   public UpdateMinistryTeamFragment newInstance() {
-      return new UpdateMinistryTeamFragment();
-   }
-
-   @Override
-   public void onCreate(@Nullable Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      compSub = new CompositeSubscription();
-      setupMinistryTeamObserver();
-      if (!getArguments().isEmpty())
-         ministryTeamID = getArguments().getString("groupID");
-   }
-
-   @Nullable
-   @Override
-   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
-      super.onCreateView(inflater, container, savedInstanceState);
-      View view =  inflater.inflate(R.layout.fragment_update_ministry_team, container, false);
-      unbinder = ButterKnife.bind(this, view);
-      return view;
-   }
-
-   @Override
-   public void onViewCreated(View view, Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-      System.out.println("in view created");
+    private Uri mImageUri;
 
 
-      MinistryTeamProvider.getMinistryTeam(UpdateMinistryTeamFragment.this, ministryTeamObserver, ministryTeamID);
-      ViewUtil.setFont(cancelButton, AppConstants.FREIG_SAN_PRO_LIGHT);
-      ViewUtil.setFont(updateButton, AppConstants.FREIG_SAN_PRO_LIGHT);
+    private CompositeSubscription compSub;
 
-   }
+    public UpdateMinistryTeamFragment newInstance() {
+        return new UpdateMinistryTeamFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        compSub = new CompositeSubscription();
+        setupMinistryTeamObserver();
+        if (!getArguments().isEmpty())
+            ministryTeamID = getArguments().getString("groupID");
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_update_ministry_team, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        System.out.println("in view created");
+        MinistryTeamProvider.getMinistryTeam(UpdateMinistryTeamFragment.this, ministryTeamObserver, ministryTeamID);
+        ViewUtil.setFont(cancelButton, AppConstants.FREIG_SAN_PRO_LIGHT);
+        ViewUtil.setFont(updateButton, AppConstants.FREIG_SAN_PRO_LIGHT);
+
+    }
 
 
-   public void setupMinistryTeamObserver() {
-      ministryTeamObserver = new Observer<MinistryTeam>() {
-         @Override
-         public void onCompleted() {
-            Timber.d("hello on complete");
-            setFieldText();
+    public void setupMinistryTeamObserver() {
+        ministryTeamObserver = new Observer<MinistryTeam>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("hello on complete");
+                setFieldText();
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "error bruh:" + e.toString());
+            }
 
-         }
+            @Override
+            public void onNext(MinistryTeam retrievedMinistryTeam) {
+                ministryTeam = retrievedMinistryTeam;
+            }
+        };
 
-         @Override
-         public void onError(Throwable e) {
-            Timber.e(e, "error bruh:" +  e.toString());
-         }
+    }
 
-         @Override
-         public void onNext(MinistryTeam retrievedMinistryTeam) {
-            ministryTeam = retrievedMinistryTeam;
-         }
-      };
+    public void setFieldText() {
+        groupTitle.setText("Updating " + ministryTeam.name);
+        teamName = ministryTeam.name;
+        teamDescription = ministryTeam.description;
+        teamImageLink = ministryTeam.teamImage;
 
-   }
+        updateTeamNameField.setText(teamName);
+        updateTeamDescriptionField.setText(teamDescription);
 
-   public void setFieldText() {
-      groupTitle.setText("Updating " + ministryTeam.name);
-      teamName = ministryTeam.name;
-      teamDescription = ministryTeam.description;
-      teamImageLink = ministryTeam.teamImage;
+        Picasso.with(this.getContext()).load(teamImageLink).fit().centerCrop().into(teamImageField);
 
+        teamImageField.isClickable();
+        teamImageField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getNewImage();
+            }
+        });
+    }
 
-      updateTeamNameField.setText(teamName);
-      updateTeamDescriptionField.setText(teamDescription);
-
-      Picasso.with(this.getContext()).load(teamImageLink).fit().centerCrop().into(teamImageField);
-
-      teamImageField.isClickable();
-      teamImageField.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            getNewImage();
-         }
-      });
-   }
-
-   public void getNewImage() {
-
-      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      Timber.d("in get new image!!!");
-      builder.setTitle("Choose Image Source");
-      builder.setItems(new CharSequence[]{"Gallery", "Camera"},
-              new DialogInterface.OnClickListener() {
-                 @Override
-                 public void onClick(DialogInterface dialogInterface, int selectedOption) {
-                    switch (selectedOption) {
-                       case 0:
-                          getImageFromGallery();
-                          break;
+    public void getNewImage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        Timber.d("in get new image!!!");
+        builder.setTitle("Choose Image Source");
+        builder.setItems(new CharSequence[]{"Gallery", "Camera"},
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int selectedOption) {
+                        switch (selectedOption) {
+                            case 0:
+                                getImageFromGallery();
+                                break;
 //                       case 1:
 //                          getImageFromCamera();
 //                          break;
-                       default:
-                          break;
+                            default:
+                                break;
+                        }
                     }
-                 }
-              });
-      builder.show();
+                });
+        builder.show();
 
-   }
+    }
 
-   private void getImageFromGallery() {
-      Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-      intent.setType("image/*");
-      intent.setAction(Intent.ACTION_GET_CONTENT);
-      Intent chooser = Intent.createChooser(intent, "Choose a Picture");
-      startActivityForResult(chooser, UPLOAD_FROM_GALLERY);
-   }
+    private void getImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent chooser = Intent.createChooser(intent, "Choose a Picture");
+        startActivityForResult(chooser, UPLOAD_FROM_GALLERY);
+    }
 
-   @Override
-   public void onActivityResult(int reqCode, int resultCode, Intent data) {
-      if (reqCode == UPLOAD_FROM_GALLERY && resultCode == RESULT_OK) {
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        if (reqCode == UPLOAD_FROM_GALLERY && resultCode == RESULT_OK) {
 
-         try {
-            final Uri uri = data.getData();
-            final InputStream imageInputStream  = getActivity().getContentResolver().openInputStream(uri);
+            try {
+                final Uri uri = data.getData();
+                final InputStream imageInputStream = getActivity().getContentResolver().openInputStream(uri);
 
 
-            Bitmap selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageInputStream), 400, 400, false);
+                Bitmap selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageInputStream), 400, 400, false);
 
-            teamImageField.setImageBitmap(selectedImage);
-         }
-         catch (Exception e) {}
+                teamImageField.setImageBitmap(selectedImage);
+            }
+            catch (Exception e) {
+            }
 
-      }
-   }
+        }
+    }
 
 //   private void getImageFromCamera() {
 //      Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -261,37 +255,38 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
 //   }
 
 
-   @OnClick(R.id.update_ministy_team_cancel_button)
-   public void onCLickUpdateCommunityGroupCancelButton() {
-      createAlertDialog(getString(R.string.create_account_cancel), getString(R.string.create_account_cancel_message), getString(R.string.alert_dialog_yes), getString(R.string.alert_dialog_no),
-            new DialogInterface.OnClickListener(){
-               @Override
-               public void onClick(DialogInterface dialogInterface, int i) {
-                  getActivity().finish();
+    @OnClick(R.id.update_ministy_team_cancel_button)
+    public void onCLickUpdateCommunityGroupCancelButton() {
+        createAlertDialog(getString(R.string.create_account_cancel), getString(R.string.create_account_cancel_message), getString(R.string.alert_dialog_yes), getString(R.string.alert_dialog_no),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finish();
 
-               }
-            },
-            new DialogInterface.OnClickListener(){
-               @Override
-               public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-               }
-            }
-      );
+                    }
+                }
+        );
 
-   }
-   public void createAlertDialog (String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {
-      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-      alertBuilder.setTitle(title);
-      alertBuilder.setMessage(message);
+    }
 
-      if (negativeText != null) {
-         alertBuilder.setNegativeButton(negativeText,
-               negativeDialogListener);
-      }
-      alertBuilder.setPositiveButton( postiveText,
-            positveDialogListener);
+    public void createAlertDialog(String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        alertBuilder.setTitle(title);
+        alertBuilder.setMessage(message);
 
-      alertBuilder.show();
-   }
+        if (negativeText != null) {
+            alertBuilder.setNegativeButton(negativeText,
+                    negativeDialogListener);
+        }
+        alertBuilder.setPositiveButton(postiveText,
+                positveDialogListener);
+
+        alertBuilder.show();
+    }
 }
