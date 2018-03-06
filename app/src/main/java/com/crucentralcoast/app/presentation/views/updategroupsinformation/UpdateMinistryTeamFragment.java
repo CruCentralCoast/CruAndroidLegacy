@@ -174,9 +174,9 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
                             case 0:
                                 getImageFromGallery();
                                 break;
-//                       case 1:
-//                          getImageFromCamera();
-//                          break;
+                       case 1:
+                          getImageFromCamera();
+                          break;
                             default:
                                 break;
                         }
@@ -201,59 +201,23 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
             try {
                 final Uri uri = data.getData();
                 final InputStream imageInputStream = getActivity().getContentResolver().openInputStream(uri);
-
-
                 Bitmap selectedImage = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(imageInputStream), 400, 400, false);
-
                 teamImageField.setImageBitmap(selectedImage);
             }
             catch (Exception e) {
             }
 
         }
+        if (reqCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            teamImageField.setImageBitmap(photo);
+        }
     }
 
-//   private void getImageFromCamera() {
-//      Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//      startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
-//
-//
-//
-//
-//
-//
-//
-//
-//      String path = Environment.getExternalStorageDirectory() + File
-//              .separator + "test.jpg";
-//      if (imageIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//         File photo = null;
-//         try {
-//            // place where to store camera taken picture
-//            photo = createTemporaryFile("picture", ".jpg");
-//            photo.delete();
-//         } catch (Exception e) {
-//            Toast.makeText(getApplicationContext(), "Please check SD " +
-//                    "card! Image shot is " +
-//                    "impossible!", Toast.LENGTH_LONG);
-//         }
-//         mImageUri = Uri.fromFile(photo);
-//         imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-//         startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
-//      }
-//   }
-//
-//   private File createTemporaryFile(String part, String ext) throws Exception
-//   {
-//      File tempDir = Environment.getExternalStorageDirectory();
-//      tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
-//      if (!tempDir.exists())
-//      {
-//         tempDir.mkdirs();
-//      }
-//      return File.createTempFile(part, ext, tempDir);
-//   }
-
+    private void getImageFromCamera() {
+        Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
+    }
 
     @OnClick(R.id.update_ministy_team_cancel_button)
     public void onCLickUpdateCommunityGroupCancelButton() {
@@ -289,4 +253,6 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
 
         alertBuilder.show();
     }
+
+
 }

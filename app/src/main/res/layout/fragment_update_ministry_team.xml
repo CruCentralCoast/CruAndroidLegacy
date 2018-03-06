@@ -54,8 +54,7 @@
                 android:hint="@string/update_community_group_team_description"
                 android:importantForAutofill="noExcludeDescendants"
                 android:inputType="textMultiLine"
-                android:lines="10"
-                android:minLines="10" />
+                />
         </android.support.design.widget.TextInputLayout>
 
 
