@@ -24,8 +24,8 @@ public class UpdateGroupsInformationProvider{
     }
 
 
-//    public static Observable<MinistryTeam> updateMinistryTeam(MinistryTeam ministryTeam) {
-//        return cruApiService.updateMinistryTeam(ministryTeam);
-//    }
+    public static Observable<MinistryTeam> updateMinistryTeam(String groupID, MinistryTeam ministryTeam) {
+        return cruApiService.updateMinistyTeam(groupID, ministryTeam);
+    }
 
 }

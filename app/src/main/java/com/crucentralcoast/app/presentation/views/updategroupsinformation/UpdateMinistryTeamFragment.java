@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,19 +31,24 @@ import com.crucentralcoast.app.data.models.CruUser;
 import com.crucentralcoast.app.data.models.MinistryTeam;
 import com.crucentralcoast.app.data.providers.CommunityGroupProvider;
 import com.crucentralcoast.app.data.providers.MinistryTeamProvider;
+import com.crucentralcoast.app.data.providers.UpdateGroupsInformationProvider;
 import com.crucentralcoast.app.presentation.util.ViewUtil;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
 import com.squareup.picasso.Picasso;
+
+import org.threeten.bp.DayOfWeek;
 
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -64,9 +70,9 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
     @BindView(R.id.update_team_title_field)
     protected TextView groupTitle;
     @BindView(R.id.update_name_field)
-    protected TextView updateTeamNameField;
+    protected EditText updateTeamNameField;
     @BindView(R.id.update_description_field)
-    protected TextView updateTeamDescriptionField;
+    protected EditText updateTeamDescriptionField;
     @BindView(R.id.ministry_team_image)
     protected ImageView teamImageField;
 
@@ -78,11 +84,11 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
     private String teamName;
     private String teamDescription;
     private String teamImageLink;
+    private String teamParentMinistryID;
+    private List<CruUser> teamLeaders;
 
     private static final int UPLOAD_FROM_GALLERY = 2;
     private static final int REQUEST_IMAGE_CAPTURE = 4;
-
-    private Uri mImageUri;
 
 
     private CompositeSubscription compSub;
@@ -147,6 +153,8 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
         teamName = ministryTeam.name;
         teamDescription = ministryTeam.description;
         teamImageLink = ministryTeam.teamImage;
+        teamLeaders = ministryTeam.ministryTeamLeaders;
+        teamParentMinistryID = ministryTeam.parentMinistryId;
 
         updateTeamNameField.setText(teamName);
         updateTeamDescriptionField.setText(teamDescription);
@@ -237,6 +245,30 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
                 }
         );
 
+    }
+
+    @OnClick(R.id.update_ministry_team_button)
+    public void onClickUpdateMinistryTeamButton() {
+
+        String mtTeamName = updateTeamNameField.getText().toString();
+        String mtTeamDescription = updateTeamDescriptionField.getText().toString();
+
+
+        MinistryTeam updateMinistryTeam = new MinistryTeam(ministryTeamID, mtTeamDescription, mtTeamName, teamParentMinistryID, teamLeaders);
+
+        compSub.add(
+              UpdateGroupsInformationProvider.updateMinistryTeam(ministryTeamID,  updateMinistryTeam)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                          response -> {
+                              getActivity().finish();
+                              Toast.makeText(getActivity(), getString(R.string.update_ministry_team_success), Toast.LENGTH_LONG).show();
+                          },
+                          error -> {
+                              Timber.e(error);
+                          }
+                    )
+        );
     }
 
     public void createAlertDialog(String title, String message, String postiveText, String negativeText, DialogInterface.OnClickListener positveDialogListener, DialogInterface.OnClickListener negativeDialogListener) {

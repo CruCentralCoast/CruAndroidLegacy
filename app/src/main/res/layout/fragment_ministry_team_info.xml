@@ -21,7 +21,14 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:textSize="16dp"/>
-
+        <Button
+            android:id="@+id/ministry_team_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit This Team"
+            android:gravity="center"
+            />
 
     </LinearLayout>
+
 </ScrollView>

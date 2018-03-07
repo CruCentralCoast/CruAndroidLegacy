@@ -98,6 +98,8 @@
     <string name="create_account_cancel">Cancel Account Creation</string>
     <string name="create_account_cancel_message">Are you sure you want to cancel account creation? All your information will be deleted</string>
     <string name="create_account_cancel_message_confirm">Account cancled</string>
+
+    <string name="update_ministry_team_success">Successfully Updated Ministry Team</string>
     <string name="password_error">Password must be at least 7 characters, contains an uppercase, lowercase, and a unique character.</string>
     <string-array name="gender_list">
         <item>Gender</item>

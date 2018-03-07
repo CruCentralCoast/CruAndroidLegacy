@@ -29,4 +29,12 @@ public final class MinistryTeam
 
     @ParcelConstructor
     MinistryTeam() {}
+
+    public MinistryTeam(String teamID, String teamDescription, String teamName, String teamParentMinistryID, List<CruUser> teamLeaders) {
+        this.id = teamID;
+        this.description = teamDescription;
+        this.name = teamName;
+        this.parentMinistryId = teamParentMinistryID;
+        this.ministryTeamLeaders = teamLeaders;
+    }
 }
