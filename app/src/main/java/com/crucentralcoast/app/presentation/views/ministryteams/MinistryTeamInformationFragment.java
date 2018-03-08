@@ -59,7 +59,7 @@ public class MinistryTeamInformationFragment extends FormContentFragment
         // retrieve the ministry team from the form holder
         ministryTeam = (MinistryTeam) formHolder.getDataObject(JoinMinistryTeamActivity.MINISTRY_TEAM);
         formHolder.setTitle(ministryTeam.name);
-        SharedPreferencesUtil.writeLoginInformation("59bff21968325a0400be2c2d", "TestName", "TestKey");
+//        SharedPreferencesUtil.writeLoginInformation("59bff21968325a0400be2c2d", "TestName", "TestKey");
         if (isLeader()) {
             ministryTeamEditButton.setVisibility(View.VISIBLE);
         }
