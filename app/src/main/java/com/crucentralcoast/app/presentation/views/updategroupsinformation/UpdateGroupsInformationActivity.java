@@ -33,8 +33,12 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         groupID = intent.getStringExtra("groupID");
 
         createBundle(groupID);
-        startFragment(fragmentType);
-
+        try {
+            startFragment(fragmentType);
+        }
+        catch (Exception e) {
+            Timber.e(e.toString());
+        }
         System.out.println("groupID: " + groupID);
         System.out.println("fragmentType: " + fragmentType);
     }
@@ -43,9 +47,11 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         switch (fragmentType) {
             case "community_group":
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, createCommunityGroupFragment()).commit();
+                break;
 
             case "ministry_team":
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, createMinistryTeamFragment()).commit();
+                break;
         }
     }
 
@@ -57,7 +63,6 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
     private UpdateCommunityGroupFragment createCommunityGroupFragment() {
         UpdateCommunityGroupFragment fragment = new UpdateCommunityGroupFragment();
         if (bundle.isEmpty()) {
-            System.out.println("error");
             return null;
         }
         fragment.setArguments(bundle);

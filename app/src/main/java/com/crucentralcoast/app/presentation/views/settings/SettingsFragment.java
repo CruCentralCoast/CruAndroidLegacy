@@ -186,8 +186,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Subscr
         UpdateGroupsInformationActivity activity = new UpdateGroupsInformationActivity();
         tempTestButton.setOnPreferenceClickListener(preference -> {
             Intent testIntent = new Intent(SettingsFragment.this.getContext(), UpdateGroupsInformationActivity.class);
-            testIntent.putExtra("fragmentType", "ministry_team");
-            testIntent.putExtra("groupID", "563b0a292930ae0300fbc0a6");
+            testIntent.putExtra("fragmentType", "community_group");
+            testIntent.putExtra("groupID", "59c1b1bca66f2404009f166a");
             getActivity().startActivity(testIntent);
             return true;
         });
