@@ -104,6 +104,9 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
         setupMinistryTeamObserver();
         if (!getArguments().isEmpty())
             ministryTeamID = getArguments().getString("groupID");
+        else {
+            Timber.e("Missing information to update ministry team");
+        }
     }
 
     @Nullable
@@ -162,12 +165,8 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
         Picasso.with(this.getContext()).load(teamImageLink).fit().centerCrop().into(teamImageField);
 
         teamImageField.isClickable();
-        teamImageField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getNewImage();
-            }
-        });
+        teamImageField.setOnClickListener(view -> getNewImage());
+
     }
 
     public void getNewImage() {
@@ -182,9 +181,9 @@ public class UpdateMinistryTeamFragment extends BaseSupportFragment {
                             case 0:
                                 getImageFromGallery();
                                 break;
-                       case 1:
-                          getImageFromCamera();
-                          break;
+                            case 1:
+                                getImageFromCamera();
+                                break;
                             default:
                                 break;
                         }

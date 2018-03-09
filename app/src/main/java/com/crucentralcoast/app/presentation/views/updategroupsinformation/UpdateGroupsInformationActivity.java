@@ -33,14 +33,7 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
         groupID = intent.getStringExtra("groupID");
 
         createBundle(groupID);
-        try {
-            startFragment(fragmentType);
-        }
-        catch (Exception e) {
-            Timber.e(e.toString());
-        }
-        System.out.println("groupID: " + groupID);
-        System.out.println("fragmentType: " + fragmentType);
+        startFragment(fragmentType);
     }
 
     private void startFragment(String fragmentType) {
@@ -71,9 +64,6 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
 
     private UpdateMinistryTeamFragment createMinistryTeamFragment() {
         UpdateMinistryTeamFragment fragment = new UpdateMinistryTeamFragment();
-        if (bundle.isEmpty()) {
-            Timber.e("ministry team bundle is empty");
-        }
         fragment.setArguments(bundle);
         return fragment;
     }

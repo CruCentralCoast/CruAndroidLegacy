@@ -85,10 +85,10 @@ public class MinistryTeamInformationFragment extends FormContentFragment
 
     @OnClick(R.id.ministry_team_edit_button)
     public void onClickUpdateMinistryTeamButton() {
-        Intent testIntent = new Intent(MinistryTeamInformationFragment.this.getContext(), UpdateGroupsInformationActivity.class);
-        testIntent.putExtra("fragmentType", "ministry_team");
-        testIntent.putExtra("groupID", ministryTeam.id);
-        getActivity().startActivity(testIntent);
+        Intent editMinistryTeamIntent = new Intent(MinistryTeamInformationFragment.this.getContext(), UpdateGroupsInformationActivity.class);
+        editMinistryTeamIntent.putExtra("fragmentType", "ministry_team");
+        editMinistryTeamIntent.putExtra("groupID", ministryTeam.id);
+        getActivity().startActivity(editMinistryTeamIntent);
     }
 
 }
