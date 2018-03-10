@@ -1,5 +1,6 @@
 package com.crucentralcoast.app.data.providers;
 
+import com.crucentralcoast.app.data.models.CommunityGroup;
 import com.crucentralcoast.app.data.models.CruUser;
 import com.crucentralcoast.app.data.models.MinistryTeam;
 import com.crucentralcoast.app.data.providers.api.CruApiProvider;
@@ -12,6 +13,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 public final class MinistryTeamProvider
 {
@@ -45,4 +47,29 @@ public final class MinistryTeamProvider
                 .subscribe(observer);
     }
 
+    public static Observable<MinistryTeam> getMinistryTeam(String id) {
+        return cruService.getMinistryTeam(id)
+                .flatMap(group -> {
+                    if(group != null) {
+                        return Observable.just(group);
+                    }
+                    else {
+                        return Observable.empty();
+                    }
+                });
+
+    }
+
+    public static void getMinistryTeam(SubscriptionsHolder holder,
+                                         Observer<MinistryTeam> observer,
+                                         String id) {
+
+        Subscription s = getMinistryTeam(id)
+                .compose(RxComposeUtil.network())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        holder.addSubscription(s);
+    }
 }
+
+

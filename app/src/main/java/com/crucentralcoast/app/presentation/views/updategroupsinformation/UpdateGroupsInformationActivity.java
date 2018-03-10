@@ -10,6 +10,7 @@ import com.crucentralcoast.app.data.providers.UpdateGroupsInformationProvider;
 import com.crucentralcoast.app.presentation.views.base.BaseSupportFragment;
 
 import butterknife.OnClick;
+import timber.log.Timber;
 
 
 /**
@@ -22,6 +23,7 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
     private String groupID;
     private Intent intent;
     private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,21 +34,21 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
 
         createBundle(groupID);
         startFragment(fragmentType);
-
-        System.out.println("groupID: " + groupID);
-        System.out.println("fragmentType: " + fragmentType);
-
-
     }
 
     private void startFragment(String fragmentType) {
-        switch(fragmentType) {
+        switch (fragmentType) {
             case "community_group":
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, createCommunityGroupFragment()).commit();
+                break;
+
+            case "ministry_team":
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, createMinistryTeamFragment()).commit();
+                break;
         }
     }
 
-    private void createBundle (String groupID){
+    private void createBundle(String groupID) {
         bundle = new Bundle();
         bundle.putString("groupID", groupID);
     }
@@ -54,9 +56,14 @@ public class UpdateGroupsInformationActivity extends AppCompatActivity {
     private UpdateCommunityGroupFragment createCommunityGroupFragment() {
         UpdateCommunityGroupFragment fragment = new UpdateCommunityGroupFragment();
         if (bundle.isEmpty()) {
-            System.out.println("error");
             return null;
         }
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    private UpdateMinistryTeamFragment createMinistryTeamFragment() {
+        UpdateMinistryTeamFragment fragment = new UpdateMinistryTeamFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
