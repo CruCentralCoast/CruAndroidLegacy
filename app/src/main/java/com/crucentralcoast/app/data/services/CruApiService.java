@@ -142,7 +142,7 @@ public interface CruApiService {
     Observable<List<CommunityGroup>> getCommunityGroups(@Path("id") String ministryId, @Body CommunityGroupRequest questionAnswers);
 
     @FormUrlEncoded
-    @POST("/api/gcm")
+    @POST("/api/fcm")
     Observable<Void> updateFcmId(@Field("old") String oldId, @Field("new") String newId);
 
     @GET("/api/prayerrequest")

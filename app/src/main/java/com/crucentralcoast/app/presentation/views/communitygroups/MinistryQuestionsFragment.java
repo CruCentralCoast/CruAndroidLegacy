@@ -23,6 +23,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
+import timber.log.Timber;
 
 public class MinistryQuestionsFragment extends FormContentListFragment
 {

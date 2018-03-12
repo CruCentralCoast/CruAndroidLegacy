@@ -22,6 +22,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
+import timber.log.Timber;
 
 public class MinistrySelectionFragment extends FormContentListFragment
 {
@@ -76,7 +77,6 @@ public class MinistrySelectionFragment extends FormContentListFragment
         formHolder.setNavigationVisibility(View.GONE);
 
         ministryAdapter = new MinistrySelectionAdapter(new HashMap<>(), formHolder);
-
         observer = createListObserver(R.layout.empty_with_alert,
                 campusMinistryMap -> {
                     ministryAdapter = new MinistrySelectionAdapter(campusMinistryMap, formHolder);

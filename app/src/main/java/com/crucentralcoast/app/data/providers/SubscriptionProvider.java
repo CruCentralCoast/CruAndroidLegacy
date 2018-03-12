@@ -82,7 +82,7 @@ public final class SubscriptionProvider
 
                 // set the selected campus for this ministry
                 for (Campus c : campuses)
-                    if (m.campusId.get(0).equals(c.id)) {
+                    if (m.campusId != null && m.campusId.get(0).equals(c.id)) {
                         selectedCampus = c;
                         break;
 
