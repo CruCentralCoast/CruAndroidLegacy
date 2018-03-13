@@ -27,7 +27,7 @@ public final class MinistryQuestionsProvider {
     {
         return getAllQuestions()
                 .flatMap(Observable::from)
-                .filter(ministryQuestion -> ministryQuestion.ministry.equals(id))
+                .filter(ministryQuestion -> ministryQuestion.ministry.get(0).equals(id))
                 .compose(RxComposeUtil.toListOrEmpty());
     }
 

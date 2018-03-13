@@ -125,7 +125,7 @@ public final class RideProvider {
                             status = true;
                         }
                     }
-                    if (ride.fcmId.equals(fcmId)) {
+                    if (ride.fcmId != null && ride.fcmId.equals(fcmId)) {
                         status = true;
                     }
                     return status;

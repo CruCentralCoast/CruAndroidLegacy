@@ -39,7 +39,7 @@ public class CommunityGroupProvider
         if (requiredMinistryQuestionAnswers.isEmpty())
             return Observable.empty();
         else
-            return cruApiService.getCommunityGroups(requiredMinistryQuestionAnswers.get(0).ministryQuestion.ministry, new CommunityGroupRequest(requiredMinistryQuestionAnswers))
+            return cruApiService.getCommunityGroups(requiredMinistryQuestionAnswers.get(0).ministryQuestion.ministry.get(0), new CommunityGroupRequest(requiredMinistryQuestionAnswers))
                     .flatMap(groups -> {
                         if(groups.isEmpty())
                             return Observable.empty();

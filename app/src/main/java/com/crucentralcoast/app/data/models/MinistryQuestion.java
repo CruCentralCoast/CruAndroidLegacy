@@ -6,6 +6,7 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Parcel
 public final class MinistryQuestion {
@@ -17,7 +18,7 @@ public final class MinistryQuestion {
     public static final String sRequired = "required";
 
     @SerializedName(sId) public String id;
-    @SerializedName(sMinistryId) public String ministry;
+    @SerializedName(sMinistryId) public List<String> ministry;
     @SerializedName(sQuestion) public String question;
     @SerializedName(sType) public Type type;
     @SerializedName(sSelectOptions) public ArrayList<Selection> selectOptions;
