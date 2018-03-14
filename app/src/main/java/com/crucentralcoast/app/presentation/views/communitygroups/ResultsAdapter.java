@@ -1,5 +1,7 @@
 package com.crucentralcoast.app.presentation.views.communitygroups;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import com.crucentralcoast.app.data.models.CruUser;
 import com.crucentralcoast.app.data.providers.CommunityGroupProvider;
 import com.crucentralcoast.app.presentation.viewmodels.ExpandableState;
 import com.crucentralcoast.app.presentation.views.forms.FormHolder;
+import com.crucentralcoast.app.presentation.views.ministryteams.MinistryTeamInformationFragment;
+import com.crucentralcoast.app.presentation.views.updategroupsinformation.UpdateGroupsInformationActivity;
 import com.crucentralcoast.app.util.SharedPreferencesUtil;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -33,6 +37,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
 {
     List<ExpandableState<CommunityGroup>> communityGroups;
     FormHolder formHolder;
+    Context context;
+    @BindView(R.id.edit_community_group_button1) Button editButton;
+
 
     public ResultsAdapter(List<CommunityGroup> communityGroups, FormHolder formHolder)
     {
@@ -47,6 +54,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
     public CommunityGroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        context = parent.getContext();
         return new CommunityGroupViewHolder(inflater.inflate(R.layout.item_community_group_result, parent, false));
     }
 
@@ -74,6 +82,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
         holder.description.setText(cg.description);
 
         holder.details.setVisibility(communityGroups.get(position).isExpanded ? View.VISIBLE : View.GONE);
+        holder.editButton.setVisibility(isLeader(cg) ? View.VISIBLE: View.GONE);
     }
 
     @Override
@@ -93,6 +102,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
         @BindView(R.id.community_group_leaders) TextView leaders;
         @BindView(R.id.community_group_details) ViewGroup details;
         @BindView(R.id.join_community_group_button) Button joinButton;
+        @BindView(R.id.edit_community_group_button1) Button editButton;
+
 
         public CommunityGroupViewHolder(View itemView)
         {
@@ -103,9 +114,20 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
         @OnClick (R.id.community_group_result_view)
         public void onTap()
         {
+//            notifyItemChanged(getAdapterPosition());
+
             // inverts the visibility of the description field
+//            editButton.setVisibility(View.GONE);
             communityGroups.get(getAdapterPosition()).isExpanded = !communityGroups.get(getAdapterPosition()).isExpanded;
+
             notifyItemChanged(getAdapterPosition());
+//
+//            if (isLeader(communityGroup)) {
+//                editButton.setVisibility(View.VISIBLE);
+//            }
+//            else {
+//                editButton.setVisibility(View.GONE);
+//            }
         }
 
         @OnClick (R.id.join_community_group_button)
@@ -124,5 +146,23 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
 
             formHolder.next();
         }
+
+        @OnClick (R.id.edit_community_group_button1)
+        public void onEditCommunityGroup() {
+            Intent editMinistryTeamIntent = new Intent(context, UpdateGroupsInformationActivity.class);
+            editMinistryTeamIntent.putExtra("fragmentType", "community_group");
+            editMinistryTeamIntent.putExtra("groupID", communityGroup.id);
+            context.startActivity(editMinistryTeamIntent);
+        }
+    }
+
+    public Boolean isLeader(CommunityGroup cg) {
+        boolean isLeader = false;
+        String loggedInID = SharedPreferencesUtil.getUserId();
+        for(CruUser user: cg.leaders) {
+            if (loggedInID.equals(user.id))
+                isLeader = true;
+        }
+        return isLeader;
     }
 }

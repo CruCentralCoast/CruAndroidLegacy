@@ -49,6 +49,16 @@ public class CommunityGroupProvider
                     .compose(RxComposeUtil.network());
     }
 
+//    protected static Observable<List<CommunityGroup>> getCommunityGroups2(List<MinistryQuestionAnswer> questionAnswers) {
+//        ArrayList<MinistryQuestionAnswer> requiredMinistryQuestionAnswers = new ArrayList<>();
+//        for (MinistryQuestionAnswer m : questionAnswers)
+//        {
+//            if (m.ministryQuestion.required)
+//                requiredMinistryQuestionAnswers.add(m);
+//        }
+//        cruApiService.getCommunityGroup()
+//    }
+
     public static void joinCommunityGroup(Observer<Void> observer, String id, CruUser user)
     {
         cruApiService.joinCommunityGroup(id, user)

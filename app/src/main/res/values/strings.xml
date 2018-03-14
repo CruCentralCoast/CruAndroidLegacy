@@ -100,6 +100,7 @@
     <string name="create_account_cancel_message_confirm">Account cancled</string>
 
     <string name="update_ministry_team_success">Successfully Updated Ministry Team</string>
+    <string name="update_community_group_success">Successfully Updated Community Group</string>
     <string name="password_error">Password must be at least 7 characters, contains an uppercase, lowercase, and a unique character.</string>
     <string-array name="gender_list">
         <item>Gender</item>
