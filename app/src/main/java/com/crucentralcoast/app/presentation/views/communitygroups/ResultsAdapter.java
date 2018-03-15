@@ -85,6 +85,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
         holder.editButton.setVisibility(isLeader(cg) ? View.VISIBLE: View.GONE);
     }
 
+
+
     @Override
     public int getItemCount()
     {
@@ -114,20 +116,20 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
         @OnClick (R.id.community_group_result_view)
         public void onTap()
         {
-//            notifyItemChanged(getAdapterPosition());
-
-            // inverts the visibility of the description field
-//            editButton.setVisibility(View.GONE);
             communityGroups.get(getAdapterPosition()).isExpanded = !communityGroups.get(getAdapterPosition()).isExpanded;
 
             notifyItemChanged(getAdapterPosition());
-//
-//            if (isLeader(communityGroup)) {
-//                editButton.setVisibility(View.VISIBLE);
-//            }
-//            else {
-//                editButton.setVisibility(View.GONE);
-//            }
+
+            SharedPreferencesUtil.writeLoginInformation("57b5f8ea880dd10300a492", "TestName", "TestKey");
+
+
+            if (isLeader(communityGroup)) {
+                editButton.setVisibility(View.VISIBLE);
+            }
+            else {
+                editButton.setVisibility(View.GONE);
+            }
+
         }
 
         @OnClick (R.id.join_community_group_button)

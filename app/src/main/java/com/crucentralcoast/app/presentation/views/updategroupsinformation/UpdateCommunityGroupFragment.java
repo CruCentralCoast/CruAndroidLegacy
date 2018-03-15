@@ -213,8 +213,9 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
                      .observeOn(AndroidSchedulers.mainThread())
                      .subscribe(
                            response -> {
+                                System.out.println("response : " + response.toString());
                                 getActivity().finish();
-                                 Toast.makeText(getActivity(), getString(R.string.update_community_group_success), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), getString(R.string.update_community_group_success), Toast.LENGTH_LONG).show();
                             },
                             error -> {
                                 Timber.e(error);
