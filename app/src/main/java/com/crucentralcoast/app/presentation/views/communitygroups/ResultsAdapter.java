@@ -120,8 +120,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.Communit
 
             notifyItemChanged(getAdapterPosition());
 
-            SharedPreferencesUtil.writeLoginInformation("57b5f8ea880dd10300a492", "TestName", "TestKey");
-
+//            SharedPreferencesUtil.writeLoginInformation("57b5f8ea880dd10300a492", "TestName", "TestKey");
 
             if (isLeader(communityGroup)) {
                 editButton.setVisibility(View.VISIBLE);
