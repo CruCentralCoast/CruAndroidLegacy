@@ -204,7 +204,7 @@ public class CreateAccountActivity extends AppCompatActivity {
       Matcher matcher;
       final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
       boolean isValid = false;
-      if (password.length() > 6) {
+      if (password.length() > 7) {
          pattern = Pattern.compile(PASSWORD_PATTERN);
          matcher = pattern.matcher(password);
          isValid = matcher.matches();
