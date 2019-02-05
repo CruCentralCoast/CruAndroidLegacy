@@ -174,8 +174,7 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
 
         try {
             groupTitle.setText(getGroupTitle(cgLeaders, cgName));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Timber.e(e, e.getMessage());
 
         }
@@ -187,26 +186,14 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
         typeSpinner.setAdapter(typeAdapter);
 //        meetingTimeSpiner.setAdapter(meetingTimeAdapter);
 
-        if(!cgDayOfWeek.equals(null)) {
+        if (!cgDayOfWeek.equals(null)) {
             spinnerPosition = dayOfWeekAdapter.getPosition(getDayFromObjectAsString(cgDayOfWeek));
             dayOfWeekSpinner.setSelection(spinnerPosition);
         }
-        if(!cgType.equals(null)) {
+        if (!cgType.equals(null)) {
             spinnerPosition = typeAdapter.getPosition(cgType);
             typeSpinner.setSelection(spinnerPosition);
         }
-
-//
-//        System.out.println("time is: " + cgMeetingTime.format(DateTimeFormatter.ofPattern(AppConstants.TIME_FORMAT)));
-//        if(!cgMeetingTime.equals(null)) {
-////            spinnerPosition = meetingTimeAdapter.getPosition
-//            try {
-//                getMeetingTimeFromObjectAsString(cgMeetingTime);
-//            }
-//            catch (Exception e) {
-//                Timber.e("errorrrrr: ", e.toString());
-//            }
-//        }
     }
 
     @OnClick(R.id.update_community_group_button)
@@ -226,8 +213,9 @@ public class UpdateCommunityGroupFragment extends BaseSupportFragment {
                      .observeOn(AndroidSchedulers.mainThread())
                      .subscribe(
                            response -> {
+                                System.out.println("response : " + response.toString());
                                 getActivity().finish();
-                                 Toast.makeText(getActivity(), getString(R.string.create_account_success), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), getString(R.string.update_community_group_success), Toast.LENGTH_LONG).show();
                             },
                             error -> {
                                 Timber.e(error);

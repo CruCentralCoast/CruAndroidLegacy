@@ -43,6 +43,7 @@ public class ResultsFragment extends FormContentListFragment
     private AlertDialog dayDialog;
     private boolean[] selectedDays;
     private ResultsAdapter adapter;
+    private boolean shouldResume;
 
     @Nullable
     @Override
@@ -56,6 +57,7 @@ public class ResultsFragment extends FormContentListFragment
     {
         inflateEmptyView(view, R.layout.empty_with_alert);
         super.onViewCreated(view, savedInstanceState);
+        shouldResume = false;
 
         unbinder = ButterKnife.bind(this, view);
 
@@ -70,6 +72,16 @@ public class ResultsFragment extends FormContentListFragment
         helper.swipeRefreshLayout.setOnRefreshListener(() -> getCommunityGroups());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (shouldResume) {
+            forceUpdate();
+        }
+        else {
+            shouldResume = true;
+        }
+    }
 
     private void getCommunityGroups()
     {

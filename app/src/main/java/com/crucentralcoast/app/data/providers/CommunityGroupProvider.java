@@ -39,7 +39,7 @@ public class CommunityGroupProvider
         if (requiredMinistryQuestionAnswers.isEmpty())
             return Observable.empty();
         else
-            return cruApiService.getCommunityGroups(requiredMinistryQuestionAnswers.get(0).ministryQuestion.ministry, new CommunityGroupRequest(requiredMinistryQuestionAnswers))
+            return cruApiService.getCommunityGroups(requiredMinistryQuestionAnswers.get(0).ministryQuestion.ministry.get(0), new CommunityGroupRequest(requiredMinistryQuestionAnswers))
                     .flatMap(groups -> {
                         if(groups.isEmpty())
                             return Observable.empty();
@@ -48,6 +48,16 @@ public class CommunityGroupProvider
                     })
                     .compose(RxComposeUtil.network());
     }
+
+//    protected static Observable<List<CommunityGroup>> getCommunityGroups2(List<MinistryQuestionAnswer> questionAnswers) {
+//        ArrayList<MinistryQuestionAnswer> requiredMinistryQuestionAnswers = new ArrayList<>();
+//        for (MinistryQuestionAnswer m : questionAnswers)
+//        {
+//            if (m.ministryQuestion.required)
+//                requiredMinistryQuestionAnswers.add(m);
+//        }
+//        cruApiService.getCommunityGroup()
+//    }
 
     public static void joinCommunityGroup(Observer<Void> observer, String id, CruUser user)
     {
